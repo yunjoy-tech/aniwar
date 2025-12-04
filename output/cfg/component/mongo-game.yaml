@@ -12,7 +12,7 @@ spec:
   - name: username
     value: "admin" # Optional. Example: "admin"
   - name: password
-    value: "123456" # Optional.
+    value: "" # Optional.
   - name: databaseName
     value: "game" # Optional. default: "daprStore"
   - name: collectionName

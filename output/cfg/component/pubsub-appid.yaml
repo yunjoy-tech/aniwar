@@ -7,9 +7,9 @@ spec:
   version: v1
   metadata:
   - name: redisHost
-    value: 127.0.0.1:16379
+    value: 127.0.0.1:6379
   - name: redisPassword
-    value: "123456"
+    value: ""
   - name: redisDB
     value: "7"
   - name: redeliverInterval

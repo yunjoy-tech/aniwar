@@ -11,7 +11,7 @@ echo Dapr uninstalled successfully
 timeout /t 3 /nobreak >nul
 
 :: 初始化 Dapr（从本地 bundle）
-start /wait dapr.exe init --from-dir %TOOLSET_DIR%\daprbundle\win
+start /wait dapr.exe init -s --from-dir %TOOLSET_DIR%\daprbundle\win
 echo Dapr initialized successfully
 
 :: 查看版本（验证是否成功）
