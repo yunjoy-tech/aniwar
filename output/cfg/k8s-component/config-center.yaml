@@ -1,0 +1,22 @@
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: config-center
+spec:
+  type: configuration.redis
+  version: v1
+  metadata:
+    - name: redisHost
+      value: 10.14.1.94:6379
+    - name: redisPassword
+      value: ""
+    - name: enableTLS
+      value: false # Optional. Allowed: true, false.
+    - name: failover
+      value: false # Optional. Allowed: true, false.
+    - name: sentinelMasterName
+      value: "" # Optional
+    - name: maxRetries
+      value: 5 # Optional
+    - name: maxRetryBackoff
+      value: 2 # Optional

@@ -1,0 +1,1 @@
+start "export_win" /min ./output/bin/win/windows_exporter-0.20.0-amd64.exe --config.file=../../cfg/node_exporter/exportercfg.yml

@@ -1,0 +1,16 @@
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: redis-lock
+spec:
+  type: lock.redis
+  version: v1
+  metadata:
+  - name: redisHost
+    value: 10.14.1.94:6379
+  - name: redisPassword
+    value: ""
+  - name: redisDB
+    value: "9"
+  - name: keyPrefix
+    value: "none"

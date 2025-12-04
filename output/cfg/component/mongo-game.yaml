@@ -1,0 +1,27 @@
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: mongo-game
+spec:
+  type: state.mongodb
+  version: v1
+  initTimeout: 5m
+  metadata:
+  - name: host
+    value: "127.0.0.1:27017" # Required. Example: "mongo-mongodb.default.svc.cluster.local:27017"
+  - name: username
+    value: "admin" # Optional. Example: "admin"
+  - name: password
+    value: "123456" # Optional.
+  - name: databaseName
+    value: "game" # Optional. default: "daprStore"
+  - name: collectionName
+    value: "player" # Optional. default: "daprCollection"
+  - name: writeconcern
+    value: "majority" # Optional.
+  - name: readconcern
+    value: "majority" # Optional.
+  - name: actorStateStore
+    value: "true"
+  - name: keyPrefix
+    value: "none"

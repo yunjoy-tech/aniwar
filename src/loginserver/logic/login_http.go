@@ -1,0 +1,100 @@
+package logic
+
+import (
+	"context"
+	"fmt"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/conf"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/datalog/taptap"
+	"strconv"
+	"time"
+
+	"github.com/dapr/go-sdk/service/common"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/utils"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/musae/framework/baseconf"
+	"gitlab.musadisca-games.com/wangxw/musae/framework/errorx"
+	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
+	"gitlab.musadisca-games.com/wangxw/musae/framework/metrics"
+	"gitlab.musadisca-games.com/wangxw/musae/framework/tcpx"
+)
+
+func (s *LoginServer) OnHttp(ctx context.Context, in *common.InvocationEvent) (out *common.Content, err error) {
+	defer func() {
+		if err := recover(); err != any(nil) {
+			logger.Trace("OnLogin failed, err: ", err)
+		}
+	}()
+
+	if in == nil {
+		return nil, fmt.Errorf("nil parameter")
+	}
+	logger.Infof("OnLogin [LoginStep] ContentType:%s, Verb:%s, QueryString:%s, len:%s", in.ContentType, in.Verb, in.QueryString, len(in.Data))
+
+	curTime := time.Now()
+	//白名单校验 TODO
+	ip, err := utils.GetIP(in.Request)
+	if err != nil {
+		logger.Warn("OnLogin get ip failed. ", err.Error())
+	}
+
+	if len(in.Data) > baseconf.GetBaseConf().GateMsgMaxSize {
+		return nil, fmt.Errorf("invalid error")
+	}
+	out = &common.Content{
+		ContentType: in.ContentType,
+		DataTypeURL: in.DataTypeURL,
+	}
+
+	clientVersion := in.Request.Header.Get("client-version")
+	platform := in.Request.Header.Get("platform")
+	//客户端版本验证
+	if conf.GConf().Base.VersionCheck {
+		logger.Infof("VersionCheck clientVersion:%s", clientVersion)
+		err = s.VersionCheckExt(platform, clientVersion)
+		if err != nil {
+			logger.Warnf("VersionCheck error:%s", err.Error())
+			out.Data = s.ErrorPack(cmd.ErrorCode_VersionLimit)
+			return out, nil
+		}
+	}
+
+	srcData, err := tcpx.Decrypt(in.Data, "")
+	if err != nil {
+		logger.Warn("OnLogin Unpack Decrypt", errorx.Wrap(err).Error())
+		return nil, err
+	}
+
+	messageId, err := tcpx.MessageIDOf(srcData)
+	if err != nil {
+		logger.Error("OnLogin MsgHandler parse messageId failed:", messageId, err)
+		return nil, err
+	}
+
+	data, err := tcpx.BodyBytesOf(srcData)
+	if err != nil {
+		logger.Warn("OnLogin BodyBytesOf", errorx.Wrap(err).Error())
+		return nil, err
+	}
+
+	res := s.handleLoginReq(&Msg{msgId: messageId, Data: data, ClientIp: ip})
+	if res.ErrCode == int32(cmd.ErrorCode_Success) {
+		data, err = s.Pack(cmd.Protocols_PLS2C_LoginRes, cmd.ErrorCode_Success, res, "")
+		delayTime := time.Since(curTime).Milliseconds()
+		metrics.HistogramPut(metrics.LoginDelayHist, delayTime, metrics.Delay)
+		logger.Debugf("===>>>OnLoginDelay, uid:%s, delay:%d, len:%v", res.AccountId, delayTime, len(data))
+		logger.WarnDelayf(delayTime, "")
+		taptap.LoginDelayComm(res.AccountId, nil, nil, messageId, delayTime)
+
+	} else {
+		data, err = s.Pack(cmd.Protocols_PS2C_ErrorCodeNtf, cmd.ErrorCode(res.ErrCode), &cmd.S2C_ErrorCodeNtf{ErrorCode: uint32(res.ErrCode), Param: []string{strconv.Itoa(int(res.ErrCode))}}, "")
+	}
+	if err != nil {
+		logger.Warnf("OnLogin res pack err: %s", errorx.Wrap(err).Error())
+	}
+	out = &common.Content{
+		Data:        data,
+		ContentType: in.ContentType,
+		DataTypeURL: in.DataTypeURL,
+	}
+	return out, nil
+}

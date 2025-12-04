@@ -1,0 +1,28 @@
+global:
+  kibanaEnabled: false
+service:
+  type: NodePort
+  nodePorts:
+    restAPI: 9200
+    transport: 9300
+master:
+  replicaCount: 1
+data:
+  replicaCount: 1
+coordinating:
+  replicaCount: 1
+ingest:
+  replicaCount: 1
+kibana:
+  elasticsearch:
+    hosts:
+      - '192.168.2.7'
+extraVolumes:
+  - name: plugins
+    persistentVolumeClaim:
+      claimName: plugins-pvc  # PVC 的名称
+
+extraVolumeMounts:
+  - name: plugins
+    mountPath: /opt/bitnami/elasticsearch/plugins  # Elasticsearch 的 plugins 目录
+    subPath: plugins

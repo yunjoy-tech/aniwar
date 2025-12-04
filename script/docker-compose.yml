@@ -1,0 +1,60 @@
+version: '3'
+services:
+  # 分片集群，两个节点
+  shard_server11:
+    container_name: shard_server11
+    image: mongo:latest
+    networks:
+      mongo:
+        ipv4_address: 172.20.0.11
+    ports:
+      - 27018:27018
+    command: --shardsvr --replSet "rs_shard_server1" --bind_ip_all
+    restart: always
+    depends_on:
+      - rs_config_server1
+
+  shard_server21:
+    container_name: shard_server21
+    networks:
+      mongo:
+        ipv4_address: 172.20.0.12
+    image: mongo:latest
+    ports:
+      - 27028:27018
+    command: --shardsvr --replSet "rs_shard_server2" --bind_ip_all
+    restart: always
+    depends_on:
+      - rs_config_server1
+
+  # 配置服务器集群一个节点
+  rs_config_server1:
+    container_name: rs_config_server1
+    networks:
+      mongo:
+        ipv4_address: 172.20.0.13
+    image: mongo:latest
+    command: --configsvr --replSet "rs_config_server" --bind_ip_all
+    restart: always
+
+  # 路由节点mongos
+  mongos:
+    container_name: mongos
+    networks:
+      mongo:
+        ipv4_address: 172.20.0.15
+    image: mongo:latest
+    ports:
+      - 27017:27017
+    entrypoint: mongos
+    command: --configdb rs_config_server/172.20.0.13:27019 --bind_ip_all
+    restart: always
+    depends_on:
+      - shard_server11
+      - shard_server21
+networks:
+  mongo:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.10/24

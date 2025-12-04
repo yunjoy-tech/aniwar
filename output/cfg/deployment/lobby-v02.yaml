@@ -1,0 +1,288 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    deployment.kubernetes.io/revision: "35"
+    meta.helm.sh/release-name: lobby-v02
+    meta.helm.sh/release-namespace: aniwar
+  creationTimestamp: null
+  generation: 1
+  labels:
+    app.kubernetes.io/instance: lobby-v02
+    app.kubernetes.io/managed-by: Helm
+    app.kubernetes.io/name: lobby-v02
+    app.kubernetes.io/version: 1.16.0
+    helm.sh/chart: lobby-v02-0.1.0
+    io.cattle.field/appId: lobby-v02
+  managedFields:
+  - apiVersion: apps/v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          .: {}
+          f:meta.helm.sh/release-name: {}
+          f:meta.helm.sh/release-namespace: {}
+        f:labels:
+          .: {}
+          f:app.kubernetes.io/instance: {}
+          f:app.kubernetes.io/managed-by: {}
+          f:app.kubernetes.io/name: {}
+          f:app.kubernetes.io/version: {}
+          f:helm.sh/chart: {}
+          f:io.cattle.field/appId: {}
+      f:spec:
+        f:progressDeadlineSeconds: {}
+        f:revisionHistoryLimit: {}
+        f:selector: {}
+        f:strategy:
+          f:rollingUpdate:
+            .: {}
+            f:maxSurge: {}
+            f:maxUnavailable: {}
+          f:type: {}
+        f:template:
+          f:metadata:
+            f:annotations:
+              .: {}
+              f:dapr.io/app-id: {}
+              f:dapr.io/app-protocol: {}
+              f:dapr.io/enabled: {}
+              f:dapr.io/log-as-json: {}
+              f:dapr.io/log-level: {}
+              f:dapr.io/sidecar-liveness-probe-delay-seconds: {}
+              f:dapr.io/sidecar-readiness-probe-delay-seconds: {}
+            f:labels:
+              .: {}
+              f:app.kubernetes.io/instance: {}
+              f:app.kubernetes.io/name: {}
+              f:io.cattle.field/appId: {}
+          f:spec:
+            f:containers:
+              k:{"name":"lobby-v02"}:
+                .: {}
+                f:image: {}
+                f:imagePullPolicy: {}
+                f:livenessProbe:
+                  .: {}
+                  f:failureThreshold: {}
+                  f:httpGet:
+                    .: {}
+                    f:path: {}
+                    f:port: {}
+                    f:scheme: {}
+                  f:periodSeconds: {}
+                  f:successThreshold: {}
+                  f:timeoutSeconds: {}
+                f:name: {}
+                f:ports: {}
+                f:readinessProbe:
+                  .: {}
+                  f:failureThreshold: {}
+                  f:httpGet:
+                    .: {}
+                    f:path: {}
+                    f:port: {}
+                    f:scheme: {}
+                  f:periodSeconds: {}
+                  f:successThreshold: {}
+                  f:timeoutSeconds: {}
+                f:resources: {}
+                f:terminationMessagePath: {}
+                f:terminationMessagePolicy: {}
+            f:dnsPolicy: {}
+            f:restartPolicy: {}
+            f:schedulerName: {}
+            f:securityContext: {}
+            f:serviceAccount: {}
+            f:serviceAccountName: {}
+            f:terminationGracePeriodSeconds: {}
+    manager: Go-http-client
+    operation: Update
+    time: "2022-09-16T02:27:21Z"
+  - apiVersion: apps/v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:spec:
+        f:replicas: {}
+        f:template:
+          f:metadata:
+            f:annotations:
+              f:cattle.io/timestamp: {}
+              f:dapr.io/config: {}
+              f:field.cattle.io/ports: {}
+          f:spec:
+            f:containers:
+              k:{"name":"lobby-v02"}:
+                f:command: {}
+                f:ports:
+                  k:{"containerPort":23001,"protocol":"TCP"}:
+                    .: {}
+                    f:containerPort: {}
+                    f:name: {}
+                    f:protocol: {}
+                  k:{"containerPort":50001,"protocol":"TCP"}:
+                    .: {}
+                    f:containerPort: {}
+                    f:name: {}
+                    f:protocol: {}
+                f:securityContext:
+                  .: {}
+                  f:capabilities: {}
+                f:volumeMounts:
+                  .: {}
+                  k:{"mountPath":"/app/log"}:
+                    .: {}
+                    f:mountPath: {}
+                    f:name: {}
+                  k:{"mountPath":"/app/output"}:
+                    .: {}
+                    f:mountPath: {}
+                    f:name: {}
+                f:workingDir: {}
+            f:dnsConfig: {}
+            f:volumes:
+              .: {}
+              k:{"name":"log"}:
+                .: {}
+                f:name: {}
+                f:persistentVolumeClaim:
+                  .: {}
+                  f:claimName: {}
+              k:{"name":"output"}:
+                .: {}
+                f:name: {}
+                f:persistentVolumeClaim:
+                  .: {}
+                  f:claimName: {}
+    manager: rancher
+    operation: Update
+    time: "2022-09-16T02:39:34Z"
+  - apiVersion: apps/v1
+    fieldsType: FieldsV1
+    fieldsV1:
+      f:metadata:
+        f:annotations:
+          f:deployment.kubernetes.io/revision: {}
+      f:status:
+        f:availableReplicas: {}
+        f:conditions:
+          .: {}
+          k:{"type":"Available"}:
+            .: {}
+            f:lastTransitionTime: {}
+            f:lastUpdateTime: {}
+            f:message: {}
+            f:reason: {}
+            f:status: {}
+            f:type: {}
+          k:{"type":"Progressing"}:
+            .: {}
+            f:lastTransitionTime: {}
+            f:lastUpdateTime: {}
+            f:message: {}
+            f:reason: {}
+            f:status: {}
+            f:type: {}
+        f:observedGeneration: {}
+        f:readyReplicas: {}
+        f:replicas: {}
+        f:updatedReplicas: {}
+    manager: kube-controller-manager
+    operation: Update
+    time: "2022-09-16T02:41:21Z"
+  name: lobby-v02
+spec:
+  progressDeadlineSeconds: 600
+  replicas: 1
+  revisionHistoryLimit: 10
+  selector:
+    matchLabels:
+      app.kubernetes.io/instance: lobby-v02
+      app.kubernetes.io/name: lobby-v02
+      io.cattle.field/appId: lobby-v02
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      annotations:
+        cattle.io/timestamp: "2022-09-16T02:40:50Z"
+        dapr.io/app-id: lobby
+        dapr.io/app-protocol: http
+        dapr.io/config: dapr-config
+        dapr.io/enabled: "true"
+        dapr.io/log-as-json: "true"
+        dapr.io/log-level: debug
+        dapr.io/sidecar-liveness-probe-delay-seconds: "10"
+        dapr.io/sidecar-readiness-probe-delay-seconds: "10"
+        field.cattle.io/ports: '[[{"containerPort":50001,"dnsName":"lobby-v02-nodeport","hostPort":0,"kind":"NodePort","name":"dapr-port","protocol":"TCP","sourcePort":50001},{"containerPort":23001,"dnsName":"lobby-v02-nodeport","hostPort":0,"kind":"NodePort","name":"app-port","protocol":"TCP","sourcePort":23001}]]'
+      creationTimestamp: null
+      labels:
+        app.kubernetes.io/instance: lobby-v02
+        app.kubernetes.io/name: lobby-v02
+        io.cattle.field/appId: lobby-v02
+    spec:
+      containers:
+      - command:
+        - /app/output/bin/linux/lobbyserver
+        - appid=lobby
+        - inaddr=23001
+        - gport=50001
+        image: 192.168.2.8:5000/aniwar/lobbyserver:v0.2
+        imagePullPolicy: Always
+        livenessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /v1.0/healthz
+            port: 3500
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        name: lobby-v02
+        ports:
+        - containerPort: 50001
+          name: dapr-port
+          protocol: TCP
+        - containerPort: 23001
+          name: app-port
+          protocol: TCP
+        readinessProbe:
+          failureThreshold: 3
+          httpGet:
+            path: /v1.0/healthz
+            port: 3500
+            scheme: HTTP
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 1
+        resources: {}
+        securityContext:
+          capabilities: {}
+        terminationMessagePath: /dev/termination-log
+        terminationMessagePolicy: File
+        volumeMounts:
+        - mountPath: /app/output
+          name: output
+        - mountPath: /app/log
+          name: log
+        workingDir: /app
+      dnsConfig: {}
+      dnsPolicy: ClusterFirst
+      restartPolicy: Always
+      schedulerName: default-scheduler
+      securityContext: {}
+      serviceAccount: lobby-v02
+      serviceAccountName: lobby-v02
+      terminationGracePeriodSeconds: 30
+      volumes:
+      - name: output
+        persistentVolumeClaim:
+          claimName: output
+      - name: log
+        persistentVolumeClaim:
+          claimName: log
+status: {}

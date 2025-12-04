@@ -1,0 +1,12 @@
+apiVersion: dapr.io/v1alpha1
+kind: Subscription
+metadata:
+  name: order
+  namespace: aniwar
+spec:
+  topic: orders
+  route: /checkout
+  pubsubname: pubsub
+  deadLetterTopic: poisonMessages
+scopes:
+  - checkout

@@ -1,0 +1,26 @@
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: topic-global
+spec:
+  type: pubsub.redis
+  version: v1
+  metadata:
+  - name: redisHost
+    value: 10.14.1.94:6379
+  - name: redisPassword
+    value: ""
+  - name: redisDB
+    value: "8"
+  - name: redeliverInterval
+    value: "0"
+  - name: processingTimeout
+    value: "0"
+  - name: queueDepth
+    value: "100"
+  - name: concurrency
+    value: "15"
+  - name: maxLenApprox
+    value: "100"
+  - name: minIdleConns
+    value: "2"

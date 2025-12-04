@@ -1,0 +1,167 @@
+package roomactor
+
+import (
+	"gitlab.musadisca-games.com/wangxw/musae/framework/baseconf"
+	"gitlab.musadisca-games.com/wangxw/musae/framework/threading"
+	"strconv"
+	"time"
+
+	"github.com/dapr/go-sdk/actor"
+	_ "github.com/dapr/go-sdk/actor"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/actorserver/frame"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/musae/framework/baseactor"
+	"gitlab.musadisca-games.com/wangxw/musae/framework/global"
+	"gitlab.musadisca-games.com/wangxw/musae/framework/service"
+	svc "gitlab.musadisca-games.com/wangxw/musae/framework/service"
+)
+
+type RoomData struct {
+	Data *cmd.Room
+	Tug  *cmd.Tug
+}
+
+type RoomActor struct {
+	*frame.CommonActor
+	RoomData
+
+	//Srv *frame.ActorServer
+
+	RoomHandler *RoomHandler
+	TugHandler  *TugHandler
+}
+
+func New() actor.Server {
+	a := &RoomActor{
+		CommonActor: frame.NewCommonActor(frame.GSrv),
+		RoomData:    RoomData{},
+	}
+	a.ActorType = global.RoomActorType
+	a.SetActor(a)
+
+	a.Srv = frame.GSrv
+	//a.RoomData = &cmd.PvpRoom{}
+
+	//a.MsgFunc = make(map[int32]base.FProtoMsgHandler)
+
+	a.HandlersMap = make(map[svc.MongoDbType][]baseactor.IBaseHandler, 0)
+
+	//协议注册
+	a.initHandlers()
+
+	return a
+}
+
+func (s *RoomActor) SetID(id string) {
+	s.ServerImplBase.SetID(id)
+}
+
+func (s *RoomActor) Activate(invokeName string) error {
+	defer func() {
+		if err := recover(); err != any(nil) {
+			s.Trace("RoomActor.SaveState recover, err: ", err)
+		}
+	}()
+
+	s.ReloadActorFromRedis(global.RoomActorType)
+
+	// 内存中没有数据
+	if s.Data == nil {
+		if err := s.loadAllData(); err != nil {
+			return err
+		}
+		// redis中也没数据，初始化默认的值就行
+		if s.Data == nil {
+			s.Data = &cmd.Room{
+				RoomId:     "",
+				RoomSecret: "",
+				RoomState:  cmd.RoomState_RoomState_idle, // 初始空闲状态
+				PlayType:   0,
+				OwnerUid:   "",
+				Players:    nil,
+				IsRecruit:  0,
+			}
+		}
+	}
+
+	s.Infof("=================>RoomActor Activate [%s]<=================", s.ID())
+
+	return nil
+}
+
+func (s *RoomActor) Deactivate() error {
+	threading.RunSafe(func() {
+		s.SaveActor2Redis(global.RoomActorType)
+		// 判定是否超时deactivate
+		now := time.Now()
+		update := time.Unix(s.Data.UpdateTs, 0)
+		gcTime, err := strconv.Atoi(baseconf.GetBaseConf().UserActorGCTime)
+		if err != nil {
+			gcTime = 600 //默认600s秒
+		}
+		if now.After(update.Add(time.Second * time.Duration(gcTime))) {
+			s.RoomHandler.dismissRoomBySystem()
+			// 清空数据
+			s.Data = &cmd.Room{
+				RoomId:     "",
+				RoomSecret: "",
+				RoomState:  cmd.RoomState_RoomState_idle, // 初始空闲状态
+				PlayType:   0,
+				OwnerUid:   "",
+				Players:    nil,
+				IsRecruit:  0,
+			}
+			mongoDbType, dbKey, dbMsg := s.RoomHandler.DBTable()
+			err = s.Cache2Redis(mongoDbType, s.ID(), dbKey, dbMsg)
+			if err != nil {
+				s.Error(err)
+			}
+		}
+	})
+
+	s.Infof("=================>RoomActor Deactivate [%s]<=================", s.ID())
+	return nil
+}
+
+func (s *RoomActor) initHandlers() {
+	s.RoomHandler = NewRoomHandler(s)
+	s.KeepHandler(s.RoomHandler)
+
+	s.TugHandler = NewTugHandler(s)
+	s.KeepHandler(s.TugHandler)
+
+}
+
+func (s *RoomActor) loadAllData() error {
+	var (
+		err    error
+		startT = time.Now()
+	)
+
+	mongoDBs := []service.MongoDbType{
+		service.MongoDbType_MongoAccount, // 账号db
+		service.MongoDbType_MongoGame,    // 游戏db
+	}
+
+	for _, eachDB := range mongoDBs {
+		if err = s.loadDBDataByDBType(eachDB); err != nil {
+			return err
+		}
+	}
+
+	s.WarnDelayf(time.Since(startT).Milliseconds(), "")
+
+	return nil
+}
+
+// 全量加载用户数据
+func (s *RoomActor) loadDBDataByDBType(dbType service.MongoDbType) error {
+	for _, handler := range s.HandlersMap[dbType] {
+		dbTable, dbKey, dbVal := handler.DBTable()
+		err := handler.LoadDBData(dbTable, dbKey, dbVal)
+		if err != nil {
+			return err
+		}
+	}
+	return nil
+}

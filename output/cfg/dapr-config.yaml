@@ -1,0 +1,25 @@
+apiVersion: dapr.io/v1alpha1
+kind: Configuration
+metadata:
+  name: dapr-config
+spec:
+  mtls:
+    enabled: false
+    workloadCertTTL: "25s"
+    allowedClockSkew: "1h"
+  features:
+    - name: Resiliency
+      enabled: false
+  metric:
+    enabled: true
+  tracing:
+    samplingRate: "1"
+    stdout: false
+    zipkin:
+      endpointAddress: "http://192.168.2.19:9411/api/v2/spans"
+  nameResolution:
+    component: "consul"
+    configuration:
+      client:
+        address: "127.0.0.1:8500"
+      selfRegister: true

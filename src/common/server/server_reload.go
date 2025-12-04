@@ -1,0 +1,131 @@
+package server
+
+import (
+	"context"
+	"encoding/json"
+	"fmt"
+	"github.com/dapr/go-sdk/service/common"
+	comn "gitlab.musadisca-games.com/wangxw/aniwar/src/common"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/excel/data"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
+	"gitlab.musadisca-games.com/wangxw/musae/framework/global"
+	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
+	"gitlab.musadisca-games.com/wangxw/musae/framework/utils"
+	"google.golang.org/protobuf/proto"
+	"strings"
+	"time"
+)
+
+func (s *Server) HotReload(ctx context.Context, in *common.InvocationEvent) (out *common.Content, err error) {
+	defer func() {
+		if err := recover(); err != any(nil) {
+			logger.Trace("hotreload failed, err: ", err)
+		}
+	}()
+
+	out = &common.Content{
+		ContentType: in.ContentType,
+		DataTypeURL: in.DataTypeURL,
+	}
+
+	if in == nil {
+		err = fmt.Errorf("nil invocation parameter")
+		logger.Warn("hotreload nil invocation parameter")
+		return out, err
+	}
+	logger.Debugf("hotreload - ContentType:%s, Verb:%s, QueryString:%s, Data:%v", in.ContentType, in.Verb, in.QueryString, in.Data)
+
+	param := &comn.ReloadParam{}
+	err = json.Unmarshal(in.Data, param)
+	if err != nil {
+		logger.Warn("hotreload ReloadParam error")
+		return out, err
+	}
+
+	switch param.Type {
+	case "conf":
+		err = s.LoadConf()
+		if err != nil {
+			out.Data = []byte(err.Error())
+		} else {
+			out.Data = []byte("SUCCESS")
+		}
+	case "excel":
+		if strings.Compare(param.Files, "all") == 0 {
+			if s.AppId == "actor" {
+				err = s.LoadExcel()
+			} else {
+				err = s.LoadNeedExcel(nil) // 非actorserver都调用这个加载方法
+			}
+		} else {
+			files := strings.Split(param.Files, "|")
+			if s.AppId == "actor" {
+				err = data.LoadByFileNames(s.DataDir, files, s.AppId, "actorserver")
+			} else {
+				err = s.LoadNeedExcel(files) // 非actorserver都调用这个加载方法
+			}
+		}
+		if err != nil {
+			out.Data = []byte(err.Error())
+		} else {
+			out.Data = []byte("SUCCESS")
+		}
+	case "dirtyword": // 静态屏蔽词更新
+		err = s.LoadWordCfg()
+		if err != nil {
+			out.Data = []byte(err.Error())
+		} else {
+			out.Data = []byte("SUCCESS")
+		}
+	default:
+		out.Data = []byte("invalid param")
+	}
+	logger.Infof("hotreload param:[%+v], out: %s", param, string(out.Data))
+	return out, nil
+
+}
+
+func (s *Server) HandlerHotEvent(in *base.ProtoMsg) (err error) {
+	req := &cmd.S2S_HotReloadReq{}
+	now := time.Now().Unix()
+	in.UnmarshalData(req)
+	notify := &cmd.S2S_HotReloadNotifyReq{}
+	logger.Infof("HandlerHotEvent Begin files:%+v", req.Files)
+	if len(req.Files) > 0 {
+		tag := req.Files[0]
+		if tag == "all" {
+			err = s.LoadExcelData()
+		} else if tag == "server.conf" {
+			err = s.ReloadConf()
+		} else {
+			err = s.LoadExcelDataByFiles(req.Files)
+		}
+		if err != nil {
+			notify.Service = s.PrivateTopicID()
+			notify.Ts = -1
+			logger.Errorf("HandlerHotEvent fail err:%v files:%+v", err, req.Files)
+		} else {
+			notify.Service = s.PrivateTopicID()
+			notify.Ts = now
+			logger.Infof("HandlerHotEvent success notify:%+v files:%+v", notify, req.Files)
+		}
+	}
+
+	reqData, err := proto.Marshal(notify)
+	if err == nil {
+		_, _ = s.ActorInvoke(global.CenterActorType, global.CenterActorID, &base.ProtoMsg{
+			AppId:   global.ACTOR_SVC,
+			MsgId:   int32(cmd.Protocols_PS2S_HotReloadNotifyReq),
+			UserId:  "",
+			RoleId:  0,
+			UAID:    global.CenterActorID,
+			Data:    reqData,
+			ErrCode: 0,
+			ReqIdx:  utils.GenIntUUID(),
+			Topic:   "",
+			Uids:    nil,
+		})
+	}
+	return err
+}

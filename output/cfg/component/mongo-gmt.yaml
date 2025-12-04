@@ -1,0 +1,25 @@
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: mongo-gmt
+spec:
+  type: state.mongodb
+  version: v1
+  initTimeout: 5m
+  metadata:
+    - name: host
+      value: "127.0.0.1:27017" # Required. Example: "mongo-mongodb.default.svc.cluster.local:27017"
+    - name: username
+      value: "admin" # Optional. Example: "admin"
+    - name: password
+      value: "123456" # Optional.
+    - name: databaseName
+      value: "gmt" # Optional. default: "daprStore"
+    - name: collectionName
+      value: "gmt" # Optional. default: "daprCollection"
+    - name: writeconcern
+      value: "majority" # Optional.
+    - name: readconcern
+      value: "majority" # Optional.
+    - name: keyPrefix
+      value: "none"

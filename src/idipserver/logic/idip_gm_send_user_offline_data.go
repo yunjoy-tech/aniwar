@@ -1,0 +1,96 @@
+package logic
+
+import (
+	"context"
+	"encoding/json"
+	"net/http"
+
+	"gitlab.musadisca-games.com/wangxw/musae/framework/utils"
+
+	"github.com/dapr/go-sdk/service/common"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/actor/stub"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
+	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
+	"google.golang.org/protobuf/proto"
+)
+
+// 请求参数结构
+type SendUserOfflineDataReq struct {
+	//ReqType    string       `json:"type"`        // 固定值 “send_mail”
+	SvrId int32 `json:"svr_id"` // 服务器ID
+	Uids  []int `json:"uids"`   // 玩家uid,[123, 124, 125, …]
+	// OperateType cmd.OfflineOperateType // 操作类型
+	Params     map[int32]int32 // 操作参数
+	AffectTime int64           `json:"affect_time"` // 生效时间，可选
+	ExpireTime int64           `json:"expire_time"` // 过期时间，可选
+}
+
+// SendUserOfflineData 记录玩家离线数据
+func (s *IDIPServer) SendUserOfflineData(out *common.Content, reqJson []byte) {
+
+	// 解析数据
+	req := SendUserOfflineDataReq{}
+	if err := json.Unmarshal(reqJson, &req); err != nil {
+		RetCommonMsg(out, http.StatusInternalServerError, int32(cmd.ErrorCode_InternalError), Internal_Error)
+		return
+	}
+
+	rpcCall := &cmd.S2SSaveOfflineDataReq{
+		//ODataStatus: cmd.OfflineDataStatus_Need_exec,
+		//OperateType: req.OperateType,
+		Params: req.Params,
+	}
+
+	items := make([]*RetItems, 0)
+	errCheck := func(err error, id int) {
+		if err != nil {
+			items = append(items, &RetItems{
+				SvrId:  0,
+				UserId: int32(id),
+				Ret:    int32(cmd.ErrorCode_InternalError),
+				Info:   err.Error(),
+			})
+			logger.Error("add error", err)
+		}
+	}
+
+	for _, uid := range req.Uids {
+		uaid, err := s.GetUAIDByRoleId(uint64(uid))
+		if err != nil {
+			errCheck(err, uid)
+			continue
+		}
+		userStub := stub.NewUserStub(uaid)
+		data, err := proto.Marshal(rpcCall)
+		if err != nil {
+			errCheck(err, uid)
+			continue
+		}
+		in := &base.ProtoMsg{
+			AppId:   s.AppId,
+			MsgId:   int32(cmd.Protocols_PS2AS_S2SSaveOfflineDataReq),
+			UserId:  uaid,
+			RoleId:  0,
+			UAID:    uaid,
+			Data:    data,
+			ErrCode: 0,
+			//GUID:    utils.GenIntUUID(),
+			ServerReqIdx: utils.GenIntUUID(),
+			Topic:        "",
+		}
+		s.ImpActorStub(userStub)
+		rsp, err := userStub.UserInvoke(context.Background(), in)
+		if rsp.ErrCode != RET_CODE_SUCCESS || err != nil {
+			errCheck(err, uid)
+			continue
+		}
+	}
+
+	// 返回结果数据
+	if len(items) > 0 {
+		RetCommonMsg(out, http.StatusInternalServerError, int32(RET_CODE_FAIL), items)
+	} else {
+		RetCommonMsg(out, http.StatusOK, int32(RET_CODE_SUCCESS), items)
+	}
+}

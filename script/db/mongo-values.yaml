@@ -1,0 +1,11 @@
+architecture: sharded
+replicaCount: 3
+sharding:
+  configsvr: true
+  mongos: true
+auth:
+  rootPassword: "0XjLawDmTfo5IVeP"
+service:
+  type: NodePort
+  nodePorts:
+    mongodb: "30017"

@@ -1,0 +1,97 @@
+version: '3'
+services:
+  # 分片集群，两个节点
+  shard_server11:
+    container_name: shard_server11
+    image: mongo:5.0
+    networks:
+      mongo:
+        ipv4_address: 172.20.0.11
+    ports:
+      - 27018:27018
+    volumes:
+      - /data/mongo/shard_server11/data/db:/data/db
+      - /data/mongo/shard_server11/data/configdb:/data/configdb
+      - /data/mongo/shard_server11/data/backup:/data/backup
+    command: --shardsvr --replSet "rs_shard_server1" --bind_ip_all
+    restart: always
+    environment:
+      TZ: Asia/Shanghai
+    depends_on:
+      - rs_config_server1
+
+  shard_server21:
+    container_name: shard_server21
+    networks:
+      mongo:
+        ipv4_address: 172.20.0.12
+    image: mongo:5.0
+    ports:
+      - 27028:27018
+    volumes:
+      - /data/mongo/shard_server21/data/db:/data/db
+      - /data/mongo/shard_server21/data/configdb:/data/configdb
+      - /data/mongo/shard_server21/data/backup:/data/backup
+    command: --shardsvr --replSet "rs_shard_server2" --bind_ip_all
+    restart: always
+    environment:
+      TZ: Asia/Shanghai
+    depends_on:
+      - rs_config_server1
+
+  # 配置服务器集群一个节点
+  rs_config_server1:
+    container_name: rs_config_server1
+    networks:
+      mongo:
+        ipv4_address: 172.20.0.13
+    image: mongo:5.0
+    volumes:
+      - /data/mongo/config_server1/data/db:/data/db
+      - /data/mongo/config_server1/data/configdb:/data/configdb
+    command: --configsvr --replSet "rs_config_server" --bind_ip_all
+    restart: always
+    environment:
+      TZ: Asia/Shanghai
+
+  # 路由节点mongos
+  mongos:
+    container_name: mongos
+    networks:
+      mongo:
+        ipv4_address: 172.20.0.15
+    image: mongo:5.0
+    ports:
+      - 27017:27017
+    volumes:
+      - /data/mongo/mongos/data/db:/data/db
+      - /data/mongo/mongos/data/configdb:/data/configdb
+    entrypoint: mongos
+    command: --configdb rs_config_server/172.20.0.13:27019 --bind_ip_all
+    restart: always
+    environment:
+      TZ: Asia/Shanghai
+    depends_on:
+      - shard_server11
+      - shard_server21
+
+  redis:
+    image: redis:6.0
+    container_name: redis
+    #network_mode: host
+    restart: always
+    environment:
+      TZ: Asia/Shanghai
+    ports:
+      - 6379:6379
+    volumes:
+      - /data/redis/data:/data:rw
+      #- /data/redis/etc:/etc/redis/:rw
+    command: [ "redis-server","/etc/redis/redis.conf" ]
+
+networks:
+  mongo:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.10/24

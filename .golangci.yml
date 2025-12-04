@@ -1,0 +1,347 @@
+## https://golangci-lint.run/
+run:
+  timeout: 2m
+  tests: false
+  allow-parallel-runners: true
+  go: "1.22"
+
+issues:
+  exclude-dirs:
+    - protobuf/*
+    - gamedb
+    - test/*
+    - stress/*
+  exclude-dirs-use-default: true
+  exclude-files:
+    - internal/handler/debug_handler.go
+
+output:
+  sort-results: true
+
+linters:
+  # enable-all: true
+  disable-all: true
+  fast: true
+  ## https://golangci-lint.run/usage/linters/
+  enable:
+    ## 默认的配置
+    - errcheck ## 报错未检查的error或者a = b.(int)的类型断言
+    - govet
+    - gosimple
+    - ineffassign ## 检查无用的赋值
+    - staticcheck
+    - unused ## 检查未使用的常量、变量、函数和类型。
+
+    - asasalint ## 检查把[]any的参数传递到可变参数函数 func(...any)中
+    - asciicheck ## 检查非ascii字符
+    - bidichk ## 检查是否包含dangerous unicode字符， 例如U+202A,U+202B,U+202C,U+202D,U+202E,U+2066,U+2067,U+2068,U+2069
+    - bodyclose ## 检查http请求的body是否关闭
+    - contextcheck ## 检查函数的context是否使用了非传递的context, 例如存在context却使用了context.Background()
+    - cyclop ## 检查代码的圈复杂度
+    - depguard ## 检查包依赖是否符合规范
+    - durationcheck ## 检查两个duration时间相乘
+    - errchkjson ## 检查传递给json的类型，报告不支持的类型，报告可以省略的返回错误检查
+    - errorlint ## 查找1.13中引入errors包，可能出现问题的代码
+    - exhaustive ## 检查枚举，switch的case是否覆盖所有的情况
+    - fatcontext
+    - copyloopvar ## 查找循环变量的导出指针
+    - gocheckcompilerdirectives ## 检查 go 编译器指令注释 (//go:) 是否有效。
+    - goconst ## 检查重复的常量
+    - gocyclo ## 函数的圈复杂度
+    - gocritic ## 高扩展性的go源码lint
+    - mnd ## 检查魔法数字， 例如 60*60*24， 5*time.Second
+    - gosec ## 检查代码中的安全问题
+    - gosmopolitan ## 报告 Go 代码库中的某些 i18n/l10n 反模式。
+    - lll ## 检查代码行的长度
+    - makezero ## 检查切片没有初始化(长度为0)但是后续使用了append
+    - mirror ## 检查，避免不必要的[]byte和string之间的转换
+    - misspell ## 错误的拼写
+    - nakedret ## golang函数存在naked return的最大长度 (func() (a int, b int) {return })
+    - nestif ## if语句的嵌套, 复杂度，函数里if语句数量
+    - nilerr ## 检查返回nil的error
+    - nilnil ## 检查是否同时返回nil的error和无效值
+    - noctx ## 找出httpq请求中没有使用context的地方
+    # - nolintlint ## nolint必须包含reason //nolint // reason
+    - prealloc ## 查询可能被预分配的切片
+    - predeclared ## 检查代码中的变量是否覆盖了go的预声明变量
+    - perfsprint ## 检查fmt.Sprintf的性能问题
+    - reassign ## 检查全局变量是否被另外的包重新赋值
+    - tagliatelle ## 检查struct的tag格式是否符合规范
+    # - tenv ## 1.17 检查os.Setenv
+    - unconvert ## 检查不必要的类型转换
+    - usestdlibvars ## 检查是否可以使用标准库的变量或者常量
+    - wastedassign ## 检查是否多余的赋值语句
+    # - whitespace ## 检查不必要的空行
+  presets:
+    - bugs
+
+linters-settings:
+  nolintlint:
+    allow-unused: true
+    require-explanation: true
+    require-specific: true
+  errcheck:
+    check-type-assertions: true ## 检查断言
+    check-blank: false ## 不检查 _
+    # ignore: fmt:.*,io/ioutil:(^Read|Write).*,io:(^Read|Write).*
+    disable-default-exclusions: false
+    exclude-functions:
+      - io.WriteString
+
+  gosimple:
+    checks: ["all"]
+    # ["all", "-ST1000", "-ST1003", "-ST1016", "-ST1020", "-ST1021", "-ST1022"]
+
+  staticcheck:
+    checks: ["all"]
+
+  asasalint:
+    ignore-test: true
+
+  gosmopolitan:
+    allow-time-local: true
+    ignore-tests: true
+    watch-for-scripts:
+      - Hiragana
+      - Katakana
+
+  gomodguard:
+    blocked:
+      modules:
+        - io/ioutil:
+            reason: "`io/ioutil` package is deprecated. Use `io` package instead."
+        - github.com/gogo/protobuf:
+            recommendations:
+              - google.golang.org/protobuf
+            reason: "`gogo/protobuf` is deprecated. Use `google.golang.org/protobuf` instead."
+        - github.com/golang/protobuf:
+            recommendations:
+              - google.golang.org/protobuf
+            reason: "`golang/protobuf` is deprecated. Use `google.golang.org/protobuf` instead."
+
+    # allowed:
+    #   # List of allowed modules.
+    #   # Default: []
+    #   modules:
+    #     - gopkg.in/yaml.v2
+    #   # List of allowed module domains.
+    #   # Default: []
+    #   domains:
+    #     - golang.org
+    # blocked:
+    #   # List of blocked modules.
+    #   # Default: []
+    #   modules:
+    #     # Blocked module.
+    #     - github.com/uudashr/go-module:
+    #         # Recommended modules that should be used instead. (Optional)
+    #         recommendations:
+    #           - golang.org/x/mod
+    #         # Reason why the recommended module should be used. (Optional)
+    #         reason: "`mod` is the official go.mod parser library."
+    #   # List of blocked module version constraints.
+    #   # Default: []
+    #   versions:
+    #     # Blocked module with version constraint.
+    #     - github.com/mitchellh/go-homedir:
+    #         # Version constraint, see https://github.com/Masterminds/semver#basic-comparisons.
+    #         version: "< 1.1.0"
+    #         # Reason why the version constraint exists. (Optional)
+    #         reason: "testing if blocked version constraint works."
+    #   # Set to true to raise lint issues for packages that are loaded from a local path via replace directive.
+    #   # Default: false
+    #   local_replace_directives: false
+
+  depguard:
+    rules:
+      # 规则名字
+      main:
+        list-mode: lax
+        files:
+          - "!$test" ## 忽略test
+        # allow:
+        #   - $gostd ## 允许所有的标准库
+        #   - github.com/ ## 允许github.com/下的所有包
+        #   - golang.org/x/ ## 允许golang.org/x下的所有包
+        #   - gorm.io/gorm
+        deny:
+          ## 引入golang/proto，不再使用gogo
+          - pkg: "io/ioutil"
+            desc: "io/ioutil包不再使用"
+          - pkg: "github.com/gogo/protobuf"
+            desc: "gogoproto"
+
+  errchkjson:
+    # With check-error-free-encoding set to true, errchkjson does warn about errors
+    # from json encoding functions that are safe to be ignored,
+    # because they are not possible to happen.
+    #
+    # if check-error-free-encoding is set to true and errcheck linter is enabled,
+    # it is recommended to add the following exceptions to prevent from false positives:
+    #
+    #     linters-settings:
+    #       errcheck:
+    #         exclude-functions:
+    #           - encoding/json.Marshal
+    #           - encoding/json.MarshalIndent
+    #
+    # Default: false
+    check-error-free-encoding: true
+    report-no-exported: true
+
+  errorlint:
+    errorf: false
+    errorf-multi: false
+
+  exhaustive:
+    check:
+      - switch
+      - map
+    default-signifies-exhaustive: true
+    default-case-required: true
+    check-generated: false
+
+  cyclop:
+    # The maximal code complexity to report.
+    # Default: 10
+    max-complexity: 20
+    # The maximal average package complexity.
+    # If it's higher than 0.0 (float) the check is enabled
+    # Default: 0.0
+    package-average: 0
+    # Should ignore tests.
+    # Default: false
+    skip-tests: true
+
+  gocyclo:
+    # Minimal code complexity to report.
+    # Default: 30 (but we recommend 10-20)
+    min-complexity: 20
+
+  nilnil:
+    checked-types:
+      - ptr
+      - func
+      - iface
+      - map
+      - chan
+
+  nestif:
+    # Minimal complexity of if statements to report.
+    # Default: 5
+    min-complexity: 8
+
+  unused:
+    # Mark all struct fields that have been written to as used.
+    # Default: true
+    # field-writes-are-uses: true
+    # Treat IncDec statement (e.g. `i++` or `i--`) as both read and write operation instead of just write.
+    # Default: false
+    # post-statements-are-reads: false
+    # Mark all exported identifiers as used.
+    # Default: true
+    # exported-is-used: true
+    # Mark all exported fields as used.
+    # default: true
+    exported-fields-are-used: true
+    # Mark all function parameters as used.
+    # default: true
+    parameters-are-used: true
+    # Mark all local variables as used.
+    # default: true
+    local-variables-are-used: false
+    # Mark all identifiers inside generated files as used.
+    # Default: true
+    generated-is-used: true
+
+  goconst:
+    match-constant: true
+    min-len: 4
+    min-occurrences: 4
+    ignore-tests: true
+    numbers: true
+
+  tagliatelle:
+    case:
+      use-field-name: false
+      rules:
+        json: snake
+        gorm: snake
+      # rules:
+      #   json: camel
+      #   yaml: camel
+      #   xml: camel
+      #   mapstructure: kebab
+  govet:
+    # Report about shadowed variables.
+    # Default: false
+    # check-shadowing: true
+    # Settings per analyzer.
+    # settings:
+    # shadow:
+    #   # Whether to be strict about shadowing; can be noisy.
+    #   # Default: false
+    #   strict: false
+    enable:
+      - appends
+      - asmdecl
+      - assign
+      - atomic
+      - atomicalign
+      - bools
+      - buildtag
+      - cgocall
+      - composites
+      - copylocks
+      - deepequalerrors
+      - defers
+      - directive
+      - errorsas
+      # - fieldalignment
+      - findcall
+      - framepointer
+      - httpresponse
+      - ifaceassert
+      - loopclosure
+      - lostcancel
+      - nilfunc
+      - nilness
+      - printf
+      - reflectvaluecompare
+      - shadow
+      - shift
+      - sigchanyzer
+      - slog
+      - sortslice
+      - stdmethods
+      - stringintconv
+      - structtag
+      - testinggoroutine
+      - tests
+      - unmarshal
+      - unreachable
+      - unsafeptr
+      - unusedresult
+      - unusedwrite
+
+  lll:
+    # Max line length, lines longer will be reported.
+    # '\t' is counted as 1 character by default, and can be changed with the tab-width option.
+    # Default: 120.
+    line-length: 160
+    # Tab width in spaces.
+    # Default: 1
+    tab-width: 4
+
+  gocritic:
+    disabled-checks:
+      - assignOp
+
+  misspell:
+    mode: default
+
+  gosec:
+    exclude-generated: true
+    excludes:
+      - G404
+      - G115

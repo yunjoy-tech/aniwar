@@ -1,0 +1,23 @@
+apiVersion: dapr.io/v1alpha1
+kind: Component
+metadata:
+  name: pubsub
+  namespace: aniwar
+spec:
+  type: pubsub.redis
+  version: v1
+  metadata:
+    - name: redisHost
+      value: 192.168.2.8:6379
+    - name: redisPassword
+      value: ""
+    - name: redisDB
+      value: "10"
+    - name: redeliverInterval
+      value: "0"
+    - name: processingTimeout
+      value: "0"
+    - name: queueDepth
+      value: "1000"
+    - name: concurrency
+      value: "15"

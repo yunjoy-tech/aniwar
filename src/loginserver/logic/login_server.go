@@ -1,0 +1,296 @@
+package logic
+
+import (
+	"context"
+	"encoding/json"
+	"errors"
+	"fmt"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/datalog/taptap"
+	"os"
+	"strings"
+	"time"
+
+	"gitlab.musadisca-games.com/wangxw/musae/framework/global"
+
+	"github.com/dapr/go-sdk/service/common"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/actor/stub"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/conf"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/db"
+	comn "gitlab.musadisca-games.com/wangxw/aniwar/src/common/server"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
+	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
+	"gitlab.musadisca-games.com/wangxw/musae/framework/metrics"
+	"gitlab.musadisca-games.com/wangxw/musae/framework/tcpx"
+	"gitlab.musadisca-games.com/wangxw/musae/framework/threading"
+	"google.golang.org/protobuf/proto"
+)
+
+type Msg struct {
+	msgId    int32
+	Data     []byte
+	ctx      *tcpx.Context
+	ClientIp string
+}
+
+func (m *Msg) String() string {
+	return fmt.Sprintf("msgId:%v, ip:%s", m.msgId, m.ctx.ClientIP())
+}
+
+type LoginServer struct {
+	comn.Server
+	ch           chan *Msg
+	ticket       chan struct{}
+	ticketAddSum int
+	ticketDecSum int
+}
+
+func NewLoginServer() base.IServer {
+	srv := &LoginServer{}
+	srv.AppId = "login"
+	srv.InAddr = ":21001"
+	srv.GRPCPort = "50001"
+	srv.OutAddr = ":12001"
+	srv.HasPriTopic = true //开启私有频道订阅
+	srv.OnPreInit = srv.PreInit
+	srv.OnServerInit = srv.ServerInit
+	srv.OnConnect = srv.OnNetConnect
+	srv.OnMessage = srv.OnNetMessage
+	srv.OnClose = srv.OnNetClose
+	srv.OnEventHandler = srv.EventHandler
+	srv.OnInvokeHandler = srv.InvokeHandler
+	srv.OnBindHandler = srv.BindingHandler
+	srv.OnRegisterMetric = srv.RegisterMetrics
+	srv.OnCfgCenterCB = srv.HandlerConfEvent
+	return srv
+}
+
+func (s *LoginServer) RegisterMetrics() {
+	metrics.RegisterGauge(metrics.LoginSucceedCount, false)
+	metrics.RegisterGauge(metrics.LoginFailedCount, false)
+	metrics.RegisterHistogram(metrics.LoginDelayHist, nil, metrics.Delay) // todo
+
+}
+
+func (s *LoginServer) PreInit() error {
+	return nil
+}
+
+func (s *LoginServer) ServerInit() error {
+	//注册login接口
+	s.RegisterRpcHandler("/api", s.OnHttp)
+	//
+	if conf.GConf().BaseConf().LoginReqRate > 0 && conf.GConf().BaseConf().LoginReqQueue > 0 {
+		s.ch = make(chan *Msg, conf.GConf().BaseConf().LoginReqQueue)
+		threading.GoSafe(s.doHandleMsg)
+		s.ticket = make(chan struct{}, conf.GConf().BaseConf().LoginReqRate)
+		threading.GoSafe(func() {
+			t := time.NewTicker(time.Second)
+			defer t.Stop()
+			for {
+				select {
+				case <-t.C:
+					threading.RunSafe(s.GrantGateTicket)
+				}
+			}
+		})
+	}
+
+	s.LiveTime = time.Now().Unix() // 创建server时间戳
+
+	// 服务启动埋点
+	taptap.ServiceStart(s.AppId, global.APP_VERSION, "", global.ROLLING_VERSION, "loginserver")
+
+	return nil
+}
+
+func (s *LoginServer) OnNetConnect(c *tcpx.Context) {
+	defer func() {
+		if err := recover(); err != any(nil) {
+			logger.Trace("OnNetConnect failed, err: ", err)
+		}
+	}()
+
+	logger.Debug("OnConnect from remote host:", c.ClientIP(), c.Network())
+}
+
+func (s *LoginServer) OnNetMessage(c *tcpx.Context) {
+	defer func() {
+		if err := recover(); err != any(nil) {
+			logger.Trace("OnNetMessage failed, err: ", err)
+		}
+	}()
+
+	s.OnTcp(c)
+}
+
+func (s *LoginServer) OnNetClose(c *tcpx.Context) {
+
+	logger.Debug("OnClose from remote host: ", c.ClientIP(), c.Network())
+}
+
+func (s *LoginServer) EventHandler(ctx context.Context, e *common.TopicEvent) (retry bool, err error) {
+	defer func() {
+		if err := recover(); err != any(nil) {
+			logger.Trace("EventHandler failed, err: ", err)
+		}
+	}()
+
+	msg, err := base.UnPackProtoMsg(e.RawData)
+	if err != nil {
+		logger.Debugf("UnPackProtoMsg, error: %+v", err)
+		return false, err
+	}
+	logger.Debugf("event - PubsubName:%s, Topic:%s, ID:%s, Data: %s", e.PubsubName, e.Topic, e.ID, e.Data)
+
+	err = s.HandlerSubEvent(msg)
+	if err != nil {
+		logger.Debugf("HandlerSubEvent  error:%+v", err)
+	}
+	return false, nil
+}
+
+func (s *LoginServer) InvokeHandler(ctx context.Context, in *common.InvocationEvent) (out *common.Content, err error) {
+	defer func() {
+		if err := recover(); err != any(nil) {
+			logger.Trace("InvokeHandler failed, err: ", err)
+		}
+	}()
+
+	if in == nil {
+		err = errors.New("nil invocation parameter")
+	}
+	logger.Debugf("InvokeHandler - ContentType:%s, Verb:%s, QueryString:%s, len:%v", in.ContentType, in.Verb, in.QueryString, len(in.Data))
+	metrics.GaugeInc(metrics.InvokeSubCount)
+	out = &common.Content{
+		Data:        in.Data,
+		ContentType: in.ContentType,
+		DataTypeURL: in.DataTypeURL,
+	}
+
+	req := &cmd.RpcCallReq{}
+	if err := json.Unmarshal(in.Data, req); err != nil {
+		logger.Debug("C2SMsg - Unmarshal error")
+	}
+	logger.Debug("RpcCallReq : %+v", req)
+
+	return out, nil
+}
+
+func (s *LoginServer) BindingHandler(ctx context.Context, in *common.BindingEvent) (out []byte, err error) {
+	logger.Debug("binding - Data:%s, Meta:%v", in.Data, in.Metadata)
+	return nil, nil
+}
+
+func (s *LoginServer) OnHeartBeat(c *tcpx.Context) {
+	logger.Debug("OnHeartBeat", c.ClientIP())
+}
+
+func (s *LoginServer) Exit() {
+
+	// 退出埋点
+	taptap.ServiceStop(s.AppId, global.APP_VERSION, "", global.ROLLING_VERSION, "loginserver", time.Now().Unix()-s.LiveTime)
+
+	logger.Info("Server Exit", s.AppId)
+}
+
+func (s *LoginServer) Reload() error {
+	s.LoadConf()
+	return nil
+}
+
+func (s *LoginServer) Main() {
+	for {
+		select {
+		case timeEvt := <-s.TimeCh:
+			s.OnTimerEventCB(timeEvt)
+		case <-s.ExitCh:
+			if s.Daprc != nil {
+				s.Daprc.Close()
+				s.Daprc.Shutdown(context.Background())
+			}
+			logger.Infof("server %s exit success", global.AppID)
+			logger.Flush()
+			os.Exit(0)
+		}
+	}
+}
+
+func (s *LoginServer) handleKickOut(uid string) error {
+	ntf := &cmd.S2S_KickoutPlayerNtf{
+		Reason: "account_multi_login",
+	}
+	data, err := proto.Marshal(ntf)
+	if err != nil {
+		logger.Debug("proto.Marshal error:", err)
+		return err
+	}
+
+	// 调用userInvoke
+	in := &base.ProtoMsg{}
+	in.MsgId = int32(cmd.Protocols_PS2S_KickoutPlayerNtf)
+	in.Data = data
+	in.UserId = uid
+	in.AppId = s.AppId
+	//in.GUID = utils.GenIntUUID()
+	in.ReqIdx = 0
+	userStub := stub.NewUserStub(uid)
+	s.ImpActorStub(userStub)
+	_, err = userStub.UserInvoke(context.Background(), in)
+	if err != nil {
+		logger.Warn("login invoke actor got err:", err)
+		return err
+	}
+
+	logger.Debug("handleKickOut: ", uid)
+	return nil
+}
+
+func (s *LoginServer) checkAccountBanned(accountId string) int64 {
+	// 查询db中的数据
+	kvTable, err := s.GetMongoAccount(db.KeyAccountInfo(accountId), nil)
+	if err != nil {
+		return 0
+	}
+
+	if kvTable == nil {
+		return 0
+	}
+	account := &cmd.UserData{}
+	err = proto.Unmarshal(kvTable.Data, account)
+	if err != nil {
+		logger.Warn("proto unmarshal err: ", err)
+		return 0
+	}
+
+	if account.Account == nil {
+		return 0
+	}
+	return account.Account.BannedTs
+}
+
+func (s *LoginServer) checkWhitelist(accountId string) bool {
+	if str, err := s.GetConfigKeyForStr(db.KeyCfgWhiteList); err == nil {
+		ids := strings.Split(str, ",")
+		for _, k := range ids {
+			if len(k) > 0 && strings.Compare(k, accountId) == 0 {
+				return true
+			}
+		}
+	}
+
+	return false
+}
+
+// checkBlacklist 验证是否在黑名单
+func (s *LoginServer) checkBlacklist(accountId string) bool {
+	if str, err := s.GetConfigKeyForStr(db.KeyCfgBlackList); err == nil {
+		ids := strings.Split(str, ",")
+		for _, k := range ids {
+			if len(k) > 0 && strings.Compare(k, accountId) == 0 {
+				return true
+			}
+		}
+	}
+	return false
+}

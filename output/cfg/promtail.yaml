@@ -1,0 +1,18 @@
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions:
+  filename: ./promtail/promtail-positions.yaml
+
+clients:
+  - url: http://192.168.2.19:3100/loki/api/v1/push
+
+scrape_configs:
+  - job_name: aniwar
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: dev_game_log
+          __path__: ./log/plog/*log
