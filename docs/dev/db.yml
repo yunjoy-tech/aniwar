@@ -1,23 +1,23 @@
-version: '3.8'
-
 services:
   redis:
     image: redis:7.2-alpine
     container_name: dev-redis
     restart: unless-stopped
     ports:
-      - "127.0.0.1:16379:16379"  # 仅本机可访问
+      - "16379:16379"
     volumes:
       - redis_data:/data
     environment:
       - TZ=Asia/Shanghai
-    command: >
-      redis-server
-      --requirepass "123456"
-      --appendonly yes
-      --appendfilename "appendonly.aof"
-      --save 900 1 300 10 60 10000
-      --loglevel notice
+    command:
+      - redis-server
+      - --requirepass "123456"
+      - --appendonly yes
+      - --appendfilename "appendonly.aof"
+      - --save 900 1 300 10 60 10000
+      - --loglevel notice
+      - --protected-mode no
+      - --bind 0.0.0.0
     logging:
       driver: "json-file"
       options:
@@ -29,7 +29,7 @@ services:
     container_name: dev-mongo
     restart: unless-stopped
     ports:
-      - "127.0.0.1:27017:27017"  # 仅本机可访问
+      - "27017:27017"
     volumes:
       - mongo_data:/data/db
       - mongo_config:/data/configdb

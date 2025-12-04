@@ -75,8 +75,8 @@ set DAPR_CONFIG=.\output\cfg\dapr-config.yaml
 
 set ACTORS="UserActor|RoomActor|AllianceActor|CenterActor|MailActor"
 
-set RDSCFGHOST=aniwar-dev-global.redis.rds.aliyuncs.com:36379
-set RDSCFGPASS=MFhqTGF3RG1UZm81SVZlUA==
+set RDSCFGHOST=127.0.0.1:16379
+set RDSCFGPASS=123456
 set RDSCFGNS=cn
 set RDSCFGGROUP=pob
 
