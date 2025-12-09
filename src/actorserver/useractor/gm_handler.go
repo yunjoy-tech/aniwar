@@ -5,14 +5,12 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	dapr "github.com/dapr/go-sdk/client"
 	"math/rand"
 	"strconv"
 	"strings"
 	"sync"
 	"time"
-	"unsafe"
-
-	dapr "github.com/dapr/go-sdk/client"
 
 	svc "gitlab.musadisca-games.com/wangxw/musae/framework/service"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/wordfilter"
@@ -69,7 +67,7 @@ func NewGmHandler(actor *UserActor) *GmHandler {
 	actor.RegisterProtoHandler(int32(cmd.Protocols_PS2AS_S2SSaveOfflineDataReq), h.GMSaveOfflineData) // GM-保存离线数据
 
 	// 注册gm指令处理方法
-	//h.RegisterCmdHandler(common.GM_ACTOR_SHOW, h.GMShowActor)
+	// h.RegisterCmdHandler(common.GM_ACTOR_SHOW, h.GMShowActor)
 	h.RegisterCmdHandler(common.GM_ACTOR_DEL, h.GMDelActor)
 	h.RegisterCmdHandler(common.GM_ADD_ITEM, h.GMAddItem)
 	h.RegisterCmdHandler(common.GM_CLEAN_ITEM, h.GMCleanItem)
@@ -94,7 +92,6 @@ func NewGmHandler(actor *UserActor) *GmHandler {
 	h.RegisterCmdHandler(common.GM_DIRECT_COMPLETE_QUEST, h.GmDirectCompleteQuest)
 	h.RegisterCmdHandler(common.GM_TEST_SIGN, h.GmTestSign)
 	h.RegisterCmdHandler(common.GM_TEST_PROTO, h.GmTestCmd)
-	h.RegisterCmdHandler(common.GM_SET_LIGHTING_COMPOSE_TREE_TS, h.GmSetLightingComposeTreeTs)
 	h.RegisterCmdHandler(common.GM_SET_SUPER_CARD, h.GmSetSuperCard)
 	h.RegisterCmdHandler(common.GM_SAVE_STORY_FLAG, h.GmSaveStoryFlag)
 	h.RegisterCmdHandler(common.GM_LEVEL_FINISH, h.GmLevelFinish)
@@ -110,16 +107,14 @@ func NewGmHandler(actor *UserActor) *GmHandler {
 	h.RegisterCmdHandler(common.GM_RESET_DUTY_TASK, h.GMResetDutyTask)
 	h.RegisterCmdHandler(common.GM_DIRECT_COMPLETE_DUTY_TASK, h.GMDirectCompleteDutyTask)
 	h.RegisterCmdHandler(common.GM_ERR_CODE, h.GMTestErrCode)
-	//h.RegisterCmdHandler(common.GM_TEST_BOOK, h.GMTestBook)
+	// h.RegisterCmdHandler(common.GM_TEST_BOOK, h.GMTestBook)
 	h.RegisterCmdHandler(common.GM_TEST_ACHIEVE, h.GMTestAchieve)
 	h.RegisterCmdHandler(common.GM_TEST_PVP_ROOM, h.GMTestRoom)
 	h.RegisterCmdHandler(common.GM_CLOSE_BATTKE_CHECK, h.GMCloseBattleCheck)
 	h.RegisterCmdHandler(common.GM_TEST_RECOMMEND, h.GMTestRecommend)
-	h.RegisterCmdHandler(common.GM_TEST_ChangeCampHomeIconTime, h.ChangeCampHomeIconTime)
 	h.RegisterCmdHandler(common.GM_ADD_CARDS_RELATION, h.AddCardsRelation)
 	h.RegisterCmdHandler(common.GM_TEST_CampDouble, h.CampDouble)
 	h.RegisterCmdHandler(common.GM_TEST_Card_Broad, h.CardBroad)
-	h.RegisterCmdHandler(common.GM_TEST_Del_Camp_Build, h.DelCampBuild)
 	h.RegisterCmdHandler(common.GM_TEST_Test_Cfg_Hot, h.TestCfgHot)
 
 	return h
@@ -184,7 +179,7 @@ func (h *GmHandler) GMSaveOfflineData(ctx context.Context, in *base.ProtoMsg) (p
 		return nil, err, int32(cmd.ErrorCode_InternalError)
 	}
 
-	//h.actor.OfflineDataHandler.saveOfflineData(req)
+	// h.actor.OfflineDataHandler.saveOfflineData(req)
 
 	rsp := &base.ProtoMsg{}
 	return rsp, nil, 0
@@ -414,7 +409,7 @@ func (h *GmHandler) GmTestCard(param []string, commonData *clidto.Comdata) error
 	)
 
 	if typ == 1 {
-		result, quality, _, err = h.actor.CampPoolHandler.handlePoolExtract(int32(poolId), total, commonData)
+		// result, quality, _, err = h.actor.CampPoolHandler.handlePoolExtract(int32(poolId), total, commonData)
 	} else if typ == 2 {
 		result, _, quality, _, err = h.actor.PoolHandler.handlePoolExtract(int32(poolId), total, commonData)
 	} else if typ == 3 {
@@ -557,18 +552,6 @@ func (h *GmHandler) GmAddPlayerExp(param []string, commonData *clidto.Comdata) e
 	return err
 }
 
-func (h *GmHandler) GmSetLightingComposeTreeTs(param []string, commonData *clidto.Comdata) error {
-	itemId, err := strconv.Atoi(param[0])
-	if err != nil {
-		return err
-	}
-	value, err := strconv.Atoi(param[1])
-	if err != nil {
-		return err
-	}
-	return h.actor.CampHandler.SetLightingComposeTreeTs(int32(itemId), int64(value))
-}
-
 func (h *GmHandler) GmSetSuperCard(param []string, commonData *clidto.Comdata) error {
 	cardId, err := strconv.Atoi(param[0])
 	if err != nil {
@@ -661,7 +644,7 @@ func (h *GmHandler) GmTestCmd(param []string, comdata *clidto.Comdata) error {
 		UAID:    "",
 		Data:    data,
 		ErrCode: 0,
-		//GUID:    utils.GenIntUUID(),
+		// GUID:    utils.GenIntUUID(),
 		ServerReqIdx: utils.GenIntUUID(),
 	})
 	logger.Debugf("调用结果 msg:%+v, err:%v, code:%d", message, err, code)
@@ -808,7 +791,7 @@ func (h *GmHandler) GmTestBattleChapter(param []string, commonData *clidto.Comda
 		operateType, _ = strconv.Atoi(param[0])
 	}
 
-	if operateType == 1 { //从battleserver获取json数据
+	if operateType == 1 { // 从battleserver获取json数据
 		var Id = "73"
 		if len(param) > 1 {
 			Id = param[1]
@@ -944,16 +927,16 @@ func (h *GmHandler) GMDirectCompleteDutyTask(param []string, commonData *clidto.
 }
 
 func (h *GmHandler) GMTestErrCode(param []string, commonData *clidto.Comdata) error {
-	//var (
+	// var (
 	//	err        error
 	//	errCodeVal = 0
-	//)
-	//if len(param) > 0 {
+	// )
+	// if len(param) > 0 {
 	//	errCodeVal, err = strconv.Atoi(param[0])
 	//	if err != nil {
 	//		return err
 	//	}
-	//}
+	// }
 	return fmt.Errorf("GM : user-defined error")
 }
 
@@ -1049,13 +1032,13 @@ func (h *GmHandler) GmTestDrop(param []string, commonData *clidto.Comdata) error
 }
 
 func (h *GmHandler) test_UGCStringCheck(str string, cType int32, f bool) (bool, error) {
-	//if f {
+	// if f {
 	//	reqMsg := &cmd.C2LS_HeartBeatReq{}
 	//	_, err := h.actor.Srv.SvcInvoke(global.IDIP_SVC, h.actor.GetUID(), h.actor.roleId, h.actor.ID(), reqMsg)
 	//	if err != nil {
 	//		h.Error(err)
 	//	}
-	//}
+	// }
 
 	// 校验合法性
 	h.Debugf("数据校验: %s %d", str, cType)
@@ -1224,21 +1207,15 @@ func (h *GmHandler) GmTestGUID(param []string, commonData *clidto.Comdata) error
 	return nil
 }
 
-func (h *GmHandler) GMTestBook(param []string, commonData *clidto.Comdata) error {
-	ret := h.actor.AchieveLevelHandler.buildAchieveLevelData()
-	fmt.Println("ret:", unsafe.Sizeof(ret))
-	return fmt.Errorf("GM : user-defined error")
-}
-
 func (h *GmHandler) GMTestAchieve(param []string, commonData *clidto.Comdata) error {
 
-	//cardIds := make([]int32, 0)
-	//for _, id := range param {
+	// cardIds := make([]int32, 0)
+	// for _, id := range param {
 	//	cardId, _ := strconv.Atoi(id)
 	//	cardIds = append(cardIds, int32(cardId))
 	//	rarity, _ := GetCardRarityByItemId(int32(cardId))
 	//	h.Debug("GM 触发广播时，卡片的稀有度:", rarity)
-	//}
+	// }
 
 	h.actor.UserChatHandler.DeleteFriendChatMessage(179794, 179193)
 	return nil
@@ -1289,7 +1266,7 @@ func (h *GmHandler) GMTestRoom(param []string, commonData *clidto.Comdata) error
 	case 1: // 创建房间
 		reqMsg := &cmd.C2LS_CreateRoomReq{
 			PlayType: cmd.RoomModel_RoomModel_tug,
-			//PlayerUid: h.actor.uid,
+			// PlayerUid: h.actor.uid,
 		}
 
 		data, err := proto.Marshal(reqMsg)
@@ -1305,7 +1282,7 @@ func (h *GmHandler) GMTestRoom(param []string, commonData *clidto.Comdata) error
 			RoleId: 0,
 			UAID:   h.actor.Srv.UAID(h.actor.ID(), h.actor.roleId),
 			Data:   data,
-			//GUID:    utils.GenIntUUID(),
+			// GUID:    utils.GenIntUUID(),
 			ServerReqIdx: utils.GenIntUUID(),
 		}
 
@@ -1315,13 +1292,13 @@ func (h *GmHandler) GMTestRoom(param []string, commonData *clidto.Comdata) error
 		}
 
 		h.Debugf(resp.Str())
-		//_, err = h.actor.Srv.SvcInvoke(global.RoomActorType, strconv.Itoa(roomId), uint64(roomId), strconv.Itoa(roomId), reqMsg)
-		//if err != nil {
+		// _, err = h.actor.Srv.SvcInvoke(global.RoomActorType, strconv.Itoa(roomId), uint64(roomId), strconv.Itoa(roomId), reqMsg)
+		// if err != nil {
 		//	h.Error(err)
-		//}
+		// }
 	case 2: // 进入房间
 		reqMsg := &cmd.C2LS_JoinRoomReq{
-			//PlayerUid: h.actor.uid,
+			// PlayerUid: h.actor.uid,
 			RoomId: roomId,
 		}
 
@@ -1338,7 +1315,7 @@ func (h *GmHandler) GMTestRoom(param []string, commonData *clidto.Comdata) error
 			RoleId: 0,
 			UAID:   h.actor.Srv.UAID(h.actor.ID(), h.actor.roleId),
 			Data:   data,
-			//GUID:    utils.GenIntUUID(),
+			// GUID:    utils.GenIntUUID(),
 			ServerReqIdx: utils.GenIntUUID(),
 		}
 
@@ -1390,14 +1367,6 @@ func (h *GmHandler) GMTestRecommend(param []string, comdata *clidto.Comdata) err
 	return nil
 }
 
-func (h *GmHandler) ChangeCampHomeIconTime(param []string, comdata *clidto.Comdata) error {
-
-	fmt.Println("param:", param)
-	timeStamp, _ := strconv.Atoi(param[0])
-	h.actor.CampHandler.ChangeHomeIconTime(int64(timeStamp))
-	return nil
-}
-
 func (h *GmHandler) AddCardsRelation(param []string, comdata *clidto.Comdata) error {
 	if len(param) < 2 {
 		return nil
@@ -1413,7 +1382,7 @@ func (h *GmHandler) AddCardsRelation(param []string, comdata *clidto.Comdata) er
 }
 
 func (h *GmHandler) CampDouble(param []string, comdata *clidto.Comdata) error {
-	//building :=
+	// building :=
 	//	h.actor.CampHandler.LifeSkillAddProduct()
 	return nil
 }
@@ -1430,16 +1399,6 @@ func (h *GmHandler) CardBroad(param []string, comdata *clidto.Comdata) error {
 	return nil
 }
 
-func (h *GmHandler) DelCampBuild(param []string, comdata *clidto.Comdata) error {
-	if len(param) < 2 {
-		return errors.New("参数数量不对")
-	}
-	itermId, _ := strconv.Atoi(param[0])
-	num, _ := strconv.Atoi(param[1])
-	h.actor.CampHandler.DelBuilding(int32(itermId), int32(num), comdata)
-	h.Debugf("GM 删除建筑[%d],[%d]个", itermId, num)
-	return nil
-}
 func (h *GmHandler) TestCfgHot(param []string, comdata *clidto.Comdata) error {
 
 	cfg := excel.GetAbilityMgr().GetById(10101)

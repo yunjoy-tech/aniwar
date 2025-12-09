@@ -34,26 +34,26 @@ import (
 type ActorState int
 
 const (
-	State_None     ActorState = 0 //UserActor 容器创建,无数据
-	State_Active   ActorState = 1 //UserActor 容器激活,有数据
-	State_Online   ActorState = 2 //UserActor 用户在线
-	State_Offline  ActorState = 3 //UserActor 用户离线
-	State_DeActive ActorState = 4 //UserActor 容器析构
+	State_None     ActorState = 0 // UserActor 容器创建,无数据
+	State_Active   ActorState = 1 // UserActor 容器激活,有数据
+	State_Online   ActorState = 2 // UserActor 用户在线
+	State_Offline  ActorState = 3 // UserActor 用户离线
+	State_DeActive ActorState = 4 // UserActor 容器析构
 )
 
 type UserActor struct {
-	//baseactor.BaseActor
+	// baseactor.BaseActor
 	*frame.CommonActor
 	UserData
 	state ActorState
-	//UserInfo string
-	//id        string //player-UserActor id (等同UAID)
-	uid      string //user id for svc invoke (等同AccountId)
+	// UserInfo string
+	// id        string //player-UserActor id (等同UAID)
+	uid      string // user id for svc invoke (等同AccountId)
 	roleId   uint64
 	liveTime int64 // 生存时间戳
 	ctx      context.Context
 
-	//Srv *frame.ActorServer
+	// Srv *frame.ActorServer
 
 	eventManager   *event.Manager
 	TaskTypeMgr    *TaskTypeMgr
@@ -61,7 +61,7 @@ type UserActor struct {
 	comData        *clidto.Comdata
 
 	// 延迟落库
-	//handlersMap map[svc.MongoDbType][]baseactor.IBaseHandler
+	// handlersMap map[svc.MongoDbType][]baseactor.IBaseHandler
 
 	AccountHandler      *AccountHandler
 	HeartBeatHandler    *HeartBeatHandler
@@ -72,14 +72,11 @@ type UserActor struct {
 	BagHandler          *BagHandler
 	TroopHandler        *TroopHandler
 	CardHandler         *CardHandler
-	CampHandler         *CampHandler
 	GmHandler           *GmHandler
 	ChapterHandler      *ChapterHandler
 	CurrencyHandler     *CurrencyHandler
 	PoolHandler         *PoolHandler
-	CampPoolHandler     *CampPoolHandler
 	HandBookHandler     *HandBookHandler
-	RedPointHandler     *RedPointHandler
 	QuestionHandler     *QuestionHandler
 	ShopHandler         *ShopHandler
 	MailHandler         *MailHandler
@@ -93,8 +90,6 @@ type UserActor struct {
 	SkinHandler         *SkinHandler
 	SignHandler         *SignHandler
 	GiftHandler         *GiftHandler
-	AchieveHandler      *AchieveHandler
-	AchieveLevelHandler *AchieveLevelHandler
 	TrialHandler        *TrialHandler
 	FriendHandler       *FriendHandler
 	BlockWayHandler     *BlockWayHandler
@@ -112,10 +107,10 @@ type UserActor struct {
 }
 
 func New() actor.Server {
-	//daprc, err := dapr.NewClientWithPort(server.GSrv.GRPCPort)
-	//if err != nil || daprc == nil {
+	// daprc, err := dapr.NewClientWithPort(server.GSrv.GRPCPort)
+	// if err != nil || daprc == nil {
 	//	u.Errorf("UserActor, dapr client error: %v", err)
-	//}
+	// }
 	a := &UserActor{
 		CommonActor: frame.NewCommonActor(frame.GSrv),
 	}
@@ -123,13 +118,13 @@ func New() actor.Server {
 	a.ActorType = global.UserActorType
 	a.SetActor(a)
 	a.HandlersMap = make(map[svc.MongoDbType][]baseactor.IBaseHandler, 0)
-	//actor.Daprc = server.GSrv.Daprc
-	//a.Daprc = daprc
+	// actor.Daprc = server.GSrv.Daprc
+	// a.Daprc = daprc
 	a.state = State_None
-	//a.Srv = frame.GSrv
+	// a.Srv = frame.GSrv
 	a.ctx = context.Background()
 
-	//a.MsgFunc = make(map[int32]base.FProtoMsgHandler)
+	// a.MsgFunc = make(map[int32]base.FProtoMsgHandler)
 	a.RpcMethods = make(map[string]*baseactor.RpcMethod)
 	a.Data = &cmd.PlayerData{}
 
@@ -139,13 +134,13 @@ func New() actor.Server {
 	a.liveTime = time.Now().Unix() // 创建server时间戳
 	a.comData = clidto.BuildComData()
 
-	//协议注册
+	// 协议注册
 	a.initHandlers()
-	//异步函数注册
+	// 异步函数注册
 	a.initAsyncFunc()
 
-	//delay save db timer
-	//actor.Srv.AddTimer(true, time.Second*DELAY_SAVE_DB_TIME, actor.Delay2DB)
+	// delay save db timer
+	// actor.Srv.AddTimer(true, time.Second*DELAY_SAVE_DB_TIME, actor.Delay2DB)
 
 	threading.GoSafeWithParam(func(ua interface{}) {
 		t := time.NewTicker(time.Second * common.FIXED_SAVE_DB_TIME)
@@ -238,7 +233,7 @@ func (u *UserActor) Activate(invokeName string) error {
 		bTrue, err = u.GetStateManager().Contains(db.KeyUserBaseInfo(u.ID()))
 		if err != nil && !errors.Is(err, service.DB_ERROR_NOT_EXIST) {
 			u.Debugf("u.GetStateManager().Contains, %+v", err)
-			//return nil
+			// return nil
 		}
 		if bTrue { // db中有数据
 			// 角色已创建 加载数据
@@ -269,7 +264,7 @@ func (u *UserActor) Activate(invokeName string) error {
 	taptap.UserActorComm(u.ID(), "actorserver", 1, time.Now().Unix()-u.liveTime)
 
 	u.Infof("=================>ActivateOn%s [%s]<=================", invokeName, u.ID())
-	//metrics.GaugeInc(metrics.UserActorCount)
+	// metrics.GaugeInc(metrics.UserActorCount)
 	u.WarnDelayf(time.Since(startTime).Milliseconds(), "UserActor Activate, %s", u.Str())
 	return nil
 }
@@ -277,7 +272,7 @@ func (u *UserActor) Activate(invokeName string) error {
 func (u *UserActor) deactivate() error {
 	// 用户下线，同步actor生命周期内修改的数据
 	startTime := time.Now()
-	if global.IsCloud { //内网研发环境不开启，防止在不同私服先后登录，旧UserActor数据覆盖新数据的问题
+	if global.IsCloud { // 内网研发环境不开启，防止在不同私服先后登录，旧UserActor数据覆盖新数据的问题
 		threading.RunSafe(func() {
 			u.OfflineSync2DB()
 		})
@@ -299,7 +294,7 @@ func (u *UserActor) deactivate() error {
 
 	// 埋点
 	taptap.UserActorComm(u.ID(), "actorserver", 0, time.Now().Unix()-u.liveTime)
-	//metrics.GaugeDec(metrics.UserActorCount)
+	// metrics.GaugeDec(metrics.UserActorCount)
 	u.SetState(State_DeActive)
 
 	u.Infof("=================>Deactivate [%s]<=================", u.ID())
@@ -375,11 +370,11 @@ func (u *UserActor) FixedTime2DB() {
 				// 离线时间更新
 				u.LoginHandler.UpdateOfflineTS(time.Now().Unix())
 
-				//向allianceActor 发送topic 信息
+				// 向allianceActor 发送topic 信息
 				u.UserAllianceHandler.PushTopic2Alliance(cmd.GateTopicOperator_GTO_unbound, "")
 
 				// 下线埋点
-				//threading.RunSafe(func() {
+				// threading.RunSafe(func() {
 				//	lilith.WriteDataLog(&lilith.RoleLogout{
 				//		HeadInfo: lilith.BuildHeadInfo(lilith.LogType_RoleLogout, u.uid, u.Account.CliDeviceInfo),
 				//		RoleId:   u.ID(),
@@ -387,7 +382,7 @@ func (u *UserActor) FixedTime2DB() {
 				//		VipLevel: 0,
 				//		Recharge: 0,
 				//	})
-				//})
+				// })
 				threading.RunSafe(func() {
 					loginDate := time.Unix(u.Data.Base.Common.OnlineTime, 0)
 					times := time.Now().Sub(loginDate).Seconds()
@@ -412,7 +407,7 @@ func (u *UserActor) FixedTime2DB() {
 //	@receiver s
 func (u *UserActor) commit2Redis() error {
 	var err error
-	//u.Debugf("commit2Redis UserActor, %s", u.ID())
+	// u.Debugf("commit2Redis UserActor, %s", u.ID())
 	cacheMap := make(map[string]*cmd.CacheKeyDataEx, 0)
 	kvTableMap := make(map[string]*state.KvTable, 0)
 	for mongoType, handlers := range u.HandlersMap {
@@ -432,7 +427,7 @@ func (u *UserActor) commit2Redis() error {
 				kvTableMap[dbKey] = kvTable
 				cacheMap[dbKey] = &cmd.CacheKeyDataEx{
 					Key: dbKey,
-					//DataLen:     int32(len(kvTable.Data)),
+					// DataLen:     int32(len(kvTable.Data)),
 					MongoDBType: string(mongoType),
 				}
 			}
@@ -565,9 +560,6 @@ func (u *UserActor) initHandlers() {
 	u.CardHandler = NewCardHandler(u)
 	u.KeepHandler(u.CardHandler)
 
-	u.CampHandler = NewCampHandler(u)
-	u.KeepHandler(u.CampHandler)
-
 	u.ChapterHandler = NewChapterHandler(u)
 	u.KeepHandler(u.ChapterHandler)
 
@@ -577,14 +569,8 @@ func (u *UserActor) initHandlers() {
 	u.PoolHandler = NewPoolHandler(u)
 	u.KeepHandler(u.PoolHandler)
 
-	u.CampPoolHandler = NewCampPoolHandler(u)
-	u.KeepHandler(u.CampPoolHandler)
-
 	u.HandBookHandler = NewHandBookHandler(u)
 	u.KeepHandler(u.HandBookHandler)
-
-	u.RedPointHandler = NewRedPointHandler(u)
-	u.KeepHandler(u.RedPointHandler)
 
 	u.QuestionHandler = NewQuestionHandler(u)
 	u.KeepHandler(u.QuestionHandler)
@@ -621,12 +607,6 @@ func (u *UserActor) initHandlers() {
 
 	u.GiftHandler = NewGiftHandler(u)
 	u.KeepHandler(u.GiftHandler)
-
-	u.AchieveHandler = NewAchieveHandler(u)
-	u.KeepHandler(u.AchieveHandler)
-
-	u.AchieveLevelHandler = NewAchieveLevelHandler(u)
-	u.KeepHandler(u.AchieveLevelHandler)
 
 	u.TrialHandler = NewTrialHandler(u)
 	u.KeepHandler(u.TrialHandler)
@@ -683,22 +663,7 @@ func (u *UserActor) initHandlers() {
 
 func (u *UserActor) initAsyncFunc() {
 	// 异步事件监听
-	u.eventManager.Listen(TASK_EVENT_BREAKTHROUGH, event.ListenerFunc(u.AchieveHandler.handleCommonAchieveData))
-	u.eventManager.Listen(TASK_EVENT_LEVEL_UPGRADE, event.ListenerFunc(u.AchieveHandler.handleCommonAchieveData))
-	u.eventManager.Listen(TASK_EVENT_ITEM_CONSUME, event.ListenerFunc(u.AchieveHandler.handleCommonAchieveData))
-	u.eventManager.Listen(TASK_EVENT_LEVEL_WIN, event.ListenerFunc(u.AchieveHandler.handleCommonAchieveData))
-	u.eventManager.Listen(TASK_EVENT_TASK_COMPLETE, event.ListenerFunc(u.AchieveHandler.handleCommonAchieveData))
-	u.eventManager.Listen(TASK_EVENT_TASK_GROUP_COMPLETE, event.ListenerFunc(u.AchieveHandler.handleCommonAchieveData))
-	u.eventManager.Listen(TASK_EVENT_CAMPAIGN_LEVEL, event.ListenerFunc(u.AchieveHandler.handleCommonAchieveData))
-	u.eventManager.Listen(TASK_EVENT_TRAVEL_LEVEL_WIN, event.ListenerFunc(u.AchieveHandler.handleCommonAchieveData))
-
 	u.eventManager.Listen(TASK_EVENT_CARD_CREATE, event.ListenerFunc(u.HandBookHandler.handleAddNewCard))
-	u.eventManager.Listen(TASK_EVENT_QUEST_COMPLETE, event.ListenerFunc(u.AchieveLevelHandler.handleConditionCheck))
-	u.eventManager.Listen(TASK_EVENT_UNLOCK_POINT, event.ListenerFunc(u.AchieveLevelHandler.handleConditionCheck))
-	u.eventManager.Listen(TASK_EVENT_LEVEL_BOX, event.ListenerFunc(u.AchieveLevelHandler.handleConditionCheck))
-	u.eventManager.Listen(TASK_EVENT_LEVEL_COLLECT, event.ListenerFunc(u.AchieveLevelHandler.handleConditionCheck))
-	u.eventManager.Listen(TASK_EVENT_BATTLE_WIN, event.ListenerFunc(u.AchieveLevelHandler.handleConditionCheck))
-	u.eventManager.Listen(TASK_EVENT_LEVEL_WIN, event.ListenerFunc(u.AchieveLevelHandler.handleConditionCheck))
 	u.eventManager.Listen(TASK_EVENT_LEVEL_ENTER, event.ListenerFunc(u.QuestHandler.TryCreateQuest))
 	u.eventManager.Listen(TASK_EVENT_ROLE_LEVEL_CHANGE, event.ListenerFunc(u.QuestHandler.TryCreateQuest))
 	u.eventManager.Listen(TASK_EVENT_STORY_FLAG_CHANGE, event.ListenerFunc(u.QuestHandler.TryCreateQuest))
@@ -763,16 +728,16 @@ func (u *UserActor) EnterGame() error {
 func (u *UserActor) Hour0Handler(ctx context.Context, params []byte) error {
 	u.Debugf("====>>> Hour0Handler")
 
-	//判断玩家是否在线跨0点, 跨天日志埋点
+	// 判断玩家是否在线跨0点, 跨天日志埋点
 	if u.GetState() != State_Online {
 		return nil
 	}
 
-	//threading.RunSafe(func() {
+	// threading.RunSafe(func() {
 	//	lilith.WriteDataLog(&lilith.UserLogin{
 	//		HeadInfo: lilith.BuildHeadInfo(lilith.LogType_UserLogin, u.uid, u.Account.CliDeviceInfo),
 	//	})
-	//})
+	// })
 
 	return nil
 }

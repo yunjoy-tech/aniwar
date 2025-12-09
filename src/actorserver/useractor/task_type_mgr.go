@@ -27,57 +27,57 @@ const (
 )
 
 const (
-	TASK_TYPE_1   = 1   //击败怪物X个
-	TASK_TYPE_2   = 2   //monster_id 击败XX怪物Y个
-	TASK_TYPE_3   = 3   //击败大地图怪物Y个
-	TASK_TYPE_11  = 11  //完成采集X次
-	TASK_TYPE_12  = 12  //resource_id	完成XX采集Y次
-	TASK_TYPE_31  = 31  //开启宝箱X次
-	TASK_TYPE_41  = 41  //完成日替碰碰车玩法X次
-	TASK_TYPE_91  = 91  //level_id	完成关卡X总共Y次
-	TASK_TYPE_92  = 92  //X次战斗胜利
-	TASK_TYPE_101 = 101 //提升角色技能等级X次
-	TASK_TYPE_102 = 102 //提升角色潜力X次
-	TASK_TYPE_103 = 103 //提升角色性格X次
-	TASK_TYPE_104 = 104 //突破角色X次
-	TASK_TYPE_105 = 105 //进行角色养成X次（包括上面101 102 103 104 121）
-	TASK_TYPE_111 = 111 //使用食物X个
-	TASK_TYPE_112 = 112 //消耗体力X点
-	TASK_TYPE_113 = 113 //消耗指定道具X个
-	TASK_TYPE_121 = 121 //角色升级X次
-	TASK_TYPE_201 = 201 //获得装备X次
-	TASK_TYPE_202 = 202 //quality	获得品质X的装备Y次
-	TASK_TYPE_203 = 203 //打造装备次数X次
-	TASK_TYPE_211 = 211 //升级装备次数
-	TASK_TYPE_212 = 212 //重铸装备次数
-	TASK_TYPE_301 = 301 //收取光合树次数
-	TASK_TYPE_302 = 302 //建筑升级次数
-	TASK_TYPE_303 = 303 //build_id	升级X建筑Y次
-	TASK_TYPE_311 = 311 //打造家具X次
-	TASK_TYPE_312 = 312 //食物制作X次
-	TASK_TYPE_313 = 313 //生产电力X次
-	TASK_TYPE_401 = 401 //hero_id	获得id为X的角色
-	TASK_TYPE_402 = 402 //累计获得X个角色
-	TASK_TYPE_403 = 403 //rarity	获得品质为X的角色Y个
-	TASK_TYPE_404 = 404 //skin_id	获得id为X的皮肤
-	TASK_TYPE_406 = 406 //累计获得X个皮肤
-	TASK_TYPE_407 = 407 //抽卡X次
-	TASK_TYPE_408 = 408 //指定类型卡池抽卡
-	TASK_TYPE_501 = 501 //累计登录天数
-	TASK_TYPE_502 = 502 //完成所有每日任务
-	TASK_TYPE_503 = 503 //累计登录天数(非生涯)
-	TASK_TYPE_504 = 504 //玩家账号等级x级
-	TASK_TYPE_505 = 505 //累计获得x个n等级的角色
-	TASK_TYPE_507 = 507 //通关xx类型副本n次
-	TASK_TYPE_508 = 508 //通关游戏日替副本n次
-	TASK_TYPE_510 = 510 //收取n次营地指定产物
-	TASK_TYPE_511 = 511 //指定建筑升级到n级
-	TASK_TYPE_512 = 512 //x个营地建筑升级到n级
-	TASK_TYPE_517 = 517 //解锁指定营地建筑
-	TASK_TYPE_518 = 518 //指定角色在指定建筑工作
-	TASK_TYPE_521 = 521 //完成指定主线任务
-	TASK_TYPE_525 = 525 //采集n个指定类型采集物
-	TASK_TYPE_527 = 527 //采集n次指定类型采集物
+	TASK_TYPE_1   = 1   // 击败怪物X个
+	TASK_TYPE_2   = 2   // monster_id 击败XX怪物Y个
+	TASK_TYPE_3   = 3   // 击败大地图怪物Y个
+	TASK_TYPE_11  = 11  // 完成采集X次
+	TASK_TYPE_12  = 12  // resource_id	完成XX采集Y次
+	TASK_TYPE_31  = 31  // 开启宝箱X次
+	TASK_TYPE_41  = 41  // 完成日替碰碰车玩法X次
+	TASK_TYPE_91  = 91  // level_id	完成关卡X总共Y次
+	TASK_TYPE_92  = 92  // X次战斗胜利
+	TASK_TYPE_101 = 101 // 提升角色技能等级X次
+	TASK_TYPE_102 = 102 // 提升角色潜力X次
+	TASK_TYPE_103 = 103 // 提升角色性格X次
+	TASK_TYPE_104 = 104 // 突破角色X次
+	TASK_TYPE_105 = 105 // 进行角色养成X次（包括上面101 102 103 104 121）
+	TASK_TYPE_111 = 111 // 使用食物X个
+	TASK_TYPE_112 = 112 // 消耗体力X点
+	TASK_TYPE_113 = 113 // 消耗指定道具X个
+	TASK_TYPE_121 = 121 // 角色升级X次
+	TASK_TYPE_201 = 201 // 获得装备X次
+	TASK_TYPE_202 = 202 // quality	获得品质X的装备Y次
+	TASK_TYPE_203 = 203 // 打造装备次数X次
+	TASK_TYPE_211 = 211 // 升级装备次数
+	TASK_TYPE_212 = 212 // 重铸装备次数
+	TASK_TYPE_301 = 301 // 收取光合树次数
+	TASK_TYPE_302 = 302 // 建筑升级次数
+	TASK_TYPE_303 = 303 // build_id	升级X建筑Y次
+	TASK_TYPE_311 = 311 // 打造家具X次
+	TASK_TYPE_312 = 312 // 食物制作X次
+	TASK_TYPE_313 = 313 // 生产电力X次
+	TASK_TYPE_401 = 401 // hero_id	获得id为X的角色
+	TASK_TYPE_402 = 402 // 累计获得X个角色
+	TASK_TYPE_403 = 403 // rarity	获得品质为X的角色Y个
+	TASK_TYPE_404 = 404 // skin_id	获得id为X的皮肤
+	TASK_TYPE_406 = 406 // 累计获得X个皮肤
+	TASK_TYPE_407 = 407 // 抽卡X次
+	TASK_TYPE_408 = 408 // 指定类型卡池抽卡
+	TASK_TYPE_501 = 501 // 累计登录天数
+	TASK_TYPE_502 = 502 // 完成所有每日任务
+	TASK_TYPE_503 = 503 // 累计登录天数(非生涯)
+	TASK_TYPE_504 = 504 // 玩家账号等级x级
+	TASK_TYPE_505 = 505 // 累计获得x个n等级的角色
+	TASK_TYPE_507 = 507 // 通关xx类型副本n次
+	TASK_TYPE_508 = 508 // 通关游戏日替副本n次
+	TASK_TYPE_510 = 510 // 收取n次营地指定产物
+	TASK_TYPE_511 = 511 // 指定建筑升级到n级
+	TASK_TYPE_512 = 512 // x个营地建筑升级到n级
+	TASK_TYPE_517 = 517 // 解锁指定营地建筑
+	TASK_TYPE_518 = 518 // 指定角色在指定建筑工作
+	TASK_TYPE_521 = 521 // 完成指定主线任务
+	TASK_TYPE_525 = 525 // 采集n个指定类型采集物
+	TASK_TYPE_527 = 527 // 采集n次指定类型采集物
 )
 
 const (
@@ -213,14 +213,6 @@ func (m *TaskTypeMgr) CreateTaskInfoItem(id, typ, target int32, params []int32, 
 		task = m.createType503(id, typ, target, params, canCreate, times...)
 	case TASK_TYPE_504:
 		task = m.createType504(id, typ, target, params, canCreate, times...)
-	case TASK_TYPE_511:
-		task = m.createType511(id, typ, target, params, canCreate, times...)
-	case TASK_TYPE_512:
-		task = m.createType512(id, typ, target, params, canCreate, times...)
-	case TASK_TYPE_517:
-		task = m.createType517(id, typ, target, params, canCreate, times...)
-	case TASK_TYPE_518:
-		task = m.createType518(id, typ, target, params, canCreate, times...)
 	case TASK_TYPE_521:
 		task = m.createType521(id, typ, target, params, canCreate, times...)
 	default:
@@ -496,97 +488,6 @@ func (m *TaskTypeMgr) createType504(id int32, typ int32, target int32, params []
 	return task
 }
 
-func (m *TaskTypeMgr) createType511(id int32, typ int32, target int32, params []int32, canCreate bool, times ...int32) *cmd.TaskInfoItem {
-	if len(params) == 0 {
-		m.actor.Debugf("task config err %d", typ)
-		return nil
-	}
-	task := &cmd.TaskInfoItem{
-		Id:          id,
-		CondId:      typ,
-		CurValue:    m.actor.CampHandler.GetBuildingLevel(params[0]),
-		TargetValue: target,
-		Status:      TASK_STATUS_DOING,
-		Create:      time.Now().Unix(),
-		Params:      params,
-		CondType:    TASK_COND_TYPE_LIFE,
-	}
-	if len(times) > 0 {
-		task.ExpireTs = task.Create + int64(times[0])
-	}
-	return task
-}
-
-func (m *TaskTypeMgr) createType512(id int32, typ int32, target int32, params []int32, canCreate bool, times ...int32) *cmd.TaskInfoItem {
-	if len(params) == 0 {
-		m.actor.Debugf("task config err %d", typ)
-		return nil
-	}
-	task := &cmd.TaskInfoItem{
-		Id:          id,
-		CondId:      typ,
-		CurValue:    m.actor.CampHandler.GetBuildingCountByLevel(params[0]),
-		TargetValue: target,
-		Status:      TASK_STATUS_DOING,
-		Create:      time.Now().Unix(),
-		Params:      params,
-		CondType:    TASK_COND_TYPE_LIFE,
-	}
-	if len(times) > 0 {
-		task.ExpireTs = task.Create + int64(times[0])
-	}
-	return task
-}
-
-func (m *TaskTypeMgr) createType517(id int32, typ int32, target int32, params []int32, canCreate bool, times ...int32) *cmd.TaskInfoItem {
-	if len(params) == 0 {
-		m.actor.Debugf("task config err %d", typ)
-		return nil
-	}
-	var cur int32
-	if m.actor.CampHandler.BuildingExist(params[0]) {
-		cur = 1
-	}
-	task := &cmd.TaskInfoItem{
-		Id:          id,
-		CondId:      typ,
-		CurValue:    cur,
-		TargetValue: 1,
-		Status:      TASK_STATUS_DOING,
-		Create:      time.Now().Unix(),
-		Params:      params,
-		CondType:    TASK_COND_TYPE_LIFE,
-	}
-	if len(times) > 0 {
-		task.ExpireTs = task.Create + int64(times[0])
-	}
-	return task
-}
-
-func (m *TaskTypeMgr) createType518(id int32, typ int32, target int32, params []int32, canCreate bool, times ...int32) *cmd.TaskInfoItem {
-	if len(params) <= 1 {
-		m.actor.Debugf("task config err %d", typ)
-		return nil
-	}
-	var cur int32
-	if canCreate && m.actor.CampHandler.IsBuildingUpCard(params[1], params[0]) {
-		cur = 1
-	}
-	task := &cmd.TaskInfoItem{
-		Id:          id,
-		CondId:      typ,
-		CurValue:    cur,
-		TargetValue: 1,
-		Status:      TASK_STATUS_DOING,
-		Create:      time.Now().Unix(),
-		Params:      params,
-	}
-	if len(times) > 0 {
-		task.ExpireTs = task.Create + int64(times[0])
-	}
-	return task
-}
-
 func (m *TaskTypeMgr) createType521(id int32, typ int32, target int32, params []int32, canCreate bool, times ...int32) *cmd.TaskInfoItem {
 	if len(params) == 0 {
 		m.actor.Debugf("task config err %d", typ)
@@ -699,10 +600,6 @@ func (m *TaskTypeMgr) CheckTaskConditionComplete(task *cmd.TaskInfoItem, e event
 		m.checkType202(task, e)
 	case TASK_TYPE_303:
 		m.checkType303(task, e)
-	case TASK_TYPE_312:
-		m.checkType312(task, e)
-	case TASK_TYPE_313:
-		m.checkType313(task, e)
 	case TASK_TYPE_401:
 		m.checkType401(task, e)
 	case TASK_TYPE_403:
@@ -723,8 +620,6 @@ func (m *TaskTypeMgr) CheckTaskConditionComplete(task *cmd.TaskInfoItem, e event
 		m.checkType510(task, e)
 	case TASK_TYPE_511:
 		m.checkType511(task, e)
-	case TASK_TYPE_512:
-		m.checkType512(task, e)
 	case TASK_TYPE_517:
 		m.checkType517(task, e)
 	case TASK_TYPE_518:
@@ -764,12 +659,12 @@ func (m *TaskTypeMgr) handleTaskAchieveChange(task *cmd.TaskInfoItem) {
 	}
 	// 任务组处理
 	excel.GetTaskgroupMgr().Foreach(func(cfg *excel.TaskgroupCfg) bool {
-		for _, id := range cfg.TaskId {
-			num := m.actor.AchieveHandler.GetAchieveNum(buildTaskKey(int(id)))
-			if num == 0 {
-				return true
-			}
-		}
+		// for _, id := range cfg.TaskId {
+		// 	num := m.actor.AchieveHandler.GetAchieveNum(buildTaskKey(int(id)))
+		// 	if num == 0 {
+		// 		return true
+		// 	}
+		// }
 		err = m.actor.eventManager.SyncPublish(event.NewBasicEvent(TASK_EVENT_TASK_GROUP_COMPLETE, []int32{}, map[string]interface{}{
 			"group_id": cfg.Id,
 		}))
@@ -893,22 +788,6 @@ func (m *TaskTypeMgr) checkType303(task *cmd.TaskInfoItem, e event.IEvent) {
 	}
 }
 
-func (m *TaskTypeMgr) checkType312(task *cmd.TaskInfoItem, e event.IEvent) {
-	buildId, ok := e.Get("buildId").(int32)
-	if !ok || buildId != BUILDING_FOOD_SUPPLY_ID {
-		return
-	}
-	task.CurValue += 1
-}
-
-func (m *TaskTypeMgr) checkType313(task *cmd.TaskInfoItem, e event.IEvent) {
-	buildId, ok := e.Get("buildId").(int32)
-	if !ok || buildId != BUILDING_FURNACE_ID {
-		return
-	}
-	task.CurValue += 1
-}
-
 func (m *TaskTypeMgr) checkType401(task *cmd.TaskInfoItem, e event.IEvent) {
 	cardId, ok := e.Get("cardId").(uint32)
 	if !ok || len(task.Params) == 0 {
@@ -1007,14 +886,6 @@ func (m *TaskTypeMgr) checkType511(task *cmd.TaskInfoItem, e event.IEvent) {
 			task.CurValue = level
 		}
 	}
-}
-
-func (m *TaskTypeMgr) checkType512(task *cmd.TaskInfoItem, e event.IEvent) {
-	cur := m.actor.CampHandler.GetBuildingCountByLevel(task.Params[0])
-	if cur == task.CurValue {
-		return
-	}
-	task.CurValue = cur
 }
 
 func (m *TaskTypeMgr) checkType517(task *cmd.TaskInfoItem, e event.IEvent) {

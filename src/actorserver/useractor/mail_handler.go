@@ -187,13 +187,13 @@ func (h *MailHandler) MailReceiveReq(ctx context.Context, in *base.ProtoMsg) (pr
 			tempIds = append(tempIds, v.Id)
 		}
 
-		//threading.RunSafe(func() {
+		// threading.RunSafe(func() {
 		//	lilith.WriteDataLog(&lilith.MailReceive{
 		//		CustomHeadInfo: lilith.BuildCustomHeadInfo(lilith.LogType_MailReceive, h.actor.uid, h.actor.Account.CliDeviceInfo),
 		//		MailIds:        lilith.ConvertList2Str(tempIds),
 		//		Reward:         lilith.ConvertListStruct2Str(rewards),
 		//	})
-		//})
+		// })
 		threading.RunSafe(func() {
 			e := &taptap.MailReceive{
 				PropertyFieldInfo: taptap.BuildPropertyFieldInfo(h.actor.Account.CliDeviceInfo),
@@ -302,12 +302,12 @@ func (h *MailHandler) MailDeleteReq(ctx context.Context, in *base.ProtoMsg) (pro
 	}
 
 	// 埋点log
-	//threading.RunSafe(func() {
+	// threading.RunSafe(func() {
 	//	lilith.WriteDataLog(&lilith.MailDelete{
 	//		CustomHeadInfo: lilith.BuildCustomHeadInfo(lilith.LogType_MailDelete, h.actor.uid, h.actor.Account.CliDeviceInfo),
 	//		MailIds:        lilith.ConvertList2Str(mailIds),
 	//	})
-	//})
+	// })
 	threading.RunSafe(func() {
 		e := &taptap.MailDelete{
 			PropertyFieldInfo: taptap.BuildPropertyFieldInfo(h.actor.Account.CliDeviceInfo),
@@ -373,10 +373,11 @@ func (h *MailHandler) receiveMailAttachment(mails []*cmd.PMailInfo, commonData *
 	}
 
 	// 家具下发
-	retItems, err := h.actor.CampHandler.HandleDropMailItem(campItems)
-	if err != nil {
-		return fmt.Errorf("internal error"), cmd.ErrorCode_InternalError, nil, nil
-	}
+	var retItems []*cmd.ItemReward
+	// retItems, err := h.actor.CampHandler.HandleDropMailItem(campItems)
+	// if err != nil {
+	// 	return fmt.Errorf("internal error"), cmd.ErrorCode_InternalError, nil, nil
+	// }
 
 	// 附件下发
 	rewards, err := GetDropMgr(h.actor).DropList2(myUtils.ConvertItem2(total), true, nil, commonData, common.CR_Mail_Attachment)

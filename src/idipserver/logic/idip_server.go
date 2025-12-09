@@ -29,7 +29,7 @@ func NewIDIPServer() base.IServer {
 	srv.AppId = "idip"
 	srv.InAddr = ":29001"
 	srv.GRPCPort = "50001"
-	srv.HasPriTopic = true //开启私有频道订阅
+	srv.HasPriTopic = true // 开启私有频道订阅
 	srv.OnPreInit = srv.PreInit
 	srv.OnServerInit = srv.ServerInit
 	srv.OnEventHandler = srv.EventHandler
@@ -76,7 +76,6 @@ func (s *IDIPServer) ServerInit() error {
 		excel.GetSkillMgr().GetDataFileName():     0,
 		excel.GetEquipmentMgr().GetDataFileName(): 0,
 		excel.GetSkinMgr().GetDataFileName():      0,
-		excel.GetAmbienceMgr().GetDataFileName():  0,
 	}
 
 	// 服务启动埋点

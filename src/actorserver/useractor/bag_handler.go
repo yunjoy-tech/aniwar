@@ -90,10 +90,8 @@ func (h *BagHandler) tryInitMap() {
 		return
 	}
 	// 注册使用道具方法
-	h.UseHandlerMap[int32(cmd.ItemType_Consumable)*100+int32(cmd.ItemConsumableType_BuildingBlueprint)] = h.actor.CampHandler.UnlockBuildingByBlueprint
 	h.UseHandlerMap[int32(cmd.ItemType_Consumable)*100+int32(cmd.ItemConsumableType_StaminaWater)] = h.actor.PlayerLevelHandler.useStaminaItem
 	// 注册前置校验方法
-	h.CheckHandlerMap[int32(cmd.ItemType_Consumable)*100+int32(cmd.ItemConsumableType_BuildingBlueprint)] = h.actor.CampHandler.BuildingBlueprintCheck
 	h.CheckHandlerMap[int32(cmd.ItemType_Consumable)*100+int32(cmd.ItemConsumableType_StaminaWater)] = h.actor.PlayerLevelHandler.useStaminaItemCheck
 	h.Debugf("tryInitMap init==== %s", h.actor.ID())
 }
@@ -145,13 +143,13 @@ func (h *BagHandler) UseItemReq(_ context.Context, in *base.ProtoMsg) (proto.Mes
 	}
 
 	// 埋点log
-	//threading.RunSafe(func() {
+	// threading.RunSafe(func() {
 	//	lilith.WriteDataLog(&lilith.UseItem{
 	//		CustomHeadInfo: lilith.BuildCustomHeadInfo(lilith.LogType_UseItem, h.actor.uid, h.actor.Account.CliDeviceInfo),
 	//		ItemId:         int32(req.ItemId),
 	//		ItemNum:        int32(req.ItemNum),
 	//	})
-	//})
+	// })
 	threading.RunSafe(func() {
 		e := &taptap.UseItem{
 			PropertyFieldInfo: taptap.BuildPropertyFieldInfo(h.actor.Account.CliDeviceInfo),
@@ -237,7 +235,7 @@ func (h *BagHandler) ItemBuyReq(ctx context.Context, in *base.ProtoMsg) (proto.M
 	for _, v := range req.Items {
 		cfg := excel.GetDirectPurchaseMgr().GetById(v.Key)
 		// 埋点log
-		//threading.RunSafe(func() {
+		// threading.RunSafe(func() {
 		//	lilith.WriteDataLog(&lilith.ItemBuy{
 		//		CustomHeadInfo: lilith.BuildCustomHeadInfo(lilith.LogType_ItemBuy, h.actor.uid, h.actor.Account.CliDeviceInfo),
 		//		ItemId:         v.Key,
@@ -245,7 +243,7 @@ func (h *BagHandler) ItemBuyReq(ctx context.Context, in *base.ProtoMsg) (proto.M
 		//		MoneyType:      cfg.Price.Key,
 		//		MoneyNum:       cfg.Price.Val * v.Value,
 		//	})
-		//})
+		// })
 		threading.RunSafe(func() {
 			e := &taptap.ItemBuy{
 				PropertyFieldInfo: taptap.BuildPropertyFieldInfo(h.actor.Account.CliDeviceInfo),
@@ -300,9 +298,9 @@ func (h *BagHandler) buildItemList() []*cmd.PCommonItemInfo {
 	return items
 }
 
-//func (h *BagHandler) GetItemValueById(itemId int32) []*cmd.KeyValueItem {
+// func (h *BagHandler) GetItemValueById(itemId int32) []*cmd.KeyValueItem {
 //	return h.GetItemValue([]int32{itemId})
-//}
+// }
 
 func (h *BagHandler) GetItemValueById(itemId int32) *cmd.KeyValueItem {
 	items := h.GetItemValueByIds(itemId)

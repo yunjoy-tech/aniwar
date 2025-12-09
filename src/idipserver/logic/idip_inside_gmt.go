@@ -75,7 +75,7 @@ func (s *IDIPServer) InsideGMT(ctx context.Context, in *common.InvocationEvent) 
 		logger.Warn("InsideGMT GMTApiReq Unmarshal error")
 	}
 	logger.Infof("InsideGMT : %+v", utils.PrettyJson(api))
-	//在这个做分流  1 ,需要审核; 2, 不需要审核
+	// 在这个做分流  1 ,需要审核; 2, 不需要审核
 	if api.GetOpType() == Verify {
 		err = s.SaveGMTRecord(api)
 		return out, nil
@@ -146,11 +146,11 @@ func (s *IDIPServer) GenRet(str string) []byte {
 func (s *IDIPServer) UpdateGameJson(files map[string]string) []byte {
 	logger.Debugf("update files:[%+v]", files)
 	// 覆写json到文件
-	//err := ioutil.WriteFile("./output/data/"+filename, []byte(data), 0777)
-	//if err != nil {
+	// err := ioutil.WriteFile("./output/data/"+filename, []byte(data), 0777)
+	// if err != nil {
 	//	logger.Debug("err:", err)
 	//	return []byte(filename)
-	//}
+	// }
 	var reloadFiles string
 	for name, data := range files {
 		szFile := "./output/res/data/" + name
@@ -430,7 +430,7 @@ func (s *IDIPServer) UseGMCommand(uid, uaid string, command string, params []str
 	in.AppId = s.AppId
 	in.RoleId = 0
 	in.UAID = uaid
-	//GUID:    utils.GenIntUUID(),
+	// GUID:    utils.GenIntUUID(),
 	in.ReqIdx = 0
 	// 临时构造stub,必须调用ImpActorStub进行方法构建
 	userStub := stub.NewUserStub(uaid)
@@ -1053,10 +1053,10 @@ func (s *IDIPServer) copyAccountData(uid, copyUid string, copyRoleId uint64, suf
 		return s.GenRet(err.Error())
 	}
 	// 修正数据
-	//_, _, copyOpenId, err := myUtils.ScanfUID(copyUid)
-	//if err != nil {
+	// _, _, copyOpenId, err := myUtils.ScanfUID(copyUid)
+	// if err != nil {
 	//	return s.GenRet(err.Error())
-	//}
+	// }
 	info.Account.OpenId = copyUid // copyOpenId
 	info.Account.Uid = copyUid
 	info.Account.Nickname += suffix
@@ -1406,7 +1406,7 @@ func (s *IDIPServer) GetAllUserInfo(uaid string, m map[string]*state.KvTable) ([
 		}
 	}
 	{
-		//成就数据
+		// 成就数据
 		table, err := s.GetMongoGame(db.KeyUserAchieve(uaid), nil)
 		if err != nil {
 			return s.GenRet(err.Error()), err
@@ -1569,34 +1569,7 @@ func (s *IDIPServer) GetAllUserInfo(uaid string, m map[string]*state.KvTable) ([
 }
 
 func CampRectify(camp *cmd.PPlayerCampBlob) {
-	//c, ok := camp.Camp[camp.CurrentCampId]
-	//if !ok {
-	//	return
-	//}
-	//if layout, ok1 := c.Layout[camp.CurrentLayoutId]; ok1 {
-	//	cfg := GetAmbienceByValue(layout.AtmosphereValue)
-	//
-	//	if cfg != nil {
-	//		c.AtmosphereLevel = cfg.Id
-	//	}
-	//}
-	//camp.Camp[camp.CurrentCampId] = c
-}
 
-func GetAmbienceByValue(value int32) *excel.AmbienceCfg {
-	maxValue := int32(0)
-	var cfgAm *excel.AmbienceCfg
-	excel.GetAmbienceMgr().Foreach(func(cfg *excel.AmbienceCfg) bool {
-		if value < cfg.AmbienceNum {
-			return true
-		}
-		if cfg.AmbienceNum >= maxValue {
-			cfgAm = cfg
-			maxValue = cfg.AmbienceNum
-		}
-		return true
-	}, true)
-	return cfgAm
 }
 
 func (s *IDIPServer) SrvPushExcel(files []*cmd.ExcelFile) []byte {
@@ -1620,17 +1593,17 @@ func (s *IDIPServer) SrvPushExcel(files []*cmd.ExcelFile) []byte {
 	res, err := pipline.Exec(cont)
 	if err != nil {
 		logger.Warn("SrvPushExcel  pipline excel err:", err, res)
-		ret.Code = 1 //失败
+		ret.Code = 1 // 失败
 		return s.GenJsonRet(ret)
 	}
-	//做校验
-	//newMd5 := make(map[string]string, len(files))
+	// 做校验
+	// newMd5 := make(map[string]string, len(files))
 	for k, _ := range srcMD5 {
 		pipline.Get(cont, k)
 	}
 	res, err = pipline.Exec(cont)
 	if err != nil {
-		ret.Code = 1 //失败
+		ret.Code = 1 // 失败
 		for _, v := range res {
 			if v.Err() != nil {
 				logger.Infof("SrvPushExcel  update redis file:%s", v.Args()[1].(string))
@@ -1644,11 +1617,11 @@ func (s *IDIPServer) SrvPushExcel(files []*cmd.ExcelFile) []byte {
 		if m, ok := srcMD5[key]; ok {
 			tempByte, _ := cmdRes.Bytes()
 			if myUtils.Md5Str2(tempByte) != m {
-				ret.Code = 1 //失败
+				ret.Code = 1 // 失败
 				logger.Infof("SrvPushExcel  update redis file:%s", key)
 			}
 		} else {
-			ret.Code = 1 //失败
+			ret.Code = 1 // 失败
 		}
 
 	}
@@ -1780,8 +1753,8 @@ func (s *IDIPServer) DelTapUser(uids string) []byte {
 }
 
 func (s *IDIPServer) SetMinVersion(key, version string) []byte {
-	//获取jenkins 版本号对应的真正版本
-	//s.Server.RedisCenter.Set(context.Background(), key, version, -1)
+	// 获取jenkins 版本号对应的真正版本
+	// s.Server.RedisCenter.Set(context.Background(), key, version, -1)
 	if err := s.Server.SaveToConfigCenter(key, version); err != nil {
 		return nil
 	}
@@ -1790,7 +1763,7 @@ func (s *IDIPServer) SetMinVersion(key, version string) []byte {
 
 func (s *IDIPServer) handleCopyGameData(uaid, copyUaid string) []byte {
 	var ret []byte
-	ret = s.copyGameData(db.KeyUserCard(uaid), db.KeyUserCard(copyUaid))           //卡片
+	ret = s.copyGameData(db.KeyUserCard(uaid), db.KeyUserCard(copyUaid))           // 卡片
 	ret = s.copyGameData(db.KeyUserCardTroop(uaid), db.KeyUserCardTroop(copyUaid)) // TroopHandler 编队
 	ret = s.copyGameData(db.KeyUserItems(uaid), db.KeyUserItems(copyUaid))         // 道具
 	ret = s.copyGameData(db.KeyUserCamp(uaid), db.KeyUserCamp(copyUaid))           // 营地
@@ -1803,7 +1776,7 @@ func (s *IDIPServer) handleCopyGameData(uaid, copyUaid string) []byte {
 	ret = s.copyGameData(db.KeyUserCardSkin(uaid), db.KeyUserCardSkin(copyUaid))   // 皮肤
 	ret = s.copyGameData(db.KeyUserCurrency(uaid), db.KeyUserCurrency(copyUaid))   // 货币
 	ret = s.copyGameData(db.KeyCampaign(uaid), db.KeyCampaign(copyUaid))           // Campaign 运动竞赛
-	ret = s.copyGameData(db.KeyUserLevelInfo(uaid), db.KeyUserLevelInfo(copyUaid)) //chapter userLevelInfo
+	ret = s.copyGameData(db.KeyUserLevelInfo(uaid), db.KeyUserLevelInfo(copyUaid)) // chapter userLevelInfo
 	ret = s.copyGameData(db.KeyUserShopInfo(uaid), db.KeyUserShopInfo(copyUaid))   // 商店
 	ret = s.copyGameData(db.KeyUserStoryFlag(uaid), db.KeyUserStoryFlag(copyUaid))
 	ret = s.copyGameData(db.KeyUserSign(uaid), db.KeyUserSign(copyUaid))               // 签到

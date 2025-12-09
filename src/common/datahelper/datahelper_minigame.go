@@ -1,7 +1,6 @@
 package datahelper
 
 import (
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/excel/data"
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
 )
 
@@ -15,14 +14,16 @@ const (
 
 // 获取倒计时时间
 func GetMiniGameCountdown(cfgId cmd.RoomModel) int32 {
-	cfg := data.GetMiniGameMgr().GetById(int32(cfgId))
-	return cfg.Countdown
+	// cfg := data.GetMiniGameMgr().GetById(int32(cfgId))
+	// return cfg.Countdown
+	return 0
 }
 
 // 获取胜利条件配置的值
 func GetMiniGameWinCondition(cfgId cmd.RoomModel, winType MiniGameWinType) int32 {
-	cfg := data.GetMiniGameMgr().GetById(int32(cfgId))
-	return cfg.WinCondition[int32(winType)]
+	// cfg := data.GetMiniGameMgr().GetById(int32(cfgId))
+	// return cfg.WinCondition[int32(winType)]
+	return 0
 }
 
 // 获取整个游戏的最大时长
@@ -35,12 +36,14 @@ func GetMiniGameTotalSec(cfgId cmd.RoomModel) int32 {
 
 // 获取最大玩家数量
 func GetMiniGamePlayerNum(cfgId cmd.RoomModel) int32 {
-	cfg := data.GetMiniGameMgr().GetById(int32(cfgId))
-	return cfg.PlayerNum
+	// cfg := data.GetMiniGameMgr().GetById(int32(cfgId))
+	// return cfg.PlayerNum
+	return 0
 }
 
 // 获取最大携带卡牌数量
 func GetMiniGameHeroNum(cfgId cmd.RoomModel) int32 {
-	cfg := data.GetMiniGameMgr().GetById(int32(cfgId))
-	return cfg.HeroNum
+	// cfg := data.GetMiniGameMgr().GetById(int32(cfgId))
+	// return cfg.HeroNum
+	return 0
 }

@@ -204,22 +204,8 @@ func (m *TaskTriggerMgr) checkTriggerType(triggerIds []int32) bool {
 			f = m.checkTrigger1(cfg)
 		case TASK_GROUP_TRIGGER_2:
 			f = m.checkTrigger2(cfg)
-		case TASK_GROUP_TRIGGER_5:
-			f = m.checkTrigger5(cfg)
-		case TASK_GROUP_TRIGGER_6:
-			f = m.checkTrigger6(cfg)
-		case TASK_GROUP_TRIGGER_7:
-			f = m.checkTrigger7(cfg)
-		case TASK_GROUP_TRIGGER_9:
-			f = m.checkTrigger9(cfg)
 		case TASK_GROUP_TRIGGER_11:
 			f = m.checkTrigger11(cfg)
-		case TASK_GROUP_TRIGGER_12:
-			f = m.checkTrigger12(cfg)
-		case TASK_GROUP_TRIGGER_14:
-			f = m.checkTrigger14(cfg)
-		case TASK_GROUP_TRIGGER_16:
-			f = m.checkTrigger16(cfg)
 		default:
 			m.actor.Errorf("unrealized task group trigger type %d", id)
 			return false
@@ -256,49 +242,6 @@ func (m *TaskTriggerMgr) checkTrigger2(cfg *excel.TriggerCfg) bool {
 	return level >= min
 }
 
-// 触发器:完成指定任务X次
-func (m *TaskTriggerMgr) checkTrigger5(cfg *excel.TriggerCfg) bool {
-	taskId, err := strconv.Atoi(cfg.Param01)
-	count, err := strconv.Atoi(cfg.Param02)
-	if err != nil {
-		return false
-	}
-	total := m.actor.AchieveHandler.GetAchieveNum(buildTaskKey(taskId))
-	return total >= int32(count)
-}
-
-// 触发器:完成指定任务组
-func (m *TaskTriggerMgr) checkTrigger6(cfg *excel.TriggerCfg) bool {
-	taskGroupId, err := strconv.Atoi(cfg.Param01)
-	if err != nil {
-		return false
-	}
-	total := m.actor.AchieveHandler.GetAchieveNum(buildTaskGroupKey(taskGroupId))
-	return total >= 1
-}
-
-// 触发器:通关某类型关卡X次
-func (m *TaskTriggerMgr) checkTrigger7(cfg *excel.TriggerCfg) bool {
-	levelType, err := strconv.Atoi(cfg.Param01)
-	count, err := strconv.Atoi(cfg.Param02)
-	if err != nil {
-		return false
-	}
-	total := m.actor.AchieveHandler.GetAchieveNum(buildLevelTypeKey(levelType))
-	return total >= int32(count)
-}
-
-// 触发器：消耗某道具id几次
-func (m *TaskTriggerMgr) checkTrigger9(cfg *excel.TriggerCfg) bool {
-	itemId, err := strconv.Atoi(cfg.Param01)
-	count, err := strconv.Atoi(cfg.Param02)
-	if err != nil {
-		return false
-	}
-	total := m.actor.AchieveHandler.GetAchieveNum(buildItemCountKey(itemId))
-	return total >= int32(count)
-}
-
 // 触发器：通关探索xx任务
 func (m *TaskTriggerMgr) checkTrigger11(cfg *excel.TriggerCfg) bool {
 	questId, err := strconv.Atoi(cfg.Param01)
@@ -306,33 +249,4 @@ func (m *TaskTriggerMgr) checkTrigger11(cfg *excel.TriggerCfg) bool {
 		return false
 	}
 	return m.actor.QuestHandler.checkQuestFinish(int32(questId))
-}
-
-// 触发器：激活某个营地内建筑ID
-func (m *TaskTriggerMgr) checkTrigger12(cfg *excel.TriggerCfg) bool {
-	buildingId, err := strconv.Atoi(cfg.Param01)
-	if err != nil {
-		return false
-	}
-	return m.actor.CampHandler.BuildingExist(int32(buildingId))
-}
-
-// 触发器：角色等级到达xx级
-func (m *TaskTriggerMgr) checkTrigger14(cfg *excel.TriggerCfg) bool {
-	level, err := strconv.Atoi(cfg.Param01)
-	if err != nil {
-		return false
-	}
-	total := m.actor.AchieveHandler.GetAchieveNum(CARD_MAX_LEVEL)
-	return total >= int32(level)
-}
-
-// 触发器：角色突破次数达到X次
-func (m *TaskTriggerMgr) checkTrigger16(cfg *excel.TriggerCfg) bool {
-	count, err := strconv.Atoi(cfg.Param01)
-	if err != nil {
-		return false
-	}
-	total := m.actor.AchieveHandler.GetAchieveNum(CARD_MAX_BREAKTHROUGH)
-	return total >= int32(count)
 }

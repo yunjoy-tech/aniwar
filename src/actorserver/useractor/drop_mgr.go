@@ -130,16 +130,16 @@ func (m *DropMgr) DropList(items map[uint32]uint32, isFullMail bool, params []in
 			return nil, fmt.Errorf("item config not found %d", itemId)
 		}
 
-		//eachChange, err := m.DropOne(itemId, itemNum, false, params, commonData, reason)
+		// eachChange, err := m.DropOne(itemId, itemNum, false, params, commonData, reason)
 		eachChange, err := m.doDrop(itemCfg, itemNum, params, commonData, reason)
 		if err != nil {
 			m.actor.Warnf("_dropMgr.DropList get err, itemId=%d, itemNum=%d, err:%+v", itemId, itemNum, err)
 			return nil, err
 		}
 
-		//dropChange.RoleExp
-		//dropChange.Items = append(dropChange.Items, eachChange.Items...)
-		//dropChange.CardExpInfos = append(dropChange.CardExpInfos, eachChange.CardExpInfos...)
+		// dropChange.RoleExp
+		// dropChange.Items = append(dropChange.Items, eachChange.Items...)
+		// dropChange.CardExpInfos = append(dropChange.CardExpInfos, eachChange.CardExpInfos...)
 
 		// 合并奖励
 		mergeDropChange(dropChange, eachChange)
@@ -173,10 +173,10 @@ func (m *DropMgr) doDrop(itemCfg *excel.ItemCfg, itemNum uint32, params []int32,
 		if err != nil {
 			m.actor.Warnf("doDrop ===>>> handleItemTypeAbility=%v", err)
 		}
-		//if err == nil {
+		// if err == nil {
 		//	dropChange.CardExpInfos = append(dropChange.CardExpInfos, expRewards...)
 		//	//dropChange.Items = append(dropChange.Items, &cmd.ItemReward{ItemId: uint32(itemCfg.ItemId), Num: itemNum})
-		//}
+		// }
 
 	case cmd.ItemType_Currency:
 		err = m.actor.CurrencyHandler.AddCurrency(itemCfg.ItemId, int64(itemNum), commonData, reason)
@@ -207,12 +207,6 @@ func (m *DropMgr) doDrop(itemCfg *excel.ItemCfg, itemNum uint32, params []int32,
 		err = errx
 		if drop != nil {
 			dropChange.Items = append(dropChange.Items, drop.Items...)
-		}
-
-	case cmd.ItemType_PlayerCamp:
-		err = m.actor.CampHandler.batchAddDecorationBuilding(itemCfg.ItemId, itemNum, commonData)
-		if err == nil {
-			dropChange.Items = append(dropChange.Items, &cmd.ItemReward{ItemId: uint32(itemCfg.ItemId), Num: itemNum})
 		}
 
 	case cmd.ItemType_Equip:
@@ -363,9 +357,6 @@ func (m *DropMgr) CheckLimit(itemId, itemNum int32) bool {
 	case cmd.ItemType_CardSkin:
 		return false
 
-	case cmd.ItemType_PlayerCamp:
-		// 判断时候超过上限
-		return m.actor.CampHandler.checkBuildingIsNumLimit(itemId, itemNum)
 	case cmd.ItemType_Equip:
 		return m.actor.EquipHandler.CheckLimit(itemNum)
 

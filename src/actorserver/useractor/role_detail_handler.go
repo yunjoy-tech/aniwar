@@ -126,7 +126,7 @@ func (h *RoleDetailHandler) ChangeShowCardsReq(ctx context.Context, in *base.Pro
 func (h *RoleDetailHandler) tryRefreshRoleDetail() error {
 	data := h.actor.GetRoleDetailData()
 	data.Lifex[0] = int32(h.actor.CardHandler.GetCardCount())
-	data.Lifex[1] = h.actor.AchieveHandler.GetCompleteCount()
+	data.Lifex[1] = 0 /*h.actor.AchieveHandler.GetCompleteCount()*/
 	data.Lifex[2] = h.actor.LoginHandler.getLoginDay()
 	if err := h.SaveDB(); err != nil {
 		return err

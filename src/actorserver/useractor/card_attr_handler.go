@@ -54,16 +54,16 @@ func (h *CardHandler) GetHpByGrow(c *cmd.CardData) (uint32, error) {
 		return 0, fmt.Errorf("not found card: %d config", c.BaseId)
 	}
 
-	id := cardCfg.GetRarity()*10000 + int32(c.BreakthroughLevel)*1000 + int32(c.CardLevel)
+	// id := cardCfg.GetRarity()*10000 + int32(c.BreakthroughLevel)*1000 + int32(c.CardLevel)
+	//
+	// growCfg := excel.GetAttributegrowMgr().GetById(id)
+	// if growCfg == nil {
+	// 	return 0, nil
+	// }
+	// hp := float32(cardCfg.GetHp()) * float32(growCfg.GetHpgrow()) / 10000
 
-	growCfg := excel.GetAttributegrowMgr().GetById(id)
-	if growCfg == nil {
-		return 0, nil
-	}
-	hp := float32(cardCfg.GetHp()) * float32(growCfg.GetHpgrow()) / 10000
-
-	logger.Debugf("GetHpByGrow: 基础血量 %d, 百分比 %d, 成长系数加成 %v", cardCfg.GetHp(), growCfg.GetHpgrow(), hp)
-	return uint32(hp), nil
+	// logger.Debugf("GetHpByGrow: 基础血量 %d, 百分比 %d, 成长系数加成 %v", cardCfg.GetHp(), growCfg.GetHpgrow(), hp)
+	return uint32(cardCfg.GetHp()), nil
 }
 
 func (h *CardHandler) GetHpByAwakenLevel(c *cmd.CardData, basicHp uint32) (uint32, error) {

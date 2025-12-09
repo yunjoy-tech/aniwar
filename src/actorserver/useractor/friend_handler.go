@@ -619,15 +619,15 @@ func (h *FriendHandler) GetFriendCampReq(ctx context.Context, in *base.ProtoMsg)
 	if _, ok := data.Friends[req.RoleId]; !ok {
 		return &cmd.LS2C_GetFriendCampRes{RoleId: req.RoleId, ErrCode: 1}, nil, 0
 	}
-	uaid, err := h.actor.Srv.GetUAIDByRoleId(req.RoleId)
-	if err != nil {
-		return nil, fmt.Errorf("role not found %d", req.RoleId), int32(cmd.ErrorCode_NotFoundPlayer)
-	}
-	camp := h.actor.CampHandler.getFriendCampInfo(uaid)
-	if camp == nil {
-		return nil, nil, int32(cmd.ErrorCode_FriendCampNotUnlock)
-	}
-	return &cmd.LS2C_GetFriendCampRes{Camp: camp}, nil, 0
+	// uaid, err := h.actor.Srv.GetUAIDByRoleId(req.RoleId)
+	// if err != nil {
+	// 	return nil, fmt.Errorf("role not found %d", req.RoleId), int32(cmd.ErrorCode_NotFoundPlayer)
+	// }
+	// camp := h.actor.CampHandler.getFriendCampInfo(uaid)
+	// if camp == nil {
+	// 	return nil, nil, int32(cmd.ErrorCode_FriendCampNotUnlock)
+	// }
+	return &cmd.LS2C_GetFriendCampRes{Camp: nil}, nil, 0
 }
 
 func (h *FriendHandler) OperateFriendPointReq(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
@@ -838,13 +838,13 @@ func (h *FriendHandler) HandleAddFriendApply(roleIds map[int32]int32) error {
 		data.Examinesx[uint64(k)] = now
 		refresh = true
 
-		//// 通知
-		//baseInfo, err := h.actor.getRoleBaseDataByRoleId(uint64(k))
-		//if err != nil {
+		// // 通知
+		// baseInfo, err := h.actor.getRoleBaseDataByRoleId(uint64(k))
+		// if err != nil {
 		//	h.Errorf("HandleAddFriendApply got err: %v", err)
 		//	continue
-		//}
-		//h.actor.comData.GetFriendData().Examines = append(h.actor.comData.GetFriendData().Examines, baseInfo.Common)
+		// }
+		// h.actor.comData.GetFriendData().Examines = append(h.actor.comData.GetFriendData().Examines, baseInfo.Common)
 	}
 	if refresh {
 		h.tryClearExaminesList(data.Examinesx)
@@ -862,13 +862,13 @@ func (h *FriendHandler) HandleAgreeFriendApply(roleIds map[int32]int32) error {
 		delete(data.Blacks, uint64(k))
 		data.Friends[uint64(k)] = 0
 
-		//// 通知
-		//baseInfo, err := h.actor.getRoleBaseDataByRoleId(uint64(k))
-		//if err != nil {
+		// // 通知
+		// baseInfo, err := h.actor.getRoleBaseDataByRoleId(uint64(k))
+		// if err != nil {
 		//	h.Errorf("HandleAgreeFriendApply got err: %v", err)
 		//	continue
-		//}
-		//h.actor.comData.GetFriendData().Friends = append(h.actor.comData.GetFriendData().Friends, baseInfo.Common)
+		// }
+		// h.actor.comData.GetFriendData().Friends = append(h.actor.comData.GetFriendData().Friends, baseInfo.Common)
 	}
 
 	h.Infof("HandleAgreeFriendApply roleIds: %v", roleIds)
@@ -880,7 +880,7 @@ func (h *FriendHandler) HandleSendFriendPoint(roleIds map[int32]int32) error {
 	data := h.actor.GetFriendData()
 	for k := range roleIds {
 		data.Receives[uint64(k)] = 0
-		//h.actor.comData.GetFriendData().Receives = append(h.actor.comData.GetFriendData().Receives, uint64(k))
+		// h.actor.comData.GetFriendData().Receives = append(h.actor.comData.GetFriendData().Receives, uint64(k))
 	}
 
 	h.Infof("HandleSendFriendPoint roleIds: %v", roleIds)

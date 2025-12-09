@@ -68,7 +68,7 @@ func (h *LoginHandler) EnterGame() error {
 
 func (h *LoginHandler) DailyRefresh() error {
 	// 跨天在线玩家自动上报一次
-	//threading.RunSafe(func() {
+	// threading.RunSafe(func() {
 	//	lilith.WriteDataLog(&lilith.RoleLogin{
 	//		HeadInfo: lilith.BuildHeadInfo(lilith.LogType_RoleLogin, h.actor.uid, h.actor.Account.CliDeviceInfo),
 	//		RoleId:   h.actor.ID(),
@@ -77,7 +77,7 @@ func (h *LoginHandler) DailyRefresh() error {
 	//		Recharge: 0,
 	//		Language: h.actor.Data.Base.Common.Language,
 	//	})
-	//})
+	// })
 	threading.RunSafe(func() {
 		e := &taptap.RoleLogin{
 			PropertyFieldInfo: taptap.BuildPropertyFieldInfo(h.actor.Account.CliDeviceInfo),
@@ -429,7 +429,7 @@ func (h *LoginHandler) TryUpdateLastLoginDate() (bool, error) {
 
 	// 更新本次登陆时间戳
 	h.UpdateOnlineTS(time.Now().Unix())
-	//h.UpdateOfflineTS(-1)
+	// h.UpdateOfflineTS(-1)
 
 	// 判断是否跨天
 	if !common.IsSameDayByOffset(oldLastLoginDate, time.Now(), common.GAME_DAILY_REFRESH_HOUR) {
@@ -464,10 +464,10 @@ func (h *LoginHandler) LoginEnterGame(ctx context.Context, in *base.ProtoMsg) (p
 		return nil, errors.New("roleId is 0"), int32(cmd.ErrorCode_InternalError)
 	}
 
-	//check role exist, return old role data,not create
+	// check role exist, return old role data,not create
 	// 查询账号,查不到返回错误码
 
-	//account, err := h.actor.Srv.GetAccount(db.KeyAccountInfo(h.actor.GetUID()))
+	// account, err := h.actor.Srv.GetAccount(db.KeyAccountInfo(h.actor.GetUID()))
 	err = h.actor.loadDBDataByDBType(service.MongoDbType_MongoAccount)
 	if err != nil {
 		return nil, err, int32(cmd.ErrorCode_NotFoundAccount)
@@ -478,7 +478,7 @@ func (h *LoginHandler) LoginEnterGame(ctx context.Context, in *base.ProtoMsg) (p
 	player, ok := h.actor.Account.PlayerList.Players[1]
 	_, err = h.actor.Srv.GetMongoGame(db.KeyUserBaseInfo(h.actor.ID()), nil)
 
-	//var bSyncDB bool
+	// var bSyncDB bool
 	// 角色不存在 创建角色
 	var bNewPlayer bool
 	if err != nil && errors.Is(err, service.DB_ERROR_NOT_EXIST) && !ok && player == nil {
@@ -496,11 +496,11 @@ func (h *LoginHandler) LoginEnterGame(ctx context.Context, in *base.ProtoMsg) (p
 		if err != nil || errCode != 0 {
 			return nil, err, int32(errCode)
 		}
-		//h.actor.Account.PlayerList.UserMap[1] = &cmd.Player{Id: h.actor.roleId, CreateTs: curTime}
-		//h.actor.Account.PlayerList.Pid = h.actor.roleId
-		//h.actor.Account.PlayerList.UpdateTs = curTime
+		// h.actor.Account.PlayerList.UserMap[1] = &cmd.Player{Id: h.actor.roleId, CreateTs: curTime}
+		// h.actor.Account.PlayerList.Pid = h.actor.roleId
+		// h.actor.Account.PlayerList.UpdateTs = curTime
 		h.actor.AccountHandler.SavePlayer(in.RoleId)
-		//bSyncDB = true
+		// bSyncDB = true
 		bNewPlayer = true
 
 		// 记录注册redis
@@ -511,18 +511,18 @@ func (h *LoginHandler) LoginEnterGame(ctx context.Context, in *base.ProtoMsg) (p
 			}
 		}
 
-		//threading.RunSafe(func() {
+		// threading.RunSafe(func() {
 		//	lilith.WriteDataLog(&lilith.UserCreate{
 		//		HeadInfo: lilith.BuildHeadInfo(lilith.LogType_UserCreate, h.actor.uid, h.actor.Account.CliDeviceInfo),
 		//	})
-		//})
+		// })
 
-		//threading.RunSafe(func() {
+		// threading.RunSafe(func() {
 		//	lilith.WriteDataLog(&lilith.RoleCreate{
 		//		HeadInfo: lilith.BuildHeadInfo(lilith.LogType_RoleCreate, h.actor.uid, h.actor.Account.CliDeviceInfo),
 		//		RoleId:   strconv.FormatUint(h.actor.roleId, 10),
 		//	})
-		//})
+		// })
 		threading.RunSafe(func() {
 			e := &taptap.RoleCreate{
 				PropertyFieldInfo: taptap.BuildPropertyFieldInfo(h.actor.Account.CliDeviceInfo),
@@ -545,7 +545,7 @@ func (h *LoginHandler) LoginEnterGame(ctx context.Context, in *base.ProtoMsg) (p
 	// 构建最新的数据
 	h.actor.comData.Data = &cmd.CliComData{
 		ServerTimestamp:     time.Now().UnixMilli(),
-		OpenServerTimestamp: time.Now().Unix() - 60*60*12, //TODO 临时数据
+		OpenServerTimestamp: time.Now().Unix() - 60*60*12, // TODO 临时数据
 		NextRefreshTime:     common.GetNextDailyRefreshTime(),
 		NewMails:            h.actor.MailHandler.getNewMailsCount(),
 		Base:                h.buildRoleBaseInfo(),
@@ -557,14 +557,12 @@ func (h *LoginHandler) LoginEnterGame(ctx context.Context, in *base.ProtoMsg) (p
 		Troop:               h.actor.TroopHandler.buildTroopList(),
 		Duty:                h.actor.DutyHandler.buildDutyInfo(false),
 		SignGroups:          h.actor.SignHandler.buildSignInfo(),
-		Camp:                h.actor.CampHandler.buildCampList(),
 		Quest:               h.actor.QuestHandler.buildQuestInfo(),
 		LevelSummary:        h.actor.ChapterHandler.Dto2PClientLevelSummary(0, 0),
 		Flags:               h.getStoryFlags(),
 		Stamina:             h.actor.PlayerLevelHandler.buildPlayerStaminaInfo(),
 		Campaign:            h.actor.CampaignHandler.buildClientCampaignData(),
 		HandBookItem:        h.actor.HandBookHandler.buildHandInfo(),
-		Achieve:             h.actor.AchieveLevelHandler.buildAchieveLevelData(),
 		BlockWayEvents:      h.actor.BlockWayHandler.buildBlockWayEvents(),
 		Friends:             h.actor.FriendHandler.buildFriendData(true),
 		UseLimit:            h.actor.UseLimitHandler.buildUseLimitData(),
@@ -594,7 +592,7 @@ func (h *LoginHandler) LoginEnterGame(ctx context.Context, in *base.ProtoMsg) (p
 		taptap.ReconnectComm(h.actor.uid, h.actor.Account.TapUserInfo, h.actor.Account.CliDeviceInfo)
 	}
 
-	//向allianceActor 发送topic 信息
+	// 向allianceActor 发送topic 信息
 	h.actor.UserAllianceHandler.PushTopic2Alliance(cmd.GateTopicOperator_GTO_bind, in.GetTopic())
 
 	h.actor.SetState(State_Online)
@@ -626,7 +624,7 @@ func (h *LoginHandler) CreatePlayer(playerId uint64, ts int64, language string) 
 		FirstLoginTimestamp:     ts,
 	}
 
-	//TODO 增加配置选项查询role
+	// TODO 增加配置选项查询role
 
 	// 查询 role:uaid
 	if conf.GConf().BaseConf().RoleIdCheck {
@@ -688,8 +686,6 @@ func (h *LoginHandler) DoEnterGame(bNewPlayer bool) (proto.Message, error, int32
 
 	// 判定新手礼包发放
 	if !h.actor.GetUserData().IsNewbieGift {
-		// 初始化营地数据
-		h.actor.CampHandler.init(DEFAULT_CAMP_ID)
 
 		if err := h.handleNewbieGift(); err != nil {
 			h.Debug(err)
@@ -718,11 +714,11 @@ func (h *LoginHandler) DoEnterGame(bNewPlayer bool) (proto.Message, error, int32
 	// 尝试同步es
 	h.actor.RoleDetailHandler.tryUploadRoleInfoToES()
 
-	//threading.RunSafe(func() {
+	// threading.RunSafe(func() {
 	//	lilith.WriteDataLog(&lilith.UserLogin{
 	//		HeadInfo: lilith.BuildHeadInfo(lilith.LogType_UserLogin, h.actor.uid, h.actor.Account.CliDeviceInfo),
 	//	})
-	//})
+	// })
 	threading.RunSafe(func() {
 		e := &taptap.RoleLogin{
 			PropertyFieldInfo: taptap.BuildPropertyFieldInfo(h.actor.Account.CliDeviceInfo),
@@ -829,7 +825,7 @@ func (h *LoginHandler) AddRoleExp(expValue uint64, commonData *clidto.Comdata) (
 		}
 
 		if newLevel != oldLevel {
-			//threading.RunSafe(func() {
+			// threading.RunSafe(func() {
 			//	lilith.WriteDataLog(&lilith.LevelUp{
 			//		HeadInfo: lilith.BuildHeadInfo(lilith.LogType_LevelUp, h.actor.uid, h.actor.Account.CliDeviceInfo),
 			//		RoleId:   strconv.FormatUint(h.actor.roleId, 10),
@@ -837,7 +833,7 @@ func (h *LoginHandler) AddRoleExp(expValue uint64, commonData *clidto.Comdata) (
 			//		VipLevel: 0,
 			//		Recharge: 0,
 			//	})
-			//})
+			// })
 			threading.RunSafe(func() {
 				e := &taptap.LevelUp{
 					PropertyFieldInfo: taptap.BuildPropertyFieldInfo(h.actor.Account.CliDeviceInfo),
