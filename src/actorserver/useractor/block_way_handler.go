@@ -237,7 +237,7 @@ func (h *BlockWayHandler) handleTriggerEvent(blockWayData *cmd.PBlockWay) {
 		h.Warnf("handleTriggerEvent type not found. type: %d", targetType)
 		return
 	}
-	lastQuestId := h.actor.QuestHandler.GetBlockTriggerId(tempQuestIds)
+	var lastQuestId int32 /*h.actor.QuestHandler.GetBlockTriggerId(tempQuestIds)*/
 
 	// 随机掉落事件
 	excel.GetRoadEventMgr().Foreach(func(cfg *excel.RoadEventCfg) bool {

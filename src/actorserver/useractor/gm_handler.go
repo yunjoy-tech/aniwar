@@ -67,7 +67,6 @@ func NewGmHandler(actor *UserActor) *GmHandler {
 	actor.RegisterProtoHandler(int32(cmd.Protocols_PS2AS_S2SSaveOfflineDataReq), h.GMSaveOfflineData) // GM-保存离线数据
 
 	// 注册gm指令处理方法
-	// h.RegisterCmdHandler(common.GM_ACTOR_SHOW, h.GMShowActor)
 	h.RegisterCmdHandler(common.GM_ACTOR_DEL, h.GMDelActor)
 	h.RegisterCmdHandler(common.GM_ADD_ITEM, h.GMAddItem)
 	h.RegisterCmdHandler(common.GM_CLEAN_ITEM, h.GMCleanItem)
@@ -88,13 +87,9 @@ func NewGmHandler(actor *UserActor) *GmHandler {
 	h.RegisterCmdHandler(common.GM_RESET_CARD_POOL_LOG, h.GmResetCardPoolLog)
 	h.RegisterCmdHandler(common.GM_WEAR_EQUIP, h.GmWearEquip)
 	h.RegisterCmdHandler(common.GM_ADD_PLAYER_EXP, h.GmAddPlayerExp)
-	h.RegisterCmdHandler(common.GM_DIRECT_COMPLETE_OBJECT, h.GmDirectCompleteObject)
-	h.RegisterCmdHandler(common.GM_DIRECT_COMPLETE_QUEST, h.GmDirectCompleteQuest)
 	h.RegisterCmdHandler(common.GM_TEST_SIGN, h.GmTestSign)
 	h.RegisterCmdHandler(common.GM_TEST_PROTO, h.GmTestCmd)
 	h.RegisterCmdHandler(common.GM_SET_SUPER_CARD, h.GmSetSuperCard)
-	h.RegisterCmdHandler(common.GM_SAVE_STORY_FLAG, h.GmSaveStoryFlag)
-	h.RegisterCmdHandler(common.GM_LEVEL_FINISH, h.GmLevelFinish)
 	h.RegisterCmdHandler(common.GM_TEST_UGC, h.GmTestUgc)
 	h.RegisterCmdHandler(common.GM_TEST_SENSITIVE, h.GmTestSensitive)
 	h.RegisterCmdHandler(common.GM_TEST_Battle_chapter, h.GmTestBattleChapter)
@@ -107,13 +102,10 @@ func NewGmHandler(actor *UserActor) *GmHandler {
 	h.RegisterCmdHandler(common.GM_RESET_DUTY_TASK, h.GMResetDutyTask)
 	h.RegisterCmdHandler(common.GM_DIRECT_COMPLETE_DUTY_TASK, h.GMDirectCompleteDutyTask)
 	h.RegisterCmdHandler(common.GM_ERR_CODE, h.GMTestErrCode)
-	// h.RegisterCmdHandler(common.GM_TEST_BOOK, h.GMTestBook)
 	h.RegisterCmdHandler(common.GM_TEST_ACHIEVE, h.GMTestAchieve)
 	h.RegisterCmdHandler(common.GM_TEST_PVP_ROOM, h.GMTestRoom)
 	h.RegisterCmdHandler(common.GM_CLOSE_BATTKE_CHECK, h.GMCloseBattleCheck)
 	h.RegisterCmdHandler(common.GM_TEST_RECOMMEND, h.GMTestRecommend)
-	h.RegisterCmdHandler(common.GM_ADD_CARDS_RELATION, h.AddCardsRelation)
-	h.RegisterCmdHandler(common.GM_TEST_CampDouble, h.CampDouble)
 	h.RegisterCmdHandler(common.GM_TEST_Card_Broad, h.CardBroad)
 	h.RegisterCmdHandler(common.GM_TEST_Test_Cfg_Hot, h.TestCfgHot)
 
@@ -567,29 +559,6 @@ func (h *GmHandler) GmSetSuperCard(param []string, commonData *clidto.Comdata) e
 	return h.actor.CardHandler.SetSuperCardByGM(cardId, typ, commonData)
 }
 
-func (h *GmHandler) GmDirectCompleteObject(param []string, commonData *clidto.Comdata) error {
-	objId, err := strconv.Atoi(param[0])
-	if err != nil {
-		return err
-	}
-	f := 0
-	if len(param) > 1 {
-		f, err = strconv.Atoi(param[1])
-		if err != nil {
-			return err
-		}
-	}
-	return h.actor.QuestHandler.directCompleteObjectByGM(int32(objId), int32(f), commonData)
-}
-
-func (h *GmHandler) GmDirectCompleteQuest(param []string, commonData *clidto.Comdata) error {
-	questId, err := strconv.Atoi(param[0])
-	if err != nil {
-		return err
-	}
-	return h.actor.QuestHandler.directCompleteQuestByGM(int32(questId), commonData)
-}
-
 func (h *GmHandler) GmTestSign(param []string, commonData *clidto.Comdata) error {
 	groupId, err := strconv.Atoi(param[0])
 	if err != nil {
@@ -649,66 +618,6 @@ func (h *GmHandler) GmTestCmd(param []string, comdata *clidto.Comdata) error {
 	})
 	logger.Debugf("调用结果 msg:%+v, err:%v, code:%d", message, err, code)
 	return nil
-}
-
-func (h *GmHandler) GmSaveStoryFlag(param []string, commonData *clidto.Comdata) error {
-	var (
-		err error
-	)
-
-	if len(param) < 1 {
-		return fmt.Errorf("invalid param")
-	}
-	flag := param[0]
-	val := datahelper.STORY_FLAG_V
-	if len(param) >= 2 {
-		val, err = strconv.Atoi(param[1])
-	}
-	err, _ = h.actor.StoryFlagHandler.saveStoryFlagVal(commonData, &cmd.FlagInfo{
-		Key: flag,
-		Val: int32(val),
-	})
-	return err
-}
-
-func (h *GmHandler) GmLevelFinish(param []string, commonData *clidto.Comdata) error {
-	// 第一个参数指定关卡id
-	levelId, err := strconv.Atoi(param[0])
-	if err != nil {
-		return err
-	}
-
-	// 第二个参数指定结束点id
-	endId := 0
-	if len(param) >= 2 {
-		endId, err = strconv.Atoi(param[1])
-		if err != nil {
-			return err
-		}
-	}
-
-	// 第三个参数为2, 表示以失败结束关卡
-	battleResult := cmd.BattleResult_BattleResult_Winer // 默认胜利
-	if len(param) >= 3 {
-		_succ, err := strconv.Atoi(param[2])
-		if err != nil {
-			return err
-		}
-		if _succ == 1 {
-			// 胜利
-		} else {
-			battleResult = cmd.BattleResult_BattleResult_Loser
-		}
-	}
-
-	if err, _ = checkIsTravelLevel(int32(levelId)); err == nil {
-		// 是间章关卡
-		h.actor.TravelLevelHandler.GmExitTravelLevel(int32(levelId))
-	} else {
-		err, _ = h.actor.ChapterHandler.GmExitLevel(h.actor.ID(), levelId, endId, battleResult)
-	}
-
-	return err
 }
 
 func (h *GmHandler) GmTestSensitive(param []string, commonData *clidto.Comdata) error {
@@ -1364,26 +1273,6 @@ func (h *GmHandler) GMTestRecommend(param []string, comdata *clidto.Comdata) err
 
 	list := h.actor.FriendHandler.getRecommendList()
 	h.Debugf("测试好友推荐列表: %+v", list)
-	return nil
-}
-
-func (h *GmHandler) AddCardsRelation(param []string, comdata *clidto.Comdata) error {
-	if len(param) < 2 {
-		return nil
-	}
-	cardIds := make([]int32, 0)
-	id1, _ := strconv.Atoi(param[0])
-	id2, _ := strconv.Atoi(param[1])
-	value, _ := strconv.Atoi(param[2])
-	cardIds = append(cardIds, int32(id1))
-	cardIds = append(cardIds, int32(id2))
-	h.actor.UserRelationHandler.GMAddRelation(cardIds, comdata, int32(value))
-	return nil
-}
-
-func (h *GmHandler) CampDouble(param []string, comdata *clidto.Comdata) error {
-	// building :=
-	//	h.actor.CampHandler.LifeSkillAddProduct()
 	return nil
 }
 

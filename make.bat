@@ -10,12 +10,19 @@
 ::set LDFLAGS="-ldflags=-X gitlab.musadisca-games.com/wangxw/musae/framework/global.APP_VERSION=DEBUG|"%date:~0,4%-%date:~5,2%-%date:~8,2%-%hour%-%time:~3,2%-%time:~6,2%
 set LDFLAGS="-ldflags=-X gitlab.musadisca-games.com/wangxw/musae/framework/global.APP_VERSION=DEBUG"
 
-go build -gcflags "-N -l" %LDFLAGS% -o ./output/bin/win/guideserver.exe ./src/guideserver
-go build -gcflags "-N -l" %LDFLAGS% -o ./output/bin/win/loginserver.exe ./src/loginserver
-go build -gcflags "-N -l" %LDFLAGS% -o ./output/bin/win/gateserver.exe ./src/gateserver
-go build -gcflags "-N -l" %LDFLAGS% -o ./output/bin/win/lobbyserver.exe ./src/lobbyserver
-go build -gcflags "-N -l" %LDFLAGS% -o ./output/bin/win/actorserver.exe ./src/actorserver
-go build -gcflags "-N -l" %LDFLAGS% -o ./output/bin/win/billserver.exe ./src/billserver
-go build -gcflags "-N -l" %LDFLAGS% -o ./output/bin/win/idipserver.exe ./src/idipserver
+echo "Build ActorServer"
+go build -gcflags "-N -l" %LDFLAGS% -o ./output/bin/win/actorserver.exe ./src/actorserver || exit /b 1
+echo "Build GuideServer"
+go build -gcflags "-N -l" %LDFLAGS% -o ./output/bin/win/guideserver.exe ./src/guideserver || exit /b 1
+echo "Build LoginServer"
+go build -gcflags "-N -l" %LDFLAGS% -o ./output/bin/win/loginserver.exe ./src/loginserver || exit /b 1
+echo "Build GateServer"
+go build -gcflags "-N -l" %LDFLAGS% -o ./output/bin/win/gateserver.exe ./src/gateserver || exit /b 1
+echo "Build LobbyServer"
+go build -gcflags "-N -l" %LDFLAGS% -o ./output/bin/win/lobbyserver.exe ./src/lobbyserver || exit /b 1
+echo "Build BillServer"
+go build -gcflags "-N -l" %LDFLAGS% -o ./output/bin/win/billserver.exe ./src/billserver || exit /b 1
+echo "Build IdipServer"
+go build -gcflags "-N -l" %LDFLAGS% -o ./output/bin/win/idipserver.exe ./src/idipserver || exit /b 1
 
 echo "ALL SERVERS build success!"

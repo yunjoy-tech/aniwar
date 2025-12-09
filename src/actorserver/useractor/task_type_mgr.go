@@ -494,9 +494,9 @@ func (m *TaskTypeMgr) createType521(id int32, typ int32, target int32, params []
 		return nil
 	}
 	var cur int32
-	if m.actor.QuestHandler.checkQuestFinish(params[0]) {
-		cur = 1
-	}
+	// if m.actor.QuestHandler.checkQuestFinish(params[0]) {
+	// 	cur = 1
+	// }
 	task := &cmd.TaskInfoItem{
 		Id:          id,
 		CondId:      typ,

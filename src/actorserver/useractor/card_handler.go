@@ -169,7 +169,7 @@ func (h *CardHandler) CardLevelUpReq(ctx context.Context, in *base.ProtoMsg) (pr
 		if cfg == nil {
 			return nil, fmt.Errorf("config not found"), int32(cmd.ErrorCode_NotFoundConfig)
 		}
-		if !(cfg.Type == int32(cmd.ItemType_Material) && cfg.SubType == int32(cmd.ItemMaterialType_ItemMaterialType_Card_Exp)) { //8
+		if !(cfg.Type == int32(cmd.ItemType_Material) && cfg.SubType == int32(cmd.ItemMaterialType_ItemMaterialType_Card_Exp)) { // 8
 			return nil, fmt.Errorf("param error"), int32(cmd.ErrorCode_ParamError)
 		}
 		sumExp += cfg.UseEffectShow * v
@@ -533,9 +533,9 @@ func (h *CardHandler) CardCharacterChangeReq(ctx context.Context, in *base.Proto
 	}
 
 	// 是否在副本中
-	if h.actor.ChapterHandler.IsInSubLevel() {
-		return nil, fmt.Errorf("illegal operation"), int32(cmd.ErrorCode_IllegalOperationError)
-	}
+	// if h.actor.ChapterHandler.IsInSubLevel() {
+	// 	return nil, fmt.Errorf("illegal operation"), int32(cmd.ErrorCode_IllegalOperationError)
+	// }
 
 	// 取卡牌
 	card, err := h.GetCard(uint32(req.CardId))
@@ -857,10 +857,10 @@ func (h *CardHandler) AddCard(itemCfg *excel.ItemCfg, addNum uint32, commonData 
 			Num:    1,
 		})
 
-		//初始化羁绊
-		h.actor.UserRelationHandler.InitCardRelation(cardId, commonData)
+		// 初始化羁绊
+		// h.actor.UserRelationHandler.InitCardRelation(cardId, commonData)
 		// 初始化通话信号
-		h.actor.UserCallSysHandler.AddCardInitSignalLevel(cardId)
+		// h.actor.UserCallSysHandler.AddCardInitSignalLevel(cardId)
 
 		exist = true
 		addNum -= 1
@@ -1094,11 +1094,11 @@ func (h *CardHandler) AddFavoriteExp(card *cmd.CardData, addExp uint32) cmd.Erro
 		isLevelUp = true
 	}
 
-	//好感度升级触发通话
+	// 好感度升级触发通话
 	if card.FavoriteLevel != targetLevel {
 		for i := card.FavoriteLevel + 1; i <= targetLevel; i++ {
 			h.Debugf("卡片[%d]好感度升级[%d]->[%d]触发通话", card.BaseId, card.FavoriteLevel, i)
-			h.actor.UserCallSysHandler.FavorUpTriggerCall(int32(card.BaseId), int32(i))
+			// h.actor.UserCallSysHandler.FavorUpTriggerCall(int32(card.BaseId), int32(i))
 		}
 	}
 	// 据俊杰说升满，抹掉超出部分经验
@@ -1194,13 +1194,13 @@ func (h *CardHandler) AddExp(c *cmd.CardData, value int32, triggerTask bool) (in
 
 	}()
 	// 升级到最大等级抹掉多余经验
-	//if targetLevel >= maxCardLevel {
+	// if targetLevel >= maxCardLevel {
 	//	h.Infof("AddExp : levelMax card Level :%v max Level %v", c.CardLevel, maxCardLevel)
 	//
 	//	c.CardLevel = targetLevel
 	//	c.CardExp = 0
 	//	return realAddExp, nil
-	//}
+	// }
 
 	c.CardLevel = targetLevel
 	c.CardExp = uint32(totalAddExp)

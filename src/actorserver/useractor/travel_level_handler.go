@@ -165,7 +165,7 @@ func (h *TravelLevelHandler) TravelBattleEndReq(ctx context.Context, in *base.Pr
 
 	travelEventCfg := data.GetTravelEventMgr().GetById(req.LevelId)
 
-	if h.CheckTravelLevelHadPassed(req.LevelId) && //已经通关了
+	if h.CheckTravelLevelHadPassed(req.LevelId) && // 已经通关了
 		travelEventCfg.Isonce == 1 { // 一次性关卡
 		return nil, errors.New(fmt.Sprintf("旅途关卡已经打过了, levelId=%d", req.LevelId)), int32(cmd.ErrorCode_Travel_level_had_passed)
 	}
@@ -195,7 +195,7 @@ func (h *TravelLevelHandler) TravelBattleEndReq(ctx context.Context, in *base.Pr
 		checkBattle = &cmd.CheckBattleRes{
 			CheckBattleResult: cmd.CheckBattleResult_CBR_success,
 			BattleResult:      req.BattleResult,
-			//SelfCards:         battleEventReq.Card,
+			// SelfCards:         battleEventReq.Card,
 			OppoCards: nil,
 			CostFoods: req.CostFoods,
 		}
@@ -298,11 +298,11 @@ func (h *TravelLevelHandler) checkTravelLevelPreCondition(levelId int32) (error,
 
 	// 大地图关卡是否完成
 	if travelEventCfg.PreMainLevel > 0 {
-		isMainLevelPassed := h.actor.ChapterHandler.CheckMainLevelHadPassed(travelEventCfg.PreMainLevel)
-		if !isMainLevelPassed {
-			return errors.New(fmt.Sprintf("大地图前置关卡没有通关, mainLevelId=%d", travelEventCfg.PreMainLevel)),
-				cmd.ErrorCode_Travel_level_pre_main_level_not_passed
-		}
+		// isMainLevelPassed := h.actor.ChapterHandler.CheckMainLevelHadPassed(travelEventCfg.PreMainLevel)
+		// if !isMainLevelPassed {
+		// 	return errors.New(fmt.Sprintf("大地图前置关卡没有通关, mainLevelId=%d", travelEventCfg.PreMainLevel)),
+		// 		cmd.ErrorCode_Travel_level_pre_main_level_not_passed
+		// }
 	}
 
 	// 旅途关卡是否完成
@@ -376,12 +376,12 @@ func (h *TravelLevelHandler) doExitLevel(levelId int32, commonData *clidto.Comda
 	if errx != nil {
 		h.Error(errx)
 	}
-	//增加羁绊值
-	cardIds := GeBattleCardCardId(cards)
-	if len(cards) > 0 {
-		h.actor.UserRelationHandler.AddRelation(cardIds, commonData, common.Realtion_type_win)
-		h.Debugf("旅途关卡增加羁绊值:%v", dropChange)
-	}
+	// 增加羁绊值
+	// cardIds := GeBattleCardCardId(cards)
+	// if len(cards) > 0 {
+	// 	// h.actor.UserRelationHandler.AddRelation(cardIds, commonData, common.Realtion_type_win)
+	// 	h.Debugf("旅途关卡增加羁绊值:%v", dropChange)
+	// }
 
 	return onceDropChange, dropChange
 }

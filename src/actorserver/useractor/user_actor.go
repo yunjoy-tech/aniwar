@@ -73,10 +73,8 @@ type UserActor struct {
 	TroopHandler        *TroopHandler
 	CardHandler         *CardHandler
 	GmHandler           *GmHandler
-	ChapterHandler      *ChapterHandler
 	CurrencyHandler     *CurrencyHandler
 	PoolHandler         *PoolHandler
-	HandBookHandler     *HandBookHandler
 	QuestionHandler     *QuestionHandler
 	ShopHandler         *ShopHandler
 	MailHandler         *MailHandler
@@ -84,13 +82,10 @@ type UserActor struct {
 	PlayerLevelHandler  *PlayerLevelHandler
 	DutyHandler         *DutyHandler
 	GuideTaskHandler    *GuideTaskHandler
-	QuestHandler        *QuestHandler
 	CampaignHandler     *CampaignHandler
-	StoryFlagHandler    *StoryFlagHandler
 	SkinHandler         *SkinHandler
 	SignHandler         *SignHandler
 	GiftHandler         *GiftHandler
-	TrialHandler        *TrialHandler
 	FriendHandler       *FriendHandler
 	BlockWayHandler     *BlockWayHandler
 	RoleDetailHandler   *RoleDetailHandler
@@ -100,8 +95,6 @@ type UserActor struct {
 	OfflineEventHandler *OfflineEventHandler
 	UseLimitHandler     *UseLimitHandler
 	UserAllianceHandler *UserAllianceHandler
-	UserRelationHandler *RelationHandler
-	UserCallSysHandler  *CallSysHandler
 	TravelLevelHandler  *TravelLevelHandler
 	ActivityHandler     *ActivityHandler
 }
@@ -560,17 +553,11 @@ func (u *UserActor) initHandlers() {
 	u.CardHandler = NewCardHandler(u)
 	u.KeepHandler(u.CardHandler)
 
-	u.ChapterHandler = NewChapterHandler(u)
-	u.KeepHandler(u.ChapterHandler)
-
 	u.CurrencyHandler = NewCurrencyHandler(u)
 	u.KeepHandler(u.CurrencyHandler)
 
 	u.PoolHandler = NewPoolHandler(u)
 	u.KeepHandler(u.PoolHandler)
-
-	u.HandBookHandler = NewHandBookHandler(u)
-	u.KeepHandler(u.HandBookHandler)
 
 	u.QuestionHandler = NewQuestionHandler(u)
 	u.KeepHandler(u.QuestionHandler)
@@ -590,14 +577,8 @@ func (u *UserActor) initHandlers() {
 	u.PlayerLevelHandler = NewPlayerLevelHandler(u)
 	u.KeepHandler(u.PlayerLevelHandler)
 
-	u.QuestHandler = NewQuestHandler(u)
-	u.KeepHandler(u.QuestHandler)
-
 	u.CampaignHandler = NewCampaignHandler(u)
 	u.KeepHandler(u.CampaignHandler)
-
-	u.StoryFlagHandler = NewStoryHandler(u)
-	u.KeepHandler(u.StoryFlagHandler)
 
 	u.SkinHandler = NewSkinHandler(u)
 	u.KeepHandler(u.SkinHandler)
@@ -607,9 +588,6 @@ func (u *UserActor) initHandlers() {
 
 	u.GiftHandler = NewGiftHandler(u)
 	u.KeepHandler(u.GiftHandler)
-
-	u.TrialHandler = NewTrialHandler(u)
-	u.KeepHandler(u.TrialHandler)
 
 	u.GmHandler = NewGmHandler(u)
 	u.KeepHandler(u.GmHandler)
@@ -641,12 +619,6 @@ func (u *UserActor) initHandlers() {
 	u.UserAllianceHandler = NewUserUserAllianceHandler(u)
 	u.KeepHandler(u.UserAllianceHandler)
 
-	u.UserRelationHandler = NewRelationHandlerHandler(u)
-	u.KeepHandler(u.UserRelationHandler)
-
-	u.UserCallSysHandler = NewCallSysHandler(u)
-	u.KeepHandler(u.UserCallSysHandler)
-
 	u.TravelLevelHandler = NewTravelLevelHandler(u)
 	u.KeepHandler(u.TravelLevelHandler)
 
@@ -663,12 +635,6 @@ func (u *UserActor) initHandlers() {
 
 func (u *UserActor) initAsyncFunc() {
 	// 异步事件监听
-	u.eventManager.Listen(TASK_EVENT_CARD_CREATE, event.ListenerFunc(u.HandBookHandler.handleAddNewCard))
-	u.eventManager.Listen(TASK_EVENT_LEVEL_ENTER, event.ListenerFunc(u.QuestHandler.TryCreateQuest))
-	u.eventManager.Listen(TASK_EVENT_ROLE_LEVEL_CHANGE, event.ListenerFunc(u.QuestHandler.TryCreateQuest))
-	u.eventManager.Listen(TASK_EVENT_STORY_FLAG_CHANGE, event.ListenerFunc(u.QuestHandler.TryCreateQuest))
-	u.eventManager.Listen(TASK_EVENT_ITEM_DROP, event.ListenerFunc(u.QuestHandler.TryCreateQuest))
-	u.eventManager.Listen(TASK_EVENT_QUEST_COMPLETE, event.ListenerFunc(u.TrialHandler.tryUnlock))
 	u.eventManager.Listen(TASK_EVENT_STAMINA_SUB, event.ListenerFunc(u.BlockWayHandler.tryTriggerEvent))
 	u.eventManager.Listen(TASK_EVENT_ROLE_LEVEL_CHANGE, event.ListenerFunc(u.DutyHandler.tryInitData))
 	u.eventManager.Listen(TASK_EVENT_QUEST_COMPLETE, event.ListenerFunc(u.DutyHandler.tryInitData))
@@ -683,7 +649,6 @@ func (u *UserActor) initAsyncFunc() {
 	// 任务监听
 	u.TaskTypeMgr.RegisterTaskTypeHandler(event.ListenerFunc(u.GuideTaskHandler.handleTaskType))
 	u.TaskTypeMgr.RegisterTaskTypeHandler(event.ListenerFunc(u.DutyHandler.handleTaskType))
-	u.TaskTypeMgr.RegisterTaskTypeHandler(event.ListenerFunc(u.HandBookHandler.handleTaskType))
 	u.TaskTypeMgr.RegisterTaskTypeHandler(event.ListenerFunc(u.ActivityHandler.handleTaskType))
 	// 触发器监听
 	u.TaskTriggerMgr.RegisterTaskTriggerHandler(event.ListenerFunc(u.ActivityHandler.handleTaskTrigger))

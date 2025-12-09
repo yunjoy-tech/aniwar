@@ -86,9 +86,9 @@ func (h *FuncUnlockHandler) CheckFuncUnlockBase(funcId int32) (error, cmd.ErrorC
 	// 其他条件判定
 	switch cfg.UnlockType {
 	case UNLOCK_TYPE_QUEST:
-		if !h.actor.QuestHandler.checkQuestFinish(cfg.UnlockParam) {
-			return fmt.Errorf("func unlock condition not match %d", UNLOCK_TYPE_QUEST), cmd.ErrorCode_FuncUnlockError
-		}
+		// if !h.actor.QuestHandler.checkQuestFinish(cfg.UnlockParam) {
+		// 	return fmt.Errorf("func unlock condition not match %d", UNLOCK_TYPE_QUEST), cmd.ErrorCode_FuncUnlockError
+		// }
 	}
 	return nil, cmd.ErrorCode_Success
 }

@@ -153,9 +153,9 @@ func (m *TaskTriggerMgr) checkPreCondition(conditions map[int32]int32) bool {
 	for k, v := range conditions {
 		switch k {
 		case TASK_TRIGGER_1:
-			if !m.actor.QuestHandler.checkQuestFinish(v) {
-				return false
-			}
+			// if !m.actor.QuestHandler.checkQuestFinish(v) {
+			// 	return false
+			// }
 		case TASK_TRIGGER_2:
 			err, _ := m.actor.FuncUnlockHandler.CheckFuncUnlockBase(v)
 			if err != nil {
@@ -205,7 +205,7 @@ func (m *TaskTriggerMgr) checkTriggerType(triggerIds []int32) bool {
 		case TASK_GROUP_TRIGGER_2:
 			f = m.checkTrigger2(cfg)
 		case TASK_GROUP_TRIGGER_11:
-			f = m.checkTrigger11(cfg)
+			// f = m.checkTrigger11(cfg)
 		default:
 			m.actor.Errorf("unrealized task group trigger type %d", id)
 			return false
@@ -240,13 +240,4 @@ func (m *TaskTriggerMgr) checkTrigger2(cfg *excel.TriggerCfg) bool {
 		return false
 	}
 	return level >= min
-}
-
-// 触发器：通关探索xx任务
-func (m *TaskTriggerMgr) checkTrigger11(cfg *excel.TriggerCfg) bool {
-	questId, err := strconv.Atoi(cfg.Param01)
-	if err != nil {
-		return false
-	}
-	return m.actor.QuestHandler.checkQuestFinish(int32(questId))
 }

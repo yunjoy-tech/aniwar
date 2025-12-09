@@ -41,11 +41,11 @@ func (h *CurrencyHandler) Init() error {
 	currencyMap := make(map[int32]*cmd.CurrencyItem)
 	currencyMap[common.CURRENCY_ITEM_ID_2010] = &cmd.CurrencyItem{
 		Key:   common.CURRENCY_ITEM_ID_2010,
-		Value: int64(h.actor.ChapterHandler.getCfgMaxTicketCount(cmd.LevelMonsterType_MonsterType_Elite)),
+		Value: 999,
 	}
 	currencyMap[common.CURRENCY_ITEM_ID_2011] = &cmd.CurrencyItem{
 		Key:   common.CURRENCY_ITEM_ID_2011,
-		Value: int64(h.actor.ChapterHandler.getCfgMaxTicketCount(cmd.LevelMonsterType_MonsterType_Boss)),
+		Value: 999,
 	}
 
 	h.actor.Data.Currency = &cmd.PCurrencyInfo{
@@ -139,14 +139,14 @@ func (h *CurrencyHandler) CurrencyExchangeReq(ctx context.Context, in *base.Prot
 	}
 
 	// 埋点log
-	//threading.RunSafe(func() {
+	// threading.RunSafe(func() {
 	//	lilith.WriteDataLog(&lilith.CurrencyExchange{
 	//		CustomHeadInfo: lilith.BuildCustomHeadInfo(lilith.LogType_CurrencyExchange, h.actor.uid, h.actor.Account.CliDeviceInfo),
 	//		MoneyType:      req.CurrencyType,
 	//		Cost:           lilith.ConvertMap2Str(costs),
 	//		ExchangeNum:    uint64(sum),
 	//	})
-	//})
+	// })
 	threading.RunSafe(func() {
 		e := &taptap.CurrencyExchange{
 			PropertyFieldInfo: taptap.BuildPropertyFieldInfo(h.actor.Account.CliDeviceInfo),
@@ -233,7 +233,7 @@ func (h *CurrencyHandler) CurrencyBuyReq(ctx context.Context, in *base.ProtoMsg)
 	}
 
 	// 埋点log
-	//threading.RunSafe(func() {
+	// threading.RunSafe(func() {
 	//	lilith.WriteDataLog(&lilith.CurrencyBuy{
 	//		CustomHeadInfo: lilith.BuildCustomHeadInfo(lilith.LogType_CurrencyBuy, h.actor.uid, h.actor.Account.CliDeviceInfo),
 	//		MoneyType:      req.CurrencyType,
@@ -241,7 +241,7 @@ func (h *CurrencyHandler) CurrencyBuyReq(ctx context.Context, in *base.ProtoMsg)
 	//		CostType:       itemCfg.SubType,
 	//		CostNum:        req.Num,
 	//	})
-	//})
+	// })
 	threading.RunSafe(func() {
 		e := &taptap.CurrencyBuy{
 			PropertyFieldInfo: taptap.BuildPropertyFieldInfo(h.actor.Account.CliDeviceInfo),
@@ -281,7 +281,7 @@ func (h *CurrencyHandler) AddValue(typ int32, value int64, commonData *clidto.Co
 
 	// 一级货币才输出
 	if typ == common.CURRENCY_ITEM_ID_2006 {
-		//threading.RunSafe(func() {
+		// threading.RunSafe(func() {
 		//	lilith.WriteDataLog(&lilith.MoneyFlow{
 		//		HeadInfo:    lilith.BuildHeadInfo(lilith.LogType_MoneyFlow, h.actor.uid, h.actor.Account.CliDeviceInfo),
 		//		RoleId:      h.actor.ID(),
@@ -295,7 +295,7 @@ func (h *CurrencyHandler) AddValue(typ int32, value int64, commonData *clidto.Co
 		//		Item:        "",
 		//		Recharge:    0,
 		//	})
-		//})
+		// })
 		threading.RunSafe(func() {
 			e := &taptap.MoneyFlow{
 				PropertyFieldInfo: taptap.BuildPropertyFieldInfo(h.actor.Account.CliDeviceInfo),
@@ -314,7 +314,7 @@ func (h *CurrencyHandler) AddValue(typ int32, value int64, commonData *clidto.Co
 		})
 	} else {
 		// 其他货币输出
-		//threading.RunSafe(func() {
+		// threading.RunSafe(func() {
 		//	lilith.WriteDataLog(&lilith.ResourceFlow{
 		//		HeadInfo:       lilith.BuildHeadInfo(lilith.LogType_ResourceFlow, h.actor.uid, h.actor.Account.CliDeviceInfo),
 		//		RoleId:         strconv.FormatUint(h.actor.roleId, 10),
@@ -327,7 +327,7 @@ func (h *CurrencyHandler) AddValue(typ int32, value int64, commonData *clidto.Co
 		//		VipLevel:       0,
 		//		Recharge:       0,
 		//	})
-		//})
+		// })
 		threading.RunSafe(func() {
 			e := &taptap.ResourceFlow{
 				PropertyFieldInfo: taptap.BuildPropertyFieldInfo(h.actor.Account.CliDeviceInfo),
@@ -403,7 +403,7 @@ func (h *CurrencyHandler) SubValue(typ int32, value int64, commonData *clidto.Co
 	}
 
 	if typ == common.CURRENCY_ITEM_ID_2006 {
-		//threading.RunSafe(func() {
+		// threading.RunSafe(func() {
 		//	lilith.WriteDataLog(&lilith.MoneyFlow{
 		//		HeadInfo:    lilith.BuildHeadInfo(lilith.LogType_MoneyFlow, h.actor.uid, h.actor.Account.CliDeviceInfo),
 		//		RoleId:      h.actor.ID(),
@@ -417,7 +417,7 @@ func (h *CurrencyHandler) SubValue(typ int32, value int64, commonData *clidto.Co
 		//		Item:        "",
 		//		Recharge:    0,
 		//	})
-		//})
+		// })
 		threading.RunSafe(func() {
 			e := &taptap.MoneyFlow{
 				PropertyFieldInfo: taptap.BuildPropertyFieldInfo(h.actor.Account.CliDeviceInfo),
@@ -435,7 +435,7 @@ func (h *CurrencyHandler) SubValue(typ int32, value int64, commonData *clidto.Co
 			taptap.WriteDataLog(taptap.LogType_MoneyFlow, h.actor.uid, h.actor.Account.TapUserInfo, e)
 		})
 	} else {
-		//threading.RunSafe(func() {
+		// threading.RunSafe(func() {
 		//	lilith.WriteDataLog(&lilith.ResourceFlow{
 		//		HeadInfo:       lilith.BuildHeadInfo(lilith.LogType_ResourceFlow, h.actor.uid, h.actor.Account.CliDeviceInfo),
 		//		RoleId:         strconv.FormatUint(h.actor.roleId, 10),
@@ -448,7 +448,7 @@ func (h *CurrencyHandler) SubValue(typ int32, value int64, commonData *clidto.Co
 		//		VipLevel:       0,
 		//		Recharge:       0,
 		//	})
-		//})
+		// })
 		threading.RunSafe(func() {
 			e := &taptap.ResourceFlow{
 				PropertyFieldInfo: taptap.BuildPropertyFieldInfo(h.actor.Account.CliDeviceInfo),
@@ -467,10 +467,10 @@ func (h *CurrencyHandler) SubValue(typ int32, value int64, commonData *clidto.Co
 	}
 
 	// 发布事件
-	//e := event.NewBasicEvent(TASK_EVENT_CURRENCY_SUB, []int32{TASK_TYPE_112}, nil)
-	//e.Set("type", typ)
-	//e.Set("count", value)
-	//h.actor.eventManager.SyncPublish(e)
+	// e := event.NewBasicEvent(TASK_EVENT_CURRENCY_SUB, []int32{TASK_TYPE_112}, nil)
+	// e.Set("type", typ)
+	// e.Set("count", value)
+	// h.actor.eventManager.SyncPublish(e)
 	return nil
 }
 
