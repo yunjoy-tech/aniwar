@@ -438,10 +438,10 @@ func (h *MailHandler) GMTAddUserMail(req *cmd.S2S_SendGMAddUserMailReq, commonDa
 	if req.QuestionId != "" {
 		newMail.QuestionUrl = h.genQuestionUrl(h.actor.uid, h.actor.Data.Base.Common.RoleId, req.QuestionType, req.QuestionId, lang)
 		// 问卷数据处理
-		err := h.actor.QuestionHandler.AddQuestion(req.QuestionId, newMail.Attachments)
-		if err != nil {
-			return err
-		}
+		// err := h.actor.QuestionHandler.AddQuestion(req.QuestionId, newMail.Attachments)
+		// if err != nil {
+		// 	return err
+		// }
 		// 该邮件奖励废弃
 		newMail.Attachments = nil
 		newMail.IsReceived = common.MAIL_STATUS_NOT_RECEIVE
@@ -600,10 +600,10 @@ func (h *MailHandler) convertMail(uid string, roleId uint64, lang string, mail *
 	if mail.QuestionId != "" {
 		questionUrl = h.genQuestionUrl(uid, roleId, mail.QuestionType, mail.QuestionId, lang)
 		// 问卷数据处理
-		err := h.actor.QuestionHandler.AddQuestion(mail.QuestionId, mail.Attachments)
-		if err != nil {
-			return nil, err
-		}
+		// err := h.actor.QuestionHandler.AddQuestion(mail.QuestionId, mail.Attachments)
+		// if err != nil {
+		// 	return nil, err
+		// }
 		// 该邮件奖励废弃
 		mail.Attachments = nil
 		isReceived = common.MAIL_STATUS_NOT_RECEIVE

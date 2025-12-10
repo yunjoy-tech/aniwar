@@ -74,14 +74,12 @@ type UserActor struct {
 	CardHandler         *CardHandler
 	GmHandler           *GmHandler
 	CurrencyHandler     *CurrencyHandler
-	QuestionHandler     *QuestionHandler
 	ShopHandler         *ShopHandler
 	MailHandler         *MailHandler
 	EquipHandler        *EquipHandler
 	PlayerLevelHandler  *PlayerLevelHandler
 	DutyHandler         *DutyHandler
 	GuideTaskHandler    *GuideTaskHandler
-	CampaignHandler     *CampaignHandler
 	SkinHandler         *SkinHandler
 	SignHandler         *SignHandler
 	GiftHandler         *GiftHandler
@@ -552,9 +550,6 @@ func (u *UserActor) initHandlers() {
 	u.CurrencyHandler = NewCurrencyHandler(u)
 	u.KeepHandler(u.CurrencyHandler)
 
-	u.QuestionHandler = NewQuestionHandler(u)
-	u.KeepHandler(u.QuestionHandler)
-
 	u.ShopHandler = NewShopHandler(u)
 	u.KeepHandler(u.ShopHandler)
 
@@ -569,9 +564,6 @@ func (u *UserActor) initHandlers() {
 
 	u.PlayerLevelHandler = NewPlayerLevelHandler(u)
 	u.KeepHandler(u.PlayerLevelHandler)
-
-	u.CampaignHandler = NewCampaignHandler(u)
-	u.KeepHandler(u.CampaignHandler)
 
 	u.SkinHandler = NewSkinHandler(u)
 	u.KeepHandler(u.SkinHandler)

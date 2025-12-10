@@ -28,8 +28,8 @@ func NewBattleHandler(actor *UserActor) *BattleHandler {
 	h := &BattleHandler{UABaseHandler: NewUABaseHandler(actor, "BattleHandler")}
 	h.ChildHandler = h
 
-	//actor.RegisterProtoHandler(int32(cmd.Protocols_PC2LS_StartBattleEventReq), h.BattleStartReq)      // 战斗开始
-	//actor.RegisterProtoHandler(int32(cmd.Protocols_PC2LS_LevelBattleEventReq), h.BattleEndReq) // 战斗事件
+	// actor.RegisterProtoHandler(int32(cmd.Protocols_PC2LS_StartBattleEventReq), h.BattleStartReq)      // 战斗开始
+	// actor.RegisterProtoHandler(int32(cmd.Protocols_PC2LS_LevelBattleEventReq), h.BattleEndReq) // 战斗事件
 
 	return h
 }
@@ -57,8 +57,8 @@ func (h *BattleHandler) DBTable() (service.MongoDbType, string, proto.Message) {
 func (h *BattleHandler) BattleStartReq(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
 	var (
 		err error
-		//errCode cmd.ErrorCode
-		//uid     string
+		// errCode cmd.ErrorCode
+		// uid     string
 		rsp *cmd.LS2C_StartBattleEventRes
 	)
 
@@ -75,7 +75,7 @@ func (h *BattleHandler) LevelBattleEventReq(ctx context.Context, in *base.ProtoM
 	var (
 		err     error
 		errCode cmd.ErrorCode = cmd.ErrorCode_Success
-		//uid     string
+		// uid     string
 		rsp *cmd.LS2C_LevelBattleEventRes
 	)
 
@@ -99,7 +99,7 @@ func (h *BattleHandler) CheckBattle(
 			BattleId:         battleId,
 			BattleRandomSeed: battleRandomSeed,
 			BattleResult:     battleResult,
-			//EventId:          battleEventId,
+			// EventId:          battleEventId,
 			SelfTeam:        selfBattleTeam,
 			BattleEventId:   battleEventId,
 			BattleFrameData: battleFrameData, /*&cmd.BattleFrameData{
@@ -111,7 +111,7 @@ func (h *BattleHandler) CheckBattle(
 				CommandUseSkill:            make([]*cmd.CommandUseSkill, 0),
 			},*/
 		},
-		//Name: "test-battle",
+		// Name: "test-battle",
 	}
 
 	if baseconf.GetBaseConf().OpenCheckBattle == 0 {
@@ -160,8 +160,8 @@ func (h *BattleHandler) buildSelfBattleCards(troopType cmd.CardTroopType, troopI
 			CardList: make([]*cmd.BattleCard, 0),
 			FoodList: make([]*cmd.KeyValueItem, 0),
 		}
-		//battleCards = make([]*cmd.BattleCard, 0)
-		//foodItems   = make([]*cmd.KeyValueItem, 0)
+		// battleCards = make([]*cmd.BattleCard, 0)
+		// foodItems   = make([]*cmd.KeyValueItem, 0)
 	)
 
 	troopInfo, err := h.actor.TroopHandler.getTroopInfo(int32(troopType), troopId)

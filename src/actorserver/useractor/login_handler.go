@@ -559,7 +559,6 @@ func (h *LoginHandler) LoginEnterGame(ctx context.Context, in *base.ProtoMsg) (p
 		SignGroups:          h.actor.SignHandler.buildSignInfo(),
 		Flags:               h.getStoryFlags(),
 		Stamina:             h.actor.PlayerLevelHandler.buildPlayerStaminaInfo(),
-		Campaign:            h.actor.CampaignHandler.buildClientCampaignData(),
 		Friends:             h.actor.FriendHandler.buildFriendData(true),
 		Alliance:            h.actor.UserAllianceHandler.buildAllianceData(true),
 		GuideTask:           h.actor.GuideTaskHandler.buildGuideTask(),
