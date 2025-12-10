@@ -68,7 +68,6 @@ type UserActor struct {
 	OrderHandler        *OrderHandler
 	BattleHandler       *BattleHandler
 	LoginHandler        *LoginHandler
-	TutorialHandler     *TutorialHandler
 	BagHandler          *BagHandler
 	TroopHandler        *TroopHandler
 	CardHandler         *CardHandler
@@ -82,7 +81,6 @@ type UserActor struct {
 	GuideTaskHandler    *GuideTaskHandler
 	SkinHandler         *SkinHandler
 	SignHandler         *SignHandler
-	GiftHandler         *GiftHandler
 	FriendHandler       *FriendHandler
 	RoleDetailHandler   *RoleDetailHandler
 	UserRoomHandler     *UserRoomHandler
@@ -538,9 +536,6 @@ func (u *UserActor) initHandlers() {
 	u.LoginHandler = NewLoginHandler(u)
 	u.KeepHandler(u.LoginHandler)
 
-	u.TutorialHandler = NewTutorialHandler(u)
-	u.KeepHandler(u.TutorialHandler)
-
 	u.TroopHandler = NewTroopHandler(u)
 	u.KeepHandler(u.TroopHandler)
 
@@ -570,9 +565,6 @@ func (u *UserActor) initHandlers() {
 
 	u.SignHandler = NewSignHandler(u)
 	u.KeepHandler(u.SignHandler)
-
-	u.GiftHandler = NewGiftHandler(u)
-	u.KeepHandler(u.GiftHandler)
 
 	u.GmHandler = NewGmHandler(u)
 	u.KeepHandler(u.GmHandler)

@@ -60,7 +60,6 @@ func NewGmHandler(actor *UserActor) *GmHandler {
 	actor.RegisterProtoHandler(int32(cmd.Protocols_PS2AS_ReceiveGMAddResReq), h.GMAddRes)             // GM-添加道具
 	actor.RegisterProtoHandler(int32(cmd.Protocols_PS2AS_ReceiveGMCostResReq), h.GMCostRes)           // GM-扣除道具
 	actor.RegisterProtoHandler(int32(cmd.Protocols_PS2AS_ReceiveGMAddGiftReq), h.GMAddGift)           // GM-获取礼包道具
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PS2AS_ReceiveGMAddGiftCodeReq), h.GMAddGiftCode)   // GM-获取礼包道具
 	actor.RegisterProtoHandler(int32(cmd.Protocols_PS2AS_ReceiveGMAddMailReq), h.GMAddMail)           // GM-添加个人邮件
 	actor.RegisterProtoHandler(int32(cmd.Protocols_PS2AS_GetUserInfo), h.GMGetUserInfo)               // GM-获取个人信息
 	actor.RegisterProtoHandler(int32(cmd.Protocols_PS2AS_GmExecuteReq), h.GMExecute)                  // GM-执行个人gm
@@ -92,8 +91,6 @@ func NewGmHandler(actor *UserActor) *GmHandler {
 	h.RegisterCmdHandler(common.GM_TEST_SENSITIVE, h.GmTestSensitive)
 	h.RegisterCmdHandler(common.GM_TEST_Battle_chapter, h.GmTestBattleChapter)
 	h.RegisterCmdHandler(common.GM_CHECKBATTLE_RELOAD_EXCEL, h.GmTestCheckBattleReloadExcel)
-	h.RegisterCmdHandler(common.GM_TEST_GEN_CODE, h.GmTestGenCode)
-	h.RegisterCmdHandler(common.GM_TEST_USE_CODE, h.GMTestUseCode)
 	h.RegisterCmdHandler(common.GM_TEST_DROP, h.GmTestDrop)
 	h.RegisterCmdHandler(common.GM_TEST_GUID, h.GmTestGUID)
 	h.RegisterCmdHandler(common.GM_TEST_DB, h.GmTestDB)
@@ -234,19 +231,6 @@ func (h *GmHandler) GMAddMail(ctx context.Context, in *base.ProtoMsg) (proto.Mes
 		return nil, err, int32(cmd.ErrorCode_InternalError)
 	}
 	return req, nil, 0
-}
-
-func (h *GmHandler) GMAddGiftCode(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
-	req := &cmd.C2LS_UseGiftCodeReq{}
-	err := in.UnmarshalData(req)
-	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
-	}
-	err = h.actor.GiftHandler.Redeem(req.Code, h.actor.comData)
-	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InvalidParam)
-	}
-	return &cmd.C2LS_UseGiftCodeReq{}, nil, 0
 }
 
 func (h *GmHandler) GMAddGift(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
@@ -712,23 +696,6 @@ func (h *GmHandler) testCheckBattle() error {
 	}
 
 	return nil
-}
-
-func (h *GmHandler) GmTestGenCode(param []string, commonData *clidto.Comdata) error {
-	contentId, err := strconv.Atoi(param[0])
-	if err != nil {
-		return err
-	}
-	genNum, err := strconv.Atoi(param[1])
-	if err != nil {
-		return err
-	}
-	_, err = h.actor.GiftHandler.Generate(int64(contentId), 1, genNum)
-	return err
-}
-
-func (h *GmHandler) GMTestUseCode(param []string, commonData *clidto.Comdata) error {
-	return h.actor.GiftHandler.Redeem(param[0], commonData)
 }
 
 func (h *GmHandler) GMDelItemById(param []string, commonData *clidto.Comdata) error {
@@ -1225,8 +1192,8 @@ func (h *GmHandler) GMTestRecommend(param []string, comdata *clidto.Comdata) err
 
 func (h *GmHandler) TestCfgHot(param []string, comdata *clidto.Comdata) error {
 
-	cfg := excel.GetAbilityMgr().GetById(10101)
-	h.Debugf("测试服务器热更:", cfg.SkilltreePara)
+	// cfg := excel.GetAbilityMgr().GetById(10101)
+	// h.Debugf("测试服务器热更:", cfg.SkilltreePara)
 
 	return nil
 }

@@ -57,10 +57,10 @@ func (s *IDIPServer) PreHandle(in *common.InvocationEvent, secretKey string) ([]
 //	@return []byte
 //	@return bool 验签通过返回true，否则返回false
 func CheckSign(reqData, secretKey string) ([]byte, bool) {
-	//验签和解析数据规则:
-	//1. 截取数据前32个字符作为签名
-	//2. 将数据剩余部分与APISecret拼接后算出md5值，与步骤1获取的签名做对比
-	//3. 如果签名验证通过，则将步骤2中数据剩余部分用base64解码得到json格式的查询数据
+	// 验签和解析数据规则:
+	// 1. 截取数据前32个字符作为签名
+	// 2. 将数据剩余部分与APISecret拼接后算出md5值，与步骤1获取的签名做对比
+	// 3. 如果签名验证通过，则将步骤2中数据剩余部分用base64解码得到json格式的查询数据
 
 	logger.Debugf("check sign reqData: %s", reqData)
 	signStr := string([]rune(reqData)[:32])
@@ -89,7 +89,7 @@ func CheckSign(reqData, secretKey string) ([]byte, bool) {
 func CheckIp(whiteIps []string, ip string) bool {
 
 	logger.Debugf("check ip: %v, ---> %s", whiteIps, ip)
-	//whiteList := conf.GConf().GMT.IpWhiteList
+	// whiteList := conf.GConf().GMT.IpWhiteList
 	for _, e := range whiteIps {
 		if e == ip {
 			return true
@@ -219,9 +219,9 @@ func (s *IDIPServer) getSysMailData(key string, value proto.Message) error {
 
 // IsValidCmd 合法cmd校验
 func IsValidCmd(cmd string) bool {
-	//if !conf.GConf().Base.IsDebug {
+	// if !conf.GConf().Base.IsDebug {
 	//	return strings.HasPrefix(cmd, "user.test")
-	//}
+	// }
 
 	return false
 }
@@ -343,8 +343,8 @@ func (s *IDIPServer) GetLocalizedStr(key string) string {
 }
 
 type TempItem struct {
-	ItemId              int32  `json:"item_id"`              //id
-	Num                 int32  `json:"num"`                  //数量
+	ItemId              int32  `json:"item_id"`              // id
+	Num                 int32  `json:"num"`                  // 数量
 	ExpirationTimestamp string `json:"expiration_timestamp"` // 过期时间
 	Name                string `json:"name"`                 //  名字
 }
@@ -377,7 +377,7 @@ type TempCard struct {
 	CardExp         int32        `json:"card_exp"`
 	Hp              int32        `json:"hp"`
 	AddNum          int32        `json:"add_num"`
-	AwakenLevel     int32        `json:"awaken_level"` //突破等级
+	AwakenLevel     int32        `json:"awaken_level"` // 突破等级
 	CreateTimestamp string       `json:"create_timestamp"`
 	EquipId         []*EquipInfo `json:"equip_id"`
 	FavoriteLevel   int32        `json:"favorite_level"`
@@ -397,15 +397,15 @@ type SkillInfo struct {
 }
 
 func (s *IDIPServer) NewSkillInfo(pos, skillId int32) *SkillInfo {
-	cfg := excel.GetSkillMgr().GetById(skillId)
-	if cfg == nil {
-		return nil
-	}
+	// cfg := excel.GetSkillMgr().GetById(skillId)
+	// if cfg == nil {
+	// 	return nil
+	// }
 	return &SkillInfo{
 		Pos:     pos,
 		SkillId: skillId,
-		Level:   cfg.Lv,
-		Name:    s.GetLocalizedStr(cfg.Name),
+		Level:   0,
+		Name:    s.GetLocalizedStr(""),
 	}
 }
 
@@ -465,7 +465,7 @@ func (s *IDIPServer) ConvertCard(cards map[uint32]*cmd.CardData, equip *cmd.PEqu
 		for k, v := range v.GetSkillCfgId() {
 			skillMap = append(skillMap, s.NewSkillInfo(int32(k), int32(v)))
 		}
-		//装备
+		// 装备
 		tmpEquip := make([]*EquipInfo, 0)
 		for pos, id := range v.GetEquipId() {
 			if tmp, ok := equip.Equips[id]; ok {

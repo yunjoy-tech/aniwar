@@ -553,7 +553,6 @@ func (h *LoginHandler) LoginEnterGame(ctx context.Context, in *base.ProtoMsg) (p
 		Equip:               h.actor.EquipHandler.buildEquipList(),
 		Card:                h.actor.CardHandler.buildCardList(),
 		Currency:            h.actor.CurrencyHandler.buildCurrencyList(),
-		Tutorial:            h.actor.TutorialHandler.buildPlayerBeginnerTutorial(),
 		Troop:               h.actor.TroopHandler.buildTroopList(),
 		Duty:                h.actor.DutyHandler.buildDutyInfo(false),
 		SignGroups:          h.actor.SignHandler.buildSignInfo(),

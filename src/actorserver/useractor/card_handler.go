@@ -658,60 +658,61 @@ func (h *CardHandler) handleCardBreakthrough(c *cmd.CardData, rsp *cmd.LS2C_Card
 
 // 技能升级逻辑处理
 func (h *CardHandler) handleSkillUpgrade(c *cmd.CardData, index uint32, commonData *clidto.Comdata) (cmd.ErrorCode, int32, int32) {
-	if _, ok := c.SkillCfgId[index]; !ok {
-		return cmd.ErrorCode_InvalidParam, 0, 0
-	}
-
-	skillCfgId := c.SkillCfgId[index]
-	skillCfg := excel.GetSkillMgr().GetById(int32(skillCfgId))
-	if skillCfg == nil {
-		h.Errorf("skill config not found: %d", skillCfgId)
-		return cmd.ErrorCode_NotFoundConfig, 0, 0
-	}
-
-	// 等级限制
-	unlockLimit := excel.GetConfigMgr().GetCfg().SKILL_UNLOCK_LIMIT
-	if skillCfg.Lv > int32(len(unlockLimit)) {
-		return cmd.ErrorCode_ConfigError, 0, 0
-	}
-
-	lv := skillCfg.Lv - 1
-	if lv >= 0 && lv < int32(len(unlockLimit)) && c.CardLevel < uint32(unlockLimit[skillCfg.Lv-1]) {
-		return cmd.ErrorCode_CardLevelNotEnough, 0, 0
-	}
-
-	// 满级了
-	if 0 >= skillCfg.GetNextLevelId() {
-		h.Errorf("skill: %d has invalid next level id: %d", skillCfgId, skillCfg.GetNextLevelId())
-		return cmd.ErrorCode_ConfigError, 0, 0
-	}
-
-	// 升级前的技能等级
-	beforeSkillLv := skillCfg.Lv
-
-	// 道具消耗check
-	if !GetConsumeMgr(h.actor).CheckMapEnough(skillCfg.UpgradeCost) {
-		return cmd.ErrorCode_NotEnoughItem, 0, 0
-	}
-
-	err := GetConsumeMgr(h.actor).ConsumeList(skillCfg.UpgradeCost, commonData, common.CR_Card_Skill_Upgrade)
-	if err != nil {
-		return cmd.ErrorCode_InternalError, 0, 0
-	}
-
-	// 下一技能等级索引
-	nextSkillIndex := uint32(skillCfg.GetNextLevelId())
-	c.SkillCfgId[index] = nextSkillIndex
-	err = h.SaveDB()
-	if err != nil {
-		return cmd.ErrorCode_InternalError, 0, 0
-	}
-
-	// 返回下一技能等级
-	nextSkillCfgId := c.SkillCfgId[index]
-	nextSkillCfg := excel.GetSkillMgr().GetById(int32(nextSkillCfgId))
-
-	return cmd.ErrorCode_Success, beforeSkillLv, nextSkillCfg.Lv // 返回升级后的技能等级
+	// if _, ok := c.SkillCfgId[index]; !ok {
+	// 	return cmd.ErrorCode_InvalidParam, 0, 0
+	// }
+	//
+	// skillCfgId := c.SkillCfgId[index]
+	// skillCfg := excel.GetSkillMgr().GetById(int32(skillCfgId))
+	// if skillCfg == nil {
+	// 	h.Errorf("skill config not found: %d", skillCfgId)
+	// 	return cmd.ErrorCode_NotFoundConfig, 0, 0
+	// }
+	//
+	// // 等级限制
+	// unlockLimit := excel.GetConfigMgr().GetCfg().SKILL_UNLOCK_LIMIT
+	// if skillCfg.Lv > int32(len(unlockLimit)) {
+	// 	return cmd.ErrorCode_ConfigError, 0, 0
+	// }
+	//
+	// lv := skillCfg.Lv - 1
+	// if lv >= 0 && lv < int32(len(unlockLimit)) && c.CardLevel < uint32(unlockLimit[skillCfg.Lv-1]) {
+	// 	return cmd.ErrorCode_CardLevelNotEnough, 0, 0
+	// }
+	//
+	// // 满级了
+	// if 0 >= skillCfg.GetNextLevelId() {
+	// 	h.Errorf("skill: %d has invalid next level id: %d", skillCfgId, skillCfg.GetNextLevelId())
+	// 	return cmd.ErrorCode_ConfigError, 0, 0
+	// }
+	//
+	// // 升级前的技能等级
+	// beforeSkillLv := skillCfg.Lv
+	//
+	// // 道具消耗check
+	// if !GetConsumeMgr(h.actor).CheckMapEnough(skillCfg.UpgradeCost) {
+	// 	return cmd.ErrorCode_NotEnoughItem, 0, 0
+	// }
+	//
+	// err := GetConsumeMgr(h.actor).ConsumeList(skillCfg.UpgradeCost, commonData, common.CR_Card_Skill_Upgrade)
+	// if err != nil {
+	// 	return cmd.ErrorCode_InternalError, 0, 0
+	// }
+	//
+	// // 下一技能等级索引
+	// nextSkillIndex := uint32(skillCfg.GetNextLevelId())
+	// c.SkillCfgId[index] = nextSkillIndex
+	// err = h.SaveDB()
+	// if err != nil {
+	// 	return cmd.ErrorCode_InternalError, 0, 0
+	// }
+	//
+	// // 返回下一技能等级
+	// nextSkillCfgId := c.SkillCfgId[index]
+	// nextSkillCfg := excel.GetSkillMgr().GetById(int32(nextSkillCfgId))
+	//
+	// return cmd.ErrorCode_Success, beforeSkillLv, nextSkillCfg.Lv // 返回升级后的技能等级
+	return cmd.ErrorCode_Success, 0, 0
 }
 
 // 卡牌觉醒处理逻辑
@@ -779,19 +780,20 @@ func (h *CardHandler) GetCard(cardId uint32) (*cmd.CardData, error) {
 }
 
 func (h *CardHandler) GetCardSkillLvSum(cardId uint32) int32 {
-	card, err := h.GetCard(cardId)
-	if err != nil {
-		return 0
-	}
-
-	var sum int32 = 0
-	for _, v := range card.SkillCfgId {
-		skillCfg := excel.GetSkillMgr().GetById(int32(v))
-		if skillCfg != nil {
-			sum += skillCfg.Lv
-		}
-	}
-	return sum
+	// card, err := h.GetCard(cardId)
+	// if err != nil {
+	// 	return 0
+	// }
+	//
+	// var sum int32 = 0
+	// for _, v := range card.SkillCfgId {
+	// 	skillCfg := excel.GetSkillMgr().GetById(int32(v))
+	// 	if skillCfg != nil {
+	// 		sum += skillCfg.Lv
+	// 	}
+	// }
+	// return sum
+	return 0
 }
 
 // 对外方法
@@ -1442,22 +1444,22 @@ func (h *CardHandler) SetSuperCardByGM(id int, typ int, commonData *clidto.Comda
 
 func fixCard2(card *cmd.CardData) {
 	m := make(map[uint32]uint32)
-	for k, skillCfgId := range card.SkillCfgId {
-		var max = skillCfgId
-		for i := 0; i < 200; i++ {
-			skillCfg := excel.GetSkillMgr().GetById(int32(max))
-			if skillCfg == nil {
-				break
-			}
-
-			// 满级了
-			if 0 >= skillCfg.GetNextLevelId() {
-				break
-			}
-			max = uint32(skillCfg.GetNextLevelId())
-		}
-		m[k] = max
-	}
+	// for k, skillCfgId := range card.SkillCfgId {
+	// 	var max = skillCfgId
+	// 	for i := 0; i < 200; i++ {
+	// 		skillCfg := excel.GetSkillMgr().GetById(int32(max))
+	// 		if skillCfg == nil {
+	// 			break
+	// 		}
+	//
+	// 		// 满级了
+	// 		if 0 >= skillCfg.GetNextLevelId() {
+	// 			break
+	// 		}
+	// 		max = uint32(skillCfg.GetNextLevelId())
+	// 	}
+	// 	m[k] = max
+	// }
 	card.SkillCfgId = m
 }
 
