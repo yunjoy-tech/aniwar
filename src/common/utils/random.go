@@ -3,36 +3,9 @@ package utils
 import (
 	"errors"
 	"fmt"
-	excel "gitlab.musadisca-games.com/wangxw/aniwar/src/excel/data"
 	"math/rand"
 	"sort"
 )
-
-type Pair struct {
-	Key   interface{}
-	Value int32
-}
-
-type PairList []*Pair
-
-func (p PairList) Swap(i, j int) {
-	p[i], p[j] = p[j], p[i]
-}
-
-func (p PairList) Len() int {
-	return len(p)
-}
-
-func (p PairList) Less(i, j int) bool {
-	// 抽卡特殊排序处理
-	if cfg1, ok := p[i].Key.(*excel.PoolContentCfg); ok {
-		cfg2, ok2 := p[j].Key.(*excel.PoolContentCfg)
-		if ok2 {
-			return p[i].Value < p[j].Value || cfg1.Id < cfg2.Id
-		}
-	}
-	return p[i].Value < p[j].Value
-}
 
 type Pair2 struct {
 	Key   int32
@@ -123,56 +96,6 @@ func RandMapAnyKey[K, V MapKeyNumberTypeExtra](m map[K]V) interface{} {
 	return m[key.(K)]
 }
 
-// RandomMap
-//
-//	@Description: 按权重随机返回一个key
-//	@param source key为随机对象,value为权重值
-//	@param isSort 是否需要排序，排序后排除对map的range二次随机影响，完全等价于系统随机数
-//	@return interface{}
-func RandomMap(source map[interface{}]int32, isSort ...bool) interface{} {
-	// 权重和
-	var sum int32 = 0
-	for _, w := range source {
-		if w <= 0 {
-			continue
-		}
-		sum += w
-	}
-
-	if sum <= 0 {
-		return nil
-	}
-
-	// 取随机数
-	randValue := rand.Int31n(sum)
-
-	sortFlag := false
-	if len(isSort) > 0 {
-		sortFlag = isSort[0]
-	}
-	if sortFlag {
-		temp := make(PairList, 0)
-		for k, v := range source {
-			temp = append(temp, &Pair{k, v})
-		}
-		sort.Sort(temp)
-		for _, pair := range temp {
-			if randValue < pair.Value {
-				return pair.Key
-			}
-			randValue -= pair.Value
-		}
-	} else {
-		for k, w := range source {
-			if randValue < w {
-				return k
-			}
-			randValue -= w
-		}
-	}
-	return nil
-}
-
 func Temp_RandomMap2(source map[int32]int32, isSort ...bool) int32 {
 	// 权重和
 	var sum int32 = 0
@@ -255,18 +178,18 @@ func Temp_RandomMap4(source map[int32]int32, isSort ...bool) int32 {
 			if total > randValue {
 				return pair.Key
 			}
-			//if randValue < pair.Value {
+			// if randValue < pair.Value {
 			//	return pair.Key
-			//}
-			//randValue -= pair.Value
+			// }
+			// randValue -= pair.Value
 		}
 	} else {
 		total := int32(0)
 		for k, w := range source {
-			//if randValue < w {
+			// if randValue < w {
 			//	return k
-			//}
-			//randValue -= w
+			// }
+			// randValue -= w
 			total += w
 			if total > randValue {
 				return k

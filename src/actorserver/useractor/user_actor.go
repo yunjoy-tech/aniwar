@@ -74,7 +74,6 @@ type UserActor struct {
 	CardHandler         *CardHandler
 	GmHandler           *GmHandler
 	CurrencyHandler     *CurrencyHandler
-	PoolHandler         *PoolHandler
 	QuestionHandler     *QuestionHandler
 	ShopHandler         *ShopHandler
 	MailHandler         *MailHandler
@@ -87,15 +86,12 @@ type UserActor struct {
 	SignHandler         *SignHandler
 	GiftHandler         *GiftHandler
 	FriendHandler       *FriendHandler
-	BlockWayHandler     *BlockWayHandler
 	RoleDetailHandler   *RoleDetailHandler
 	UserRoomHandler     *UserRoomHandler
 	FuncUnlockHandler   *FuncUnlockHandler
 	UserChatHandler     *UserChatHandler
 	OfflineEventHandler *OfflineEventHandler
-	UseLimitHandler     *UseLimitHandler
 	UserAllianceHandler *UserAllianceHandler
-	TravelLevelHandler  *TravelLevelHandler
 	ActivityHandler     *ActivityHandler
 }
 
@@ -556,9 +552,6 @@ func (u *UserActor) initHandlers() {
 	u.CurrencyHandler = NewCurrencyHandler(u)
 	u.KeepHandler(u.CurrencyHandler)
 
-	u.PoolHandler = NewPoolHandler(u)
-	u.KeepHandler(u.PoolHandler)
-
 	u.QuestionHandler = NewQuestionHandler(u)
 	u.KeepHandler(u.QuestionHandler)
 
@@ -595,9 +588,6 @@ func (u *UserActor) initHandlers() {
 	u.BagHandler = NewBagHandler(u)
 	u.KeepHandler(u.BagHandler)
 
-	u.BlockWayHandler = NewBlockWayHandler(u)
-	u.KeepHandler(u.BlockWayHandler)
-
 	u.RoleDetailHandler = NewRoleDetailHandler(u)
 	u.KeepHandler(u.RoleDetailHandler)
 
@@ -613,14 +603,8 @@ func (u *UserActor) initHandlers() {
 	u.OfflineEventHandler = NewOfflineEventHandler(u)
 	u.KeepHandler(u.OfflineEventHandler)
 
-	u.UseLimitHandler = NewUseLimitHandler(u)
-	u.KeepHandler(u.UseLimitHandler)
-
 	u.UserAllianceHandler = NewUserUserAllianceHandler(u)
 	u.KeepHandler(u.UserAllianceHandler)
-
-	u.TravelLevelHandler = NewTravelLevelHandler(u)
-	u.KeepHandler(u.TravelLevelHandler)
 
 	u.ActivityHandler = NewActivityHandler(u)
 	u.KeepHandler(u.ActivityHandler)
@@ -635,7 +619,6 @@ func (u *UserActor) initHandlers() {
 
 func (u *UserActor) initAsyncFunc() {
 	// 异步事件监听
-	u.eventManager.Listen(TASK_EVENT_STAMINA_SUB, event.ListenerFunc(u.BlockWayHandler.tryTriggerEvent))
 	u.eventManager.Listen(TASK_EVENT_ROLE_LEVEL_CHANGE, event.ListenerFunc(u.DutyHandler.tryInitData))
 	u.eventManager.Listen(TASK_EVENT_QUEST_COMPLETE, event.ListenerFunc(u.DutyHandler.tryInitData))
 	u.eventManager.Listen(TASK_EVENT_CARD_CREATE, event.ListenerFunc(u.LoginHandler.tryUnlockHeadsEvent))

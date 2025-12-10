@@ -560,12 +560,9 @@ func (h *LoginHandler) LoginEnterGame(ctx context.Context, in *base.ProtoMsg) (p
 		Flags:               h.getStoryFlags(),
 		Stamina:             h.actor.PlayerLevelHandler.buildPlayerStaminaInfo(),
 		Campaign:            h.actor.CampaignHandler.buildClientCampaignData(),
-		BlockWayEvents:      h.actor.BlockWayHandler.buildBlockWayEvents(),
 		Friends:             h.actor.FriendHandler.buildFriendData(true),
-		UseLimit:            h.actor.UseLimitHandler.buildUseLimitData(),
 		Alliance:            h.actor.UserAllianceHandler.buildAllianceData(true),
 		GuideTask:           h.actor.GuideTaskHandler.buildGuideTask(),
-		TravelLevelData:     h.actor.TravelLevelHandler.getTravelLevelData(),
 		ActivityData:        h.actor.ActivityHandler.formatActivity2Client(),
 	}
 

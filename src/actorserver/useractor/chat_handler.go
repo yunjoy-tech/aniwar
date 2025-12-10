@@ -46,9 +46,9 @@ func NewUserChatHandler(actor *UserActor) *UserChatHandler {
 	h := &UserChatHandler{UABaseHandler: NewUABaseHandler(actor, "UserChatHandler")}
 	h.ChildHandler = h
 
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PC2LS_GetChatMessageReq), h.GetChatMessageReq)   //获取聊天消息
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PC2LS_SendChatMessageReq), h.SendChatMessageReq) //发送聊天消息
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PC2LS_HasReadMessageReq), h.HasReadMessageReq)   //标记好友消息已读
+	actor.RegisterProtoHandler(int32(cmd.Protocols_PC2LS_GetChatMessageReq), h.GetChatMessageReq)   // 获取聊天消息
+	actor.RegisterProtoHandler(int32(cmd.Protocols_PC2LS_SendChatMessageReq), h.SendChatMessageReq) // 发送聊天消息
+	actor.RegisterProtoHandler(int32(cmd.Protocols_PC2LS_HasReadMessageReq), h.HasReadMessageReq)   // 标记好友消息已读
 	return h
 }
 
@@ -69,9 +69,7 @@ func (h *UserChatHandler) Init() error {
 }
 
 func (h *UserChatHandler) EnterGame() error {
-	h.ProcessExcel()
-
-	//聊天消息异步存ES
+	// 聊天消息异步存ES TODO 废弃es方案，避免引入es组件 方案一：redis缓存部分消息 方案二: 接入专业聊天sdk
 	h.ProcessMessage()
 	return nil
 }
@@ -91,15 +89,6 @@ func (h *UserChatHandler) SetDBData(dbData proto.Message) error {
 
 func (h *UserChatHandler) DBTable() (service.MongoDbType, string, proto.Message) {
 	return service.MongoDbType_MongoGame, db.KeyUserChatInfo(h.actor.ID()), h.actor.Data.ChatInfo
-}
-func (h *UserChatHandler) ProcessExcel() {
-	excel.GetChatParmMgr().Foreach(func(cfg *excel.ChatParmCfg) bool {
-		if cfg.Id == 2 {
-			h.FriendMessageLimit = cfg.TextLimit
-		}
-		return true
-	}, true)
-
 }
 
 func (h *UserChatHandler) ProcessMessage() {
@@ -135,7 +124,7 @@ func (h *UserChatHandler) GetChatMessageReq(ctx context.Context, in *base.ProtoM
 	if err := in.UnmarshalData(req); err != nil {
 		return nil, err, int32(cmd.ErrorCode_DeSerializeError)
 	}
-	//判断是否是好友或者同一联盟
+	// 判断是否是好友或者同一联盟
 	if code := h.IsFriendOrUnion(req.GetTarget(), req.GetChannelId()); code != int32(cmd.ErrorCode_Success) {
 		return nil, errors.New("不是好友或同一联盟"), code
 	}
@@ -146,11 +135,11 @@ func (h *UserChatHandler) GetChatMessageReq(ctx context.Context, in *base.ProtoM
 	if req.GetChannelId() == cmd.ChatChannel_Channel_private {
 		// 设置没有未读消息
 		h.SetHasMessage(roleId, false)
-		//从DB中获取数据
+		// 从DB中获取数据
 		message = h.GetMessageFromES(roleId, req.GetTarget(), time.Now().Unix(), req.GetFromSize(), req.GetSize())
 	}
 
-	//获取联盟消息
+	// 获取联盟消息
 	if req.GetChannelId() == cmd.ChatChannel_Channel_alliance {
 		reqMsg := &cmd.S2S_GetAllianceMessageReq{
 			FromSize: req.GetFromSize(),
@@ -181,7 +170,7 @@ func (h *UserChatHandler) SendChatMessageReq(ctx context.Context, in *base.Proto
 	if strings.TrimSpace(req.Message) == "" {
 		return nil, errors.New("发送空消息"), int32(cmd.ErrorCode_Chat_message_empty)
 	}
-	//暂时去掉判断CD时间
+	// 暂时去掉判断CD时间
 	if !h.IsCD(req.GetToObject(), req.GetChannelId()) {
 		return nil, errors.New("CD 时间"), int32(cmd.ErrorCode_Chat_message_CD)
 	}
@@ -195,7 +184,7 @@ func (h *UserChatHandler) SendChatMessageReq(ctx context.Context, in *base.Proto
 	if !result {
 		return nil, err, int32(cmd.ErrorCode_Chat_illegal_message)
 	}
-	//判断是否是好友或者书联盟成员
+	// 判断是否是好友或者书联盟成员
 	if code := h.IsFriendOrUnion(req.GetToObject(), req.GetChannelId()); code != int32(cmd.ErrorCode_Success) {
 		return nil, errors.New("不是好友或同一联盟"), code
 	}
@@ -267,7 +256,7 @@ func (h *UserChatHandler) PushMessageToUserReq(req *cmd.S2S_PushMessageToUserReq
 	if code := h.IsFriendOrUnion(req.GetFromRoleId(), channel); code != int32(cmd.ErrorCode_Success) {
 		return errors.New("不是好友或同一联盟"), code
 	}
-	//设置好友有未读消息
+	// 设置好友有未读消息
 	h.SetHasMessage(req.GetFromRoleId(), true)
 	if err := h.SaveDB(); err != nil {
 		h.Debug("chat saveDB failed", err)
@@ -279,14 +268,14 @@ func (h *UserChatHandler) PushMessageToUserReq(req *cmd.S2S_PushMessageToUserReq
 	return nil, int32(cmd.ErrorCode_Success)
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////内部调用
+// ////////////////////////////////////////////////////////////////////////////////////////////////////内部调用
 
 func (h *UserChatHandler) PushMessage2Alliance(allianceId int64, message *cmd.BroadMessage, channelId cmd.ChatChannel, topic string) int32 {
 	req := &cmd.S2S_SendMessage2AllianceReq{
 		Message: message,
 	}
 	res := &cmd.S2S_SendMessage2AllianceRes{}
-	//获取玩家的联盟Id
+	// 获取玩家的联盟Id
 	err, _ := h.actor.UserAllianceHandler.AllianceInvoke(int64(allianceId), int32(cmd.Protocols_PS2S_SendMessage2AllianceReq), req, res, topic)
 	if err != nil {
 		h.Debugf("玩家[%d],向allianceActor,转发消息失败:[%v]", allianceId, err)
@@ -296,15 +285,15 @@ func (h *UserChatHandler) PushMessage2Alliance(allianceId int64, message *cmd.Br
 
 func (h *UserChatHandler) PushMessageToFriend(fromRoleId, toRoleId uint64, message *cmd.BroadMessage, channelId cmd.ChatChannel, save bool) int32 {
 
-	//存储es
+	// 存储es
 	if save {
-		//if err := h.SaveMessage2ES(fromRoleId, toRoleId, message); err != nil {
+		// if err := h.SaveMessage2ES(fromRoleId, toRoleId, message); err != nil {
 		//	h.Debug("聊天信息存储ES失败", err)
 		//	return int32(cmd.ErrorCode_InternalError)
-		//}
+		// }
 		h.MessageWrite2Channel(fromRoleId, toRoleId, message)
 	}
-	//推送给好友
+	// 推送给好友
 	call, _ := proto.Marshal(&cmd.S2S_PushMessageToUserReq{
 		FromRoleId: h.actor.roleId,
 		Message:    message,
@@ -348,14 +337,14 @@ func (h *UserChatHandler) IsCD(roleId uint64, channel cmd.ChatChannel) bool {
 
 // IsFriendOrUnion 是否是好友或联盟
 func (h *UserChatHandler) IsFriendOrUnion(roleId uint64, channel cmd.ChatChannel) int32 {
-	//判断是否是好友
+	// 判断是否是好友
 	if channel == cmd.ChatChannel_Channel_private {
 		if !h.actor.FriendHandler.IsFriend(roleId) {
 			return int32(cmd.ErrorCode_Chat_not_friend_ship)
 		}
 	}
 
-	//判断是否是同联盟
+	// 判断是否是同联盟
 	if channel == cmd.ChatChannel_Channel_alliance {
 		if roleId != uint64(h.actor.UserAllianceHandler.getAllianceId()) {
 			return int32(cmd.ErrorCode_Not_Alliance_member)
@@ -381,7 +370,7 @@ func (h *UserChatHandler) BroadcastMessages(roleId uint64, channelId cmd.ChatCha
 		notify.ExtraValue = int32(h.actor.UserAllianceHandler.getAllianceId())
 	}
 
-	//全服广播
+	// 全服广播
 	h.Debug("抽卡发送全服广播:", roleId)
 	err = h.actor.Srv.Send2BC(uaid, notify)
 	if err != nil {
@@ -404,7 +393,7 @@ func (h *UserChatHandler) PushMessage2Friend(roleId uint64, msgId int32, data []
 		UAID:    uaid,
 		Data:    data,
 		ErrCode: 0,
-		//GUID:    utils.GenIntUUID(),
+		// GUID:    utils.GenIntUUID(),
 		ServerReqIdx: utils.GenIntUUID(),
 		Topic:        "",
 	}
@@ -449,7 +438,7 @@ func (h *UserChatHandler) GetMessageFromES(myRoleId, roleId uint64, endTime int6
 	if esIndex == "" {
 		return nil
 	}
-	//hitSize := 30
+	// hitSize := 30
 	infos := make([]*cmd.BroadMessage, 0)
 	rangeMap := map[string]service.RangeItem{
 		"timeStamp": {

@@ -68,23 +68,3 @@ func RandomByWeightVo2(vos []*data.WeightVo2) (*data.WeightVo2, error) {
 
 	return nil, fmt.Errorf("no value is returned")
 }
-
-////RandomByRate 根据
-//func RandomByRate(groupId int32) ([]*data.WeightVo2, error) {
-//	var (
-//		ret = make([]*data.WeightVo2, 0)
-//	)
-//	//if len(vos) <= 0 {
-//	//	return ret, nil
-//	//}
-//
-//	for _, eachVo := range vos {
-//		rate := rand.Int31n(100) // 概率为百分比
-//		if eachVo.Weight > rate {
-//			// 命中
-//			ret = append(ret, eachVo)
-//		}
-//	}
-//
-//	return ret, nil
-//}

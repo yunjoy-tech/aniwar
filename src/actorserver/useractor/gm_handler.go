@@ -75,7 +75,6 @@ func NewGmHandler(actor *UserActor) *GmHandler {
 	h.RegisterCmdHandler(common.GM_DEL_ITEM_BY_ID, h.GMDelItemById)
 	h.RegisterCmdHandler(common.GM_ADD_CARD_EXP, h.GmAddCardExp)
 	h.RegisterCmdHandler(common.GM_ADD_FAVORITE_EXP, h.GmAddFavoriteExp)
-	h.RegisterCmdHandler(common.GM_TEST_CARD, h.GmTestCard)
 	h.RegisterCmdHandler(common.GM_KICKOUT, h.GmKickout)
 	h.RegisterCmdHandler(common.GM_BANNED, h.GmBanned)
 	h.RegisterCmdHandler(common.GM_SET_CARD_STRENGTH, h.GmSetCardStrength)
@@ -84,7 +83,6 @@ func NewGmHandler(actor *UserActor) *GmHandler {
 	h.RegisterCmdHandler(common.GM_DEL_STAMINA, h.GmDelStamina)
 	h.RegisterCmdHandler(common.GM_DIRECT_LEVEL_UP, h.GMDirectLevelUp)
 	h.RegisterCmdHandler(common.GM_RESET_LEVEL, h.GmResetLevel)
-	h.RegisterCmdHandler(common.GM_RESET_CARD_POOL_LOG, h.GmResetCardPoolLog)
 	h.RegisterCmdHandler(common.GM_WEAR_EQUIP, h.GmWearEquip)
 	h.RegisterCmdHandler(common.GM_ADD_PLAYER_EXP, h.GmAddPlayerExp)
 	h.RegisterCmdHandler(common.GM_TEST_SIGN, h.GmTestSign)
@@ -106,7 +104,6 @@ func NewGmHandler(actor *UserActor) *GmHandler {
 	h.RegisterCmdHandler(common.GM_TEST_PVP_ROOM, h.GMTestRoom)
 	h.RegisterCmdHandler(common.GM_CLOSE_BATTKE_CHECK, h.GMCloseBattleCheck)
 	h.RegisterCmdHandler(common.GM_TEST_RECOMMEND, h.GMTestRecommend)
-	h.RegisterCmdHandler(common.GM_TEST_Card_Broad, h.CardBroad)
 	h.RegisterCmdHandler(common.GM_TEST_Test_Cfg_Hot, h.TestCfgHot)
 
 	return h
@@ -379,52 +376,6 @@ func (h *GmHandler) GmAddFavoriteExp(param []string, commonData *clidto.Comdata)
 	return nil
 }
 
-func (h *GmHandler) GmTestCard(param []string, commonData *clidto.Comdata) error {
-	poolId, err := strconv.Atoi(param[0])
-	if err != nil {
-		return err
-	}
-	total, err := strconv.Atoi(param[1])
-	if err != nil {
-		return err
-	}
-	var typ int
-	if len(param) > 2 {
-		typ, err = strconv.Atoi(param[2])
-		if err != nil {
-			return err
-		}
-	}
-	var (
-		result  []int32
-		quality []int32
-	)
-
-	if typ == 1 {
-		// result, quality, _, err = h.actor.CampPoolHandler.handlePoolExtract(int32(poolId), total, commonData)
-	} else if typ == 2 {
-		result, _, quality, _, err = h.actor.PoolHandler.handlePoolExtract(int32(poolId), total, commonData)
-	} else if typ == 3 {
-		result, _, quality, _, err = h.actor.PoolHandler.handleNewbiePoolExtract(int32(poolId), total, commonData)
-	}
-
-	if err != nil {
-		return err
-	}
-	// 处理结果统计
-	resultMap := make(map[int32]int32)
-	qualityMap := make(map[int32]int32)
-	for _, v := range result {
-		resultMap[v] += 1
-	}
-	for _, v := range quality {
-		qualityMap[v] += 1
-	}
-	str := fmt.Sprintf("player %s, 卡池Id: %d, 抽卡次数: %d,\n抽卡结果 %+v \n品质分布 %+v \n抽卡统计 %+v \n品质统计 %+v", h.actor.ID(), poolId, total, result, quality, resultMap, qualityMap)
-	myUtils.SaveLogToFile("./log/plog/testcard.txt", str)
-	return nil
-}
-
 func (h *GmHandler) GmSetCardStrength(param []string, commonData *clidto.Comdata) error {
 	cardId, err := strconv.Atoi(param[0])
 	if err != nil {
@@ -489,10 +440,6 @@ func (h *GmHandler) GmDelStamina(param []string, commonData *clidto.Comdata) err
 
 func (h *GmHandler) GmResetLevel(param []string, commonData *clidto.Comdata) error {
 	return h.actor.LoginHandler.ResetLevelByGM(commonData)
-}
-
-func (h *GmHandler) GmResetCardPoolLog(param []string, commonData *clidto.Comdata) error {
-	return h.actor.PoolHandler.ResetCardLogByGM()
 }
 
 func (h *GmHandler) GmKickout(param []string, commonData *clidto.Comdata) error {
@@ -1273,18 +1220,6 @@ func (h *GmHandler) GMTestRecommend(param []string, comdata *clidto.Comdata) err
 
 	list := h.actor.FriendHandler.getRecommendList()
 	h.Debugf("测试好友推荐列表: %+v", list)
-	return nil
-}
-
-func (h *GmHandler) CardBroad(param []string, comdata *clidto.Comdata) error {
-	cardIds := make([]int32, 0)
-	for _, id := range param {
-		cardId, _ := strconv.Atoi(id)
-		cardIds = append(cardIds, int32(cardId))
-		rarity, _ := GetCardRarityByItemId(int32(cardId))
-		h.Debug("GM 触发广播时，卡片的稀有度:", rarity)
-	}
-	h.actor.PoolHandler.BroadcastMessage(h.actor.roleId, cardIds)
 	return nil
 }
 
