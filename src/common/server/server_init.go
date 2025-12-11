@@ -6,25 +6,21 @@ import (
 	"fmt"
 	"github.com/go-redis/redis/v8"
 	"github.com/pkg/errors"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/conf"
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/datalog/taptap"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/excel/data"
+	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
+	"gitlab.musadisca-games.com/wangxw/musae/framework/baseconf"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/global"
+	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/tcpx"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/utils"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/wordfilter"
+	"go.uber.org/zap/zapcore"
 	"os"
 	"strconv"
 	"strings"
 	"time"
-
-	"gitlab.musadisca-games.com/wangxw/musae/framework/baseconf"
-
-	//"gitlab.musadisca-games.com/wangxw/musae/framework/global"
-
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/conf"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/excel/data"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
-	"go.uber.org/zap/zapcore"
 )
 
 func (s *Server) AnalysisArgs() {
@@ -32,7 +28,7 @@ func (s *Server) AnalysisArgs() {
 		str := os.Args[i]
 
 		fmt.Printf("run args %-3d: %s\n", i, str)
-		//szArgs := strings.Split(str, "=")
+		// szArgs := strings.Split(str, "=")
 		szArgs := strings.SplitN(str, "=", 2)
 		if len(szArgs) != 2 || szArgs[0] == "" || szArgs[1] == "" {
 			fmt.Println("error arg: ", str)
@@ -164,7 +160,7 @@ func (s *Server) InitSrvArgs() error {
 
 	gateway, ok := s.Args["gateway"]
 	if ok {
-		//s.Gateway = gateway
+		// s.Gateway = gateway
 		global.Gateway = gateway
 	}
 
@@ -206,10 +202,10 @@ func (s *Server) InitSrvArgs() error {
 
 	rdsSrvPass, ok := s.Args["rdssrvpass"]
 	if ok {
-		//pass, err := base64.StdEncoding.DecodeString(rdsSrvPass)
-		//if err != nil {
+		// pass, err := base64.StdEncoding.DecodeString(rdsSrvPass)
+		// if err != nil {
 		//	logger.Fatalf("decode password %s err:", err, rdsSrvPass)
-		//}
+		// }
 		global.RdsSrvPass = string(rdsSrvPass)
 	}
 
@@ -220,10 +216,10 @@ func (s *Server) InitSrvArgs() error {
 
 	esSrvPass, ok := s.Args["essrvpass"]
 	if ok {
-		//pass, err := base64.StdEncoding.DecodeString(esSrvPass)
-		//if err != nil {
+		// pass, err := base64.StdEncoding.DecodeString(esSrvPass)
+		// if err != nil {
 		//	logger.Fatalf("decode password %s err:", err, esSrvPass)
-		//}
+		// }
 		global.ESSrvPass = string(esSrvPass)
 	}
 
@@ -238,7 +234,7 @@ func (s *Server) InitSrvArgs() error {
 	} else {
 		global.StartTime = time.Now().String()
 	}*/
-	//global.StartTime = time.Now().Format("2006-01-02 15:04:05.000 -0700 MST")
+	// global.StartTime = time.Now().Format("2006-01-02 15:04:05.000 -0700 MST")
 	global.StartTime = time.Now().Unix()
 	if !IsValidAppId(s.AppId) {
 		fmt.Println("AppId error:", s.AppId)
@@ -434,8 +430,8 @@ func (s *Server) LoadConf(params ...string) error {
 	if global.IsCloud && conf.GConf().Base.LogDir != "" {
 		s.LogDir = conf.GConf().Base.LogDir
 	}
-	//s.GateIP = conf.GConf().Base.GateIP
-	//s.GatePort = conf.GConf().Base.GatePort
+	// s.GateIP = conf.GConf().Base.GateIP
+	// s.GatePort = conf.GConf().Base.GatePort
 
 	if conf.GConf().Base.Version != "" && conf.GConf().Base.VersionCheck {
 		s.version = ParseVersion(conf.GConf().Base.Version)
