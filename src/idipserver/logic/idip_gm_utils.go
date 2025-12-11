@@ -18,23 +18,23 @@ import (
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/conf"
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/db"
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/utils"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/service"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/state"
 	"google.golang.org/protobuf/proto"
 )
 
-func (s *IDIPServer) PreHandle(in *common.InvocationEvent, secretKey string) ([]byte, cmd.ErrorCode, string) {
+func (s *IDIPServer) PreHandle(in *common.InvocationEvent, secretKey string) ([]byte, pb.ErrorCode, string) {
 	// IP校验
 	logger.Debugf("remote addr: %s", in.Request.RemoteAddr)
 	if conf.GConf().GMT.IsIpWhite {
 		ip, err := utils.GetIP(in.Request)
 		if err != nil {
-			return nil, cmd.ErrorCode_IpLimit, IP_LIMIT
+			return nil, pb.ErrorCode_IpLimit, IP_LIMIT
 		}
 		if !CheckIp(conf.GConf().GMT.IpWhiteList, ip) {
-			return nil, cmd.ErrorCode_IpLimit, IP_LIMIT
+			return nil, pb.ErrorCode_IpLimit, IP_LIMIT
 		}
 	}
 
@@ -42,11 +42,11 @@ func (s *IDIPServer) PreHandle(in *common.InvocationEvent, secretKey string) ([]
 	reqJson, b := CheckSign(string(in.Data), secretKey)
 	if !b {
 		logger.Debugf("request sign failed.")
-		return nil, cmd.ErrorCode_SignCheckError, Sign_Check_Error
+		return nil, pb.ErrorCode_SignCheckError, Sign_Check_Error
 	}
 
 	// 前置处理结束了，返回请求json数据进行逻辑处理
-	return reqJson, cmd.ErrorCode_Success, ""
+	return reqJson, pb.ErrorCode_Success, ""
 }
 
 // CheckSign
@@ -235,7 +235,7 @@ func errCheck(err error, id int, items []*RetItems) {
 		items = append(items, &RetItems{
 			SvrId:  0,
 			UserId: int32(id),
-			Ret:    int32(cmd.ErrorCode_InternalError),
+			Ret:    int32(pb.ErrorCode_InternalError),
 			Info:   err.Error(),
 		})
 		logger.Error("add error", err)
@@ -256,7 +256,7 @@ type TempMail struct {
 }
 
 // ConvertMail 邮件可视化转换
-func (s *IDIPServer) ConvertMail(mails map[int64]*cmd.PMailInfo) []*TempMail {
+func (s *IDIPServer) ConvertMail(mails map[int64]*pb.PMailInfo) []*TempMail {
 	ret := make([]*TempMail, 0, len(mails))
 	for _, v := range mails {
 		t := &TempMail{
@@ -284,7 +284,7 @@ func (s *IDIPServer) ConvertMail(mails map[int64]*cmd.PMailInfo) []*TempMail {
 }
 
 // ConvertSysMail 系统邮件可视化处理
-func (s *IDIPServer) ConvertSysMail(mails map[int64]*cmd.PSysMailInfo) []*TempMail {
+func (s *IDIPServer) ConvertSysMail(mails map[int64]*pb.PSysMailInfo) []*TempMail {
 	ret := make([]*TempMail, 0, len(mails))
 	for _, v := range mails {
 		t := &TempMail{
@@ -321,7 +321,7 @@ func ConvertItem2(uids map[string]int32) string {
 	return strings.TrimSuffix(sb.String(), ",")
 }
 
-func (s *IDIPServer) ConvertItem(items []*cmd.ItemReward) string {
+func (s *IDIPServer) ConvertItem(items []*pb.ItemReward) string {
 	var sb strings.Builder
 	for _, v := range items {
 		cfg := excel.GetItemMgr().GetById(int32(v.ItemId))
@@ -349,7 +349,7 @@ type TempItem struct {
 	Name                string `json:"name"`                 //  名字
 }
 
-func (s *IDIPServer) ConvertBagItem(items map[uint64]*cmd.PCommonItemInfo) []*TempItem {
+func (s *IDIPServer) ConvertBagItem(items map[uint64]*pb.PCommonItemInfo) []*TempItem {
 	ret := make([]*TempItem, 0, len(items))
 	for _, v := range items {
 		cfg := excel.GetItemMgr().GetById(int32(v.GetBaseId()))
@@ -449,7 +449,7 @@ func (s *IDIPServer) NewSkin(skinId int32) *SkinInfo {
 
 }
 
-func (s *IDIPServer) ConvertCard(cards map[uint32]*cmd.CardData, equip *cmd.PEquipData) []*TempCard {
+func (s *IDIPServer) ConvertCard(cards map[uint32]*pb.CardData, equip *pb.PEquipData) []*TempCard {
 	ret := make([]*TempCard, 0, len(cards))
 	for _, v := range cards {
 		cfg := excel.GetBeastarMgr().GetById(int32(v.GetBaseId()))

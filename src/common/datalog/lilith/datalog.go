@@ -1,29 +1,29 @@
 package lilith
 
-//import (
+// import (
 //	"encoding/json"
 //	"fmt"
 //	"time"
 //
 //	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/conf"
 //	myUtils "gitlab.musadisca-games.com/wangxw/aniwar/src/common/utils"
-//	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+//	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 //	"gitlab.musadisca-games.com/wangxw/musae/framework/dlog"
 //	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
 //	"gitlab.musadisca-games.com/wangxw/musae/framework/threading"
 //	"gitlab.musadisca-games.com/wangxw/musae/framework/utils"
-//)
+// )
 //
-//const (
+// const (
 //	FORMAT_DATETIME_LOG = "2006-01-02 15:04:05" // 日志上报统一时间格式
 //	VERSION             = 1                     // 版本号
 //	CHANNEL_STR_IOS     = "self-lilith-0.7"
 //	CHANNEL_STR_PC      = "self-lilith-1"
 //	OS_TYPE_ANDROID     = "android"
 //	OS_TYPE_IOS         = "ios"
-//)
+// )
 //
-//func WriteDataLog(data any) {
+// func WriteDataLog(data any) {
 //	var (
 //		startT = time.Now()
 //	)
@@ -36,10 +36,10 @@ package lilith
 //	dlog.Write(string(b))
 //
 //	logger.WarnDelayf(time.Since(startT).Milliseconds(), "")
-//}
+// }
 //
-//// 构建通用日志公共头信息
-//func BuildHeadInfo(logType, uid string, device *cmd.CliDeviceInfo) *SystemFieldInfo {
+// // 构建通用日志公共头信息
+// func BuildHeadInfo(logType, uid string, device *pb.CliDeviceInfo) *SystemFieldInfo {
 //	head := &SystemFieldInfo{
 //		LogType:     logType,
 //		Version:     VERSION,
@@ -75,23 +75,23 @@ package lilith
 //	}
 //	logger.Debugf("埋点日志公共数据：%+v", head)
 //	return head
-//}
+// }
 //
-//// GetOpenId 拼接规则：appid@{platname}:{server_region}:{phase}-appuid
-//func GetOpenId(uid string) string {
+// // GetOpenId 拼接规则：appid@{platname}:{server_region}:{phase}-appuid
+// func GetOpenId(uid string) string {
 //	_, appid, appuid, err := myUtils.ScanfUID(uid)
 //	if err != nil {
 //		return ""
 //	}
 //	return fmt.Sprintf("%d@%s:%s:%s-%s", appid, conf.GConf().Sdk.PlatName, conf.GConf().Sdk.ServerRegion, conf.GConf().Sdk.Phase, appuid)
-//}
+// }
 //
-//// GetServerId 拼接规则：{platname}:{server_region}:{phase}-server_id
-//func GetServerId() string {
+// // GetServerId 拼接规则：{platname}:{server_region}:{phase}-server_id
+// func GetServerId() string {
 //	return fmt.Sprintf("%s:%s:%s-%d", conf.GConf().Sdk.PlatName, conf.GConf().Sdk.ServerRegion, conf.GConf().Sdk.Phase, 0)
-//}
+// }
 //
-//func BuildCustomHeadInfo(logType, uid string, device *cmd.CliDeviceInfo) *PropertyFieldInfo {
+// func BuildCustomHeadInfo(logType, uid string, device *pb.CliDeviceInfo) *PropertyFieldInfo {
 //	headInfo := BuildHeadInfo(logType, uid, device)
 //	headInfo.LogType = "aniwar_" + logType
 //	customHead := &PropertyFieldInfo{
@@ -100,10 +100,10 @@ package lilith
 //	}
 //	logger.Debugf("埋点自定义日志公共数据: %+v", customHead)
 //	return customHead
-//}
+// }
 //
-//// 服务启动
-//func ServiceStart(appId, appVersion, clientVersion, rollingVersion, serverName string) error {
+// // 服务启动
+// func ServiceStart(appId, appVersion, clientVersion, rollingVersion, serverName string) error {
 //
 //	threading.RunSafe(func() {
 //		WriteDataLog(&ServerStart{
@@ -116,10 +116,10 @@ package lilith
 //	})
 //
 //	return nil
-//}
+// }
 //
-//// 服务退出
-//func ServiceStop(appId, appVersion, clientVersion, rollingVersion, serverName string, liveTime int64) error {
+// // 服务退出
+// func ServiceStop(appId, appVersion, clientVersion, rollingVersion, serverName string, liveTime int64) error {
 //	threading.RunSafe(func() {
 //		WriteDataLog(&ServerStop{
 //			PropertyFieldInfo: BuildCustomHeadInfo(LogType_ServiceStop, serverName, nil),
@@ -132,10 +132,10 @@ package lilith
 //	})
 //
 //	return nil
-//}
+// }
 //
-//// 服务定时器
-//func ServerHourComm(appId, appVersion, clientVersion, rollingVersion, serverName string, liveTime int64) error {
+// // 服务定时器
+// func ServerHourComm(appId, appVersion, clientVersion, rollingVersion, serverName string, liveTime int64) error {
 //	threading.RunSafe(func() {
 //		WriteDataLog(&ServerHour{
 //			PropertyFieldInfo: BuildCustomHeadInfo(LogType_ServerHour, serverName, nil),
@@ -148,10 +148,10 @@ package lilith
 //	})
 //
 //	return nil
-//}
+// }
 //
-//// 服务器配置事件
-//func ConfeventComm(appId, appVersion, clientVersion, rollingVersion, serverName, eventId, eventData string) error {
+// // 服务器配置事件
+// func ConfeventComm(appId, appVersion, clientVersion, rollingVersion, serverName, eventId, eventData string) error {
 //	threading.RunSafe(func() {
 //		WriteDataLog(&Confevent{
 //			PropertyFieldInfo: BuildCustomHeadInfo(LogType_Confevent, serverName, nil),
@@ -165,10 +165,10 @@ package lilith
 //	})
 //
 //	return nil
-//}
+// }
 //
-//// 服务热更新
-//func ServeReloadComm(appId, appVersion, clientVersion, rollingVersion, serverName, files, fails string) error {
+// // 服务热更新
+// func ServeReloadComm(appId, appVersion, clientVersion, rollingVersion, serverName, files, fails string) error {
 //	threading.RunSafe(func() {
 //		WriteDataLog(&ServeReload{
 //			PropertyFieldInfo: BuildCustomHeadInfo(LogType_ServeReload, serverName, nil),
@@ -182,10 +182,10 @@ package lilith
 //	})
 //
 //	return nil
-//}
+// }
 //
-//// GM指令
-//func GmCmdComm(cmd, param, gmuser string, user int, ip, serverName, result string, resultStatus int) error {
+// // GM指令
+// func GmCmdComm(cmd, param, gmuser string, user int, ip, serverName, result string, resultStatus int) error {
 //	threading.RunSafe(func() {
 //		WriteDataLog(&GmCmd{
 //			PropertyFieldInfo: BuildCustomHeadInfo(LogType_GmCmd, serverName, nil),
@@ -200,10 +200,10 @@ package lilith
 //	})
 //
 //	return nil
-//}
+// }
 //
-//// 用户容器上线下线
-//func UserActorComm(id, serverName string, typeC, liveTime int64) error {
+// // 用户容器上线下线
+// func UserActorComm(id, serverName string, typeC, liveTime int64) error {
 //	threading.RunSafe(func() {
 //		WriteDataLog(&UserActor{
 //			PropertyFieldInfo: BuildCustomHeadInfo(LogType_UserActor, serverName, nil),
@@ -214,10 +214,10 @@ package lilith
 //	})
 //
 //	return nil
-//}
+// }
 //
-//// DB读写失效
-//func DbFailComm(key, db, typeC, serverName string) error {
+// // DB读写失效
+// func DbFailComm(key, db, typeC, serverName string) error {
 //	threading.RunSafe(func() {
 //		WriteDataLog(&DbFail{
 //			PropertyFieldInfo: BuildCustomHeadInfo(LogType_DbFail, serverName, nil),
@@ -228,10 +228,10 @@ package lilith
 //	})
 //
 //	return nil
-//}
+// }
 //
-//// login网络延迟
-//func LoginDelayComm(uid string, device *cmd.CliDeviceInfo, msgId int32, delay int64) {
+// // login网络延迟
+// func LoginDelayComm(uid string, device *pb.CliDeviceInfo, msgId int32, delay int64) {
 //	if delay < conf.GConf().Base.DelayLogLimit {
 //		return
 //	}
@@ -242,10 +242,10 @@ package lilith
 //			Delay:          delay,
 //		})
 //	})
-//}
+// }
 //
-//// gate网络延迟
-//func GateDelayComm(uid string, device *cmd.CliDeviceInfo, msgId int32, delay int64) {
+// // gate网络延迟
+// func GateDelayComm(uid string, device *pb.CliDeviceInfo, msgId int32, delay int64) {
 //	if delay < conf.GConf().Base.DelayLogLimit {
 //		return
 //	}
@@ -256,4 +256,4 @@ package lilith
 //			Delay:          delay,
 //		})
 //	})
-//}
+// }

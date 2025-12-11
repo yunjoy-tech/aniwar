@@ -7,7 +7,7 @@ import (
 	"github.com/dapr/go-sdk/service/common"
 	"github.com/go-redis/redis/v8"
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/db"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/service"
 	"net/http"
@@ -41,7 +41,7 @@ func (s *IDIPServer) ModifyWhiteList(out *common.Content, reqJson []byte) {
 	// 解析数据
 	req := ModifyWhiteListReq{}
 	if err := json.Unmarshal(reqJson, &req); err != nil {
-		RetCommonMsg(out, http.StatusInternalServerError, int32(cmd.ErrorCode_InternalError), Internal_Error)
+		RetCommonMsg(out, http.StatusInternalServerError, int32(pb.ErrorCode_InternalError), Internal_Error)
 		return
 	}
 
@@ -49,7 +49,7 @@ func (s *IDIPServer) ModifyWhiteList(out *common.Content, reqJson []byte) {
 	data, err := s.GetFromConfigCenter(db.KeyCfgWhiteList)
 	if err != nil && !strings.Contains(err.Error(), redis.Nil.Error()) && !errors.Is(err, service.DB_ERROR_NOT_EXIST) {
 		logger.Error("GetFromConfigCenter", db.KeyCfgWhiteList, err)
-		RetCommonMsg(out, http.StatusInternalServerError, int32(cmd.ErrorCode_InternalError), Internal_Error)
+		RetCommonMsg(out, http.StatusInternalServerError, int32(pb.ErrorCode_InternalError), Internal_Error)
 		return
 	}
 	curWhiteList := make(map[string]int32)
@@ -69,7 +69,7 @@ func (s *IDIPServer) ModifyWhiteList(out *common.Content, reqJson []byte) {
 		} else if req.Operation == TYPE_DELETE {
 			delete(curWhiteList, uidStr)
 		} else {
-			RetCommonMsg(out, http.StatusInternalServerError, int32(cmd.ErrorCode_UnrealizedTypeError), Unrealized_Type_Error)
+			RetCommonMsg(out, http.StatusInternalServerError, int32(pb.ErrorCode_UnrealizedTypeError), Unrealized_Type_Error)
 			return
 		}
 		items = append(items, WhiteListItem{
@@ -86,7 +86,7 @@ func (s *IDIPServer) ModifyWhiteList(out *common.Content, reqJson []byte) {
 	tempStr = strings.TrimSuffix(tempStr, ",")
 	err = s.SaveToConfigCenter(db.KeyCfgWhiteList, tempStr)
 	if err != nil {
-		RetCommonMsg(out, http.StatusInternalServerError, int32(cmd.ErrorCode_InternalError), Internal_Error)
+		RetCommonMsg(out, http.StatusInternalServerError, int32(pb.ErrorCode_InternalError), Internal_Error)
 		return
 	}
 

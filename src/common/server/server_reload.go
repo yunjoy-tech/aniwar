@@ -7,7 +7,7 @@ import (
 	"github.com/dapr/go-sdk/service/common"
 	comn "gitlab.musadisca-games.com/wangxw/aniwar/src/common"
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/excel/data"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/global"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
@@ -87,10 +87,10 @@ func (s *Server) HotReload(ctx context.Context, in *common.InvocationEvent) (out
 }
 
 func (s *Server) HandlerHotEvent(in *base.ProtoMsg) (err error) {
-	req := &cmd.S2S_HotReloadReq{}
+	req := &pb.S2S_HotReloadReq{}
 	now := time.Now().Unix()
 	in.UnmarshalData(req)
-	notify := &cmd.S2S_HotReloadNotifyReq{}
+	notify := &pb.S2S_HotReloadNotifyReq{}
 	logger.Infof("HandlerHotEvent Begin files:%+v", req.Files)
 	if len(req.Files) > 0 {
 		tag := req.Files[0]
@@ -116,7 +116,7 @@ func (s *Server) HandlerHotEvent(in *base.ProtoMsg) (err error) {
 	if err == nil {
 		_, _ = s.ActorInvoke(global.CenterActorType, global.CenterActorID, &base.ProtoMsg{
 			AppId:   global.ACTOR_SVC,
-			MsgId:   int32(cmd.Protocols_PS2S_HotReloadNotifyReq),
+			MsgId:   int32(pb.Protocols_PS2S_HotReloadNotifyReq),
 			UserId:  "",
 			RoleId:  0,
 			UAID:    global.CenterActorID,

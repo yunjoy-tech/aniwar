@@ -12,7 +12,7 @@ import (
 
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/conf"
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/db"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/baseconf"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/errorx"
@@ -24,7 +24,7 @@ import (
 
 func (s *GateServer) OnTcp(c *tcpx.Context) {
 
-	var session *cmd.UserSession
+	var session *pb.UserSession
 	var err error
 	accountId := c.GetAccountId()
 
@@ -83,12 +83,12 @@ func (s *GateServer) OnTcp(c *tcpx.Context) {
 	}
 	logger.Infof(" c.GetReqIndex() : %d", c.GetReqIndex())
 
-	//防重放
+	// 防重放
 	rspData, downMsgId := s.reqRepeated(nil, messageID, reqIdx, session)
-	if rspData != nil && downMsgId != int32(cmd.Protocols_Protocols_None) {
+	if rspData != nil && downMsgId != int32(pb.Protocols_Protocols_None) {
 		user := s.userMgr.GetUser(accountId)
 		if user != nil {
-			err = user.ReplyWithBody(downMsgId, reqIdx, cmd.ErrorCode_Success, rspData)
+			err = user.ReplyWithBody(downMsgId, reqIdx, pb.ErrorCode_Success, rspData)
 			if err != nil {
 				logger.Debugf("OnNetMessage ReqRepeated err:%v ", err)
 				return
@@ -110,7 +110,7 @@ func (s *GateServer) OnTcp(c *tcpx.Context) {
 	if dataLen > baseconf.GetBaseConf().GateMsgMaxSize {
 		logger.Warn("OnNetMessage BodyBytesOf", errorx.Wrap(err).Error())
 
-		//TODO 处理踢人操作
+		// TODO 处理踢人操作
 		return
 	}
 
@@ -129,12 +129,12 @@ func (s *GateServer) OnTcp(c *tcpx.Context) {
 
 	// gm命令处理
 	handleMsgStatistics(messageID, int64(dataLen), true)
-	logger.Debug("OnNetMessage: ", c.ClientIP(), c.Network(), cmd.Protocols(messageID), len(data))
+	logger.Debug("OnNetMessage: ", c.ClientIP(), c.Network(), pb.Protocols(messageID), len(data))
 
-	switch cmd.Protocols(messageID) {
-	/*case cmd.Protocols_PC2LS_RsaClientRandomReq:
+	switch pb.Protocols(messageID) {
+	/*case pb.Protocols_PC2LS_RsaClientRandomReq:
 	s.HandleRsa(c, messageID, data)*/
-	case cmd.Protocols_PC2G_LoginGateReq:
+	case pb.Protocols_PC2G_LoginGateReq:
 		_, err = s.HandleLoginGate(c, messageID, data, reqIdx)
 		if err != nil {
 			logger.Debugf("OnNetMessage Auth error, %v %v %v", c.ClientIP(), c.Network(), err)
@@ -142,12 +142,12 @@ func (s *GateServer) OnTcp(c *tcpx.Context) {
 			metrics.GaugeInc(metrics.GateAuthFailCount)
 			return
 		}
-	case cmd.Protocols_PC2G_LoginGameReq: // 快速登陆
+	case pb.Protocols_PC2G_LoginGameReq: // 快速登陆
 		_, err = s.HandleLoginGame(c, nil, messageID, data, reqIdx)
 		if err != nil {
 			logger.Debugf("OnNetMessage Auth error, %v %v %v", c.ClientIP(), c.Network(), err)
 			// TODO 返回错误码提示
-			//s.HandleAuthFail(c)
+			// s.HandleAuthFail(c)
 			c.CloseConn()
 			metrics.GaugeInc(metrics.GateAuthFailCount)
 			return
@@ -167,33 +167,33 @@ func (s *GateServer) OnTcp(c *tcpx.Context) {
 	}
 }
 
-//func (s *GateServer) Send2ClientErrorCode(uid string, errCode cmd.ErrorCode) error {
+// func (s *GateServer) Send2ClientErrorCode(uid string, errCode pb.ErrorCode) error {
 //	user := s.userMgr.GetUser(uid)
 //	if user == nil {
 //		return nil
 //	}
 //
-//	rsp := &cmd.S2C_ErrorCodeNtf{ErrorCode: uint32(errCode)}
+//	rsp := &pb.S2C_ErrorCodeNtf{ErrorCode: uint32(errCode)}
 //	b, err := proto.Marshal(rsp)
 //	if err != nil {
 //		logger.Errorf(err.Error())
 //		return err
 //	}
 //
-//	err = user.ReplyWithBody(int32(cmd.Protocols_PS2C_ErrorCodeNtf), 0, errCode, b)
+//	err = user.ReplyWithBody(int32(pb.Protocols_PS2C_ErrorCodeNtf), 0, errCode, b)
 //	if err != nil {
 //		logger.Warn("GateServer:Send2ClientErrorCode got error, uid:%s, errCode:%+v", uid, errCode)
 //		return err
 //	}
 //
 //	return nil
-//}
+// }
 
 func (s *GateServer) Send2Client(msg *base.ProtoMsg) {
 	var err error
 	logger.Debugf("Send2Gate, msg:%+v", msg)
-	//判断是否是4开头，然后全服广播
-	if common.IsBC(cmd.Protocols(msg.MsgId)) {
+	// 判断是否是4开头，然后全服广播
+	if common.IsBC(pb.Protocols(msg.MsgId)) {
 		s.userMgr.BroadcastMsg(msg.MsgId, msg.AppId, msg.Data)
 		return
 	}
@@ -203,10 +203,10 @@ func (s *GateServer) Send2Client(msg *base.ProtoMsg) {
 			continue
 		}
 		if user.IsOnline() {
-			err = user.ReplyWithBody(msg.MsgId, msg.ReqIdx, cmd.ErrorCode(msg.ErrCode), msg.Data)
+			err = user.ReplyWithBody(msg.MsgId, msg.ReqIdx, pb.ErrorCode(msg.ErrCode), msg.Data)
 		} else {
 			var vals []interface{}
-			b, e := proto.Marshal(&cmd.MsgData{Id: msg.MsgId, Data: msg.Data})
+			b, e := proto.Marshal(&pb.MsgData{Id: msg.MsgId, Data: msg.Data})
 			if e != nil {
 				continue
 			}
@@ -214,7 +214,7 @@ func (s *GateServer) Send2Client(msg *base.ProtoMsg) {
 			err = s.SAdd(context.Background(), db.KeyOfflineMsg(uid), int(conf.Base().HeartbeatTimout), vals...)
 		}
 		if err != nil {
-			logger.Warnf("ReplyWithBody uid:%s, msg:%+v, err: %+v", uid, cmd.Protocols(msg.MsgId), err)
+			logger.Warnf("ReplyWithBody uid:%s, msg:%+v, err: %+v", uid, pb.Protocols(msg.MsgId), err)
 		}
 	}
 }
@@ -222,13 +222,13 @@ func (s *GateServer) Send2Client(msg *base.ProtoMsg) {
 func (s *GateServer) TcpLoginGame(pendingUser *PendingUser) ([]byte, *base.RpcError) {
 	playerId, err := s.GetPlayerId(pendingUser.uid)
 	if playerId == 0 && err != nil {
-		return nil, &base.RpcError{Err: err, Code: int32(cmd.ErrorCode_NotFoundPlayer)}
+		return nil, &base.RpcError{Err: err, Code: int32(pb.ErrorCode_NotFoundPlayer)}
 	}
 	now := time.Now()
 	uaid := s.UAID(pendingUser.uid, playerId)
 	msg, err := s.UserInvoke(uaid, &base.ProtoMsg{
 		AppId:   s.AppId,
-		MsgId:   int32(cmd.Protocols_PC2G_LoginGameReq),
+		MsgId:   int32(pb.Protocols_PC2G_LoginGameReq),
 		ReqIdx:  pendingUser.reqIdx,
 		UserId:  pendingUser.uid,
 		RoleId:  playerId,
@@ -238,36 +238,36 @@ func (s *GateServer) TcpLoginGame(pendingUser *PendingUser) ([]byte, *base.RpcEr
 	})
 	respMessageID, respData := msg.MsgId, msg.Data
 	if respMessageID > 0 {
-		if respMessageID == int32(cmd.Protocols_PS2C_ErrorCodeNtf) {
-			rsp := &cmd.S2C_ErrorCodeNtf{ErrorCode: uint32(msg.ErrCode), Param: []string{string(respData)}}
+		if respMessageID == int32(pb.Protocols_PS2C_ErrorCodeNtf) {
+			rsp := &pb.S2C_ErrorCodeNtf{ErrorCode: uint32(msg.ErrCode), Param: []string{string(respData)}}
 			b, err := proto.Marshal(rsp)
 			if err != nil {
-				logger.Warn("GateServer:ExecuteLoginGame, UserInvoke, reply error:", uaid, cmd.Protocols(respMessageID), respMessageID, errorx.Wrap(err).Error())
+				logger.Warn("GateServer:ExecuteLoginGame, UserInvoke, reply error:", uaid, pb.Protocols(respMessageID), respMessageID, errorx.Wrap(err).Error())
 			}
-			err = pendingUser.ctx.ReplyWithBody(int32(cmd.Protocols_PS2C_ErrorCodeNtf), msg.ErrCode, b)
+			err = pendingUser.ctx.ReplyWithBody(int32(pb.Protocols_PS2C_ErrorCodeNtf), msg.ErrCode, b)
 			if err != nil {
-				logger.Warn("GateServer:ExecuteLoginGame, UserInvoke, reply error:", uaid, cmd.Protocols(respMessageID), respMessageID, errorx.Wrap(err).Error())
+				logger.Warn("GateServer:ExecuteLoginGame, UserInvoke, reply error:", uaid, pb.Protocols(respMessageID), respMessageID, errorx.Wrap(err).Error())
 			}
 			metrics.GaugeInc(metrics.EnterFailedCount)
-		} else if msg.ErrCode == int32(cmd.ErrorCode_RepeatMsg) {
-			logger.Debugf("OnNetMessage, 防重放中获取到数据返回, :", global.RoomActorType, cmd.Protocols(respMessageID), respMessageID, len(respData))
+		} else if msg.ErrCode == int32(pb.ErrorCode_RepeatMsg) {
+			logger.Debugf("OnNetMessage, 防重放中获取到数据返回, :", global.RoomActorType, pb.Protocols(respMessageID), respMessageID, len(respData))
 
 			lastRspData, _ := s.reqRepeated(nil, pendingUser.msgId, pendingUser.reqIdx, pendingUser.session)
-			err = pendingUser.ctx.ReplyWithBody(respMessageID, int32(cmd.ErrorCode_Success), lastRspData)
+			err = pendingUser.ctx.ReplyWithBody(respMessageID, int32(pb.ErrorCode_Success), lastRspData)
 			if err != nil {
-				logger.Warn("GateServer:ExecuteLoginGame, UserInvoke, reply error:", uaid, cmd.Protocols(respMessageID), respMessageID, errorx.Wrap(err).Error())
+				logger.Warn("GateServer:ExecuteLoginGame, UserInvoke, reply error:", uaid, pb.Protocols(respMessageID), respMessageID, errorx.Wrap(err).Error())
 			}
 		} else {
-			//deprecated
+			// deprecated
 			user := s.userMgr.AddUser(pendingUser.uid, playerId, pendingUser.ctx, pendingUser.session)
-			err = user.ReplyWithBody(respMessageID, pendingUser.reqIdx, cmd.ErrorCode_Success, respData)
+			err = user.ReplyWithBody(respMessageID, pendingUser.reqIdx, pb.ErrorCode_Success, respData)
 			if err != nil {
 				logger.Warn("GateServer:ExecuteLoginGame, UserInvoke ReplyWithBody err: ", errorx.Wrap(err).Error())
 			}
 			metrics.HistogramPut(metrics.EnterDelayHist, time.Since(now).Milliseconds(), metrics.Delay)
 			metrics.GaugeInc(metrics.EnterSucceedCount)
 		}
-		logger.Debug("GateServer:ExecuteLoginGame, UserInvoke End:", uaid, cmd.Protocols(respMessageID), respMessageID, len(respData))
+		logger.Debug("GateServer:ExecuteLoginGame, UserInvoke End:", uaid, pb.Protocols(respMessageID), respMessageID, len(respData))
 	}
 	return nil, nil
 }

@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/conf"
 
@@ -87,7 +87,7 @@ https://tds-tapsdk.cn.tapapis.com/anti-addiction/v1/clients/{{clientId}}/users/{
     }
 }
 */
-func TapCheckPayLimit(tapUserInfo *cmd.TaptapUserInfo, tapToken, userIdentifier string, amount int32) (bool, cmd.ErrorCode) {
+func TapCheckPayLimit(tapUserInfo *pb.TaptapUserInfo, tapToken, userIdentifier string, amount int32) (bool, pb.ErrorCode) {
 	headMap := make(map[string]string, 0)
 	headMap["Content-Type"] = "application/json"
 	headMap["Authorization"] = tapToken
@@ -101,7 +101,7 @@ func TapCheckPayLimit(tapUserInfo *cmd.TaptapUserInfo, tapToken, userIdentifier 
 		headMap)
 	if err != nil {
 		logger.Errorf(err.Error())
-		return false, cmd.ErrorCode_Tap_pay_limit_code_unknown_err
+		return false, pb.ErrorCode_Tap_pay_limit_code_unknown_err
 	}
 
 	respBytes, _ := json.Marshal(resp)
@@ -110,7 +110,7 @@ func TapCheckPayLimit(tapUserInfo *cmd.TaptapUserInfo, tapToken, userIdentifier 
 	if resp == nil {
 		err = errors.New(fmt.Sprintf("检查消费限制, resp为空"))
 		logger.Errorf(err.Error())
-		return false, cmd.ErrorCode_Tap_pay_limit_code_unknown_err
+		return false, pb.ErrorCode_Tap_pay_limit_code_unknown_err
 	}
 
 	if !resp.Success {
@@ -118,46 +118,46 @@ func TapCheckPayLimit(tapUserInfo *cmd.TaptapUserInfo, tapToken, userIdentifier 
 		logger.Errorf(err.Error())
 
 		if resp.Data.Code == 3 {
-			return false, cmd.ErrorCode_Tap_pay_limit_code_pay_num_err
+			return false, pb.ErrorCode_Tap_pay_limit_code_pay_num_err
 		} else if resp.Data.Code == 16 {
-			return false, cmd.ErrorCode_Tap_certification_fail
+			return false, pb.ErrorCode_Tap_certification_fail
 		}
 	}
 
 	if resp.Success {
 		if resp.Data.Status {
-			return true, cmd.ErrorCode_Tap_pay_limit_code_can_pay // 允许消费
+			return true, pb.ErrorCode_Tap_pay_limit_code_can_pay // 允许消费
 		} else {
 			if tapUserInfo != nil {
 
 				if tapUserInfo.Age < 8 {
-					return false, cmd.ErrorCode_Tap_pay_limit_code_limit_8
+					return false, pb.ErrorCode_Tap_pay_limit_code_limit_8
 				} else if tapUserInfo.Age <= 15 {
 					if amount > 50*100 /*单位:分*/ {
-						return false, cmd.ErrorCode_Tap_pay_limit_code_limit_15
+						return false, pb.ErrorCode_Tap_pay_limit_code_limit_15
 					} else {
-						return false, cmd.ErrorCode_Tap_pay_limit_code_limit_15_total
+						return false, pb.ErrorCode_Tap_pay_limit_code_limit_15_total
 					}
 				} else if tapUserInfo.Age <= 17 {
 					if amount > 100*100 /*单位:分*/ {
-						return false, cmd.ErrorCode_Tap_pay_limit_code_limit_17
+						return false, pb.ErrorCode_Tap_pay_limit_code_limit_17
 					} else {
-						return false, cmd.ErrorCode_Tap_pay_limit_code_limit_17_total
+						return false, pb.ErrorCode_Tap_pay_limit_code_limit_17_total
 					}
 				}
 			}
-			return false, cmd.ErrorCode_Tap_pay_limit_code_limit // 消费限制
+			return false, pb.ErrorCode_Tap_pay_limit_code_limit // 消费限制
 		}
 	}
 
-	//bytes, err := json.Marshal(resp)
-	//if err != nil {
+	// bytes, err := json.Marshal(resp)
+	// if err != nil {
 	//	err = errors.Wrap(err, "json.Marshal got error")
 	//	logger.Errorf(err.Error())
 	//	return false, -1
-	//}
+	// }
 
-	return false, cmd.ErrorCode_Tap_pay_limit_code_unknown_err
+	return false, pb.ErrorCode_Tap_pay_limit_code_unknown_err
 }
 
 // TapUploadPayAmount 上报充值金额

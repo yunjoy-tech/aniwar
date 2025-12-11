@@ -12,13 +12,13 @@ import (
 	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
 
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/db"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/service"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/state"
 	"google.golang.org/protobuf/proto"
 )
 
-func (s *Server) SaveAccount(account *cmd.UserData) error {
+func (s *Server) SaveAccount(account *pb.UserData) error {
 	temp, err := proto.Marshal(account)
 	if err != nil {
 		return err
@@ -48,13 +48,13 @@ func (s *Server) SaveAccount(account *cmd.UserData) error {
 	return nil
 }
 
-func (s *Server) GetAccount(key string) (*cmd.UserData, error) {
+func (s *Server) GetAccount(key string) (*pb.UserData, error) {
 	// 查询db中的数据
 	kvTable, err := s.GetMongoAccount(key, nil)
 	if err != nil {
 		return nil, err
 	}
-	account := &cmd.UserData{}
+	account := &pb.UserData{}
 	if kvTable != nil {
 		if err = proto.Unmarshal(kvTable.Data, account); err != nil {
 			return nil, service.DB_ERROR_MARSHAL
@@ -92,15 +92,15 @@ func (s *Server) SAdd(ctx context.Context, key string, ttl int, vals ...interfac
 		return errors.Errorf("redis expire error:%v,key:%s, vals:%+v", expireRet.Err(), key, vals)
 	}
 
-	//ret := s.Redis.SAdd(ctx, key, vals...)
-	//if ret.Err() != nil {
+	// ret := s.Redis.SAdd(ctx, key, vals...)
+	// if ret.Err() != nil {
 	//	return errors.Errorf("redis SAdd error:%v,key:%s, vals:%+v", ret.Err(), key, vals)
-	//}
-	//if ttl > 0 {
+	// }
+	// if ttl > 0 {
 	//	if ret := s.Redis.RedisExpire(ctx, key, time.Duration(ttl)*time.Second); ret.Val() == false || ret.Err() != nil {
 	//		return errors.Errorf("redis expire error:%v,key:%s, vals:%+v", ret.Err(), key, vals)
 	//	}
-	//}
+	// }
 	return nil
 }
 

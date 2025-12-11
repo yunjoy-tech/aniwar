@@ -20,7 +20,7 @@ import (
 
 	"github.com/dapr/go-sdk/service/common"
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/conf"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/baseconf"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
@@ -33,7 +33,7 @@ import (
 type GateServer struct {
 	comn.Server
 	userMgr *UserMgr
-	//pendingUserMgr *PendingUserMgr
+	// pendingUserMgr *PendingUserMgr
 	ch chan *base.ProtoMsg
 }
 
@@ -45,7 +45,7 @@ func NewGateServer() base.IServer {
 	srv.InAddr = ":22001"
 	srv.GRPCPort = "50001"
 	srv.OutAddr = ":13001"
-	srv.HasPriTopic = true //开启私有频道订阅
+	srv.HasPriTopic = true // 开启私有频道订阅
 	srv.OnPreInit = srv.PreInit
 	srv.OnServerInit = srv.ServerInit
 	srv.OnConnect = srv.OnNetConnect
@@ -57,7 +57,7 @@ func NewGateServer() base.IServer {
 	srv.OnRegisterMetric = srv.RegisterMetrics
 	srv.OnCfgCenterCB = srv.HandlerConfEvent
 	srv.userMgr = NewUserMgr(srv)
-	//srv.pendingUserMgr = NewPendingUserMgr(srv)
+	// srv.pendingUserMgr = NewPendingUserMgr(srv)
 	return srv
 }
 
@@ -92,7 +92,7 @@ func (s *GateServer) PreInit() error {
 
 func (s *GateServer) ServerInit() error {
 
-	//注册login接口
+	// 注册login接口
 	s.RegisterRpcHandler("/api", s.OnHttp)
 
 	interval := time.Duration(conf.GConf().BaseConf().HeartbeatInterval)
@@ -112,7 +112,7 @@ func (s *GateServer) ServerInit() error {
 		threading.GoSafe(s.pendingUserMgr.Execute)
 	}*/
 	threading.GoSafe(s.HandlerSrvMsg)
-	//threading.GoSafe(func() {
+	// threading.GoSafe(func() {
 	//	t := time.NewTicker(time.Second * 1)
 	//	defer t.Stop()
 	//	for {
@@ -121,7 +121,7 @@ func (s *GateServer) ServerInit() error {
 	//			threading.RunSafe(s.pendingUserMgr.GrantLoginToken)
 	//		}
 	//	}
-	//})
+	// })
 
 	s.LiveTime = time.Now().Unix() // 创建server时间戳
 	// 服务启动埋点
@@ -130,14 +130,14 @@ func (s *GateServer) ServerInit() error {
 	return nil
 }
 
-//func (s *GateServer) GetUser(userId string, roleId uint64, c *tcpx.Context) *User {
+// func (s *GateServer) GetUser(userId string, roleId uint64, c *tcpx.Context) *User {
 //	user := s.userMgr.GetUser(userId)
 //	if user == nil || user.roleId != roleId {
 //		return s.userMgr.AddUser(userId, roleId, c)
 //	}
 //	user.ctx = c
 //	return user
-//}
+// }
 
 func (s *GateServer) OnNetConnect(c *tcpx.Context) {
 	if conf.Base().IsDebug {
@@ -153,7 +153,7 @@ func (s *GateServer) OnNetMessage(c *tcpx.Context) {
 		}
 	}()
 
-	//logger.Debug("OnNetMessage from remote host: ", c.ClientIP(), c.Network())
+	// logger.Debug("OnNetMessage from remote host: ", c.ClientIP(), c.Network())
 	s.OnTcp(c)
 }
 
@@ -174,24 +174,24 @@ func (s *GateServer) OnNetClose(c *tcpx.Context) {
 	metrics.GaugeDec(metrics.GateConnCount)
 }
 
-//// KnockOff 被踢下线
-//func (s *GateServer) KnockOff(uid string) {
+// // KnockOff 被踢下线
+// func (s *GateServer) KnockOff(uid string) {
 //	if isOnline, session := s.PlayerIsOnline(uid); isOnline {
 //		if session != nil {
 //			heartBeat := s.GetHeartBeat(session.Uaid)
 //
 //			if heartBeat != nil {
-//				ret := &cmd.S2C_ErrorCodeNtf{ErrorCode: uint32(cmd.ErrorCode_KnockedOff)}
+//				ret := &pb.S2C_ErrorCodeNtf{ErrorCode: uint32(pb.ErrorCode_KnockedOff)}
 //				logger.Debugf("顶号, 踢人下线, %+v", ret)
 //
-//				err := s.Send2ClientErrorCode(uid, cmd.ErrorCode_KnockedOff)
+//				err := s.Send2ClientErrorCode(uid, pb.ErrorCode_KnockedOff)
 //				if err != nil {
 //					logger.Errorf("GateServer KnockOff got err:%+v", err)
 //				}
 //			}
 //		}
 //	}
-//}
+// }
 
 func (s *GateServer) EventHandler(ctx context.Context, e *common.TopicEvent) (retry bool, err error) {
 	defer func() {
@@ -213,8 +213,8 @@ func (s *GateServer) EventHandler(ctx context.Context, e *common.TopicEvent) (re
 	handleMsgStatistics(msg.MsgId, int64(len(msg.Data)), false)
 	logger.Debugf("PubSubName:%s Topic:%s ID:%s DataLen:%v Msg:%s", e.PubsubName, e.Topic, e.ID, len(e.RawData), msg.Str())
 
-	if msg.MsgId == int32(cmd.Protocols_PS2C_ErrorCodeNtf) {
-		errCode := &cmd.S2C_ErrorCodeNtf{}
+	if msg.MsgId == int32(pb.Protocols_PS2C_ErrorCodeNtf) {
+		errCode := &pb.S2C_ErrorCodeNtf{}
 		err = proto.Unmarshal(msg.Data, errCode)
 		if err != nil {
 			logger.Debugf("Unmarshal, error: %+v", err)
@@ -255,8 +255,8 @@ func (s *GateServer) InvokeHandler(ctx context.Context, in *common.InvocationEve
 		logger.Warn("InvokeHandler UnPackProtoMsg, err: ", err)
 		return nil, err
 	}
-	//messageID, uid, data := msg.MsgId, msg.UserId, msg.Data
-	logger.Debugf("Gate InvokeHandler: msgId:%v, %s", cmd.Protocols(msg.MsgId), msg.String())
+	// messageID, uid, data := msg.MsgId, msg.UserId, msg.Data
+	logger.Debugf("Gate InvokeHandler: msgId:%v, %s", pb.Protocols(msg.MsgId), msg.String())
 
 	msg.Topic = string(svc.EVENT_PRIVATE)
 	s.PushSrvMsg(msg)
@@ -315,12 +315,12 @@ func (s *GateServer) Main() {
 }
 
 // 防重放
-func (s *GateServer) reqRepeated(c *tcpx.Context, messageID int32, reqIdx uint32, session *cmd.UserSession) ([]byte, int32) {
+func (s *GateServer) reqRepeated(c *tcpx.Context, messageID int32, reqIdx uint32, session *pb.UserSession) ([]byte, int32) {
 	if baseconf.GetBaseConf() == nil || baseconf.GetBaseConf().UseReqIdx == 0 {
 		// 未开启
-		return nil, int32(cmd.Protocols_Protocols_None)
+		return nil, int32(pb.Protocols_Protocols_None)
 	}
-	//if c != nil {
+	// if c != nil {
 	//	if user := s.userMgr.GetUser(c.GetAccountId()); user != nil {
 	//
 	//		//lastRsp := user.GetLastRsp()
@@ -334,7 +334,7 @@ func (s *GateServer) reqRepeated(c *tcpx.Context, messageID int32, reqIdx uint32
 	//	} else {
 	//		logger.Warnf("OnNetMessage GetUser got nil")
 	//	}
-	//} else
+	// } else
 
 	if session != nil {
 		if session.LastRspData != nil && session.LastRspData.ReqIdx == reqIdx && messageID == session.LastRspData.UpCmd {
@@ -342,11 +342,11 @@ func (s *GateServer) reqRepeated(c *tcpx.Context, messageID int32, reqIdx uint32
 		}
 	}
 
-	return nil, int32(cmd.Protocols_Protocols_None)
+	return nil, int32(pb.Protocols_Protocols_None)
 }
 
 func (s *GateServer) setLastRespData(uid string, downMsgId int32, reqIdx uint32, body []byte) error {
-	if !myCommon.IsDown(cmd.Protocols(downMsgId)) {
+	if !myCommon.IsDown(pb.Protocols(downMsgId)) {
 		return nil
 	}
 
@@ -360,7 +360,7 @@ func (s *GateServer) setLastRespData(uid string, downMsgId int32, reqIdx uint32,
 	if err != nil {
 		return err
 	}
-	session.LastRspData = &cmd.LastRspData{
+	session.LastRspData = &pb.LastRspData{
 		ReqIdx:  reqIdx,
 		UpCmd:   upMsgId,
 		DownCmd: downMsgId,
@@ -375,8 +375,8 @@ func (s *GateServer) setLastRespData(uid string, downMsgId int32, reqIdx uint32,
 }
 
 // NotifyActorGateTopic 通知userActor, 广播gate的topic
-func (s *GateServer) NotifyActorGateTopic(uid string, uaid string, operator cmd.GateTopicOperator) error {
-	gateTopicData, err := proto.Marshal(&cmd.S2S_TcpGateTopicReq1{
+func (s *GateServer) NotifyActorGateTopic(uid string, uaid string, operator pb.GateTopicOperator) error {
+	gateTopicData, err := proto.Marshal(&pb.S2S_TcpGateTopicReq1{
 		Opt:    operator,
 		Uid:    uid,
 		GateId: s.PrivateTopicID(),
@@ -388,7 +388,7 @@ func (s *GateServer) NotifyActorGateTopic(uid string, uaid string, operator cmd.
 	_, playerId := s.ConvUAID(uaid)
 	_, err = s.UserInvoke(uaid, &base.ProtoMsg{
 		AppId:        s.AppId,
-		MsgId:        int32(cmd.Protocols_PS2S_TcpGateTopicReq1),
+		MsgId:        int32(pb.Protocols_PS2S_TcpGateTopicReq1),
 		ServerReqIdx: utils.GenIntUUID(),
 		UserId:       uid,
 		RoleId:       playerId,

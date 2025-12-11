@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"github.com/dapr/go-sdk/service/common"
 	gameCommon "gitlab.musadisca-games.com/wangxw/aniwar/src/common"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
 	"net/http"
 	"strconv"
@@ -26,10 +26,10 @@ func (s *IDIPServer) AddBatchResource(out *common.Content, reqJson []byte) {
 	// 解析数据
 	req := &AddBatchResourceReq{}
 	if err := json.Unmarshal(reqJson, req); err != nil {
-		RetCommonMsg(out, http.StatusInternalServerError, int32(cmd.ErrorCode_InternalError), Internal_Error)
+		RetCommonMsg(out, http.StatusInternalServerError, int32(pb.ErrorCode_InternalError), Internal_Error)
 		return
 	}
-	rpcCall := &cmd.S2SReceiveGMAddResReq{Items: map[int32]int32{}, Coins: map[int32]int32{}}
+	rpcCall := &pb.S2SReceiveGMAddResReq{Items: map[int32]int32{}, Coins: map[int32]int32{}}
 	for _, coin := range req.Coins {
 		itemId, err := strconv.Atoi(coin.CoinName)
 		if err != nil {
@@ -47,13 +47,13 @@ func (s *IDIPServer) AddBatchResource(out *common.Content, reqJson []byte) {
 		}
 		rpcCall.Items[int32(itemId)] += item.ItemCount
 	}
-	//todo hero no define
+	// todo hero no define
 	for range req.Heroes {
-		rpcCall.Heros = append(rpcCall.Heros, &cmd.ItemHero{})
+		rpcCall.Heros = append(rpcCall.Heros, &pb.ItemHero{})
 	}
-	//todo equip no define
+	// todo equip no define
 	for range req.Equip {
-		rpcCall.Equips = append(rpcCall.Equips, &cmd.ItemEquip{})
+		rpcCall.Equips = append(rpcCall.Equips, &pb.ItemEquip{})
 	}
 
 	items := GMAddItem(s, req.Uids, rpcCall)

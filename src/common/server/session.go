@@ -17,34 +17,34 @@ import (
 	"github.com/pkg/errors"
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/conf"
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/db"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/service"
 )
 
-func (s *Server) GetUserSession(uid string) (*cmd.UserSession, error, cmd.ErrorCode) {
+func (s *Server) GetUserSession(uid string) (*pb.UserSession, error, pb.ErrorCode) {
 	if uid == "" {
-		return nil, fmt.Errorf("accountId is empty"), cmd.ErrorCode_ReLogin
+		return nil, fmt.Errorf("accountId is empty"), pb.ErrorCode_ReLogin
 	}
 
 	kvTable, err := s.GetGlobalRedis(db.KeyUserSession(uid), nil)
 	if err != nil {
-		if errors.Is(err, service.DB_ERROR_NOT_EXIST) { //session数据不存在,重新登录
-			return nil, fmt.Errorf("db value not exist"), cmd.ErrorCode_ReLogin
+		if errors.Is(err, service.DB_ERROR_NOT_EXIST) { // session数据不存在,重新登录
+			return nil, fmt.Errorf("db value not exist"), pb.ErrorCode_ReLogin
 		} else {
-			return nil, fmt.Errorf("internal error"), cmd.ErrorCode_InternalError
+			return nil, fmt.Errorf("internal error"), pb.ErrorCode_InternalError
 		}
 	}
 
-	gUser := &cmd.UserSession{}
+	gUser := &pb.UserSession{}
 	err = db.ParseKvTable(kvTable, gUser)
 	if err != nil {
-		return nil, err, cmd.ErrorCode_ReLogin
+		return nil, err, pb.ErrorCode_ReLogin
 	}
 
-	return gUser, nil, cmd.ErrorCode_Success
+	return gUser, nil, pb.ErrorCode_Success
 }
 
-//func (s *Server) SaveUserSession2(session *cmd.UserSession) error {
+// func (s *Server) SaveUserSession2(session *pb.UserSession) error {
 //	if session.Uid == "" {
 //		return fmt.Errorf("accountId is empty")
 //	}
@@ -102,9 +102,9 @@ func (s *Server) GetUserSession(uid string) (*cmd.UserSession, error, cmd.ErrorC
 //	//}
 //
 //	return nil
-//}
+// }
 
-func (s *Server) SaveUserSession(session *cmd.UserSession) error {
+func (s *Server) SaveUserSession(session *pb.UserSession) error {
 	_, err := utils.RetryDoSyncInterval(3, 30, func() (any, error) {
 		return nil, s.doSaveUserSession(session)
 	})
@@ -112,7 +112,7 @@ func (s *Server) SaveUserSession(session *cmd.UserSession) error {
 	return err
 }
 
-func (s *Server) doSaveUserSession(session *cmd.UserSession) error {
+func (s *Server) doSaveUserSession(session *pb.UserSession) error {
 	if session.Uid == "" {
 		return fmt.Errorf("accountId is empty")
 	}
@@ -131,21 +131,21 @@ func (s *Server) doSaveUserSession(session *cmd.UserSession) error {
 
 	ttlMap := map[string]string{"ttlInSeconds": strconv.Itoa(conf.GConf().Base.AccTokenTTL)}
 
-	//retryPolicy := backoff.NewExponentialBackOff()
+	// retryPolicy := backoff.NewExponentialBackOff()
 
-	//for {
+	// for {
 	ctx, _ := context.WithTimeout(context.Background(), global.DB_INVOKE_TIMEOUT*time.Second)
-	//defer cancelFunc()
+	// defer cancelFunc()
 	item, err := s.Daprc.GetStateWithConsistency(ctx, string(service.RedisGlobal), key, nil, dapr.StateConsistencyStrong)
 	if err != nil {
 		logger.Errorf("DBNext GetStateWithConsistency err: %v, %v, %+v", err, key, item)
 		return err
-		//waitTime := retryPolicy.NextBackOff()
-		//time.Sleep(waitTime)
-		//continue
+		// waitTime := retryPolicy.NextBackOff()
+		// time.Sleep(waitTime)
+		// continue
 	}
 
-	//etag = item.Etag
+	// etag = item.Etag
 	opt := &dapr.StateOperation{
 		Type: dapr.StateOperationTypeUpsert,
 		Item: &dapr.SetStateItem{
@@ -166,8 +166,8 @@ func (s *Server) doSaveUserSession(session *cmd.UserSession) error {
 	if err != nil {
 		return err
 	}
-	//break
-	//}
+	// break
+	// }
 
 	return nil
 }

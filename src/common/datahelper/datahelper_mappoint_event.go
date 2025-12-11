@@ -1,9 +1,9 @@
 package datahelper
 
-//// GetMappointEventFrozen 获取地图固定事件
-//func GetMappointEventFrozen(niwaId int32, mapEvents []*cmd.MappointEvent) ([]*cmd.MappointEvent, []*cmd.MappointEventGroupInfo) {
+// // GetMappointEventFrozen 获取地图固定事件
+// func GetMappointEventFrozen(niwaId int32, mapEvents []*pb.MappointEvent) ([]*pb.MappointEvent, []*pb.MappointEventGroupInfo) {
 //	var (
-//		events = make([]*cmd.MappointEvent, 0)
+//		events = make([]*pb.MappointEvent, 0)
 //	)
 //
 //	data.GetDungeonentranceMgr().Foreach(func(cfg *data.DungeonentranceCfg) bool {
@@ -24,7 +24,7 @@ package datahelper
 //			return false
 //		}
 //
-//		eventData := &cmd.MappointEvent{
+//		eventData := &pb.MappointEvent{
 //			EventId: cfg.Id,
 //			PosIdx:  cfg.BornHierarchy,
 //		}
@@ -37,4 +37,4 @@ package datahelper
 //	logger.Infof("地图%d, 固定事件:%v", niwaId, events)
 //
 //	return events, GetEventGroupList(events)
-//}
+// }

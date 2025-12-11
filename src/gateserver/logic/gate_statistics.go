@@ -7,7 +7,7 @@ import (
 
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common"
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/conf"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
 )
 
@@ -63,7 +63,7 @@ func (s *GateServer) printMsgStatistics() {
 				down += statistics.Counter
 				downSize += statistics.ByteSize
 			}
-			logger.Debugf("消息id：%-6d, 消息名: %-40s 处理次数: %-10d 数据大小: %-10d 上行: %v", msgId, cmd.Protocols_name[msgId], statistics.Counter, statistics.ByteSize, statistics.Up)
+			logger.Debugf("消息id：%-6d, 消息名: %-40s 处理次数: %-10d 数据大小: %-10d 上行: %v", msgId, pb.Protocols_name[msgId], statistics.Counter, statistics.ByteSize, statistics.Up)
 			return true
 		})
 

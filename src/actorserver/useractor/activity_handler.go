@@ -22,7 +22,7 @@ import (
 	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
 
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/db"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/service"
 	"google.golang.org/protobuf/proto"
 )
@@ -36,9 +36,9 @@ func NewActivityHandler(actor *UserActor) *ActivityHandler {
 	h.ChildHandler = h
 
 	// 协议注册
-	h.actor.RegisterProtoHandler(int32(cmd.Protocols_PC2LS_ActivityListReq), h.ActivityListReq)
-	h.actor.RegisterProtoHandler(int32(cmd.Protocols_PC2LS_FetchActivityRewardReq), h.FetchActivityRewardReq)
-	h.actor.RegisterProtoHandler(int32(cmd.Protocols_PC2LS_OneKeyActivityRewardReq), h.OneKeyActivityRewardReq)
+	h.actor.RegisterProtoHandler(int32(pb.Protocols_PC2LS_ActivityListReq), h.ActivityListReq)
+	h.actor.RegisterProtoHandler(int32(pb.Protocols_PC2LS_FetchActivityRewardReq), h.FetchActivityRewardReq)
+	h.actor.RegisterProtoHandler(int32(pb.Protocols_PC2LS_OneKeyActivityRewardReq), h.OneKeyActivityRewardReq)
 
 	return h
 }
@@ -46,9 +46,9 @@ func NewActivityHandler(actor *UserActor) *ActivityHandler {
 // Init 初始化模块数据
 func (h *ActivityHandler) Init() error {
 	// 初始化
-	h.actor.Data.ActivityData = &cmd.PServerUserActivity{
+	h.actor.Data.ActivityData = &pb.PServerUserActivity{
 		CreateTime:    time.Now().Unix(),
-		ActivityDatas: make(map[int32]*cmd.ActivityData, 0),
+		ActivityDatas: make(map[int32]*pb.ActivityData, 0),
 	}
 
 	if err := h.SaveDB(); err != nil {
@@ -70,14 +70,14 @@ func (h *ActivityHandler) DailyRefresh() error {
 	// 尝试更新活动
 	h.tryUpdateActivityList()
 
-	//七日签到, 每天上线自动签到
+	// 七日签到, 每天上线自动签到
 	_ = h.doSignin()
 
 	return nil
 }
 
 func (h *ActivityHandler) SetDBData(dbData proto.Message) error {
-	if dbVal, ok := dbData.(*cmd.PServerUserActivity); ok {
+	if dbVal, ok := dbData.(*pb.PServerUserActivity); ok {
 		h.actor.Data.ActivityData = dbVal
 	} else {
 		return fmt.Errorf("SetDBData, 数据类型错误! %v", dbData)
@@ -99,31 +99,31 @@ func (h *ActivityHandler) handleTaskType(e event.IEvent) error {
 	activityData := h.actor.Data.ActivityData
 	for _, t := range e.Type() {
 		for _, each := range activityData.ActivityDatas {
-			//if each.ActivityState != cmd.ActivityState_AS_under_way {
+			// if each.ActivityState != pb.ActivityState_AS_under_way {
 			//	// 活动不在进行中
 			//	continue
-			//}
+			// }
 			if !canActivityDo(each) {
 				// 活动不在进行中
 				h.Debugf("ActivityHandler.handleTaskType 活动不在进行中, activityId=%d", each.ActivityId)
 				continue
 			}
 
-			//changedActivityData := &cmd.ActivityData{
+			// changedActivityData := &pb.ActivityData{
 			//	ActivityId: each.ActivityId,
-			//	Items:      make([]*cmd.ActivityItem, 0),
-			//}
+			//	Items:      make([]*pb.ActivityItem, 0),
+			// }
 			hadChange := false
 
 			for _, item := range each.Items {
-				//if nowSec < item.BeginTime {
+				// if nowSec < item.BeginTime {
 				//	// 当前活动页未开始
 				//	h.Debugf("ActivityHandler.handleTaskType 活动不在进行中, DayIndex=%d", item.DayIndex)
 				//	continue
-				//}
+				// }
 
-				activityItem := &cmd.ActivityItem{
-					TaskInfos: make([]*cmd.TaskInfoItem, 0),
+				activityItem := &pb.ActivityItem{
+					TaskInfos: make([]*pb.TaskInfoItem, 0),
 				}
 
 				for _, taskInfo := range item.TaskInfos {
@@ -166,7 +166,7 @@ func (h *ActivityHandler) tryUpdateActivityList() {
 	newestActivityDatas := h.getNewestActivityDatas()
 
 	if h.actor.Data.ActivityData.ActivityDatas == nil {
-		h.actor.Data.ActivityData.ActivityDatas = make(map[int32]*cmd.ActivityData, 0)
+		h.actor.Data.ActivityData.ActivityDatas = make(map[int32]*pb.ActivityData, 0)
 	}
 
 	for _, each := range newestActivityDatas {
@@ -175,7 +175,7 @@ func (h *ActivityHandler) tryUpdateActivityList() {
 		// 下发客户端数据
 		h.actor.comData.AddActivityData(each)
 
-		if cmd.ActivityExcelType(each.ActivityType) == cmd.ActivityExcelType_AE_TYPE_signin {
+		if pb.ActivityExcelType(each.ActivityType) == pb.ActivityExcelType_AE_TYPE_signin {
 			// 刚领取到签到活动，先执行下签到逻辑
 			_ = h.doSignin()
 		}
@@ -188,7 +188,7 @@ func (h *ActivityHandler) tryUpdateActivityList() {
 }
 
 // 活动是否可见
-func canActivityShow(activityData *cmd.ActivityData) bool {
+func canActivityShow(activityData *pb.ActivityData) bool {
 	if activityData == nil {
 		return false
 	}
@@ -208,7 +208,7 @@ func canActivityShow(activityData *cmd.ActivityData) bool {
 }
 
 // 活动是否可执行
-func canActivityDo(activityData *cmd.ActivityData) bool {
+func canActivityDo(activityData *pb.ActivityData) bool {
 	if activityData == nil {
 		return false
 	}
@@ -228,14 +228,14 @@ func canActivityDo(activityData *cmd.ActivityData) bool {
 	return b
 }
 
-func (h *ActivityHandler) formatActivity2Client() *cmd.PClientActivity {
+func (h *ActivityHandler) formatActivity2Client() *pb.PClientActivity {
 	// 尝试更新活动
 	h.tryUpdateActivityList()
 
 	activityData := h.actor.Data.ActivityData
 
-	clientActivityData := &cmd.PClientActivity{
-		ActivityDatas: make([]*cmd.ActivityData, 0),
+	clientActivityData := &pb.PClientActivity{
+		ActivityDatas: make([]*pb.ActivityData, 0),
 	}
 
 	for _, each := range activityData.ActivityDatas {
@@ -251,30 +251,30 @@ func (h *ActivityHandler) formatActivity2Client() *cmd.PClientActivity {
 
 // ActivityListReq 获取互动列表
 func (h *ActivityHandler) ActivityListReq(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
-	var req cmd.C2LS_ActivityListReq
+	var req pb.C2LS_ActivityListReq
 	err := in.UnmarshalData(&req)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_SerializeError)
+		return nil, err, int32(pb.ErrorCode_SerializeError)
 	}
 
 	// 尝试更新活动
 	h.tryUpdateActivityList()
 
-	res := &cmd.LS2C_ActivityListRes{
+	res := &pb.LS2C_ActivityListRes{
 		CommonData: h.actor.comData.FixDownComData(),
 	}
 
 	h.Debugf("获取活动数据:%v", res)
 
-	return res, nil, int32(cmd.ErrorCode_Success)
+	return res, nil, int32(pb.ErrorCode_Success)
 }
 
 // FetchActivityRewardReq 获取活动奖励
 func (h *ActivityHandler) FetchActivityRewardReq(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
-	var req cmd.C2LS_FetchActivityRewardReq
+	var req pb.C2LS_FetchActivityRewardReq
 	err := in.UnmarshalData(&req)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_SerializeError)
+		return nil, err, int32(pb.ErrorCode_SerializeError)
 	}
 
 	err, errCode, dropChange := h.fetchActivityRewards(req.ActivityId, req.DayIndex, req.ElementId)
@@ -284,22 +284,22 @@ func (h *ActivityHandler) FetchActivityRewardReq(ctx context.Context, in *base.P
 
 	err = h.SaveDB()
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
-	res := &cmd.LS2C_FetchActivityRewardRes{
+	res := &pb.LS2C_FetchActivityRewardRes{
 		DropChange: dropChange,
 		CommonData: h.actor.comData.FixDownComData(),
 	}
 
-	return res, nil, int32(cmd.ErrorCode_Success)
+	return res, nil, int32(pb.ErrorCode_Success)
 }
 
 func (h *ActivityHandler) OneKeyActivityRewardReq(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
-	var req cmd.C2LS_OneKeyActivityRewardReq
+	var req pb.C2LS_OneKeyActivityRewardReq
 	err := in.UnmarshalData(&req)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_SerializeError)
+		return nil, err, int32(pb.ErrorCode_SerializeError)
 	}
 
 	err, errCode, dropChange := h.oneKeyActivityRewards(req.ActivityId)
@@ -309,25 +309,25 @@ func (h *ActivityHandler) OneKeyActivityRewardReq(ctx context.Context, in *base.
 
 	err = h.SaveDB()
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
-	res := &cmd.LS2C_OneKeyActivityRewardRes{
+	res := &pb.LS2C_OneKeyActivityRewardRes{
 		DropChange: dropChange,
 		CommonData: h.actor.comData.FixDownComData(),
 	}
 
-	return res, nil, int32(cmd.ErrorCode_Success)
+	return res, nil, int32(pb.ErrorCode_Success)
 }
 
 // getNewestActivityDatas 获取新的活动数据
-func (h *ActivityHandler) getNewestActivityDatas() []*cmd.ActivityData {
+func (h *ActivityHandler) getNewestActivityDatas() []*pb.ActivityData {
 	var (
 		err                                             error
 		beginShowTime, beginTime, endTime, ShowLastTime time.Time
 		nowSec                                          = time.Now()
 
-		newestActivityDatas = make([]*cmd.ActivityData, 0)
+		newestActivityDatas = make([]*pb.ActivityData, 0)
 	)
 
 	hadActivityData := h.actor.Data.ActivityData.ActivityDatas
@@ -350,26 +350,26 @@ func (h *ActivityHandler) getNewestActivityDatas() []*cmd.ActivityData {
 		}
 
 		// 活动时间
-		if cmd.ActivityExcelTimeType(cfg.Timetype) == cmd.ActivityExcelTimeType_AE_TIME_TYPE_newbie { // 没有过期时间
-			//totalDays, err := strconv.Atoi(cfg.Value1)
-			//if err != nil {
+		if pb.ActivityExcelTimeType(cfg.Timetype) == pb.ActivityExcelTimeType_AE_TIME_TYPE_newbie { // 没有过期时间
+			// totalDays, err := strconv.Atoi(cfg.Value1)
+			// if err != nil {
 			//	err = errors.Wrap(err, fmt.Sprintf("解析配置表失败, activityId=%d, value1=%s", cfg.Id, cfg.Value1))
 			//	h.Debugf(err.Error())
 			//	return true
-			//}
+			// }
 
 			todayRefreshTime := common.GetTodayRefreshTime(nowSec)
 
 			beginShowTime = todayRefreshTime
 			beginTime = todayRefreshTime
 
-			//_endTimeSec := common.GetNextNDailyRefreshTime(int32(totalDays))
-			//endTime = time.Unix(_endTimeSec, 0)
-			//ShowLastTime = time.Unix(_endTimeSec, 0)
+			// _endTimeSec := common.GetNextNDailyRefreshTime(int32(totalDays))
+			// endTime = time.Unix(_endTimeSec, 0)
+			// ShowLastTime = time.Unix(_endTimeSec, 0)
 			endTime = time.Date(2999, 1, 1, 0, 0, 0, 0, time.Local) // 固定给个很长的过期时间
 			ShowLastTime = endTime
 
-		} else if cmd.ActivityExcelTimeType(cfg.Timetype) == cmd.ActivityExcelTimeType_AE_TIME_TYPE_background {
+		} else if pb.ActivityExcelTimeType(cfg.Timetype) == pb.ActivityExcelTimeType_AE_TIME_TYPE_background {
 			beginShowTime, beginTime, endTime, ShowLastTime, err = datahelper.GetActivityCfgTime(cfg.Id)
 			if err != nil {
 				h.Debugf(err.Error())
@@ -377,10 +377,10 @@ func (h *ActivityHandler) getNewestActivityDatas() []*cmd.ActivityData {
 			}
 		}
 
-		activityData := &cmd.ActivityData{
+		activityData := &pb.ActivityData{
 			ActivityId:   cfg.Id,
 			ActivityType: cfg.Type,
-			//ActivityState: cmd.ActivityState_AS_under_way,
+			// ActivityState: pb.ActivityState_AS_under_way,
 			BeginTime:     beginTime.Unix(),
 			EndTime:       endTime.Unix(),
 			BeginShowTime: beginShowTime.Unix(),
@@ -388,13 +388,13 @@ func (h *ActivityHandler) getNewestActivityDatas() []*cmd.ActivityData {
 			Items:         nil,
 		}
 
-		if cmd.ActivityExcelType(cfg.Type) == cmd.ActivityExcelType_AE_TYPE_task {
+		if pb.ActivityExcelType(cfg.Type) == pb.ActivityExcelType_AE_TYPE_task {
 			// 寻找活动任务
 			_activityItems := h.getActivityTaskItems(cfg.Id)
 			activityData.Items = _activityItems
 
 			newestActivityDatas = append(newestActivityDatas, activityData)
-		} else if cmd.ActivityExcelType(cfg.Type) == cmd.ActivityExcelType_AE_TYPE_signin {
+		} else if pb.ActivityExcelType(cfg.Type) == pb.ActivityExcelType_AE_TYPE_signin {
 			// 签到活动
 			_activitySignInfo := h.getActivitySigninItems(cfg.Id, beginTime, endTime)
 			activityData.Sign = _activitySignInfo
@@ -410,9 +410,9 @@ func (h *ActivityHandler) getNewestActivityDatas() []*cmd.ActivityData {
 	return newestActivityDatas
 }
 
-func (h *ActivityHandler) getActivityTaskItems(activityId int32) []*cmd.ActivityItem {
+func (h *ActivityHandler) getActivityTaskItems(activityId int32) []*pb.ActivityItem {
 	var (
-		activityItems = make([]*cmd.ActivityItem, 0)
+		activityItems = make([]*pb.ActivityItem, 0)
 	)
 
 	data.GetActivityTaskMgr().Foreach(func(cfg *data.ActivityTaskCfg) bool {
@@ -420,7 +420,7 @@ func (h *ActivityHandler) getActivityTaskItems(activityId int32) []*cmd.Activity
 			// 开始时间
 			diffDay := utils.Max(cfg.Days-1, 0) // 天数
 			openTime := common.GetNextNDailyRefreshTime(diffDay)
-			activityItem := &cmd.ActivityItem{
+			activityItem := &pb.ActivityItem{
 				BeginTime: openTime,
 				DayIndex:  cfg.Days,
 			}
@@ -449,22 +449,22 @@ func (h *ActivityHandler) getActivityTaskItems(activityId int32) []*cmd.Activity
 	return activityItems
 }
 
-func (h *ActivityHandler) getActivitySigninItems(activityId int32, beginTime time.Time, endTime time.Time) *cmd.PActivitySignInfo {
-	//var (
-	//	activityItems = make([]*cmd.ActivityItem, 0)
-	//)
+func (h *ActivityHandler) getActivitySigninItems(activityId int32, beginTime time.Time, endTime time.Time) *pb.PActivitySignInfo {
+	// var (
+	//	activityItems = make([]*pb.ActivityItem, 0)
+	// )
 
-	//data.GetActivitySigninMgr().Foreach(func(cfg *data.ActivitySigninCfg) bool {
+	// data.GetActivitySigninMgr().Foreach(func(cfg *data.ActivitySigninCfg) bool {
 	//	if cfg.ActivityId == activityId {
 	//		// 开始时间
 	//		diffDay := utils.Max(cfg.Days-1, 0) // 天数
 	//		openTime := common.GetNextNDailyRefreshTime(diffDay)
-	//		activityItem := &cmd.ActivityItem{
+	//		activityItem := &pb.ActivityItem{
 	//			BeginTime: openTime,
 	//			DayIndex:  cfg.Days,
 	//		}
 	//
-	//		signinInfo := &cmd.PActivitySignInfo{
+	//		signinInfo := &pb.PActivitySignInfo{
 	//			NextSign:         common.GetTodayRefreshTime(time.Now()).Unix(),
 	//			Signed:           0,
 	//			HadRewardDayIdxs: make([]int32, 0),
@@ -478,8 +478,8 @@ func (h *ActivityHandler) getActivitySigninItems(activityId int32, beginTime tim
 	//	}
 	//
 	//	return true
-	//}, true)
-	signinInfo := &cmd.PActivitySignInfo{
+	// }, true)
+	signinInfo := &pb.PActivitySignInfo{
 		NextSign:         common.GetTodayRefreshTime(time.Now()).Unix(),
 		Signed:           0,
 		HadRewardDayIdxs: make([]int32, 0),
@@ -488,9 +488,9 @@ func (h *ActivityHandler) getActivitySigninItems(activityId int32, beginTime tim
 	return signinInfo
 }
 
-func (h *ActivityHandler) fetchActivityRewards(activityId int32, dayIndex int32, elementId int32) (error, cmd.ErrorCode, *cmd.DropChange) {
+func (h *ActivityHandler) fetchActivityRewards(activityId int32, dayIndex int32, elementId int32) (error, pb.ErrorCode, *pb.DropChange) {
 	var (
-		dropChange = &cmd.DropChange{}
+		dropChange = &pb.DropChange{}
 		nowSec     = time.Now().Unix()
 	)
 
@@ -500,22 +500,22 @@ func (h *ActivityHandler) fetchActivityRewards(activityId int32, dayIndex int32,
 	if !ok {
 		err := errors.New(fmt.Sprintf("不存在的活动数据, activityId=%d", activityId))
 		h.Errorf(err.Error())
-		return err, cmd.ErrorCode_ParamError, nil
+		return err, pb.ErrorCode_ParamError, nil
 	}
 
 	if activityData.BeginTime > nowSec || activityData.EndShowTime < nowSec {
-		return errors.New(fmt.Sprintf("活动未开始或已经结束了, activityId=%d", activityId)), cmd.ErrorCode_Activity_is_not_open, nil
+		return errors.New(fmt.Sprintf("活动未开始或已经结束了, activityId=%d", activityId)), pb.ErrorCode_Activity_is_not_open, nil
 	}
 
-	switch cmd.ActivityExcelType(activityCfg.Type) {
-	case cmd.ActivityExcelType_AE_TYPE_task:
+	switch pb.ActivityExcelType(activityCfg.Type) {
+	case pb.ActivityExcelType_AE_TYPE_task:
 		err, errCode, _dropChange := h.fetchActivityTaskRewards(activityId, dayIndex, elementId)
 		if err != nil {
 			return err, errCode, nil
 		}
 		mergeDropChange(dropChange, _dropChange, true)
 
-	case cmd.ActivityExcelType_AE_TYPE_signin:
+	case pb.ActivityExcelType_AE_TYPE_signin:
 		err, errCode, _dropChange := h.fetchActivitySigninRewards(activityId, dayIndex)
 		if err != nil {
 			return err, errCode, nil
@@ -532,10 +532,10 @@ func (h *ActivityHandler) fetchActivityRewards(activityId int32, dayIndex int32,
 
 	h.actor.comData.AddActivityData(h.actor.Data.ActivityData.ActivityDatas[activityId])
 
-	return nil, cmd.ErrorCode_Success, dropChange
+	return nil, pb.ErrorCode_Success, dropChange
 }
 
-func (h *ActivityHandler) fetchActivityTaskRewards(activityId int32, dayIndex int32, elementId int32) (error, cmd.ErrorCode, *cmd.DropChange) {
+func (h *ActivityHandler) fetchActivityTaskRewards(activityId int32, dayIndex int32, elementId int32) (error, pb.ErrorCode, *pb.DropChange) {
 	var (
 		nowSec = time.Now().Unix()
 	)
@@ -544,7 +544,7 @@ func (h *ActivityHandler) fetchActivityTaskRewards(activityId int32, dayIndex in
 	if !ok {
 		err := errors.New(fmt.Sprintf("不存在的活动数据, activityId=%d", activityId))
 		h.Errorf(err.Error())
-		return nil, cmd.ErrorCode_ParamError, nil
+		return nil, pb.ErrorCode_ParamError, nil
 	}
 
 	if err, errCode := activityIsOpen(activityId); err != nil {
@@ -556,12 +556,12 @@ func (h *ActivityHandler) fetchActivityTaskRewards(activityId int32, dayIndex in
 			if item.BeginTime > nowSec {
 				// 活动页开始时间还未到
 				h.Debugf("活动页时间还未到, activityId=%d, item.DayIdx=%d, item.BeginTime=%d, nowSec=%d", activityId, item.DayIndex, item.BeginTime, nowSec)
-				return nil, cmd.ErrorCode_Activity_is_not_open, nil
+				return nil, pb.ErrorCode_Activity_is_not_open, nil
 			}
 		}
 	}
 
-	var taskInfoItem *cmd.TaskInfoItem
+	var taskInfoItem *pb.TaskInfoItem
 
 LabelA:
 	for _, item := range activityData.Items {
@@ -571,12 +571,12 @@ LabelA:
 				if taskInfo.Id == elementId {
 					if taskInfo.Status == TASK_STATUS_RECEIVED {
 						h.Debugf("奖励已经领取了, activityId=%d, dayIndex=%d, elementId=%d", activityId, dayIndex, elementId)
-						return nil, cmd.ErrorCode_TaskStatusRewardReceived, nil
+						return nil, pb.ErrorCode_TaskStatusRewardReceived, nil
 					}
 
 					if taskInfo.Status != TASK_STATUS_COMPLETE {
 						h.Debugf("任务尚未完成, activityId=%d, dayIndex=%d, elementId=%d", activityId, dayIndex, elementId)
-						return nil, cmd.ErrorCode_TaskStatusNotComplete, nil
+						return nil, pb.ErrorCode_TaskStatusNotComplete, nil
 					}
 
 					taskInfoItem = taskInfo
@@ -586,11 +586,11 @@ LabelA:
 		}
 	}
 	if taskInfoItem == nil {
-		return fmt.Errorf("任务未完成, %d", elementId), cmd.ErrorCode_TaskStatusNotComplete, nil
+		return fmt.Errorf("任务未完成, %d", elementId), pb.ErrorCode_TaskStatusNotComplete, nil
 	}
 	taskCfg := data.GetTaskMgr().GetById(taskInfoItem.Id)
 	if taskCfg == nil {
-		return fmt.Errorf("taskCfg is nil, %d", taskInfoItem.Id), cmd.ErrorCode_NotFoundConfig, nil
+		return fmt.Errorf("taskCfg is nil, %d", taskInfoItem.Id), pb.ErrorCode_NotFoundConfig, nil
 	}
 	// 任务状态
 	taskInfoItem.Status = TASK_STATUS_RECEIVED
@@ -598,20 +598,20 @@ LabelA:
 	reward := datahelper.ConvertItem3(taskCfg.Reward)
 	dropChange, err := GetDropMgr(h.actor).DropList2(reward, true, nil, h.actor.comData, common.CR_FINISH_ACTIVITY)
 	if err != nil {
-		return err, cmd.ErrorCode_InternalError, nil
+		return err, pb.ErrorCode_InternalError, nil
 	}
 
 	err = h.SaveDB()
 	if err != nil {
-		return err, cmd.ErrorCode_SaveDBError, nil
+		return err, pb.ErrorCode_SaveDBError, nil
 	}
 
-	return nil, cmd.ErrorCode_Success, dropChange
+	return nil, pb.ErrorCode_Success, dropChange
 }
 
-func (h *ActivityHandler) oneKeyActivityRewards(activityId int32) (error, cmd.ErrorCode, *cmd.DropChange) {
+func (h *ActivityHandler) oneKeyActivityRewards(activityId int32) (error, pb.ErrorCode, *pb.DropChange) {
 	var (
-		dropChange = &cmd.DropChange{}
+		dropChange = &pb.DropChange{}
 	)
 
 	for _, activityData := range h.actor.Data.ActivityData.ActivityDatas {
@@ -627,19 +627,19 @@ func (h *ActivityHandler) oneKeyActivityRewards(activityId int32) (error, cmd.Er
 		}
 	}
 
-	return nil, cmd.ErrorCode_Success, dropChange
+	return nil, pb.ErrorCode_Success, dropChange
 }
 
 // 互动全部完成下发互动表的奖励
-func (h *ActivityHandler) wholeActivityFinishRewards(activityId int32) *cmd.DropChange {
+func (h *ActivityHandler) wholeActivityFinishRewards(activityId int32) *pb.DropChange {
 	activityData, ok := h.actor.Data.ActivityData.ActivityDatas[activityId]
 	if !ok {
 		h.Debugf("wholeActivityFinishRewards 未找到活动数据")
 		return nil
 	}
 
-	switch cmd.ActivityExcelType(activityData.ActivityType) {
-	case cmd.ActivityExcelType_AE_TYPE_task:
+	switch pb.ActivityExcelType(activityData.ActivityType) {
+	case pb.ActivityExcelType_AE_TYPE_task:
 		for _, activityItem := range activityData.Items {
 			for _, taskInfoItem := range activityItem.TaskInfos {
 				if taskInfoItem.Status != TASK_STATUS_RECEIVED {
@@ -649,7 +649,7 @@ func (h *ActivityHandler) wholeActivityFinishRewards(activityId int32) *cmd.Drop
 				}
 			}
 		}
-	case cmd.ActivityExcelType_AE_TYPE_signin:
+	case pb.ActivityExcelType_AE_TYPE_signin:
 		activityCfg := data.GetActivityMgr().GetById(activityId)
 		totalDays, err := strconv.Atoi(activityCfg.Value1)
 		if err != nil {
@@ -682,7 +682,7 @@ func (h *ActivityHandler) doSignin() error {
 	nowSec := time.Now().Unix()
 
 	for _, activityData := range h.actor.Data.ActivityData.ActivityDatas {
-		if cmd.ActivityExcelType(activityData.ActivityType) == cmd.ActivityExcelType_AE_TYPE_signin {
+		if pb.ActivityExcelType(activityData.ActivityType) == pb.ActivityExcelType_AE_TYPE_signin {
 			if activityData.Sign.NextSign > nowSec {
 				h.Debugf("当前签到时间还未到, activityData.Sign:%v", activityData.Sign)
 				continue
@@ -716,23 +716,23 @@ func (h *ActivityHandler) doSignin() error {
 }
 
 // fetchActivitySigninRewards 签到领取奖励
-func (h *ActivityHandler) fetchActivitySigninRewards(activityId int32, dayIndex int32) (error, cmd.ErrorCode, *cmd.DropChange) {
+func (h *ActivityHandler) fetchActivitySigninRewards(activityId int32, dayIndex int32) (error, pb.ErrorCode, *pb.DropChange) {
 	activityData, ok := h.actor.Data.ActivityData.ActivityDatas[activityId]
 	if !ok {
-		return errors.New(fmt.Sprintf("未找到活动数据, activityId=%d", activityId)), cmd.ErrorCode_ParamError, nil
+		return errors.New(fmt.Sprintf("未找到活动数据, activityId=%d", activityId)), pb.ErrorCode_ParamError, nil
 	}
 
-	if cmd.ActivityExcelType(activityData.ActivityType) != cmd.ActivityExcelType_AE_TYPE_signin {
-		return errors.New(fmt.Sprintf("不是签到活动, activityId=%d", activityId)), cmd.ErrorCode_ParamError, nil
+	if pb.ActivityExcelType(activityData.ActivityType) != pb.ActivityExcelType_AE_TYPE_signin {
+		return errors.New(fmt.Sprintf("不是签到活动, activityId=%d", activityId)), pb.ErrorCode_ParamError, nil
 	}
 
 	if activityData.Sign == nil {
-		return errors.New(fmt.Sprintf("签到数据为空, activityId=%d", activityId)), cmd.ErrorCode_ParamError, nil
+		return errors.New(fmt.Sprintf("签到数据为空, activityId=%d", activityId)), pb.ErrorCode_ParamError, nil
 	}
 
 	if activityData.Sign.Signed < dayIndex {
 		return errors.New(fmt.Sprintf("签到天数不足, activityId=%d, dayIndex=%d, signInfo:%v", activityId, dayIndex, activityData.Sign)),
-			cmd.ErrorCode_Activity_signin_count_not_enough, nil
+			pb.ErrorCode_Activity_signin_count_not_enough, nil
 	}
 
 	hadFound := false
@@ -743,7 +743,7 @@ func (h *ActivityHandler) fetchActivitySigninRewards(activityId int32, dayIndex 
 	}
 	if hadFound {
 		return errors.New(fmt.Sprintf("已经领取过奖励了, activityId=%d, dayIndex=%d, signInfo:%v", activityId, dayIndex, activityData.Sign)),
-			cmd.ErrorCode_Activity_had_got_reward, nil
+			pb.ErrorCode_Activity_had_got_reward, nil
 	}
 
 	// 记录已经领奖的标识
@@ -753,19 +753,19 @@ func (h *ActivityHandler) fetchActivitySigninRewards(activityId int32, dayIndex 
 	singinRewards := datahelper.GetActivitySinginRewards(activityId, dayIndex)
 	dropChange, err := GetDropMgr(h.actor).DropListByItems(singinRewards, true, nil, h.actor.comData, common.CR_FINISH_ACTIVITY)
 	if err != nil {
-		return err, cmd.ErrorCode_InternalError, nil
+		return err, pb.ErrorCode_InternalError, nil
 	}
 
-	return nil, cmd.ErrorCode_Success, dropChange
+	return nil, pb.ErrorCode_Success, dropChange
 }
 
 // 活动是否开启
-func activityIsOpen(activityId int32) (error, cmd.ErrorCode) {
+func activityIsOpen(activityId int32) (error, pb.ErrorCode) {
 	activityCfg := data.GetActivityMgr().GetById(activityId)
 
 	if activityCfg.IsOpen != 1 {
-		return errors.New(fmt.Sprintf("活动未开启, activiyId=%d", activityId)), cmd.ErrorCode_Activity_is_not_open
+		return errors.New(fmt.Sprintf("活动未开启, activiyId=%d", activityId)), pb.ErrorCode_Activity_is_not_open
 	}
 
-	return nil, cmd.ErrorCode_Success
+	return nil, pb.ErrorCode_Success
 }

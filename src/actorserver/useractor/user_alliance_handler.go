@@ -17,7 +17,7 @@ import (
 
 	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/service"
 	"google.golang.org/protobuf/proto"
@@ -31,16 +31,16 @@ func NewUserUserAllianceHandler(actor *UserActor) *UserAllianceHandler {
 	h := &UserAllianceHandler{UABaseHandler: NewUABaseHandler(actor, "UserAllianceHandler")}
 	h.ChildHandler = h
 
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PC2LS_GetAllianceInfoReq), h.GetAllianceInfoReq)
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PC2LS_CreateAllianceReq), h.CreateAllianceReq)
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PC2LS_GetAllianceRecommendReq), h.GetAllianceRecommendReq)
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PC2LS_SearchAllianceReq), h.SearchAllianceReq)
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PC2LS_JoinAllianceReq), h.JoinAllianceReq)
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PC2LS_AllianceApplyHandleReq), h.AllianceApplyHandleReq)
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PC2LS_ExitAllianceReq), h.ExitAllianceReq)
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PC2LS_ChangeAllianceInfoReq), h.ChangeAllianceInfoReq)
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PC2LS_ChangeMemberPositionReq), h.ChangeMemberPositionReq)
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PC2LS_GetAllianceLogReq), h.GetAllianceLogReq)
+	actor.RegisterProtoHandler(int32(pb.Protocols_PC2LS_GetAllianceInfoReq), h.GetAllianceInfoReq)
+	actor.RegisterProtoHandler(int32(pb.Protocols_PC2LS_CreateAllianceReq), h.CreateAllianceReq)
+	actor.RegisterProtoHandler(int32(pb.Protocols_PC2LS_GetAllianceRecommendReq), h.GetAllianceRecommendReq)
+	actor.RegisterProtoHandler(int32(pb.Protocols_PC2LS_SearchAllianceReq), h.SearchAllianceReq)
+	actor.RegisterProtoHandler(int32(pb.Protocols_PC2LS_JoinAllianceReq), h.JoinAllianceReq)
+	actor.RegisterProtoHandler(int32(pb.Protocols_PC2LS_AllianceApplyHandleReq), h.AllianceApplyHandleReq)
+	actor.RegisterProtoHandler(int32(pb.Protocols_PC2LS_ExitAllianceReq), h.ExitAllianceReq)
+	actor.RegisterProtoHandler(int32(pb.Protocols_PC2LS_ChangeAllianceInfoReq), h.ChangeAllianceInfoReq)
+	actor.RegisterProtoHandler(int32(pb.Protocols_PC2LS_ChangeMemberPositionReq), h.ChangeMemberPositionReq)
+	actor.RegisterProtoHandler(int32(pb.Protocols_PC2LS_GetAllianceLogReq), h.GetAllianceLogReq)
 
 	return h
 }
@@ -48,7 +48,7 @@ func NewUserUserAllianceHandler(actor *UserActor) *UserAllianceHandler {
 // Init 初始化模块数据
 func (h *UserAllianceHandler) Init() error {
 	// 初始化
-	h.actor.Data.UserAlliance = &cmd.PUserAllianceData{
+	h.actor.Data.UserAlliance = &pb.PUserAllianceData{
 		Createtime: time.Now().Unix(),
 	}
 
@@ -70,7 +70,7 @@ func (h *UserAllianceHandler) DailyRefresh() error {
 }
 
 func (h *UserAllianceHandler) SetDBData(dbData proto.Message) error {
-	if dbVal, ok := dbData.(*cmd.PUserAllianceData); ok {
+	if dbVal, ok := dbData.(*pb.PUserAllianceData); ok {
 		h.actor.Data.UserAlliance = dbVal
 	} else {
 		return fmt.Errorf("SetDBData, 数据类型错误! %v", dbData)
@@ -171,13 +171,13 @@ func (h *UserAllianceHandler) handleAddContribution(typ int32, params []int32) e
 	}, true)
 
 	// 上报到联盟处理
-	reqMsg := &cmd.S2S_AddContributeReq{AddValue: add, AddType: typ}
-	err, _ := h.AllianceInvoke(h.getAllianceId(), int32(cmd.Protocols_PS2S_AddContributeReq), reqMsg, nil, "")
+	reqMsg := &pb.S2S_AddContributeReq{AddValue: add, AddType: typ}
+	err, _ := h.AllianceInvoke(h.getAllianceId(), int32(pb.Protocols_PS2S_AddContributeReq), reqMsg, nil, "")
 	h.Infof("handleAddContribution type:%d, add:%d", typ, add)
 	return err
 }
 
-func (h *UserAllianceHandler) buildAllianceData(flag bool) *cmd.PCommonAllianceInfo {
+func (h *UserAllianceHandler) buildAllianceData(flag bool) *pb.PCommonAllianceInfo {
 	data := h.actor.GetUserAllianceData()
 
 	if flag {
@@ -190,7 +190,7 @@ func (h *UserAllianceHandler) buildAllianceData(flag bool) *cmd.PCommonAllianceI
 	userAllianceInfo := h.buildUserAllianceInfo(nil)
 	// 没联盟，给个人数据
 	if data.AllianceId == 0 {
-		return &cmd.PCommonAllianceInfo{User: userAllianceInfo}
+		return &pb.PCommonAllianceInfo{User: userAllianceInfo}
 	}
 
 	info, err := h.getAllianceInfo(data.AllianceId)
@@ -202,22 +202,22 @@ func (h *UserAllianceHandler) buildAllianceData(flag bool) *cmd.PCommonAllianceI
 	return info
 }
 
-func (h *UserAllianceHandler) getAllianceInfo(allianceId int64) (*cmd.PCommonAllianceInfo, error) {
-	reqMsg := &cmd.S2S_GetAllianceInfoReq{}
-	rspData := &cmd.S2S_GetAllianceInfoRes{}
-	err, _ := h.AllianceInvoke(allianceId, int32(cmd.Protocols_PS2S_GetAllianceInfoReq), reqMsg, rspData, "")
+func (h *UserAllianceHandler) getAllianceInfo(allianceId int64) (*pb.PCommonAllianceInfo, error) {
+	reqMsg := &pb.S2S_GetAllianceInfoReq{}
+	rspData := &pb.S2S_GetAllianceInfoRes{}
+	err, _ := h.AllianceInvoke(allianceId, int32(pb.Protocols_PS2S_GetAllianceInfoReq), reqMsg, rspData, "")
 	if err != nil {
 		return nil, err
 	}
 	return rspData.Info, nil
 }
 
-func (h *UserAllianceHandler) toAllianceBaseInfo(base *cmd.PServerAllianceBaseInfo) (*cmd.PCommonAllianceBaseInfo, error) {
+func (h *UserAllianceHandler) toAllianceBaseInfo(base *pb.PServerAllianceBaseInfo) (*pb.PCommonAllianceBaseInfo, error) {
 	info, err := h.actor.getRoleBaseDataByRoleId(base.LeaderId)
 	if err != nil {
 		return nil, err
 	}
-	return &cmd.PCommonAllianceBaseInfo{
+	return &pb.PCommonAllianceBaseInfo{
 		Id:             base.Id,
 		Name:           base.Name,
 		Profile:        base.Profile,
@@ -231,9 +231,9 @@ func (h *UserAllianceHandler) toAllianceBaseInfo(base *cmd.PServerAllianceBaseIn
 	}, nil
 }
 
-func (h *UserAllianceHandler) buildUserAllianceInfo(alliance *cmd.PCommonAllianceInfo) *cmd.PUserAllianceInfo {
+func (h *UserAllianceHandler) buildUserAllianceInfo(alliance *pb.PCommonAllianceInfo) *pb.PUserAllianceInfo {
 	data := h.actor.GetUserAllianceData()
-	user := &cmd.PUserAllianceInfo{
+	user := &pb.PUserAllianceInfo{
 		AllianceId:  data.AllianceId,
 		RecommendTs: data.RecommendTs,
 		AllianceTs:  data.AllianceTs,
@@ -250,22 +250,22 @@ func (h *UserAllianceHandler) GetAllianceRecommendReq(ctx context.Context, in *b
 	if err != nil {
 		return nil, err, int32(code)
 	}
-	var req cmd.C2LS_GetAllianceRecommendReq
+	var req pb.C2LS_GetAllianceRecommendReq
 	err = in.UnmarshalData(&req)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_DeSerializeError)
+		return nil, err, int32(pb.ErrorCode_DeSerializeError)
 	}
 
 	data := h.actor.GetUserAllianceData()
 	// 是否有联盟
 	if data.AllianceId > 0 {
-		return nil, fmt.Errorf("illegal operation"), int32(cmd.ErrorCode_IllegalOperationError)
+		return nil, fmt.Errorf("illegal operation"), int32(pb.ErrorCode_IllegalOperationError)
 	}
 
 	// cd判定
 	now := time.Now().Unix()
 	if now <= data.RecommendTs {
-		return nil, fmt.Errorf("operation cd"), int32(cmd.ErrorCode_Alliance_recommend_cd)
+		return nil, fmt.Errorf("operation cd"), int32(pb.ErrorCode_Alliance_recommend_cd)
 	}
 	if data.RecommendTs == 0 {
 		data.RecommendTs = 1 // 首次打开界面自动刷新一次
@@ -274,17 +274,17 @@ func (h *UserAllianceHandler) GetAllianceRecommendReq(ctx context.Context, in *b
 	}
 
 	if err = h.SaveDB(); err != nil {
-		return nil, err, int32(cmd.ErrorCode_SaveDBError)
+		return nil, err, int32(pb.ErrorCode_SaveDBError)
 	}
 
 	// 拉取列表
 	retList := h.getRecommendList()
-	return &cmd.LS2C_GetAllianceRecommendRes{List: retList, RecommendTs: data.RecommendTs}, nil, 0
+	return &pb.LS2C_GetAllianceRecommendRes{List: retList, RecommendTs: data.RecommendTs}, nil, 0
 }
 
-func (h *UserAllianceHandler) getRecommendList() []*cmd.PCommonAllianceBaseInfo {
+func (h *UserAllianceHandler) getRecommendList() []*pb.PCommonAllianceBaseInfo {
 	hitSize := int(excel.GetAllianceParmMgr().GetById(2).AllianceParm)
-	infos := make([]*cmd.PCommonAllianceBaseInfo, 0)
+	infos := make([]*pb.PCommonAllianceBaseInfo, 0)
 
 	err, hitData := h.actor.Srv.ESMultiSearch(common.ES_ALLIANCE_BASE_KEY, nil, nil, nil, hitSize, true)
 	if err != nil {
@@ -292,7 +292,7 @@ func (h *UserAllianceHandler) getRecommendList() []*cmd.PCommonAllianceBaseInfo 
 		return infos
 	}
 	for _, hit := range hitData.Hits {
-		temp := &cmd.PServerAllianceBaseInfo{}
+		temp := &pb.PServerAllianceBaseInfo{}
 		if err = json.Unmarshal(hit.Source_, temp); err != nil {
 			continue
 		}
@@ -310,18 +310,18 @@ func (h *UserAllianceHandler) SearchAllianceReq(ctx context.Context, in *base.Pr
 	if err != nil {
 		return nil, err, int32(code)
 	}
-	var req cmd.C2LS_SearchAllianceReq
+	var req pb.C2LS_SearchAllianceReq
 	err = in.UnmarshalData(&req)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_DeSerializeError)
+		return nil, err, int32(pb.ErrorCode_DeSerializeError)
 	}
 
 	baseInfo, err := h.getAllianceByName(req.Name)
 	if err != nil || baseInfo == nil {
-		return nil, err, int32(cmd.ErrorCode_Not_found_alliance)
+		return nil, err, int32(pb.ErrorCode_Not_found_alliance)
 	}
 
-	return &cmd.LS2C_SearchAllianceRes{Base: baseInfo}, nil, 0
+	return &pb.LS2C_SearchAllianceRes{Base: baseInfo}, nil, 0
 }
 
 func (h *UserAllianceHandler) JoinAllianceReq(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
@@ -329,37 +329,37 @@ func (h *UserAllianceHandler) JoinAllianceReq(ctx context.Context, in *base.Prot
 	if err != nil {
 		return nil, err, int32(code)
 	}
-	var req cmd.C2LS_JoinAllianceReq
+	var req pb.C2LS_JoinAllianceReq
 	err = in.UnmarshalData(&req)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_DeSerializeError)
+		return nil, err, int32(pb.ErrorCode_DeSerializeError)
 	}
 
 	// 校验
 	data := h.actor.GetUserAllianceData()
 	if data.AllianceId > 0 {
-		return nil, fmt.Errorf("exist alliance"), int32(cmd.ErrorCode_Had_exist_alliance)
+		return nil, fmt.Errorf("exist alliance"), int32(pb.ErrorCode_Had_exist_alliance)
 	}
 	// cd中
 	if time.Now().Unix() < data.JoinTs {
-		return nil, fmt.Errorf("join alliance cd"), int32(cmd.ErrorCode_Alliance_join_cd)
+		return nil, fmt.Errorf("join alliance cd"), int32(pb.ErrorCode_Alliance_join_cd)
 	}
 	_, err = h.checkAllianceId(req.AllianceId)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_Not_found_alliance)
+		return nil, err, int32(pb.ErrorCode_Not_found_alliance)
 	}
 
 	// 申请加入
-	reqMsg := &cmd.S2S_JoinAllianceReq{}
-	rspData := &cmd.S2S_JoinAllianceRes{}
-	err, code = h.AllianceInvoke(req.AllianceId, int32(cmd.Protocols_PS2S_JoinAllianceReq), reqMsg, rspData, in.GetTopic())
+	reqMsg := &pb.S2S_JoinAllianceReq{}
+	rspData := &pb.S2S_JoinAllianceRes{}
+	err, code = h.AllianceInvoke(req.AllianceId, int32(pb.Protocols_PS2S_JoinAllianceReq), reqMsg, rspData, in.GetTopic())
 	if err != nil {
 		return nil, err, int32(code)
 	}
 	if rspData.ErrCode > 0 {
 		return nil, fmt.Errorf("join alliance failed"), rspData.ErrCode
 	}
-	return &cmd.LS2C_JoinAllianceRes{}, nil, 0
+	return &pb.LS2C_JoinAllianceRes{}, nil, 0
 }
 
 func (h *UserAllianceHandler) AllianceApplyHandleReq(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
@@ -367,31 +367,31 @@ func (h *UserAllianceHandler) AllianceApplyHandleReq(ctx context.Context, in *ba
 	if err != nil {
 		return nil, err, int32(code)
 	}
-	var req cmd.C2LS_AllianceApplyHandleReq
+	var req pb.C2LS_AllianceApplyHandleReq
 	err = in.UnmarshalData(&req)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_DeSerializeError)
+		return nil, err, int32(pb.ErrorCode_DeSerializeError)
 	}
 
 	// 校验
 	data := h.actor.GetUserAllianceData()
 	if data.AllianceId <= 0 {
-		return nil, fmt.Errorf("not in alliance"), int32(cmd.ErrorCode_Not_in_alliance)
+		return nil, fmt.Errorf("not in alliance"), int32(pb.ErrorCode_Not_in_alliance)
 	}
 
 	// 提交到联盟
-	reqMsg := &cmd.S2S_AllianceApplyHandleReq{
+	reqMsg := &pb.S2S_AllianceApplyHandleReq{
 		RoleIds: req.RoleIds,
 		IsAgree: req.IsAgree,
 	}
-	rspData := &cmd.S2S_AllianceApplyHandleRes{}
-	err, code = h.AllianceInvoke(data.AllianceId, int32(cmd.Protocols_PS2S_AllianceApplyHandleReq), reqMsg, rspData, in.GetTopic())
+	rspData := &pb.S2S_AllianceApplyHandleRes{}
+	err, code = h.AllianceInvoke(data.AllianceId, int32(pb.Protocols_PS2S_AllianceApplyHandleReq), reqMsg, rspData, in.GetTopic())
 	if err != nil {
 		return nil, err, int32(code)
 	}
 	h.actor.comData.GetAllianceData().Members = append(h.actor.comData.GetAllianceData().Members, rspData.Members...)
 	h.actor.comData.GetAllianceData().Base = rspData.Base
-	res := &cmd.LS2C_AllianceApplyHandleRes{
+	res := &pb.LS2C_AllianceApplyHandleRes{
 		CommonData: h.actor.comData.FixDownComData(),
 		IsAgree:    req.IsAgree,
 		Result:     rspData.Result,
@@ -404,22 +404,22 @@ func (h *UserAllianceHandler) ExitAllianceReq(ctx context.Context, in *base.Prot
 	if err != nil {
 		return nil, err, int32(code)
 	}
-	var req cmd.C2LS_ExitAllianceReq
+	var req pb.C2LS_ExitAllianceReq
 	err = in.UnmarshalData(&req)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_DeSerializeError)
+		return nil, err, int32(pb.ErrorCode_DeSerializeError)
 	}
 
 	// 校验
 	data := h.actor.GetUserAllianceData()
 	if data.AllianceId <= 0 {
-		return nil, fmt.Errorf("not in alliance"), int32(cmd.ErrorCode_Not_in_alliance)
+		return nil, fmt.Errorf("not in alliance"), int32(pb.ErrorCode_Not_in_alliance)
 	}
 
 	// 提交到联盟
-	reqMsg := &cmd.S2S_ExitAllianceReq{ExitType: req.ExitType, TargetId: req.TargetId}
-	rspData := &cmd.S2S_ExitAllianceRes{}
-	err, code = h.AllianceInvoke(data.AllianceId, int32(cmd.Protocols_PS2S_ExitAllianceReq), reqMsg, rspData, in.GetTopic())
+	reqMsg := &pb.S2S_ExitAllianceReq{ExitType: req.ExitType, TargetId: req.TargetId}
+	rspData := &pb.S2S_ExitAllianceRes{}
+	err, code = h.AllianceInvoke(data.AllianceId, int32(pb.Protocols_PS2S_ExitAllianceReq), reqMsg, rspData, in.GetTopic())
 	if err != nil {
 		return nil, err, int32(code)
 	}
@@ -427,7 +427,7 @@ func (h *UserAllianceHandler) ExitAllianceReq(ctx context.Context, in *base.Prot
 	if req.ExitType == 1 {
 		h.HandleExitAlliance(1)
 	}
-	rsp := &cmd.LS2C_ExitAllianceRes{
+	rsp := &pb.LS2C_ExitAllianceRes{
 		ExitType: req.ExitType,
 		TargetId: req.TargetId,
 		Base:     rspData.Base,
@@ -453,26 +453,26 @@ func (h *UserAllianceHandler) GetAllianceLogReq(ctx context.Context, in *base.Pr
 	if err != nil {
 		return nil, err, int32(code)
 	}
-	var req cmd.C2LS_GetAllianceLogReq
+	var req pb.C2LS_GetAllianceLogReq
 	err = in.UnmarshalData(&req)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_DeSerializeError)
+		return nil, err, int32(pb.ErrorCode_DeSerializeError)
 	}
 
 	// 校验
 	data := h.actor.GetUserAllianceData()
 	if data.AllianceId <= 0 {
-		return nil, fmt.Errorf("not in alliance"), int32(cmd.ErrorCode_Not_in_alliance)
+		return nil, fmt.Errorf("not in alliance"), int32(pb.ErrorCode_Not_in_alliance)
 	}
 
 	// 提交到联盟
-	reqMsg := &cmd.S2S_GetAllianceLogReq{Page: req.Page}
-	rspData := &cmd.S2S_GetAllianceLogRes{}
-	err, code = h.AllianceInvoke(data.AllianceId, int32(cmd.Protocols_PS2S_GetAllianceLogReq), reqMsg, rspData, in.GetTopic())
+	reqMsg := &pb.S2S_GetAllianceLogReq{Page: req.Page}
+	rspData := &pb.S2S_GetAllianceLogRes{}
+	err, code = h.AllianceInvoke(data.AllianceId, int32(pb.Protocols_PS2S_GetAllianceLogReq), reqMsg, rspData, in.GetTopic())
 	if err != nil {
 		return nil, err, int32(code)
 	}
-	return &cmd.LS2C_GetAllianceLogRes{Page: req.Page, Logs: rspData.Logs}, nil, 0
+	return &pb.LS2C_GetAllianceLogRes{Page: req.Page, Logs: rspData.Logs}, nil, 0
 }
 
 func (h *UserAllianceHandler) ChangeMemberPositionReq(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
@@ -480,33 +480,33 @@ func (h *UserAllianceHandler) ChangeMemberPositionReq(ctx context.Context, in *b
 	if err != nil {
 		return nil, err, int32(code)
 	}
-	var req cmd.C2LS_ChangeMemberPositionReq
+	var req pb.C2LS_ChangeMemberPositionReq
 	err = in.UnmarshalData(&req)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_DeSerializeError)
+		return nil, err, int32(pb.ErrorCode_DeSerializeError)
 	}
 
 	// 校验
 	data := h.actor.GetUserAllianceData()
 	if data.AllianceId <= 0 {
-		return nil, fmt.Errorf("not in alliance"), int32(cmd.ErrorCode_Not_in_alliance)
+		return nil, fmt.Errorf("not in alliance"), int32(pb.ErrorCode_Not_in_alliance)
 	}
 	if req.TargetId == h.actor.roleId {
-		return nil, fmt.Errorf("param error"), int32(cmd.ErrorCode_IllegalOperationError)
+		return nil, fmt.Errorf("param error"), int32(pb.ErrorCode_IllegalOperationError)
 	}
 
 	// 提交到联盟
-	reqMsg := &cmd.S2S_ChangeMemberPositionReq{
+	reqMsg := &pb.S2S_ChangeMemberPositionReq{
 		TargetId:   req.TargetId,
 		PositionId: req.PositionId,
 	}
-	rspData := &cmd.S2S_ChangeMemberPositionRes{}
-	err, code = h.AllianceInvoke(data.AllianceId, int32(cmd.Protocols_PS2S_ChangeMemberPositionReq), reqMsg, rspData, in.GetTopic())
+	rspData := &pb.S2S_ChangeMemberPositionRes{}
+	err, code = h.AllianceInvoke(data.AllianceId, int32(pb.Protocols_PS2S_ChangeMemberPositionReq), reqMsg, rspData, in.GetTopic())
 	if err != nil {
 		return nil, err, int32(code)
 	}
 
-	rsp := &cmd.LS2C_ChangeMemberPositionRes{
+	rsp := &pb.LS2C_ChangeMemberPositionRes{
 		Base:    rspData.Info.Base,
 		Members: rspData.Info.Members,
 	}
@@ -518,15 +518,15 @@ func (h *UserAllianceHandler) ChangeAllianceInfoReq(ctx context.Context, in *bas
 	if err != nil {
 		return nil, err, int32(code)
 	}
-	var req cmd.C2LS_ChangeAllianceInfoReq
+	var req pb.C2LS_ChangeAllianceInfoReq
 	err = in.UnmarshalData(&req)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_DeSerializeError)
+		return nil, err, int32(pb.ErrorCode_DeSerializeError)
 	}
 	// 校验
 	data := h.actor.GetUserAllianceData()
 	if data.AllianceId <= 0 {
-		return nil, fmt.Errorf("not in alliance"), int32(cmd.ErrorCode_Not_in_alliance)
+		return nil, fmt.Errorf("not in alliance"), int32(pb.ErrorCode_Not_in_alliance)
 	}
 	infos := map[string]string{}
 	if req.EditType == 1 {
@@ -536,50 +536,50 @@ func (h *UserAllianceHandler) ChangeAllianceInfoReq(ctx context.Context, in *bas
 	} else if req.EditType == 3 {
 		headCfg := excel.GetAllianceHeadMgr().GetById(req.LogoId)
 		if headCfg == nil {
-			return nil, fmt.Errorf("logo id illegal %v", req.LogoId), int32(cmd.ErrorCode_ParamError)
+			return nil, fmt.Errorf("logo id illegal %v", req.LogoId), int32(pb.ErrorCode_ParamError)
 		}
 	} else {
-		return nil, fmt.Errorf("edit type illegal"), int32(cmd.ErrorCode_ParamError)
+		return nil, fmt.Errorf("edit type illegal"), int32(pb.ErrorCode_ParamError)
 	}
 	err, code = h.commonInfoCheck(infos)
-	if err != nil || code != cmd.ErrorCode_Success {
+	if err != nil || code != pb.ErrorCode_Success {
 		return nil, err, int32(code)
 	}
 
 	// 提交到联盟
-	reqMsg := &cmd.S2S_ChangeAllianceInfoReq{
+	reqMsg := &pb.S2S_ChangeAllianceInfoReq{
 		EditType: req.EditType,
 		Profile:  req.Profile,
 		Notice:   req.Notice,
 		LogoId:   req.LogoId,
 	}
-	rspData := &cmd.S2S_ChangeAllianceInfoRes{}
-	err, code = h.AllianceInvoke(data.AllianceId, int32(cmd.Protocols_PS2S_ChangeAllianceInfoReq), reqMsg, rspData, in.GetTopic())
+	rspData := &pb.S2S_ChangeAllianceInfoRes{}
+	err, code = h.AllianceInvoke(data.AllianceId, int32(pb.Protocols_PS2S_ChangeAllianceInfoReq), reqMsg, rspData, in.GetTopic())
 	if err != nil {
 		return nil, err, int32(code)
 	}
 	h.actor.comData.GetAllianceData().Base = rspData.Info.Base
-	return &cmd.LS2C_ChangeAllianceInfoRes{CommonData: h.actor.comData.FixDownComData()}, nil, 0
+	return &pb.LS2C_ChangeAllianceInfoRes{CommonData: h.actor.comData.FixDownComData()}, nil, 0
 }
 
 // 联盟信息通用check
-func (h *UserAllianceHandler) commonInfoCheck(infos map[string]string) (error, cmd.ErrorCode) {
+func (h *UserAllianceHandler) commonInfoCheck(infos map[string]string) (error, pb.ErrorCode) {
 	// 名称校验
 	name, ok := infos["name"]
 	if ok {
 		nameLen := utf8.RuneCountInString(name)
 		if nameLen == 0 || nameLen > 8 {
-			return fmt.Errorf("name length is illegal"), cmd.ErrorCode_Alliance_name_illegal
+			return fmt.Errorf("name length is illegal"), pb.ErrorCode_Alliance_name_illegal
 		}
 		if h.actor.Srv.CheckSpecialLetters(name, false) {
-			return fmt.Errorf("name is illegal"), cmd.ErrorCode_Alliance_name_illegal
+			return fmt.Errorf("name is illegal"), pb.ErrorCode_Alliance_name_illegal
 		}
 		check, err := h.actor.Srv.CheckSensitiveWord(common.CHECK_TYPE_PLAYERNAME, name)
 		if err != nil || !check {
-			return err, cmd.ErrorCode_Alliance_name_illegal
+			return err, pb.ErrorCode_Alliance_name_illegal
 		}
 		if h.checkAllianceName(name) {
-			return err, cmd.ErrorCode_Alliance_name_exist
+			return err, pb.ErrorCode_Alliance_name_exist
 		}
 	}
 
@@ -587,15 +587,15 @@ func (h *UserAllianceHandler) commonInfoCheck(infos map[string]string) (error, c
 	profile, ok := infos["profile"]
 	if ok {
 		if utf8.RuneCountInString(profile) > 50 {
-			return fmt.Errorf("profile length is illegal"), cmd.ErrorCode_Alliance_profile_illegal
+			return fmt.Errorf("profile length is illegal"), pb.ErrorCode_Alliance_profile_illegal
 		}
 		if profile != "" {
 			if h.actor.Srv.CheckSpecialLetters(profile, true) {
-				return fmt.Errorf("profile is illegal"), cmd.ErrorCode_Alliance_profile_illegal
+				return fmt.Errorf("profile is illegal"), pb.ErrorCode_Alliance_profile_illegal
 			}
 			check, err := h.actor.Srv.CheckSensitiveWord(common.CHECK_TYPE_PLAYERNAME, profile)
 			if err != nil || !check {
-				return err, cmd.ErrorCode_Alliance_profile_illegal
+				return err, pb.ErrorCode_Alliance_profile_illegal
 			}
 		}
 	}
@@ -604,15 +604,15 @@ func (h *UserAllianceHandler) commonInfoCheck(infos map[string]string) (error, c
 	notice, ok := infos["notice"]
 	if ok {
 		if utf8.RuneCountInString(notice) > 80 {
-			return fmt.Errorf("notice length is illegal"), cmd.ErrorCode_Alliance_notice_illegal
+			return fmt.Errorf("notice length is illegal"), pb.ErrorCode_Alliance_notice_illegal
 		}
 		if notice != "" {
 			if h.actor.Srv.CheckSpecialLetters(notice, true) {
-				return fmt.Errorf("notice is illegal"), cmd.ErrorCode_Alliance_notice_illegal
+				return fmt.Errorf("notice is illegal"), pb.ErrorCode_Alliance_notice_illegal
 			}
 			check, err := h.actor.Srv.CheckSensitiveWord(common.CHECK_TYPE_PLAYERNAME, notice)
 			if err != nil || !check {
-				return err, cmd.ErrorCode_Alliance_notice_illegal
+				return err, pb.ErrorCode_Alliance_notice_illegal
 			}
 		}
 	}
@@ -626,24 +626,24 @@ func (h *UserAllianceHandler) GetAllianceInfoReq(ctx context.Context, in *base.P
 		return nil, err, int32(code)
 	}
 
-	var req cmd.C2LS_GetAllianceInfoReq
+	var req pb.C2LS_GetAllianceInfoReq
 	err = in.UnmarshalData(&req)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_DeSerializeError)
+		return nil, err, int32(pb.ErrorCode_DeSerializeError)
 	}
 
 	// cd判定
 	data := h.actor.GetUserAllianceData()
 	now := time.Now().Unix()
 	if now < data.AllianceTs {
-		return &cmd.LS2C_GetAllianceInfoRes{}, nil, 0 // 隐式cd，不给错误码
+		return &pb.LS2C_GetAllianceInfoRes{}, nil, 0 // 隐式cd，不给错误码
 	}
 
 	data.AllianceTs = now + 15
 	if err = h.SaveDB(); err != nil {
-		return nil, err, int32(cmd.ErrorCode_SaveDBError)
+		return nil, err, int32(pb.ErrorCode_SaveDBError)
 	}
-	return &cmd.LS2C_GetAllianceInfoRes{Alliance: h.buildAllianceData(false)}, nil, 0
+	return &pb.LS2C_GetAllianceInfoRes{Alliance: h.buildAllianceData(false)}, nil, 0
 }
 
 func (h *UserAllianceHandler) CreateAllianceReq(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
@@ -652,19 +652,19 @@ func (h *UserAllianceHandler) CreateAllianceReq(ctx context.Context, in *base.Pr
 		return nil, err, int32(code)
 	}
 
-	var req cmd.C2LS_CreateAllianceReq
+	var req pb.C2LS_CreateAllianceReq
 	err = in.UnmarshalData(&req)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_DeSerializeError)
+		return nil, err, int32(pb.ErrorCode_DeSerializeError)
 	}
 	data := h.actor.GetUserAllianceData()
 	if data.AllianceId > 0 {
-		return nil, fmt.Errorf("exist alliance"), int32(cmd.ErrorCode_Had_exist_alliance)
+		return nil, fmt.Errorf("exist alliance"), int32(pb.ErrorCode_Had_exist_alliance)
 	}
 	// logo id校验
 	headCfg := excel.GetAllianceHeadMgr().GetById(req.LogoId)
 	if headCfg == nil {
-		return nil, fmt.Errorf("logo id illegal %v", req.LogoId), int32(cmd.ErrorCode_ParamError)
+		return nil, fmt.Errorf("logo id illegal %v", req.LogoId), int32(pb.ErrorCode_ParamError)
 	}
 
 	infos := map[string]string{
@@ -672,27 +672,27 @@ func (h *UserAllianceHandler) CreateAllianceReq(ctx context.Context, in *base.Pr
 		"profile": req.Profile,
 	}
 	err, code = h.commonInfoCheck(infos)
-	if err != nil || code != cmd.ErrorCode_Success {
+	if err != nil || code != pb.ErrorCode_Success {
 		return nil, err, int32(code)
 	}
 
 	cost := excel.GetConfigMgr().GetCfg().ALLIANCE_CREATE_COST
 	if !GetConsumeMgr(h.actor).CheckMapEnough(map[int32]int32{cost[0]: cost[1]}) {
-		return nil, fmt.Errorf("currency not enough"), int32(cmd.ErrorCode_CurrencyNotEnough)
+		return nil, fmt.Errorf("currency not enough"), int32(pb.ErrorCode_CurrencyNotEnough)
 	}
 
 	// 创建联盟数据
 	allianceId := h.actor.Srv.GenGUID(guid.GUID_ALLIANCE)
 	if allianceId == 0 {
-		return nil, fmt.Errorf("allianceId generate failed"), int32(cmd.ErrorCode_InternalError)
+		return nil, fmt.Errorf("allianceId generate failed"), int32(pb.ErrorCode_InternalError)
 	}
-	reqMsg := &cmd.S2S_CreateAllianceReq{
+	reqMsg := &pb.S2S_CreateAllianceReq{
 		Name:    req.Name,
 		Profile: req.Profile,
 		LogoId:  req.LogoId,
 	}
-	rspData := &cmd.S2S_CreateAllianceRes{}
-	err, code = h.AllianceInvoke(int64(allianceId), int32(cmd.Protocols_PS2S_CreateAllianceReq), reqMsg, rspData, in.GetTopic())
+	rspData := &pb.S2S_CreateAllianceRes{}
+	err, code = h.AllianceInvoke(int64(allianceId), int32(pb.Protocols_PS2S_CreateAllianceReq), reqMsg, rspData, in.GetTopic())
 	if err != nil {
 		return nil, err, int32(code)
 	}
@@ -701,26 +701,26 @@ func (h *UserAllianceHandler) CreateAllianceReq(ctx context.Context, in *base.Pr
 	data.AllianceId = int64(allianceId)
 	h.afterJoinAlliance()
 	if err = h.SaveDB(); err != nil {
-		return nil, err, int32(cmd.ErrorCode_SaveDBError)
+		return nil, err, int32(pb.ErrorCode_SaveDBError)
 	}
 
 	err = GetConsumeMgr(h.actor).ConsumeList(map[int32]int32{cost[0]: cost[1]}, h.actor.comData, common.CR_ALLIANCE_CREATE)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 	h.buildUserAllianceInfo(rspData.Info)
 	h.actor.comData.Data.Alliance = rspData.Info
-	return &cmd.LS2C_CreateAllianceRes{CommonData: h.actor.comData.FixDownComData()}, nil, int32(cmd.ErrorCode_Success)
+	return &pb.LS2C_CreateAllianceRes{CommonData: h.actor.comData.FixDownComData()}, nil, int32(pb.ErrorCode_Success)
 }
 
 // 检查给定联盟id是否存在
-func (h *UserAllianceHandler) checkAllianceId(allianceId int64) (*cmd.PServerAllianceBaseInfo, error) {
+func (h *UserAllianceHandler) checkAllianceId(allianceId int64) (*pb.PServerAllianceBaseInfo, error) {
 	err, info := h.actor.Srv.ESGet(common.ES_ALLIANCE_BASE_KEY, strconv.Itoa(int(allianceId)))
 	if err != nil {
 		return nil, err
 	}
 
-	data := &cmd.PServerAllianceBaseInfo{}
+	data := &pb.PServerAllianceBaseInfo{}
 	if err = json.Unmarshal(info, data); err != nil {
 		return nil, err
 	}
@@ -736,7 +736,7 @@ func (h *UserAllianceHandler) checkAllianceName(name string) bool {
 	return info != nil
 }
 
-func (h *UserAllianceHandler) getAllianceByName(name string) (*cmd.PCommonAllianceBaseInfo, error) {
+func (h *UserAllianceHandler) getAllianceByName(name string) (*pb.PCommonAllianceBaseInfo, error) {
 	// 索引不存在
 	if !h.actor.Srv.ESCheckIndex(common.ES_ALLIANCE_BASE_KEY) {
 		return nil, nil
@@ -748,9 +748,9 @@ func (h *UserAllianceHandler) getAllianceByName(name string) (*cmd.PCommonAllian
 		h.Errorf("es查询出错了: %v", err)
 		return nil, err
 	}
-	var baseInfo *cmd.PCommonAllianceBaseInfo
+	var baseInfo *pb.PCommonAllianceBaseInfo
 	for _, hit := range hitData.Hits {
-		temp := &cmd.PServerAllianceBaseInfo{}
+		temp := &pb.PServerAllianceBaseInfo{}
 		if err = json.Unmarshal(hit.Source_, temp); err != nil {
 			h.Error(err)
 			continue
@@ -768,7 +768,7 @@ func (h *UserAllianceHandler) getAllianceId() int64 {
 	return h.actor.GetUserAllianceData().AllianceId
 }
 
-func (h *UserAllianceHandler) HandleJoinAlliance(alliance *cmd.PCommonAllianceInfo) error {
+func (h *UserAllianceHandler) HandleJoinAlliance(alliance *pb.PCommonAllianceInfo) error {
 	data := h.actor.GetUserAllianceData()
 	data.AllianceId = alliance.Base.Id
 	data.ApplyOutdateTs = time.Now().Unix()
@@ -806,10 +806,10 @@ func (h *UserAllianceHandler) afterExitAlliance() {
 }
 
 // 封装联盟actor调用方法
-func (h *UserAllianceHandler) AllianceInvoke(allianceId int64, msgId int32, reqMsg proto.Message, rspData proto.Message, topic string) (error, cmd.ErrorCode) {
+func (h *UserAllianceHandler) AllianceInvoke(allianceId int64, msgId int32, reqMsg proto.Message, rspData proto.Message, topic string) (error, pb.ErrorCode) {
 	callData, err := proto.Marshal(reqMsg)
 	if err != nil {
-		return err, cmd.ErrorCode_SerializeError
+		return err, pb.ErrorCode_SerializeError
 	}
 	protoMsg := &base.ProtoMsg{
 		MsgId:  msgId,
@@ -818,7 +818,7 @@ func (h *UserAllianceHandler) AllianceInvoke(allianceId int64, msgId int32, reqM
 		RoleId: h.actor.roleId,
 		UAID:   h.actor.ID(),
 		Data:   callData,
-		//GUID:    utils.GenIntUUID(),
+		// GUID:    utils.GenIntUUID(),
 		Topic:        topic,
 		ServerReqIdx: utils.GenIntUUID(),
 	}
@@ -827,26 +827,26 @@ func (h *UserAllianceHandler) AllianceInvoke(allianceId int64, msgId int32, reqM
 		h.Error(err)
 	}
 	if rspMsg.ErrCode > 0 {
-		return err, cmd.ErrorCode(rspMsg.ErrCode)
+		return err, pb.ErrorCode(rspMsg.ErrCode)
 	}
 
 	// 返回数据解析
 	if rspData != nil {
 		err = proto.Unmarshal(rspMsg.Data, rspData)
 		if err != nil {
-			return err, cmd.ErrorCode_DeSerializeError
+			return err, pb.ErrorCode_DeSerializeError
 		}
 	}
-	return nil, cmd.ErrorCode_Success
+	return nil, pb.ErrorCode_Success
 }
 
 // 推送玩家联盟id变更信息
-func (h *UserAllianceHandler) pushChangeAllianceIdNtf(alliance *cmd.PCommonAllianceInfo) {
+func (h *UserAllianceHandler) pushChangeAllianceIdNtf(alliance *pb.PCommonAllianceInfo) {
 	user := h.buildUserAllianceInfo(alliance)
 	if alliance == nil {
-		alliance = &cmd.PCommonAllianceInfo{User: user}
+		alliance = &pb.PCommonAllianceInfo{User: user}
 	}
-	ntf := &cmd.LS2C_ChangeAllianceIdNtf{
+	ntf := &pb.LS2C_ChangeAllianceIdNtf{
 		Alliance: alliance,
 	}
 
@@ -858,19 +858,19 @@ func (h *UserAllianceHandler) pushChangeAllianceIdNtf(alliance *cmd.PCommonAllia
 	h.Infof("玩家联盟id变化了 info: %+v", ntf)
 }
 
-func (h *UserAllianceHandler) PushTopic2Alliance(opt cmd.GateTopicOperator, topic string) {
+func (h *UserAllianceHandler) PushTopic2Alliance(opt pb.GateTopicOperator, topic string) {
 
 	allianceId := h.getAllianceId()
 	if allianceId <= 0 {
 		return
 	}
-	req := &cmd.S2S_BindMemberGateTopicReq{
+	req := &pb.S2S_BindMemberGateTopicReq{
 		Opt:    opt,
 		Uid:    h.actor.GetUID(),
 		GateId: topic,
 	}
-	res := &cmd.S2S_BindMemberGateTopicRes{}
-	err, _ := h.actor.UserAllianceHandler.AllianceInvoke(int64(allianceId), int32(cmd.Protocols_PS2S_BindMemberGateTopicReq), req, res, topic)
+	res := &pb.S2S_BindMemberGateTopicRes{}
+	err, _ := h.actor.UserAllianceHandler.AllianceInvoke(int64(allianceId), int32(pb.Protocols_PS2S_BindMemberGateTopicReq), req, res, topic)
 	if err != nil {
 		h.Debugf("玩家[%d],向allianceActor,转发消息失败:[%v]", allianceId, err)
 	}

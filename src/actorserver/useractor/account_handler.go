@@ -15,7 +15,7 @@ import (
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/db"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/service"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 )
 
 type AccountHandler struct {
@@ -26,9 +26,9 @@ func NewAccountHandler(actor *UserActor) *AccountHandler {
 	h := &AccountHandler{UABaseHandler: NewUABaseHandler(actor, "AccountHandler")}
 	h.ChildHandler = h
 
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PS2S_TcpGateTopicReq1), h.TcpGateTopicReq1) // gate通知userActor, 广播到所有的actors更新topic
-	//actor.RegisterProtoHandler(int32(cmd.Protocols_PC2LS_UseItemReq), h.UseItemReq)                     // 使用道具
-	//actor.RegisterProtoHandler(int32(cmd.Protocols_PLS2S_DestroyExpireItemReq), h.DestroyExpireItemReq) // 销毁过期道具
+	actor.RegisterProtoHandler(int32(pb.Protocols_PS2S_TcpGateTopicReq1), h.TcpGateTopicReq1) // gate通知userActor, 广播到所有的actors更新topic
+	// actor.RegisterProtoHandler(int32(pb.Protocols_PC2LS_UseItemReq), h.UseItemReq)                     // 使用道具
+	// actor.RegisterProtoHandler(int32(pb.Protocols_PLS2S_DestroyExpireItemReq), h.DestroyExpireItemReq) // 销毁过期道具
 	return h
 }
 
@@ -45,7 +45,7 @@ func (h *AccountHandler) DailyRefresh() error {
 }
 
 func (h *AccountHandler) SetDBData(dbData proto.Message) error {
-	if dbVal, ok := dbData.(*cmd.UserData); ok {
+	if dbVal, ok := dbData.(*pb.UserData); ok {
 		h.actor.Account = dbVal
 	} else {
 		return fmt.Errorf("SetDBData, 数据类型错误! %v", dbData)
@@ -63,58 +63,58 @@ func (h *AccountHandler) TcpGateTopicReq1(ctx context.Context, in *base.ProtoMsg
 		err error
 	)
 
-	var req cmd.S2S_TcpGateTopicReq1
+	var req pb.S2S_TcpGateTopicReq1
 	err = in.UnmarshalData(&req)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_DeSerializeError)
+		return nil, err, int32(pb.ErrorCode_DeSerializeError)
 	}
 
-	req2 := &cmd.S2S_TcpGateTopicReq2{
+	req2 := &pb.S2S_TcpGateTopicReq2{
 		Opt:    req.Opt,
 		Uid:    req.Uid,
 		GateId: req.GateId,
 	}
-	//gateTopicData, err := proto.Marshal(req2)
-	//if err != nil {
-	//	return nil, err, int32(cmd.ErrorCode_InternalError)
-	//}
-	//h.Debugf("收到gate通知, useractor广播到所有的actors, 更新topic, uaid:%s, req:%+v", h.actor.uid, &req)
+	// gateTopicData, err := proto.Marshal(req2)
+	// if err != nil {
+	//	return nil, err, int32(pb.ErrorCode_InternalError)
+	// }
+	// h.Debugf("收到gate通知, useractor广播到所有的actors, 更新topic, uaid:%s, req:%+v", h.actor.uid, &req)
 
 	h.actor.UpdateGateTopic(req2)
 
 	// TODO HDY 通知roomActor更新gateTopic
 
-	//_, err = h.actor.Srv.UserInvoke(h.actor.Srv.UAID(h.actor.uid, h.actor.roleId), &base.ProtoMsg{
+	// _, err = h.actor.Srv.UserInvoke(h.actor.Srv.UAID(h.actor.uid, h.actor.roleId), &base.ProtoMsg{
 	//	AppId:        global.ACTOR_SVC,
-	//	MsgId:        int32(cmd.Protocols_PS2S_TcpGateTopicReq2),
+	//	MsgId:        int32(pb.Protocols_PS2S_TcpGateTopicReq2),
 	//	ServerReqIdx: utils.GenIntUUID(),
 	//	UserId:       h.actor.uid,
 	//	RoleId:       0,
 	//	UAID:         h.actor.Srv.UAID(h.actor.ID(), h.actor.roleId),
 	//	Data:         gateTopicData,
 	//	ErrCode:      0,
-	//})
-	//if err != nil {
-	//	return nil, err, int32(cmd.ErrorCode_RpcInvokeError)
-	//}
+	// })
+	// if err != nil {
+	//	return nil, err, int32(pb.ErrorCode_RpcInvokeError)
+	// }
 
-	//_, err, invokeErr := h.actor.Srv.ActorInvoke(global.RoomActorType, h.actor.uid, &base.ProtoMsg{ // FIXME 此处的actorId不正确, 需要传入roomId
+	// _, err, invokeErr := h.actor.Srv.ActorInvoke(global.RoomActorType, h.actor.uid, &base.ProtoMsg{ // FIXME 此处的actorId不正确, 需要传入roomId
 	//	AppId:        global.ACTOR_SVC,
-	//	MsgId:        int32(cmd.Protocols_PS2S_TcpGateTopicReq2),
+	//	MsgId:        int32(pb.Protocols_PS2S_TcpGateTopicReq2),
 	//	ServerReqIdx: utils.GenIntUUID(),
 	//	UserId:       h.actor.uid,
 	//	RoleId:       0,
 	//	UAID:         h.actor.Srv.UAID(h.actor.ID(), h.actor.roleId),
 	//	Data:         gateTopicData,
 	//	ErrCode:      0,
-	//})
-	//if invokeErr != nil {
-	//	return nil, invokeErr, int32(cmd.ErrorCode_RpcInvokeError)
-	//} else if err != nil {
-	//	return nil, err, int32(cmd.ErrorCode_RpcInvokeError)
-	//}
+	// })
+	// if invokeErr != nil {
+	//	return nil, invokeErr, int32(pb.ErrorCode_RpcInvokeError)
+	// } else if err != nil {
+	//	return nil, err, int32(pb.ErrorCode_RpcInvokeError)
+	// }
 
-	return &cmd.S2S_TcpGateTopicRes1{}, nil, int32(cmd.ErrorCode_Success)
+	return &pb.S2S_TcpGateTopicRes1{}, nil, int32(pb.ErrorCode_Success)
 }
 
 // SavePlayer 保存角色信息
@@ -123,7 +123,7 @@ func (h *AccountHandler) SavePlayer(playerId uint64) {
 		curTime = time.Now().Unix()
 	)
 
-	h.actor.Account.PlayerList.Players[1] = &cmd.Player{Id: playerId, CreateTs: curTime}
+	h.actor.Account.PlayerList.Players[1] = &pb.Player{Id: playerId, CreateTs: curTime}
 	h.actor.Account.PlayerList.PlayerId = playerId
 	h.actor.Account.PlayerList.UpdateTs = curTime
 
@@ -148,7 +148,7 @@ func (h *AccountHandler) ChangeNickname(nickname string) {
 // bannedMsg表示封禁的原因，解封可以传空字符串
 func (h *AccountHandler) Banned(bannedMsg string, bannedSec int64) error {
 	account := h.actor.Account.Account
-	if bannedSec > 0 { //封禁
+	if bannedSec > 0 { // 封禁
 		account.BannedTs = time.Now().Add(time.Second * time.Duration(bannedSec)).Unix()
 		account.BannedMsg = bannedMsg
 
@@ -177,7 +177,7 @@ func (h *AccountHandler) Banned(bannedMsg string, bannedSec int64) error {
 		})
 	}
 
-	//threading.RunSafe(func() {
+	// threading.RunSafe(func() {
 	//	lilith.WriteDataLog(&lilith.BanRole{
 	//		LogType:    lilith.LogType_BanRole,
 	//		Version:    "1",
@@ -191,7 +191,7 @@ func (h *AccountHandler) Banned(bannedMsg string, bannedSec int64) error {
 	//		BanSource:  "0",
 	//		BanReason:  "0",
 	//	})
-	//})
+	// })
 
 	err := h.SaveDB(true)
 	if err != nil {

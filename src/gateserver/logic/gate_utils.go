@@ -1,12 +1,12 @@
 package logic
 
 import (
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 )
 
 func IsBroadcastCmd(messageId int32) bool {
-	switch cmd.Protocols(messageId) {
-	case cmd.Protocols_Protocols_None:
+	switch pb.Protocols(messageId) {
+	case pb.Protocols_Protocols_None:
 		return true
 	default:
 		return false

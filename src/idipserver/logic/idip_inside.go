@@ -13,7 +13,7 @@ import (
 
 	"github.com/dapr/go-sdk/service/common"
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/db"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/service"
@@ -23,18 +23,18 @@ import (
 
 type InsideGmtHandlerFunc = func(apiData []byte) []byte
 
-var InsideGmtHandlerMap = make(map[cmd.GMT]InsideGmtHandlerFunc)
+var InsideGmtHandlerMap = make(map[pb.GMT]InsideGmtHandlerFunc)
 
 // 审核订单的状态
 const (
-	Verify   = iota + 1 //此次操作需要审核
+	Verify   = iota + 1 // 此次操作需要审核
 	NoVerify            // 此次操作不需要审核
 )
 
 const (
-	Verifying = iota + 1 //审核中
-	Pass                 //通过
-	Rejected             //驳回
+	Verifying = iota + 1 // 审核中
+	Pass                 // 通过
+	Rejected             // 驳回
 )
 
 const (
@@ -45,7 +45,7 @@ const (
 	version_use              // 使用
 )
 
-func registerInsideGmtHandler(cmd cmd.GMT, f InsideGmtHandlerFunc) {
+func registerInsideGmtHandler(cmd pb.GMT, f InsideGmtHandlerFunc) {
 	if _, ok := InsideGmtHandlerMap[cmd]; !ok {
 		InsideGmtHandlerMap[cmd] = f
 		logger.Debugf("register InsideGmtHandler: %d", cmd)
@@ -55,53 +55,53 @@ func registerInsideGmtHandler(cmd cmd.GMT, f InsideGmtHandlerFunc) {
 }
 
 func (s *IDIPServer) InitInsideGmtHandlerMap() {
-	registerInsideGmtHandler(cmd.GMT_SendUserMailReq, s.SendUserMailReq)
-	registerInsideGmtHandler(cmd.GMT_SendMultiLangUserMailReq, s.SendMultiLangUserMailReq)
-	registerInsideGmtHandler(cmd.GMT_SendSysMailReq, s.SendSysMailReq)
-	registerInsideGmtHandler(cmd.GMT_SendMultiLangSysMailReq, s.SendMultiLangSysMailReq)
-	registerInsideGmtHandler(cmd.GMT_GetConfCenterReq, s.GetConfCenterReq)
-	registerInsideGmtHandler(cmd.GMT_ModConfCenterReq, s.ModConfCenterReq)
-	registerInsideGmtHandler(cmd.GMT_GetGameJsonReq, s.GetGameJsonReq)
-	registerInsideGmtHandler(cmd.GMT_UpdateGameJsonReq, s.UpdateGameJsonReq)
-	registerInsideGmtHandler(cmd.GMT_ServerListReq, s.ServerListReq)
-	registerInsideGmtHandler(cmd.GMT_GMCommondReq, s.GMCommondReq)
-	registerInsideGmtHandler(cmd.GMT_MailListReq, s.MailListReq)
-	registerInsideGmtHandler(cmd.GMT_GetSysMailReq, s.GetSysMailReq)
-	registerInsideGmtHandler(cmd.GMT_DelSysMailReq, s.DelSysMailReq)
-	registerInsideGmtHandler(cmd.GMT_CheckItemReq, s.CheckItemReq)
-	registerInsideGmtHandler(cmd.GMT_ImportUserJsonReq, s.ImportUserJsonReq)
-	registerInsideGmtHandler(cmd.GMT_ExportUserJsonReq, s.ExportUserJsonReq)
-	registerInsideGmtHandler(cmd.GMT_CopyUserInfoReq, s.CopyUserInfoReq)
-	registerInsideGmtHandler(cmd.GMT_UserInfoReq, s.UserInfoReq)
-	registerInsideGmtHandler(cmd.GMT_GetAllGMTRecord, s.GetAllGMTRecord)
-	registerInsideGmtHandler(cmd.GMT_GMTVerify, s.Verify)
-	registerInsideGmtHandler(cmd.GMT_GetUserOrderList, s.GetUserOrderList)
-	registerInsideGmtHandler(cmd.GMT_ReDropOrderReward, s.ReDropOrderReward)
-	registerInsideGmtHandler(cmd.GMT_GetUserBagInfo, s.GetUserBagInfo)
-	registerInsideGmtHandler(cmd.GMT_GetUserCardInfo, s.GetUserCardInfo)
-	registerInsideGmtHandler(cmd.GMT_ReduceItem, s.ReduceItem)
-	registerInsideGmtHandler(cmd.GMT_GetServerVersion, s.GetServerVersion)
-	registerInsideGmtHandler(cmd.GMT_ChangeVersionState, s.ChangeVersionState)
-	registerInsideGmtHandler(cmd.GMT_ClientVersionPublish, s.ClientVersionPublish) //发布上线
-	registerInsideGmtHandler(cmd.GMT_PushExcelReq, s.PushExcelReq)
-	registerInsideGmtHandler(cmd.GMT_SrvHotReloadReq, s.SrvHotReloadReq)
-	registerInsideGmtHandler(cmd.GMT_SrvRestartReq, s.SrvRestartReq)
-	registerInsideGmtHandler(cmd.GMT_NotifyDownloadPkgReq, s.NotifyDownloadPkgReq)
-	registerInsideGmtHandler(cmd.GMT_CopyTapUserInfoReq, s.CopyTapUserInfoReq)
-	registerInsideGmtHandler(cmd.GMT_DelTapUserInfoReq, s.DelTapUserInfoReq)
-	registerInsideGmtHandler(cmd.GMT_SetClientMinVersion, s.SetClientMinVersion)
-	registerInsideGmtHandler(cmd.GMT_SetServerCurVersion, s.SetServerCurVersion)
-	registerInsideGmtHandler(cmd.GMT_GetClientMaxVersion, s.GetClientMaxVersion) //获取客户端最大版本
-	registerInsideGmtHandler(cmd.GMT_SetExcelExpired, s.SetExcelExpired)
-	registerInsideGmtHandler(cmd.GMT_GetExcelExpired, s.GetExcelExpired)
-	registerInsideGmtHandler(cmd.GMT_GetExcelList, s.GetExcelList)
-	registerInsideGmtHandler(cmd.GMT_GetAllianceInfo, s.GetAllianceInfo)
-	registerInsideGmtHandler(cmd.GMT_GetRollingVersion, s.GetServerRollingVersion)
-	registerInsideGmtHandler(cmd.GMT_GetExcelConfigReq, s.GetExcelConfigReq)
+	registerInsideGmtHandler(pb.GMT_SendUserMailReq, s.SendUserMailReq)
+	registerInsideGmtHandler(pb.GMT_SendMultiLangUserMailReq, s.SendMultiLangUserMailReq)
+	registerInsideGmtHandler(pb.GMT_SendSysMailReq, s.SendSysMailReq)
+	registerInsideGmtHandler(pb.GMT_SendMultiLangSysMailReq, s.SendMultiLangSysMailReq)
+	registerInsideGmtHandler(pb.GMT_GetConfCenterReq, s.GetConfCenterReq)
+	registerInsideGmtHandler(pb.GMT_ModConfCenterReq, s.ModConfCenterReq)
+	registerInsideGmtHandler(pb.GMT_GetGameJsonReq, s.GetGameJsonReq)
+	registerInsideGmtHandler(pb.GMT_UpdateGameJsonReq, s.UpdateGameJsonReq)
+	registerInsideGmtHandler(pb.GMT_ServerListReq, s.ServerListReq)
+	registerInsideGmtHandler(pb.GMT_GMCommondReq, s.GMCommondReq)
+	registerInsideGmtHandler(pb.GMT_MailListReq, s.MailListReq)
+	registerInsideGmtHandler(pb.GMT_GetSysMailReq, s.GetSysMailReq)
+	registerInsideGmtHandler(pb.GMT_DelSysMailReq, s.DelSysMailReq)
+	registerInsideGmtHandler(pb.GMT_CheckItemReq, s.CheckItemReq)
+	registerInsideGmtHandler(pb.GMT_ImportUserJsonReq, s.ImportUserJsonReq)
+	registerInsideGmtHandler(pb.GMT_ExportUserJsonReq, s.ExportUserJsonReq)
+	registerInsideGmtHandler(pb.GMT_CopyUserInfoReq, s.CopyUserInfoReq)
+	registerInsideGmtHandler(pb.GMT_UserInfoReq, s.UserInfoReq)
+	registerInsideGmtHandler(pb.GMT_GetAllGMTRecord, s.GetAllGMTRecord)
+	registerInsideGmtHandler(pb.GMT_GMTVerify, s.Verify)
+	registerInsideGmtHandler(pb.GMT_GetUserOrderList, s.GetUserOrderList)
+	registerInsideGmtHandler(pb.GMT_ReDropOrderReward, s.ReDropOrderReward)
+	registerInsideGmtHandler(pb.GMT_GetUserBagInfo, s.GetUserBagInfo)
+	registerInsideGmtHandler(pb.GMT_GetUserCardInfo, s.GetUserCardInfo)
+	registerInsideGmtHandler(pb.GMT_ReduceItem, s.ReduceItem)
+	registerInsideGmtHandler(pb.GMT_GetServerVersion, s.GetServerVersion)
+	registerInsideGmtHandler(pb.GMT_ChangeVersionState, s.ChangeVersionState)
+	registerInsideGmtHandler(pb.GMT_ClientVersionPublish, s.ClientVersionPublish) // 发布上线
+	registerInsideGmtHandler(pb.GMT_PushExcelReq, s.PushExcelReq)
+	registerInsideGmtHandler(pb.GMT_SrvHotReloadReq, s.SrvHotReloadReq)
+	registerInsideGmtHandler(pb.GMT_SrvRestartReq, s.SrvRestartReq)
+	registerInsideGmtHandler(pb.GMT_NotifyDownloadPkgReq, s.NotifyDownloadPkgReq)
+	registerInsideGmtHandler(pb.GMT_CopyTapUserInfoReq, s.CopyTapUserInfoReq)
+	registerInsideGmtHandler(pb.GMT_DelTapUserInfoReq, s.DelTapUserInfoReq)
+	registerInsideGmtHandler(pb.GMT_SetClientMinVersion, s.SetClientMinVersion)
+	registerInsideGmtHandler(pb.GMT_SetServerCurVersion, s.SetServerCurVersion)
+	registerInsideGmtHandler(pb.GMT_GetClientMaxVersion, s.GetClientMaxVersion) // 获取客户端最大版本
+	registerInsideGmtHandler(pb.GMT_SetExcelExpired, s.SetExcelExpired)
+	registerInsideGmtHandler(pb.GMT_GetExcelExpired, s.GetExcelExpired)
+	registerInsideGmtHandler(pb.GMT_GetExcelList, s.GetExcelList)
+	registerInsideGmtHandler(pb.GMT_GetAllianceInfo, s.GetAllianceInfo)
+	registerInsideGmtHandler(pb.GMT_GetRollingVersion, s.GetServerRollingVersion)
+	registerInsideGmtHandler(pb.GMT_GetExcelConfigReq, s.GetExcelConfigReq)
 }
 
 func (s *IDIPServer) GetExcelConfigReq(apiData []byte) []byte {
-	req := &cmd.GMTExcelConfigReq{}
+	req := &pb.GMTExcelConfigReq{}
 	if err := json.Unmarshal(apiData, req); err != nil {
 		logger.Errorf("Unmarshal fail apiData:%s error:%+v", string(apiData), err)
 	}
@@ -110,21 +110,21 @@ func (s *IDIPServer) GetExcelConfigReq(apiData []byte) []byte {
 }
 
 func (s *IDIPServer) UserInfoReq(apiData []byte) []byte {
-	req := &cmd.GMTUserInfoReq{}
+	req := &pb.GMTUserInfoReq{}
 	if err := json.Unmarshal(apiData, req); err != nil {
 		logger.Errorf("Unmarshal fail apiData:%s error:%+v", string(apiData), err)
 	}
-	typ, ok := cmd.GMT_UserData_value[req.Type]
+	typ, ok := pb.GMT_UserData_value[req.Type]
 	logger.Debugf("InsideGMT UserInfo,type:%v Req: %s", typ, utils.PrettyJson(req))
 	if ok {
-		return s.GetUserInfo(s.GetUAID(req.Uid, req.RoleId), cmd.GMT_UserData(typ))
+		return s.GetUserInfo(s.GetUAID(req.Uid, req.RoleId), pb.GMT_UserData(typ))
 	} else {
 		return []byte(req.Type + " error")
 	}
 }
 
 func (s *IDIPServer) CopyUserInfoReq(apiData []byte) []byte {
-	req := &cmd.GMTCopyUserInfoReq{}
+	req := &pb.GMTCopyUserInfoReq{}
 	if err := json.Unmarshal(apiData, req); err != nil {
 		logger.Errorf("Unmarshal fail apiData:%s error:%+v", string(apiData), err)
 	}
@@ -133,7 +133,7 @@ func (s *IDIPServer) CopyUserInfoReq(apiData []byte) []byte {
 }
 
 func (s *IDIPServer) ExportUserJsonReq(apiData []byte) []byte {
-	req := &cmd.GMTExportUserJsonReq{}
+	req := &pb.GMTExportUserJsonReq{}
 	if err := json.Unmarshal(apiData, req); err != nil {
 		logger.Errorf("Unmarshal fail apiData:%s error:%+v", string(apiData), err)
 	}
@@ -142,7 +142,7 @@ func (s *IDIPServer) ExportUserJsonReq(apiData []byte) []byte {
 }
 
 func (s *IDIPServer) ImportUserJsonReq(apiData []byte) []byte {
-	req := &cmd.GMTImportUserJsonReq{}
+	req := &pb.GMTImportUserJsonReq{}
 	if err := json.Unmarshal(apiData, req); err != nil {
 		logger.Errorf("Unmarshal fail apiData:%s error:%+v", string(apiData), err)
 	}
@@ -151,7 +151,7 @@ func (s *IDIPServer) ImportUserJsonReq(apiData []byte) []byte {
 }
 
 func (s *IDIPServer) MailListReq(apiData []byte) []byte {
-	req := &cmd.GMTCommonReq{}
+	req := &pb.GMTCommonReq{}
 	if err := json.Unmarshal(apiData, req); err != nil {
 		logger.Errorf("Unmarshal fail apiData:%s error:%+v", string(apiData), err)
 	}
@@ -159,7 +159,7 @@ func (s *IDIPServer) MailListReq(apiData []byte) []byte {
 }
 
 func (s *IDIPServer) GetSysMailReq(apiData []byte) []byte {
-	req := &cmd.GMTGetSysMailReq{}
+	req := &pb.GMTGetSysMailReq{}
 	if err := json.Unmarshal(apiData, req); err != nil {
 		logger.Errorf("Unmarshal fail apiData:%s error:%+v", string(apiData), err)
 	}
@@ -167,7 +167,7 @@ func (s *IDIPServer) GetSysMailReq(apiData []byte) []byte {
 }
 
 func (s *IDIPServer) DelSysMailReq(apiData []byte) []byte {
-	req := &cmd.GMTDelSysMailReq{}
+	req := &pb.GMTDelSysMailReq{}
 	if err := json.Unmarshal(apiData, req); err != nil {
 		logger.Errorf("Unmarshal fail apiData:%s error:%+v", string(apiData), err)
 	}
@@ -175,7 +175,7 @@ func (s *IDIPServer) DelSysMailReq(apiData []byte) []byte {
 }
 
 func (s *IDIPServer) CheckItemReq(apiData []byte) []byte {
-	req := &cmd.GMTCheckItemReq{}
+	req := &pb.GMTCheckItemReq{}
 	if err := json.Unmarshal(apiData, req); err != nil {
 		logger.Errorf("Unmarshal fail apiData:%s error:%+v", string(apiData), err)
 	}
@@ -183,7 +183,7 @@ func (s *IDIPServer) CheckItemReq(apiData []byte) []byte {
 }
 
 func (s *IDIPServer) GMCommondReq(apiData []byte) []byte {
-	req := &cmd.GMTGMCommondReq{}
+	req := &pb.GMTGMCommondReq{}
 	if err := json.Unmarshal(apiData, req); err != nil {
 		logger.Errorf("Unmarshal fail apiData:%s error:%+v", string(apiData), err)
 	}
@@ -193,7 +193,7 @@ func (s *IDIPServer) GMCommondReq(apiData []byte) []byte {
 }
 
 func (s *IDIPServer) ServerListReq(apiData []byte) []byte {
-	req := &cmd.GMTServerListReq{}
+	req := &pb.GMTServerListReq{}
 	if err := json.Unmarshal(apiData, req); err != nil {
 		logger.Errorf("Unmarshal fail apiData:%s error:%+v", string(apiData), err)
 	}
@@ -201,7 +201,7 @@ func (s *IDIPServer) ServerListReq(apiData []byte) []byte {
 }
 
 func (s *IDIPServer) UpdateGameJsonReq(apiData []byte) []byte {
-	req := &cmd.GMTUpdateGameJsonReq{}
+	req := &pb.GMTUpdateGameJsonReq{}
 	if err := json.Unmarshal(apiData, req); err != nil {
 		logger.Errorf("Unmarshal fail apiData:%s error:%+v", string(apiData), err)
 	}
@@ -209,7 +209,7 @@ func (s *IDIPServer) UpdateGameJsonReq(apiData []byte) []byte {
 }
 
 func (s *IDIPServer) GetGameJsonReq(apiData []byte) []byte {
-	req := &cmd.GMTGetGameJsonReq{}
+	req := &pb.GMTGetGameJsonReq{}
 	if err := json.Unmarshal(apiData, req); err != nil {
 		logger.Errorf("Unmarshal fail apiData:%s error:%+v", string(apiData), err)
 	}
@@ -217,14 +217,14 @@ func (s *IDIPServer) GetGameJsonReq(apiData []byte) []byte {
 }
 
 func (s *IDIPServer) ModConfCenterReq(apiData []byte) []byte {
-	req := &cmd.GMTModConfCenterReq{}
+	req := &pb.GMTModConfCenterReq{}
 	if err := json.Unmarshal(apiData, req); err != nil {
 		logger.Errorf("Unmarshal fail apiData:%s error:%+v", string(apiData), err)
 	}
 	return s.ModConfCenter(req.Name, req.Val)
 }
 func (s *IDIPServer) GetConfCenterReq(apiData []byte) []byte {
-	req := &cmd.GMTGetConfCenterReq{}
+	req := &pb.GMTGetConfCenterReq{}
 	if err := json.Unmarshal(apiData, req); err != nil {
 		logger.Errorf("Unmarshal fail apiData:%s error:%+v", string(apiData), err)
 	}
@@ -261,7 +261,7 @@ func (s *IDIPServer) GetAllGMTRecord(apiData []byte) []byte {
 		logger.Warn("InsideGmtHandler GetAllGMTRecord  is not found ", err)
 		return nil
 	}
-	value := &cmd.GMTDataVerify{}
+	value := &pb.GMTDataVerify{}
 	if len(record) > 0 {
 		err = proto.Unmarshal(record, value)
 		if err != nil {
@@ -272,13 +272,13 @@ func (s *IDIPServer) GetAllGMTRecord(apiData []byte) []byte {
 	return data
 }
 
-func (s *IDIPServer) SaveGMTRecord(api *cmd.GMTApiReq) error {
+func (s *IDIPServer) SaveGMTRecord(api *pb.GMTApiReq) error {
 
 	record, err := s.GetGMTRecord()
 	if err != nil {
 		logger.Warn("InsideGmtHandler SaveGMTRecord  is not found ", api.GetCmd(), err)
 	}
-	value := &cmd.GMTDataVerify{}
+	value := &pb.GMTDataVerify{}
 	if len(record) > 0 {
 		err = proto.Unmarshal(record, value)
 		if err != nil {
@@ -287,7 +287,7 @@ func (s *IDIPServer) SaveGMTRecord(api *cmd.GMTApiReq) error {
 	}
 	value.OrderNumMax++
 	// 先获取库里的数据TODO
-	value.DataVerify = append(value.DataVerify, &cmd.DataVerify{
+	value.DataVerify = append(value.DataVerify, &pb.DataVerify{
 		Cmd:        api.GetCmd(),
 		Data:       api.GetData(),
 		OpType:     api.GetOpType(),
@@ -305,9 +305,9 @@ func (s *IDIPServer) SaveGMTRecord(api *cmd.GMTApiReq) error {
 		return err
 	}
 
-	//如果是改变服务器版本状态的,要改变元数据的状态
-	if api.GetCmd() == int32(cmd.GMT_ChangeVersionState) {
-		//TODO
+	// 如果是改变服务器版本状态的,要改变元数据的状态
+	if api.GetCmd() == int32(pb.GMT_ChangeVersionState) {
+		// TODO
 		versionData := &ChangeVersionState{}
 		json.Unmarshal(api.GetData(), versionData)
 		var key string
@@ -344,7 +344,7 @@ func (s *IDIPServer) Verify(apiData []byte) []byte {
 	if err != nil {
 		logger.Warn("InsideGmtHandler Verify  is not found", err)
 	}
-	value := &cmd.GMTDataVerify{}
+	value := &pb.GMTDataVerify{}
 	if len(record) > 0 {
 		err = proto.Unmarshal(record, value)
 		if err != nil {
@@ -354,7 +354,7 @@ func (s *IDIPServer) Verify(apiData []byte) []byte {
 	}
 
 	// 从库里把这条数据找出来
-	target := &cmd.DataVerify{}
+	target := &pb.DataVerify{}
 	for _, v := range value.DataVerify {
 		if v.Number == req.Number {
 			target = v
@@ -371,7 +371,7 @@ func (s *IDIPServer) Verify(apiData []byte) []byte {
 		target.State = Rejected
 		target.Result = "successful"
 	case Pass:
-		if handler, ok := InsideGmtHandlerMap[cmd.GMT(target.Cmd)]; ok {
+		if handler, ok := InsideGmtHandlerMap[pb.GMT(target.Cmd)]; ok {
 			out := handler(target.Data)
 			target.Result = string(out)
 			target.State = Pass
@@ -398,36 +398,36 @@ func (s *IDIPServer) getUserOrderList(out *common.Content, apiData []byte) {
 	req := &GetOrderReq{}
 	if err := json.Unmarshal(apiData, req); err != nil {
 		logger.Warn("C2SMsg - Unmarshal error ")
-		RetCommonMsg(out, http.StatusInternalServerError, int32(cmd.ErrorCode_InternalError), Internal_Error)
+		RetCommonMsg(out, http.StatusInternalServerError, int32(pb.ErrorCode_InternalError), Internal_Error)
 		return
 	}
 	//
 	uaid := s.GetUAID(req.Uid, req.RoleId)
 
-	reqData := &cmd.S2S_OrderListReq{
-		OrderStatus: cmd.OrderStatus_OrderStatus_Max,
+	reqData := &pb.S2S_OrderListReq{
+		OrderStatus: pb.OrderStatus_OrderStatus_Max,
 	}
 
 	data, err := proto.Marshal(reqData)
 	if err != nil {
-		RetCommonMsg(out, http.StatusInternalServerError, int32(cmd.ErrorCode_InternalError), Internal_Error)
+		RetCommonMsg(out, http.StatusInternalServerError, int32(pb.ErrorCode_InternalError), Internal_Error)
 		return
 	}
 	// 从DB中获取用户订单数据
 	rsp, err := s.UserInvoke(uaid, &base.ProtoMsg{
 		AppId:   s.AppId,
-		MsgId:   int32(cmd.Protocols_PS2S_OrderListReq),
+		MsgId:   int32(pb.Protocols_PS2S_OrderListReq),
 		UserId:  req.Uid,
 		RoleId:  req.RoleId,
 		UAID:    uaid,
 		Data:    data,
 		ErrCode: 0,
-		//GUID:    utils.GenIntUUID(),
+		// GUID:    utils.GenIntUUID(),
 		ServerReqIdx: utils.GenIntUUID(),
 		Topic:        "",
 	})
 	if rsp.ErrCode != RET_CODE_SUCCESS || err != nil {
-		RetCommonMsg(out, http.StatusInternalServerError, int32(cmd.ErrorCode_InternalError), Internal_Error)
+		RetCommonMsg(out, http.StatusInternalServerError, int32(pb.ErrorCode_InternalError), Internal_Error)
 		return
 	}
 	out.Data = rsp.Data
@@ -442,30 +442,30 @@ func (s *IDIPServer) ReDropOrderReward(apiData []byte) []byte {
 	//
 	uaid := s.GetUAID(req.Uid, req.RoleId)
 
-	reqData := &cmd.S2S_ReplacementOrderReq{
+	reqData := &pb.S2S_ReplacementOrderReq{
 		OrderId: req.OrderId,
 	}
 
 	data, err := proto.Marshal(reqData)
 	if err != nil {
-		//RetCommonMsg(out, http.StatusInternalServerError, int32(cmd.ErrorCode_InternalError), Internal_Error)
+		// RetCommonMsg(out, http.StatusInternalServerError, int32(pb.ErrorCode_InternalError), Internal_Error)
 		return nil
 	}
 	// 从DB中获取用户订单数据
 	rsp, err := s.UserInvoke(uaid, &base.ProtoMsg{
 		AppId:   s.AppId,
-		MsgId:   int32(cmd.Protocols_PS2S_ReplacementOrderReq),
+		MsgId:   int32(pb.Protocols_PS2S_ReplacementOrderReq),
 		UserId:  req.Uid,
 		RoleId:  req.RoleId,
 		UAID:    uaid,
 		Data:    data,
 		ErrCode: 0,
-		//GUID:    utils.GenIntUUID(),
+		// GUID:    utils.GenIntUUID(),
 		ServerReqIdx: utils.GenIntUUID(),
 		Topic:        "",
 	})
 	if rsp.ErrCode != RET_CODE_SUCCESS || err != nil {
-		//RetCommonMsg(out, http.StatusInternalServerError, int32(cmd.ErrorCode_InternalError), Internal_Error)
+		// RetCommonMsg(out, http.StatusInternalServerError, int32(pb.ErrorCode_InternalError), Internal_Error)
 
 		return []byte{}
 	}
@@ -473,21 +473,21 @@ func (s *IDIPServer) ReDropOrderReward(apiData []byte) []byte {
 }
 
 func (s *IDIPServer) GetUserBagInfo(apiData []byte) []byte {
-	req := &cmd.GMTCommonReq{}
+	req := &pb.GMTCommonReq{}
 	if err := json.Unmarshal(apiData, req); err != nil {
 		logger.Errorf("Unmarshal fail apiData:%s error:%+v", string(apiData), err)
 	}
-	//获取背包数据
+	// 获取背包数据
 	uaid := s.GetUAID(req.Uid, req.RoleId)
 	userItems, err := s.GetMongoGame(db.KeyUserItems(uaid), nil)
 	if err != nil {
 		return s.GenRet(err.Error())
 	}
-	info := &cmd.PCommonItemInfos{}
+	info := &pb.PCommonItemInfos{}
 	if err = base.UnmarshalData(userItems.Data, info); err != nil {
 		return s.GenRet(err.Error())
 	}
-	//可是转换
+	// 可是转换
 	ret := s.ConvertBagItem(info.GetItems())
 	// 返回
 	data, err := json.Marshal(ret)
@@ -499,11 +499,11 @@ func (s *IDIPServer) GetUserBagInfo(apiData []byte) []byte {
 }
 
 func (s *IDIPServer) GetUserCardInfo(apiData []byte) []byte {
-	req := &cmd.GMTCommonReq{}
+	req := &pb.GMTCommonReq{}
 	if err := json.Unmarshal(apiData, req); err != nil {
 		logger.Errorf("Unmarshal fail apiData:%s error:%+v", string(apiData), err)
 	}
-	//获取卡片数据
+	// 获取卡片数据
 	uaid := s.GetUAID(req.Uid, req.RoleId)
 	userCards, err := s.GetMongoGame(db.KeyUserCard(uaid), nil)
 	if err != nil {
@@ -513,14 +513,14 @@ func (s *IDIPServer) GetUserCardInfo(apiData []byte) []byte {
 	if err != nil {
 		return s.GenRet(err.Error())
 	}
-	equips := &cmd.PEquipData{}
+	equips := &pb.PEquipData{}
 	err = proto.Unmarshal(userEquip.Data, equips)
 
-	info := &cmd.PCardData{}
+	info := &pb.PCardData{}
 	if err = base.UnmarshalData(userCards.Data, info); err != nil {
 		return s.GenRet(err.Error())
 	}
-	//可是转换
+	// 可是转换
 	ret := s.ConvertCard(info.GetCard(), equips)
 	// 返回
 	data, err := json.Marshal(ret)
@@ -540,32 +540,32 @@ func (s *IDIPServer) ReduceItem(apiData []byte) []byte {
 	roleId, _ := strconv.ParseUint(req.RoleId, 10, 64)
 	uaid := s.GetUAID(req.Uid, uint64(roleId))
 
-	reqData := &cmd.S2S_ReduceUserItemReq{
+	reqData := &pb.S2S_ReduceUserItemReq{
 		ItemId: req.ItemId,
-		//Num:    req.Num,
+		// Num:    req.Num,
 		Num: req.Num,
 	}
 
 	data, err := proto.Marshal(reqData)
 	if err != nil {
-		//RetCommonMsg(out, http.StatusInternalServerError, int32(cmd.ErrorCode_InternalError), Internal_Error)
+		// RetCommonMsg(out, http.StatusInternalServerError, int32(pb.ErrorCode_InternalError), Internal_Error)
 		return nil
 	}
 	// 调userInvoke 扣除道具
 	rsp, err := s.UserInvoke(uaid, &base.ProtoMsg{
 		AppId:   s.AppId,
-		MsgId:   int32(cmd.Protocols_PS2S_ReduceUserItemReq),
+		MsgId:   int32(pb.Protocols_PS2S_ReduceUserItemReq),
 		UserId:  req.Uid,
 		RoleId:  uint64(roleId),
 		UAID:    uaid,
 		Data:    data,
 		ErrCode: 0,
-		//GUID:    utils.GenIntUUID(),
+		// GUID:    utils.GenIntUUID(),
 		ServerReqIdx: utils.GenIntUUID(),
 		Topic:        "",
 	})
 	if rsp.ErrCode != RET_CODE_SUCCESS || err != nil {
-		//RetCommonMsg(out, http.StatusInternalServerError, int32(cmd.ErrorCode_InternalError), Internal_Error)
+		// RetCommonMsg(out, http.StatusInternalServerError, int32(pb.ErrorCode_InternalError), Internal_Error)
 		fmt.Println("报错:", rsp.ErrCode, err)
 		return []byte{}
 	}
@@ -579,7 +579,7 @@ func (s *IDIPServer) GetServerVersion(apiData []byte) []byte {
 	}
 
 	var version *ServerVersion
-	if req.Ops == "1" { //获取服务端版本
+	if req.Ops == "1" { // 获取服务端版本
 		version = s.getServerVersion()
 	}
 	if req.Ops == "2" { // 客户端
@@ -603,12 +603,12 @@ func (s *IDIPServer) ChangeVersionState(apiData []byte) []byte {
 		versionRecord = s.changeServerVersionState(req)
 	}
 	if req.ServiceType == "2" {
-		//versionRecord = s.changeClientVersionState(req)
-		//设置当前版本
-		//s.setCurrentVersion(req)
-		//s.setMaxClientVersion(req)
-		////坐下oss 版本号和2.8sdk 版本号映射
-		//s.setVersionMap(req)
+		// versionRecord = s.changeClientVersionState(req)
+		// 设置当前版本
+		// s.setCurrentVersion(req)
+		// s.setMaxClientVersion(req)
+		// //坐下oss 版本号和2.8sdk 版本号映射
+		// s.setVersionMap(req)
 	}
 
 	data, err := json.Marshal(versionRecord)
@@ -619,13 +619,13 @@ func (s *IDIPServer) ChangeVersionState(apiData []byte) []byte {
 }
 
 func (s *IDIPServer) changeVersionState(key string, state int32) bool {
-	//key := fmt.Sprintf("version:server:%s", version)
+	// key := fmt.Sprintf("version:server:%s", version)
 	s.Server.Redis.HSet(context.Background(), key, "state", state)
 	return true
 }
 
 func (s *IDIPServer) PushExcelReq(apiData []byte) []byte {
-	req := &cmd.GMTPushExcelReq{}
+	req := &pb.GMTPushExcelReq{}
 	if err := json.Unmarshal(apiData, req); err != nil {
 		logger.Errorf("Unmarshal fail apiData:%s error:%+v", string(apiData), err)
 	}
@@ -634,7 +634,7 @@ func (s *IDIPServer) PushExcelReq(apiData []byte) []byte {
 }
 
 func (s *IDIPServer) SrvHotReloadReq(apiData []byte) []byte {
-	req := &cmd.GMTSrvHotReloadReq{}
+	req := &pb.GMTSrvHotReloadReq{}
 	if err := json.Unmarshal(apiData, req); err != nil {
 		logger.Errorf("Unmarshal fail apiData:%s error:%+v", string(apiData), err)
 	}
@@ -643,7 +643,7 @@ func (s *IDIPServer) SrvHotReloadReq(apiData []byte) []byte {
 }
 
 func (s *IDIPServer) SrvRestartReq(apiData []byte) []byte {
-	req := &cmd.GMTSrvRestartReq{}
+	req := &pb.GMTSrvRestartReq{}
 	if err := json.Unmarshal(apiData, req); err != nil {
 		logger.Errorf("Unmarshal fail apiData:%s error:%+v", string(apiData), err)
 	}
@@ -652,7 +652,7 @@ func (s *IDIPServer) SrvRestartReq(apiData []byte) []byte {
 }
 
 func (s *IDIPServer) NotifyDownloadPkgReq(apiData []byte) []byte {
-	req := &cmd.GMTNotifyDownloadPkgReq{}
+	req := &pb.GMTNotifyDownloadPkgReq{}
 	if err := json.Unmarshal(apiData, req); err != nil {
 		logger.Errorf("Unmarshal fail apiData:%s error:%+v", string(apiData), err)
 	}
@@ -661,7 +661,7 @@ func (s *IDIPServer) NotifyDownloadPkgReq(apiData []byte) []byte {
 }
 
 func (s *IDIPServer) CopyTapUserInfoReq(apiData []byte) []byte {
-	req := &cmd.GMTCopyTapUserInfoReq{}
+	req := &pb.GMTCopyTapUserInfoReq{}
 	if err := json.Unmarshal(apiData, req); err != nil {
 		logger.Errorf("Unmarshal fail apiData:%s error:%+v", string(apiData), err)
 	}
@@ -673,7 +673,7 @@ func (s *IDIPServer) GetServerRollingVersion(apiData []byte) []byte {
 }
 
 func (s *IDIPServer) DelTapUserInfoReq(apiData []byte) []byte {
-	req := &cmd.GMTDelTapUserInfoReq{}
+	req := &pb.GMTDelTapUserInfoReq{}
 	if err := json.Unmarshal(apiData, req); err != nil {
 		logger.Errorf("Unmarshal fail apiData:%s error:%+v", string(apiData), err)
 	}
@@ -689,8 +689,8 @@ func (s *IDIPServer) SetClientMinVersion(apiData []byte) []byte {
 	logger.Debugf("InsideGMT SetClientMinVersion, Req: %s", utils.PrettyJson(req))
 	// 找到流水号=> 到线上版本的映射
 	key := fmt.Sprintf("%s:%s", db.KeyCfgCVersionJenkins, req.Version)
-	//value := s.Server.RedisCenter.Get(context.Background(), key)
-	//newVersion := value.Val()
+	// value := s.Server.RedisCenter.Get(context.Background(), key)
+	// newVersion := value.Val()
 	newVersion, err := s.Server.GetFromConfigCenter(key)
 	if err != nil {
 		logger.Debugf("InsideGMT SetClientMinVersion, err: %s", err)
@@ -728,8 +728,8 @@ func (s *IDIPServer) GetClientMaxVersion(apiData []byte) []byte {
 	if strings.ToLower(req.Platform) == "ios" {
 		key = db.KeyCfgCVersionIOSMax
 	}
-	//val := s.Server.Redis.Get(context.Background(), "cfg:version:client:android:max")
-	//val := s.Server.RedisCenter.Get(context.Background(), key)
+	// val := s.Server.Redis.Get(context.Background(), "cfg:version:client:android:max")
+	// val := s.Server.RedisCenter.Get(context.Background(), key)
 	resp := &GetClientMaxVersion{}
 	maxVersion, err := s.Server.GetFromConfigCenter(key)
 	logger.Warnf("GetClientMaxVersionReq: maxVersion:%s,err:%+v", maxVersion, err)
@@ -779,18 +779,18 @@ func (s *IDIPServer) SetExcelExpired(apiData []byte) []byte {
 
 func (s *IDIPServer) getServerVersion() *ServerVersion {
 	version := &ServerVersion{
-		//VersionRecord: make([]*VersionRecord, 0),
+		// VersionRecord: make([]*VersionRecord, 0),
 		CurVersion: "",
 	}
-	//res := s.Server.RedisCenter.Keys(context.Background(), "cn:develop:version:server:*")
-	//for _, key := range res.Val() {
+	// res := s.Server.RedisCenter.Keys(context.Background(), "cn:develop:version:server:*")
+	// for _, key := range res.Val() {
 	//	versionMap := s.Server.Redis.HGetAll(context.Background(), key)
 	//	version.VersionRecord = append(version.VersionRecord, VersionRecordMap2Struct(versionMap.Val()))
 	//	fmt.Println("version：")
-	//}
-	//TODO 获取当前版本
+	// }
+	// TODO 获取当前版本
 
-	//value := s.Server.Redis.Get(context.Background(), "cfg:version:server")
+	// value := s.Server.Redis.Get(context.Background(), "cfg:version:server")
 
 	version.CurVersion = global.ROLLING_VERSION
 	return version
@@ -802,34 +802,34 @@ func (s *IDIPServer) getClientVersion() *ServerVersion {
 		CurVersion:    "",
 	}
 	var err error
-	//获取当前版本android
-	//value := s.Server.RedisCenter.Get(context.Background(), db.KeyCfgCVersionAndroid)
-	//version.CurVersionAndroid = value.Val()
+	// 获取当前版本android
+	// value := s.Server.RedisCenter.Get(context.Background(), db.KeyCfgCVersionAndroid)
+	// version.CurVersionAndroid = value.Val()
 	version.CurVersionAndroid, err = s.Server.GetFromConfigCenter(db.KeyCfgCVersionAndroid)
 	if err != nil {
 		logger.Warn("getClientVersion - CurVersionAndroid error ", err)
 	}
 
-	//value = s.Server.RedisCenter.Get(context.Background(), db.KeyCfgCVersionIOS)
-	//version.CurVersionIos = value.Val()
+	// value = s.Server.RedisCenter.Get(context.Background(), db.KeyCfgCVersionIOS)
+	// version.CurVersionIos = value.Val()
 	version.CurVersionIos, err = s.Server.GetFromConfigCenter(db.KeyCfgCVersionIOS)
 	if err != nil {
 		logger.Warn("getClientVersion - CurVersionIos error ", err)
 	}
-	//获取最低版本
-	//valueMini := s.Server.RedisCenter.Get(context.Background(), db.KeyCfgCVersionAndroidMini)
-	//version.MinVersionAndroid = valueMini.Val()
+	// 获取最低版本
+	// valueMini := s.Server.RedisCenter.Get(context.Background(), db.KeyCfgCVersionAndroidMini)
+	// version.MinVersionAndroid = valueMini.Val()
 	version.MinVersionAndroid, err = s.Server.GetFromConfigCenter(db.KeyCfgCVersionAndroidMini)
 	if err != nil {
 		logger.Warn("getClientVersion - MinVersionAndroid error ", err)
 	}
-	//valueMini = s.Server.RedisCenter.Get(context.Background(), db.KeyCfgCVersionIOSMini)
-	//version.MinVersionIos = valueMini.Val()
+	// valueMini = s.Server.RedisCenter.Get(context.Background(), db.KeyCfgCVersionIOSMini)
+	// version.MinVersionIos = valueMini.Val()
 	version.MinVersionIos, err = s.Server.GetFromConfigCenter(db.KeyCfgCVersionIOSMini)
 	if err != nil {
 		logger.Warn("getClientVersion - MinVersionIos error ", err)
 	}
-	//获取当前版本的映射Jenkins 版本
+	// 获取当前版本的映射Jenkins 版本
 	version.CurJenkinsVersionAndroid, err = s.GetJenkinsCUrVersion(version.CurVersionAndroid)
 	if err != nil {
 		logger.Warn("getClientVersion - CurJenkinsVersionAndroid error ", err)
@@ -854,28 +854,28 @@ func (s *IDIPServer) setCurrentVersion(req *ClientVersionPublishReq) error {
 	if "ios" == strings.ToLower(req.Platform) {
 		key = db.KeyCfgCVersionIOS
 	}
-	//s.Server.RedisCenter.Set(context.Background(), key, req.NewVersion, -1)
+	// s.Server.RedisCenter.Set(context.Background(), key, req.NewVersion, -1)
 	return s.Server.SaveToConfigCenter(key, req.NewVersion)
 }
 func (s *IDIPServer) setVersionMap(req *ClientVersionPublishReq) error {
-	//设置线上版本=>jenkins 流水号映射
+	// 设置线上版本=>jenkins 流水号映射
 	key := db.KeyCfgCVersionOnline
-	//if strings.ToLower(req.Channel) == "ios" {
+	// if strings.ToLower(req.Channel) == "ios" {
 	//	key = db.KeyCfgCVersionIOSOnline
-	//}
+	// }
 	key = fmt.Sprintf("%s:%s", key, req.NewVersion)
-	//s.Server.RedisCenter.Set(context.Background(), key, req.Version, -1)
+	// s.Server.RedisCenter.Set(context.Background(), key, req.Version, -1)
 	if err := s.Server.SaveToConfigCenter(key, req.Version); err != nil {
 		return err
 	}
 
-	//设置流水号=> 线上版本的映射
+	// 设置流水号=> 线上版本的映射
 	keyJenkins := db.KeyCfgCVersionJenkins
-	//if strings.ToLower(req.Channel) == "ios" {
+	// if strings.ToLower(req.Channel) == "ios" {
 	//	keyJenkins = db.KeyCfgCVersionIOSJenkins
-	//}
+	// }
 	keyJenkins = fmt.Sprintf("%s:%s", keyJenkins, req.Version)
-	//s.Server.RedisCenter.Set(context.Background(), keyJenkins, req.NewVersion, -1)
+	// s.Server.RedisCenter.Set(context.Background(), keyJenkins, req.NewVersion, -1)
 	return s.Server.SaveToConfigCenter(keyJenkins, req.NewVersion)
 
 }
@@ -885,21 +885,21 @@ func (s *IDIPServer) setMaxClientVersion(req *ClientVersionPublishReq) error {
 	if "ios" == strings.ToLower(req.Platform) {
 		key = db.KeyCfgCVersionIOSMax
 	}
-	//s.Server.RedisCenter.Set(context.Background(), key, req.NewVersion, -1)
+	// s.Server.RedisCenter.Set(context.Background(), key, req.NewVersion, -1)
 	return s.Server.SaveToConfigCenter(key, req.NewVersion)
 }
 
 func (s *IDIPServer) GetJenkinsCUrVersion(curVersion string) (string, error) {
 	key := fmt.Sprintf("%s:%s", db.KeyCfgCVersionOnline, curVersion)
-	//value := s.Server.RedisCenter.Get(context.Background(), key)
-	//return value.Val()
+	// value := s.Server.RedisCenter.Get(context.Background(), key)
+	// return value.Val()
 	return s.Server.GetFromConfigCenter(key)
 }
 
 func (s *IDIPServer) GetJenkinsMinVersion(minVersion string) (string, error) {
 	key := fmt.Sprintf("cfg:version:j_c:map:%s", minVersion)
-	//value := s.Server.Redis.Get(context.Background(), key)
-	//return value.Val()
+	// value := s.Server.Redis.Get(context.Background(), key)
+	// return value.Val()
 	return s.Server.GetFromConfigCenter(key)
 }
 

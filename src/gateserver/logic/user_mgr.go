@@ -6,7 +6,7 @@ import (
 	"sync"
 	"time"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/metrics"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/threading"
 
@@ -25,7 +25,7 @@ func NewUserMgr(srv *GateServer) *UserMgr {
 	return mgr
 }
 
-func (m *UserMgr) AddUser(uid string, roleId uint64, c *tcpx.Context, session *cmd.UserSession) *User {
+func (m *UserMgr) AddUser(uid string, roleId uint64, c *tcpx.Context, session *pb.UserSession) *User {
 	user := NewUser(uid, roleId, c, m.s)
 	err := user.SetSession(session)
 	if err != nil {
@@ -58,7 +58,7 @@ func (m *UserMgr) BroadcastMsg(msgId int32, appid string, data []byte) *User {
 	i := 0
 	m.users.Range(func(key, value any) bool {
 		logger.Debugf("全服广播空指针调试，user：%v", value.(*User))
-		err := value.(*User).ReplyWithBody(msgId, 0, cmd.ErrorCode_Success, data)
+		err := value.(*User).ReplyWithBody(msgId, 0, pb.ErrorCode_Success, data)
 		if err != nil {
 			logger.Warnf("[BroadcastMsg] ReplyWithBody error, %v %v %v %v", key, msgId, appid, err)
 		} else {
@@ -86,7 +86,7 @@ func (m *UserMgr) Logout(uid, reason string) error {
 		}
 
 		// 通知userActor广播actors解除绑定的topic
-		err := m.s.NotifyActorGateTopic(user.uid, user.uaid, cmd.GateTopicOperator_GTO_unbound)
+		err := m.s.NotifyActorGateTopic(user.uid, user.uaid, pb.GateTopicOperator_GTO_unbound)
 		if err != nil {
 			logger.Errorf(err.Error())
 		}*/
@@ -97,7 +97,7 @@ func (m *UserMgr) Logout(uid, reason string) error {
 	}
 	user.ctx = nil
 
-	//m.DelUser(uid)
+	// m.DelUser(uid)
 
 	logger.Infof("uid:%s reason:%s", uid, reason)
 	return nil
@@ -113,8 +113,8 @@ func (m *UserMgr) UserNum() int32 {
 }
 
 func (m *UserMgr) HeartbeatCheck() error {
-	//now := time.Now().Unix()
-	//m.users.Range(func(key, value any) bool {
+	// now := time.Now().Unix()
+	// m.users.Range(func(key, value any) bool {
 	//	v := value.(*User)
 	//	diff := int32(now - v.lastHeartbeatTs)
 	//	if diff >= conf.GConf().Base.HeartbeatTimout {
@@ -125,7 +125,7 @@ func (m *UserMgr) HeartbeatCheck() error {
 	//		}
 	//	}
 	//	return true
-	//})
+	// })
 	return nil
 }
 
@@ -142,7 +142,7 @@ func (m *UserMgr) ReportDataMinute() error {
 func reportOnlineUser(m *UserMgr) error {
 	userNum := m.UserNum()
 
-	//threading.RunSafe(func() {
+	// threading.RunSafe(func() {
 	//	lilith.WriteDataLog(&lilith.Online{
 	//		LogType:     lilith.LogType_Online,
 	//		Version:     strconv.Itoa(lilith.VERSION),
@@ -151,7 +151,7 @@ func reportOnlineUser(m *UserMgr) error {
 	//		OnlineCount: int64(userNum),
 	//		ServerTag:   m.s.AppId,
 	//	})
-	//})
+	// })
 	threading.RunSafe(func() {
 		e := &taptap.Online{
 			PropertyFieldInfo: taptap.BuildPropertyFieldInfo(nil),

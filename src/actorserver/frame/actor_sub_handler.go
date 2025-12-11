@@ -1,7 +1,7 @@
 package frame
 
 import (
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/process"
@@ -12,8 +12,8 @@ import (
 
 func (s *ActorServer) HandlerSubEvent(msg *base.ProtoMsg) (err error) {
 	switch msg.MsgId {
-	case int32(cmd.Protocols_PS2S_HotReloadReq):
-		req := &cmd.S2S_HotReloadReq{}
+	case int32(pb.Protocols_PS2S_HotReloadReq):
+		req := &pb.S2S_HotReloadReq{}
 		err = msg.UnmarshalData(req)
 		if err != nil {
 			logger.Errorf("HandlerSubEvent err:%+v msg:s", err, msg.Str())
@@ -24,7 +24,7 @@ func (s *ActorServer) HandlerSubEvent(msg *base.ProtoMsg) (err error) {
 		} else {
 			err = s.HandlerHotEvent(msg)
 		}
-	case int32(cmd.Protocols_PS2S_SvcRestartReq):
+	case int32(pb.Protocols_PS2S_SvcRestartReq):
 		threading.GoSafe(func() {
 			process.Exit()
 		})
@@ -36,9 +36,9 @@ func (s *ActorServer) HandlerSubEvent(msg *base.ProtoMsg) (err error) {
 	return err
 }
 
-func (s *ActorServer) HandlerSysMailEvent(req *cmd.S2S_HotReloadReq) (err error) {
+func (s *ActorServer) HandlerSysMailEvent(req *pb.S2S_HotReloadReq) (err error) {
 	now := time.Now().Unix()
-	notify := &cmd.S2S_HotReloadNotifyReq{}
+	notify := &pb.S2S_HotReloadNotifyReq{}
 	err = s.GetSystemMail(s.SysMailMgr.Data)
 	if err != nil {
 		notify.Service = s.PrivateTopicID()
@@ -52,7 +52,7 @@ func (s *ActorServer) HandlerSysMailEvent(req *cmd.S2S_HotReloadReq) (err error)
 
 	reqData, err := proto.Marshal(notify)
 	if err == nil {
-		s.CenterSrvInvoke(int32(cmd.Protocols_PS2S_HotReloadNotifyReq), reqData)
+		s.CenterSrvInvoke(int32(pb.Protocols_PS2S_HotReloadNotifyReq), reqData)
 	}
 	return err
 }

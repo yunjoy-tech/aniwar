@@ -17,7 +17,7 @@ import (
 
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/db"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/service"
 	"google.golang.org/protobuf/proto"
 )
@@ -31,7 +31,7 @@ func NewTugHandler(actor *RoomActor) *TugHandler {
 	h := &TugHandler{USBaseHandler: NewUSBaseHandler(actor, "TugHandler")}
 	h.ChildHandler = h
 
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PC2LS_TugClickReq), h.TugClickReq) // 拔河游戏开始 C2S
+	actor.RegisterProtoHandler(int32(pb.Protocols_PC2LS_TugClickReq), h.TugClickReq) // 拔河游戏开始 C2S
 
 	return h
 }
@@ -43,7 +43,7 @@ func (h *TugHandler) Init() error {
 }
 
 func (h *TugHandler) SetDBData(dbData proto.Message) error {
-	if dbVal, ok := dbData.(*cmd.Tug); ok {
+	if dbVal, ok := dbData.(*pb.Tug); ok {
 		h.actor.Tug = dbVal
 	} else {
 		return fmt.Errorf("SetDBData, 数据类型错误! %v", dbData)
@@ -72,15 +72,15 @@ func (h *TugHandler) TugClickReq(ctx context.Context, in *base.ProtoMsg) (proto.
 		playerUid = in.UserId // 玩家id
 	)
 
-	if h.actor.Tug.TugState != cmd.TugState_ts_playing {
+	if h.actor.Tug.TugState != pb.TugState_ts_playing {
 		// 拔河已结束或未开始 - 忽略本次请求 - 不做errCode响应
-		return &cmd.LS2C_TugClickRes{}, nil, int32(cmd.ErrorCode_Success)
+		return &pb.LS2C_TugClickRes{}, nil, int32(pb.ErrorCode_Success)
 	}
 
-	var req cmd.C2LS_TugClickReq
+	var req pb.C2LS_TugClickReq
 	err = in.UnmarshalData(&req)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_DeSerializeError)
+		return nil, err, int32(pb.ErrorCode_DeSerializeError)
 	}
 
 	for _, scoreInfo := range h.actor.Tug.Scores {
@@ -95,16 +95,16 @@ func (h *TugHandler) TugClickReq(ctx context.Context, in *base.ProtoMsg) (proto.
 	// 持久化
 	err = h.Cache2Redis()
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_SaveDBError)
+		return nil, err, int32(pb.ErrorCode_SaveDBError)
 	}
 
-	rsp := &cmd.LS2C_TugClickRes{TotalClickCount: req.TotalClickCount}
+	rsp := &pb.LS2C_TugClickRes{TotalClickCount: req.TotalClickCount}
 
-	return rsp, nil, int32(cmd.ErrorCode_Success)
+	return rsp, nil, int32(pb.ErrorCode_Success)
 }
 
 func (h *TugHandler) pushTugInfoNtf() {
-	ntf := &cmd.LS2C_TugInfoNtf{
+	ntf := &pb.LS2C_TugInfoNtf{
 		TugInfo: h.actor.Tug,
 	}
 
@@ -115,21 +115,21 @@ func (h *TugHandler) pushTugInfoNtf() {
 }
 
 // 游戏开始
-func (h *TugHandler) tugGameStart(roomModel cmd.RoomModel) {
-	scores := make([]*cmd.TugScore, 0)
+func (h *TugHandler) tugGameStart(roomModel pb.RoomModel) {
+	scores := make([]*pb.TugScore, 0)
 	for _, player := range h.actor.Data.Players {
-		scores = append(scores, &cmd.TugScore{
+		scores = append(scores, &pb.TugScore{
 			PlayerUid: player.PlayerUid,
 			Score:     0,
 		})
 	}
 
-	h.actor.Tug = &cmd.Tug{
-		RoomGameInfo: &cmd.RoomGameInfo{
+	h.actor.Tug = &pb.Tug{
+		RoomGameInfo: &pb.RoomGameInfo{
 			GameId:      utils.GenStrUUID(),
 			TugStartSec: time.Now().Unix(),
 		},
-		TugState:  cmd.TugState_ts_countDown,
+		TugState:  pb.TugState_ts_countDown,
 		Scores:    scores,
 		RoomModel: roomModel,
 	}
@@ -148,7 +148,7 @@ func (h *TugHandler) tugGameStart(roomModel cmd.RoomModel) {
 // 游戏结束
 func (h *TugHandler) tugGameOver() {
 	// 修改状态
-	h.actor.Tug.TugState = cmd.TugState_ts_game_over
+	h.actor.Tug.TugState = pb.TugState_ts_game_over
 
 	h.Infof("游戏结束, 结果:%v", h.actor.Tug)
 
@@ -186,7 +186,7 @@ func (h *TugHandler) tugCreateTick() {
 
 func (h *TugHandler) tugExecTick() {
 	h.Debugf("定时器调用...")
-	if h.actor.Tug.TugState == cmd.TugState_ts_game_over {
+	if h.actor.Tug.TugState == pb.TugState_ts_game_over {
 		// 游戏结束, 停止定时器
 		h._tickStop <- struct{}{}
 		return
@@ -195,7 +195,7 @@ func (h *TugHandler) tugExecTick() {
 	h.actor.Tug.TugTick++
 	if h.actor.Tug.TugTick == datahelper.GetMiniGameCountdown(h.actor.Tug.RoomModel) {
 		// 3秒倒计时结束，游戏开始
-		h.actor.Tug.TugState = cmd.TugState_ts_playing
+		h.actor.Tug.TugState = pb.TugState_ts_playing
 		err := h.Cache2Redis()
 		if err != nil {
 			h.Errorf(err.Error())
@@ -234,7 +234,7 @@ OnGameOver:
 	return true
 }
 
-func getMaxDiff(scores []*cmd.TugScore) int32 {
+func getMaxDiff(scores []*pb.TugScore) int32 {
 	var maxDiff int32 = 0
 	for i := 0; i < len(scores); i++ {
 		for j := i + 1; j < len(scores); j++ {

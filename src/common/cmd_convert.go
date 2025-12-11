@@ -6,7 +6,7 @@ import (
 	"github.com/pkg/errors"
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/utils"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 )
 
 var (
@@ -17,7 +17,7 @@ var (
 )
 
 // 获取上行/下行标识
-func getUpDownFlag(p cmd.Protocols) (error, int32) {
+func getUpDownFlag(p pb.Protocols) (error, int32) {
 	if err := isProtocols(int32(p)); err != nil {
 		return err, 0
 	}
@@ -27,7 +27,7 @@ func getUpDownFlag(p cmd.Protocols) (error, int32) {
 }
 
 // 获取微服务标识
-func getServiceFlag(p cmd.Protocols) (error, int32) {
+func getServiceFlag(p pb.Protocols) (error, int32) {
 	if err := isProtocols(int32(p)); err != nil {
 		return err, 0
 	}
@@ -37,7 +37,7 @@ func getServiceFlag(p cmd.Protocols) (error, int32) {
 }
 
 // 获取游戏模块标识
-func getGameModelFlag(p cmd.Protocols) (error, int32) {
+func getGameModelFlag(p pb.Protocols) (error, int32) {
 	if err := isProtocols(int32(p)); err != nil {
 		return err, 0
 	}
@@ -47,22 +47,22 @@ func getGameModelFlag(p cmd.Protocols) (error, int32) {
 }
 
 // 上行和下行协议互转
-func convertUpAndDown(p cmd.Protocols, addNumber int32) (error, cmd.Protocols) {
+func convertUpAndDown(p pb.Protocols, addNumber int32) (error, pb.Protocols) {
 	if err := isProtocols(int32(p)); err != nil {
-		return errors.New(fmt.Sprintf("NOT EXIST before convert, protocol:%v", p)), cmd.Protocols_Protocols_None
+		return errors.New(fmt.Sprintf("NOT EXIST before convert, protocol:%v", p)), pb.Protocols_Protocols_None
 	}
 
 	cNum := int32(p) + addNumber
 	if err := isProtocols(cNum); err != nil {
-		return errors.New(fmt.Sprintf("NOT EXIST after convert, before protocol:%v, after protocol:%v", p, cNum)), cmd.Protocols_Protocols_None
+		return errors.New(fmt.Sprintf("NOT EXIST after convert, before protocol:%v, after protocol:%v", p, cNum)), pb.Protocols_Protocols_None
 	}
 
-	return nil, cmd.Protocols(cNum)
+	return nil, pb.Protocols(cNum)
 }
 
 // 是否是上行或下行协议号
 func isProtocols(p int32) error {
-	_, ok := cmd.Protocols_name[p]
+	_, ok := pb.Protocols_name[p]
 
 	if !ok {
 		return errors.New(fmt.Sprintf("NOT EXIST before convert, protocol:%v", p))
@@ -72,7 +72,7 @@ func isProtocols(p int32) error {
 }
 
 // Up2Down 上行协议号转为对应的下行协议号
-func Up2Down(up cmd.Protocols) (error, cmd.Protocols) {
+func Up2Down(up pb.Protocols) (error, pb.Protocols) {
 	return convertUpAndDown(up, 10000000)
 }
 
@@ -82,7 +82,7 @@ func UpNumber2DownNumber(upNum int32) (error, int32) {
 		return errors.New(fmt.Sprintf("upNum is NOT protocols, %d", upNum)), 0
 	}
 
-	err, down := Up2Down(cmd.Protocols(upNum))
+	err, down := Up2Down(pb.Protocols(upNum))
 	if err != nil {
 		return err, int32(down)
 	}
@@ -91,7 +91,7 @@ func UpNumber2DownNumber(upNum int32) (error, int32) {
 }
 
 // Down2Up 下行协议号转为对应的上行协议号
-func Down2Up(up cmd.Protocols) (error, cmd.Protocols) {
+func Down2Up(up pb.Protocols) (error, pb.Protocols) {
 	return convertUpAndDown(up, 10000000*-1)
 }
 
@@ -100,7 +100,7 @@ func DownNumber2UpNumber(downNum int32) (error, int32) {
 	if err := isProtocols(downNum); err != nil {
 		return err, 0
 	}
-	err, up := Down2Up(cmd.Protocols(downNum))
+	err, up := Down2Up(pb.Protocols(downNum))
 	if err != nil {
 		return err, int32(up)
 	}
@@ -109,7 +109,7 @@ func DownNumber2UpNumber(downNum int32) (error, int32) {
 }
 
 // IsUp 是否是上行协议号
-func IsUp(p cmd.Protocols) bool {
+func IsUp(p pb.Protocols) bool {
 	err, val := getUpDownFlag(p)
 	if err != nil {
 		return false
@@ -118,7 +118,7 @@ func IsUp(p cmd.Protocols) bool {
 }
 
 // IsDown 是否是下行协议号
-func IsDown(p cmd.Protocols) bool {
+func IsDown(p pb.Protocols) bool {
 	err, val := getUpDownFlag(p)
 	if err != nil {
 		return false
@@ -126,7 +126,7 @@ func IsDown(p cmd.Protocols) bool {
 	return val == 2
 }
 
-func IsUserActorCmd(p cmd.Protocols) bool {
+func IsUserActorCmd(p pb.Protocols) bool {
 	err, flag := getServiceFlag(p)
 	if err != nil {
 		return false
@@ -135,7 +135,7 @@ func IsUserActorCmd(p cmd.Protocols) bool {
 	return flag == 1 // 01标识UserActor服务上的协议
 }
 
-func IsRoomActorCmd(p cmd.Protocols) bool {
+func IsRoomActorCmd(p pb.Protocols) bool {
 	err, flag := getServiceFlag(p)
 	if err != nil {
 		return false
@@ -145,7 +145,7 @@ func IsRoomActorCmd(p cmd.Protocols) bool {
 }
 
 // IsBC 合法的全服广播
-func IsBC(p cmd.Protocols) bool {
+func IsBC(p pb.Protocols) bool {
 	err, val := getUpDownFlag(p)
 	if err != nil {
 		return false

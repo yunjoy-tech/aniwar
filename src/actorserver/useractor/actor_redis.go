@@ -4,26 +4,26 @@ import (
 	"fmt"
 
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/db"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/service"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/state"
 	"google.golang.org/protobuf/proto"
 )
 
 func (u *UserActor) SaveRedis(key string, value proto.Message, meta map[string]string) error {
-	//// kvtable包装
-	//kvTable := &state.KvTable{
+	// // kvtable包装
+	// kvTable := &state.KvTable{
 	//	Id:      0,
 	//	Data:    make([]byte, 0),
 	//	UpSecTS: time.Now().Unix(),
 	//	InSecTS: 0,
-	//}
-	//temp, err := proto.Marshal(value)
-	//if err != nil || temp == nil {
+	// }
+	// temp, err := proto.Marshal(value)
+	// if err != nil || temp == nil {
 	//	return fmt.Errorf("SaveGlobalRedis Marshal err:%+v", err.Error())
-	//}
+	// }
 	//
-	//kvTable.Data = temp
+	// kvTable.Data = temp
 	kvTable, err := db.BuildKvTable(value, key)
 	if err != nil {
 		return err
@@ -35,8 +35,8 @@ func (u *UserActor) SaveRedis(key string, value proto.Message, meta map[string]s
 		return err
 	}
 
-	//logger.Debugf("UserActor SaveGlobalRedis,%s", key)
-	//logger.Debugf("UserActor SaveGlobalRedis,%s, %s", key, utils.PrettyJson(value))
+	// logger.Debugf("UserActor SaveGlobalRedis,%s", key)
+	// logger.Debugf("UserActor SaveGlobalRedis,%s, %s", key, utils.PrettyJson(value))
 	return nil
 }
 
@@ -69,7 +69,7 @@ func (u *UserActor) GetRedis(key string, value proto.Message) error {
 		return err
 	}
 
-	//logger.Infof("UserActor LoadDB ret: %v, %, %v", err, key, utils.PrettyJson(value))
+	// logger.Infof("UserActor LoadDB ret: %v, %, %v", err, key, utils.PrettyJson(value))
 	return nil
 }
 
@@ -106,18 +106,18 @@ func (u *UserActor) RedisKeyExist(key string, message proto.Message) (*state.KvT
 }
 
 // 获取指定玩家的base数据块
-func (u *UserActor) getRoleBaseDataByRoleId(roleId uint64) (*cmd.PServerRoleBaseInfo, error) {
+func (u *UserActor) getRoleBaseDataByRoleId(roleId uint64) (*pb.PServerRoleBaseInfo, error) {
 	uaid, err := u.Srv.GetUAIDByRoleId(roleId)
 	if err != nil {
 		return nil, fmt.Errorf("roleId not found %v", roleId)
 	}
 
-	data := &cmd.PServerRoleBaseInfo{}
+	data := &pb.PServerRoleBaseInfo{}
 	_, err = u.GetCache(service.MongoDbType_MongoGame, db.KeyUserBaseInfo(uaid), data)
 	if err != nil {
 		return nil, err
 	}
-	//获取是否有好友消息
+	// 获取是否有好友消息
 	if data.Common != nil {
 		data.Common.HasMessage = u.UserChatHandler.HasMessage(roleId)
 	}
@@ -125,13 +125,13 @@ func (u *UserActor) getRoleBaseDataByRoleId(roleId uint64) (*cmd.PServerRoleBase
 }
 
 // 获取指定玩家的详情数据块
-func (u *UserActor) getRoleDetailInfoByRoleId(roleId uint64) (*cmd.PServerRoleDetailInfo, error) {
+func (u *UserActor) getRoleDetailInfoByRoleId(roleId uint64) (*pb.PServerRoleDetailInfo, error) {
 	uaid, err := u.Srv.GetUAIDByRoleId(roleId)
 	if err != nil {
 		return nil, fmt.Errorf("roleId not found %v", roleId)
 	}
 
-	data := &cmd.PServerRoleDetailInfo{}
+	data := &pb.PServerRoleDetailInfo{}
 	_, err = u.GetCache(service.MongoDbType_MongoGame, db.KeyRoleDetailInfo(uaid), data)
 	if err != nil {
 		return nil, err
@@ -140,13 +140,13 @@ func (u *UserActor) getRoleDetailInfoByRoleId(roleId uint64) (*cmd.PServerRoleDe
 }
 
 // 获取指定玩家的联盟数据块
-func (u *UserActor) getAllianceDataByRoleId(roleId uint64) (*cmd.PUserAllianceData, error) {
+func (u *UserActor) getAllianceDataByRoleId(roleId uint64) (*pb.PUserAllianceData, error) {
 	uaid, err := u.Srv.GetUAIDByRoleId(roleId)
 	if err != nil {
 		return nil, fmt.Errorf("roleId not found %v", roleId)
 	}
 
-	data := &cmd.PUserAllianceData{}
+	data := &pb.PUserAllianceData{}
 	_, err = u.GetCache(service.MongoDbType_MongoGame, db.KeyUserAlliance(uaid), data)
 	if err != nil {
 		return nil, err
@@ -155,13 +155,13 @@ func (u *UserActor) getAllianceDataByRoleId(roleId uint64) (*cmd.PUserAllianceDa
 }
 
 // 获取指定玩家的好友数据块
-func (u *UserActor) getFriendDataByRoleId(roleId uint64) (*cmd.PFriendData, error) {
+func (u *UserActor) getFriendDataByRoleId(roleId uint64) (*pb.PFriendData, error) {
 	uaid, err := u.Srv.GetUAIDByRoleId(roleId)
 	if err != nil {
 		return nil, fmt.Errorf("roleId not found %v", roleId)
 	}
 
-	data := &cmd.PFriendData{}
+	data := &pb.PFriendData{}
 	_, err = u.GetCache(service.MongoDbType_MongoGame, db.KeyUserFriend(uaid), data)
 	if err != nil {
 		return nil, err
@@ -171,9 +171,9 @@ func (u *UserActor) getFriendDataByRoleId(roleId uint64) (*cmd.PFriendData, erro
 }
 
 // 获取指定玩家的卡牌数据块
-func (u *UserActor) getClientCardInfo(roleId uint64) []*cmd.PClientCardInfo {
+func (u *UserActor) getClientCardInfo(roleId uint64) []*pb.PClientCardInfo {
 	var (
-		cardInfos = make([]*cmd.PClientCardInfo, 0)
+		cardInfos = make([]*pb.PClientCardInfo, 0)
 	)
 	uaid, err := u.Srv.GetUAIDByRoleId(roleId)
 	if err != nil {
@@ -181,14 +181,14 @@ func (u *UserActor) getClientCardInfo(roleId uint64) []*cmd.PClientCardInfo {
 	}
 
 	// 皮肤数据
-	skinData := &cmd.PSkinData{}
+	skinData := &pb.PSkinData{}
 	_, err = u.GetCache(service.MongoDbType_MongoGame, db.KeyUserCardSkin(uaid), skinData)
 	if err != nil {
 		return cardInfos
 	}
 
 	// 卡牌数据
-	cardData := &cmd.PCardData{}
+	cardData := &pb.PCardData{}
 	_, err = u.GetCache(service.MongoDbType_MongoGame, db.KeyUserCard(uaid), cardData)
 	if err != nil {
 		return cardInfos
@@ -208,10 +208,10 @@ func (u *UserActor) getClientCardInfo(roleId uint64) []*cmd.PClientCardInfo {
 }
 
 // 获取指定玩家的卡牌数据块
-func (u *UserActor) getCardDataByRoleId(roleId uint64, cards []int32) ([]*cmd.PClientCardInfo, error) {
+func (u *UserActor) getCardDataByRoleId(roleId uint64, cards []int32) ([]*pb.PClientCardInfo, error) {
 	cardInfos := u.getClientCardInfo(roleId)
 
-	ret := make([]*cmd.PClientCardInfo, 0)
+	ret := make([]*pb.PClientCardInfo, 0)
 	for _, id := range cards {
 		hadFound := false
 		for _, cardInfo := range cardInfos {
@@ -222,7 +222,7 @@ func (u *UserActor) getCardDataByRoleId(roleId uint64, cards []int32) ([]*cmd.PC
 			ret = append(ret, cardInfo)
 		}
 		if !hadFound {
-			ret = append(ret, &cmd.PClientCardInfo{}) // 占位用
+			ret = append(ret, &pb.PClientCardInfo{}) // 占位用
 		}
 
 	}

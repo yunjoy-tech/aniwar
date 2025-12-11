@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"github.com/dapr/go-sdk/service/common"
 	excel "gitlab.musadisca-games.com/wangxw/aniwar/src/excel/data"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"net/http"
 )
 
@@ -23,7 +23,7 @@ func (s *IDIPServer) GetGiftList(out *common.Content, reqJson []byte) {
 	// 解析数据
 	req := &GiftListReq{}
 	if err := json.Unmarshal(reqJson, req); err != nil {
-		RetCommonMsg(out, http.StatusInternalServerError, int32(cmd.ErrorCode_InternalError), Internal_Error)
+		RetCommonMsg(out, http.StatusInternalServerError, int32(pb.ErrorCode_InternalError), Internal_Error)
 		return
 	}
 	giftList := make([]*GiftDetail, 0)

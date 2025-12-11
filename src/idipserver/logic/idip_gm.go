@@ -17,7 +17,7 @@ import (
 	myCommon "gitlab.musadisca-games.com/wangxw/aniwar/src/common"
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/conf"
 	myUtils "gitlab.musadisca-games.com/wangxw/aniwar/src/common/utils"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
 	"google.golang.org/protobuf/proto"
@@ -68,7 +68,7 @@ func (s *IDIPServer) GMTHandler(ctx context.Context, in *common.InvocationEvent)
 
 	// 前置处理逻辑
 	reqJson, code, errMsg := s.PreHandle(in, conf.GConf().GMT.ApiSecret)
-	if code != cmd.ErrorCode_Success {
+	if code != pb.ErrorCode_Success {
 		RetCommonMsg(out, http.StatusInternalServerError, int32(code), errMsg)
 		return
 	}
@@ -80,20 +80,20 @@ func (s *IDIPServer) GMTHandler(ctx context.Context, in *common.InvocationEvent)
 
 	m, err := myUtils.JsonToMap(reqJson)
 	if err != nil {
-		RetCommonMsg(out, http.StatusInternalServerError, int32(cmd.ErrorCode_InternalError), Internal_Error)
+		RetCommonMsg(out, http.StatusInternalServerError, int32(pb.ErrorCode_InternalError), Internal_Error)
 		return
 	}
 
 	// 根据type调用处理
 	var handler GmtHandlerFunc
 	if typ, ok := m["type"].(string); !ok {
-		RetCommonMsg(out, http.StatusInternalServerError, int32(cmd.ErrorCode_InternalError), Internal_Error)
+		RetCommonMsg(out, http.StatusInternalServerError, int32(pb.ErrorCode_InternalError), Internal_Error)
 		return
 	} else {
 		handler = GmtHandlerMap[typ]
 	}
 	if handler == nil {
-		RetCommonMsg(out, http.StatusInternalServerError, int32(cmd.ErrorCode_UnrealizedTypeError), Unrealized_Type_Error)
+		RetCommonMsg(out, http.StatusInternalServerError, int32(pb.ErrorCode_UnrealizedTypeError), Unrealized_Type_Error)
 		return
 	}
 	handler(out, reqJson)
@@ -119,7 +119,7 @@ func (s *IDIPServer) QuestionRewardHandler(ctx context.Context, in *common.Invoc
 	}
 
 	reqJson, code, errMsg := s.PreHandle(in, conf.GConf().Question.SecretKey)
-	if code != cmd.ErrorCode_Success {
+	if code != pb.ErrorCode_Success {
 		logger.Debugf("QuestionRewardHandler prehandle failed, %s", errMsg)
 		RetCommonMsg(out, http.StatusInternalServerError, int32(code), errMsg)
 		return
@@ -128,7 +128,7 @@ func (s *IDIPServer) QuestionRewardHandler(ctx context.Context, in *common.Invoc
 	// 记录此次操作数据
 	err = s.RecordOperation(lilithKey(), reqJson)
 	if err != nil {
-		RetCommonMsg(out, http.StatusInternalServerError, int32(cmd.ErrorCode_InternalError), Internal_Error)
+		RetCommonMsg(out, http.StatusInternalServerError, int32(pb.ErrorCode_InternalError), Internal_Error)
 		return
 	}
 
@@ -138,19 +138,19 @@ func (s *IDIPServer) QuestionRewardHandler(ctx context.Context, in *common.Invoc
 	// sid 		string  问卷id（如是多语言问卷，即为多语言问卷id）
 	m, err := myUtils.JsonToMap(reqJson)
 	if err != nil {
-		RetCommonMsg(out, http.StatusInternalServerError, int32(cmd.ErrorCode_InternalError), Internal_Error)
+		RetCommonMsg(out, http.StatusInternalServerError, int32(pb.ErrorCode_InternalError), Internal_Error)
 		return
 	}
 	mType := m["type"]
 	mRole := m["role_key"]
 	mSid := m["sid"]
 	if mType == nil || mRole == nil || mSid == nil {
-		RetCommonMsg(out, http.StatusInternalServerError, int32(cmd.ErrorCode_ParamError), Param_Error)
+		RetCommonMsg(out, http.StatusInternalServerError, int32(pb.ErrorCode_ParamError), Param_Error)
 		return
 	}
 
 	if mType.(string) != "recv_reward" {
-		RetCommonMsg(out, http.StatusInternalServerError, int32(cmd.ErrorCode_ParamError), Param_Error)
+		RetCommonMsg(out, http.StatusInternalServerError, int32(pb.ErrorCode_ParamError), Param_Error)
 		return
 	}
 
@@ -158,35 +158,35 @@ func (s *IDIPServer) QuestionRewardHandler(ctx context.Context, in *common.Invoc
 	arr := strings.Split(mRole.(string), ";")
 	uid, err := strconv.Atoi(arr[1])
 	if err != nil {
-		RetCommonMsg(out, http.StatusInternalServerError, int32(cmd.ErrorCode_ParamError), Param_Error)
+		RetCommonMsg(out, http.StatusInternalServerError, int32(pb.ErrorCode_ParamError), Param_Error)
 		return
 	}
 
 	uaid, err := s.GetUAIDByRoleId(uint64(uid))
 	if err != nil {
-		RetCommonMsg(out, http.StatusInternalServerError, int32(cmd.ErrorCode_InternalError), Internal_Error)
+		RetCommonMsg(out, http.StatusInternalServerError, int32(pb.ErrorCode_InternalError), Internal_Error)
 		return
 	}
 
-	data, err := proto.Marshal(&cmd.S2S_SendQuestionRewardReq{Sid: mSid.(string)})
+	data, err := proto.Marshal(&pb.S2S_SendQuestionRewardReq{Sid: mSid.(string)})
 	if err != nil {
-		RetCommonMsg(out, http.StatusInternalServerError, int32(cmd.ErrorCode_InternalError), Internal_Error)
+		RetCommonMsg(out, http.StatusInternalServerError, int32(pb.ErrorCode_InternalError), Internal_Error)
 		return
 	}
 	rsp, err := s.UserInvoke(uaid, &base.ProtoMsg{
 		AppId:   s.AppId,
-		MsgId:   int32(cmd.Protocols_PS2S_SendQuestionRewardReq),
+		MsgId:   int32(pb.Protocols_PS2S_SendQuestionRewardReq),
 		UserId:  uaid,
 		RoleId:  0,
 		UAID:    uaid,
 		Data:    data,
 		ErrCode: 0,
-		//GUID:    utils.GenIntUUID(),
+		// GUID:    utils.GenIntUUID(),
 		ServerReqIdx: utils.GenIntUUID(),
 		Topic:        "",
 	})
 	if rsp.ErrCode != RET_CODE_SUCCESS || err != nil {
-		RetCommonMsg(out, http.StatusInternalServerError, int32(cmd.ErrorCode_InternalError), Internal_Error)
+		RetCommonMsg(out, http.StatusInternalServerError, int32(pb.ErrorCode_InternalError), Internal_Error)
 		return
 	}
 
@@ -224,43 +224,43 @@ func (s *IDIPServer) DelAccountHandler(ctx context.Context, in *common.Invocatio
 	// 验签
 	if b := sdksign.ParkSignVerify(argsMap, []string{"sign"}); !b {
 		logger.Debugf("request sign failed.")
-		RetCommonMsg(out, http.StatusInternalServerError, int32(cmd.ErrorCode_SignCheckError), Sign_Check_Error)
+		RetCommonMsg(out, http.StatusInternalServerError, int32(pb.ErrorCode_SignCheckError), Sign_Check_Error)
 		return
 	}
 
 	// 记录此次操作数据
 	err = s.RecordOperation(lilithKey(), in.Data)
 	if err != nil {
-		RetCommonMsg(out, http.StatusInternalServerError, int32(cmd.ErrorCode_InternalError), err)
+		RetCommonMsg(out, http.StatusInternalServerError, int32(pb.ErrorCode_InternalError), err)
 		return
 	}
 
 	uaid := sdkconstant.GenLilithUid(argsMap["app_uid"].(int))
 	// 游戏方不删除数据，进行永久封号处理
-	data, err := proto.Marshal(&cmd.S2AS_ExcuteGMReq{
+	data, err := proto.Marshal(&pb.S2AS_ExcuteGMReq{
 		CmdName: myCommon.GM_BANNED,
 		OptVal:  fmt.Sprintf("%v %s", myCommon.TIME_SEC_1_YEAR*10, "账号数据删除"),
 	})
 	if err != nil {
-		RetCommonMsg(out, http.StatusInternalServerError, int32(cmd.ErrorCode_InternalError), err)
+		RetCommonMsg(out, http.StatusInternalServerError, int32(pb.ErrorCode_InternalError), err)
 		return
 	}
 
 	callData := &base.ProtoMsg{
 		AppId:   s.AppId,
-		MsgId:   int32(cmd.Protocols_PS2AS_GmExecuteReq),
+		MsgId:   int32(pb.Protocols_PS2AS_GmExecuteReq),
 		UserId:  uaid,
 		RoleId:  0,
 		UAID:    uaid,
 		Data:    data,
 		ErrCode: 0,
-		//GUID:    utils.GenIntUUID(),
+		// GUID:    utils.GenIntUUID(),
 		ServerReqIdx: utils.GenIntUUID(),
 		Topic:        "",
 	}
 	rsp, err := s.UserInvoke(uaid, callData)
 	if rsp.ErrCode != RET_CODE_SUCCESS || err != nil {
-		RetCommonMsg(out, http.StatusInternalServerError, int32(cmd.ErrorCode_InternalError), err)
+		RetCommonMsg(out, http.StatusInternalServerError, int32(pb.ErrorCode_InternalError), err)
 		return
 	}
 

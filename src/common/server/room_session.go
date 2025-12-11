@@ -8,7 +8,7 @@ import (
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/conf"
 
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/db"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/service"
 )
 
@@ -18,7 +18,7 @@ func (s *Server) SaveRoomBindingData(uid string, roomId string) error {
 	}
 
 	key := db.KeyPlayerUidAndRoomId(uid)
-	binding := &cmd.RoomBindingData{
+	binding := &pb.RoomBindingData{
 		RoomId: roomId,
 	}
 	kvTable, err := db.BuildKvTable(binding, key)
@@ -31,27 +31,27 @@ func (s *Server) SaveRoomBindingData(uid string, roomId string) error {
 }
 
 // 处理玩家在大厅还是在房间
-func (s *Server) GetRoomBindingData(uid string) (*cmd.RoomBindingData, error, cmd.ErrorCode) {
+func (s *Server) GetRoomBindingData(uid string) (*pb.RoomBindingData, error, pb.ErrorCode) {
 	if uid == "" {
-		return nil, fmt.Errorf("roleId is empty"), cmd.ErrorCode_Room_player_not_exist
+		return nil, fmt.Errorf("roleId is empty"), pb.ErrorCode_Room_player_not_exist
 	}
 
 	kvTable, err := s.GetGlobalRedis(db.KeyPlayerUidAndRoomId(uid), nil)
 	if err != nil {
-		if errors.Is(err, service.DB_ERROR_NOT_EXIST) { //session数据不存在,重新登录
-			return nil, fmt.Errorf("db value not exist"), cmd.ErrorCode_Room_player_not_exist
+		if errors.Is(err, service.DB_ERROR_NOT_EXIST) { // session数据不存在,重新登录
+			return nil, fmt.Errorf("db value not exist"), pb.ErrorCode_Room_player_not_exist
 		} else {
-			return nil, fmt.Errorf("internal error"), cmd.ErrorCode_InternalError
+			return nil, fmt.Errorf("internal error"), pb.ErrorCode_InternalError
 		}
 	}
 
-	binding := &cmd.RoomBindingData{}
+	binding := &pb.RoomBindingData{}
 	err = db.ParseKvTable(kvTable, binding)
 	if err != nil {
-		return nil, err, cmd.ErrorCode_InternalError
+		return nil, err, pb.ErrorCode_InternalError
 	}
 
-	return binding, nil, cmd.ErrorCode_Success
+	return binding, nil, pb.ErrorCode_Success
 }
 
 func (s *Server) CheckInRoom(uid string) bool {
@@ -62,30 +62,30 @@ func (s *Server) CheckInRoom(uid string) bool {
 	return data.RoomId != ""
 }
 
-//func (s *Server) GetRoomSession(uid string) (*cmd.RoomSession, error, cmd.ErrorCode) {
+// func (s *Server) GetRoomSession(uid string) (*pb.RoomSession, error, pb.ErrorCode) {
 //	if uid == "" {
-//		return nil, fmt.Errorf("accountId is empty"), cmd.ErrorCode_Room_player_not_exist
+//		return nil, fmt.Errorf("accountId is empty"), pb.ErrorCode_Room_player_not_exist
 //	}
 //
 //	kvTable, err := s.GetGlobalRedis(db.KeyRoomSession(uid), nil)
 //	if err != nil {
 //		if errors.Is(err, service.DB_ERROR_NOT_EXIST) { //session数据不存在,重新登录
-//			return nil, fmt.Errorf("db value not exist"), cmd.ErrorCode_Room_player_not_exist
+//			return nil, fmt.Errorf("db value not exist"), pb.ErrorCode_Room_player_not_exist
 //		} else {
-//			return nil, fmt.Errorf("internal error"), cmd.ErrorCode_InternalError
+//			return nil, fmt.Errorf("internal error"), pb.ErrorCode_InternalError
 //		}
 //	}
 //
-//	roomSession := &cmd.RoomSession{}
+//	roomSession := &pb.RoomSession{}
 //	err = db.ParseKvTable(kvTable, roomSession)
 //	if err != nil {
-//		return nil, err, cmd.ErrorCode_ReLogin
+//		return nil, err, pb.ErrorCode_ReLogin
 //	}
 //
-//	return roomSession, nil, cmd.ErrorCode_Success
-//}
+//	return roomSession, nil, pb.ErrorCode_Success
+// }
 
-//func (s *Server) SaveRoomSession(playerUid string, session *cmd.RoomSession) error {
+// func (s *Server) SaveRoomSession(playerUid string, session *pb.RoomSession) error {
 //	if session.RoomId == "" {
 //		return fmt.Errorf("accountId is empty")
 //	}
@@ -104,9 +104,9 @@ func (s *Server) CheckInRoom(uid string) bool {
 //	}
 //
 //	return nil
-//}
+// }
 
-//func (s *Server) GetToken(uid string) (string, error) {
+// func (s *Server) GetToken(uid string) (string, error) {
 //	if uid == "" {
 //		return "", errors.New("uid is empty")
 //	}
@@ -117,9 +117,9 @@ func (s *Server) CheckInRoom(uid string) bool {
 //	}
 //
 //	return string(kv.Data), nil
-//}
+// }
 //
-//func (s *Server) SaveToken(uid, token string) error {
+// func (s *Server) SaveToken(uid, token string) error {
 //	if uid == "" {
 //		return errors.New("uid is empty")
 //	}
@@ -139,4 +139,4 @@ func (s *Server) CheckInRoom(uid string) bool {
 //	}
 //
 //	return nil
-//}
+// }

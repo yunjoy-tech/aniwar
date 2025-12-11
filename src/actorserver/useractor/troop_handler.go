@@ -12,7 +12,7 @@ import (
 	"gitlab.musadisca-games.com/wangxw/musae/framework/service"
 
 	excel "gitlab.musadisca-games.com/wangxw/aniwar/src/excel/data"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
 	"google.golang.org/protobuf/proto"
 )
@@ -25,18 +25,18 @@ func NewTroopHandler(actor *UserActor) *TroopHandler {
 	h := &TroopHandler{UABaseHandler: NewUABaseHandler(actor, "TroopHandler")}
 	h.ChildHandler = h
 
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PC2LS_CardTroopListReq), h.TroopListReq)
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PC2LS_CardTroopOperateReq), h.TroopOperateReq)
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PC2LS_CardTroopFoodLogReq), h.TroopFoodLogReq)
+	actor.RegisterProtoHandler(int32(pb.Protocols_PC2LS_CardTroopListReq), h.TroopListReq)
+	actor.RegisterProtoHandler(int32(pb.Protocols_PC2LS_CardTroopOperateReq), h.TroopOperateReq)
+	actor.RegisterProtoHandler(int32(pb.Protocols_PC2LS_CardTroopFoodLogReq), h.TroopFoodLogReq)
 	return h
 }
 
 // Init 初始化模块数据
 func (h *TroopHandler) Init() error {
 	// 初始化
-	h.actor.Data.Troops = &cmd.PCardTroopsInfo{
+	h.actor.Data.Troops = &pb.PCardTroopsInfo{
 		Createtime: time.Now().Unix(),
-		Troop:      make(map[int32]*cmd.PServerCardTroopInfo),
+		Troop:      make(map[int32]*pb.PServerCardTroopInfo),
 	}
 
 	// 保存
@@ -57,7 +57,7 @@ func (h *TroopHandler) DailyRefresh() error {
 }
 
 func (h *TroopHandler) SetDBData(dbData proto.Message) error {
-	if dbVal, ok := dbData.(*cmd.PCardTroopsInfo); ok {
+	if dbVal, ok := dbData.(*pb.PCardTroopsInfo); ok {
 		h.actor.Data.Troops = dbVal
 	} else {
 		return fmt.Errorf("SetDBData, 数据类型错误! %v", dbData)
@@ -70,97 +70,27 @@ func (h *TroopHandler) DBTable() (service.MongoDbType, string, proto.Message) {
 	return service.MongoDbType_MongoGame, db.KeyUserCardTroop(h.actor.ID()), h.actor.Data.Troops
 }
 
-func (h *TroopHandler) buildTroopList() []*cmd.PClientCardTroopInfo {
-	// 尝试增加编队类型
-	b := false
-	// safa Get
-	data := h.actor.GetTroopData()
-	// 干掉非配置数据，保证登录
-	for troopType, troopName := range data.Troop {
-		if _, exist := cmd.CardTroopType_name[troopType]; !exist {
-			if len(data.Troop[troopType].Troop) > 0 {
-				h.Warnf("delete unsupported troop type :%v ,troop data %v", troopName, data.Troop[troopType].Troop)
-			} else {
-				h.Warnf("delete unsupported troop type :%v ,nil data", troopName)
-			}
-			delete(data.Troop, troopType)
-		}
-	}
-
-	if _, exist := data.Troop[int32(cmd.CardTroopType_CardTroopType_None)]; exist {
-		delete(data.Troop, int32(cmd.CardTroopType_CardTroopType_None))
-	}
-
-	if _, exist := data.Troop[int32(cmd.CardTroopType_CardTroopType_Max)]; exist {
-		delete(data.Troop, int32(cmd.CardTroopType_CardTroopType_None))
-	}
-
-	for troopId := range cmd.CardTroopType_name {
-		if troopId == int32(cmd.CardTroopType_CardTroopType_None) ||
-			troopId == int32(cmd.CardTroopType_CardTroopType_Max) {
-			continue
-		}
-
-		if _, exist := data.Troop[troopId]; exist {
-			continue
-		}
-		data.Troop[troopId] = &cmd.PServerCardTroopInfo{
-			TroopType:  troopId,
-			Troop:      make(map[int32]*cmd.ServerCardTroopInfo),
-			UseTroopId: 0,
-			Foods:      make([]int32, 0),
-		}
-		b = true
-	}
-
-	troopData := make([]*cmd.PClientCardTroopInfo, 0)
-	for _, info := range data.Troop {
-		// 食物上限容错
-		limit := int(excel.GetConfigMgr().GetCfg().BATTLE_FOOD_LIMIT)
-		if len(info.Foods) > limit {
-			b = true
-			info.Foods = info.Foods[:limit]
-		}
-
-		troopData = append(troopData, &cmd.PClientCardTroopInfo{
-			TroopType:  info.TroopType,
-			Troop:      convertList(info.Troop),
-			UseTroopId: info.UseTroopId,
-			Foods:      info.Foods,
-		})
-	}
-
-	if b {
-		if err := h.SaveDB(); err != nil {
-			h.Warn(err)
-			return nil
-		}
-	}
-
-	return troopData
-}
-
 func (h *TroopHandler) TroopListReq(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
 
-	var req cmd.C2LS_CardTroopListReq
+	var req pb.C2LS_CardTroopListReq
 	err := in.UnmarshalData(&req)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
 	// 参数check
 	if !isValidCardTroopType(req.TroopType) {
-		return nil, fmt.Errorf("invalia param"), int32(cmd.ErrorCode_InvalidParam)
+		return nil, fmt.Errorf("invalia param"), int32(pb.ErrorCode_InvalidParam)
 	}
 
 	troopInfo, err := h.getTroopTypeInfo(req.TroopType)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InvalidParam)
+		return nil, err, int32(pb.ErrorCode_InvalidParam)
 	}
 
 	// 返回消息
-	rsp := &cmd.LS2C_CardTroopListRes{
-		Troop: &cmd.PClientCardTroopInfo{
+	rsp := &pb.LS2C_CardTroopListRes{
+		Troop: &pb.PClientCardTroopInfo{
 			TroopType:  troopInfo.TroopType,
 			Troop:      convertList(troopInfo.Troop),
 			UseTroopId: troopInfo.UseTroopId,
@@ -174,33 +104,33 @@ func (h *TroopHandler) TroopListReq(ctx context.Context, in *base.ProtoMsg) (pro
 // TroopFoodLogReq 编队食物记录
 func (h *TroopHandler) TroopFoodLogReq(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
 
-	var req cmd.C2LS_CardTroopFoodLogReq
+	var req pb.C2LS_CardTroopFoodLogReq
 	err := in.UnmarshalData(&req)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
 	// check
 	if !isValidCardTroopType(req.TroopType) || !isValidFood(req.Foods) {
 		h.Debugf("TroopFoodLogReq invalid param: %d %+v", req.TroopType, req.Foods)
-		return nil, err, int32(cmd.ErrorCode_InvalidParam)
+		return nil, err, int32(pb.ErrorCode_InvalidParam)
 	}
 
 	// 获取玩法数据
 	troopInfo, err := h.getTroopTypeInfo(req.TroopType)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
 	// 埋点log
-	//threading.RunSafe(func() {
+	// threading.RunSafe(func() {
 	//	lilith.WriteDataLog(&lilith.FoodOperate{
 	//		CustomHeadInfo: lilith.BuildCustomHeadInfo(lilith.LogType_FoodOperate, h.actor.uid, h.actor.Account.CliDeviceInfo),
 	//		TroopType:      req.TroopType,
 	//		BeforeFoods:    lilith.ConvertList2Str(troopInfo.Foods),
 	//		AfterFoods:     lilith.ConvertList2Str(req.Foods),
 	//	})
-	//})
+	// })
 	threading.RunSafe(func() {
 		e := &taptap.FoodOperate{
 			PropertyFieldInfo: taptap.BuildPropertyFieldInfo(h.actor.Account.CliDeviceInfo),
@@ -214,11 +144,11 @@ func (h *TroopHandler) TroopFoodLogReq(ctx context.Context, in *base.ProtoMsg) (
 	troopInfo.Foods = req.Foods
 	if err = h.SaveDB(); err != nil {
 		h.Error("TroopFoodLogReq save troop to db failed. err: ", err)
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
 	// 返回消息
-	rsp := &cmd.LS2C_CardTroopFoodLogRes{
+	rsp := &pb.LS2C_CardTroopFoodLogRes{
 		TroopType: req.TroopType,
 		Foods:     req.Foods,
 	}
@@ -227,53 +157,53 @@ func (h *TroopHandler) TroopFoodLogReq(ctx context.Context, in *base.ProtoMsg) (
 
 func (h *TroopHandler) TroopOperateReq(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
 
-	var req cmd.C2LS_CardTroopOperateReq
+	var req pb.C2LS_CardTroopOperateReq
 	err := in.UnmarshalData(&req)
 	if err != nil {
 		h.Error("TroopOperateReq Unmarshal err: ", err)
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
-	err, code := h.CardTroopOperate(cmd.CardTroopType(req.TroopType), req.TroopId, cmd.CardTroopSubType(req.SubType), req.Positions)
+	err, code := h.CardTroopOperate(pb.CardTroopType(req.TroopType), req.TroopId, pb.CardTroopSubType(req.SubType), req.Positions)
 	if err != nil {
 		return nil, err, int32(code)
 	}
 
 	info, err := h.getTroopInfo(req.TroopType, req.TroopId)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InvalidParam)
+		return nil, err, int32(pb.ErrorCode_InvalidParam)
 	}
-	return &cmd.LS2C_CardTroopOperateRes{Info: convert(info)}, nil, 0
+	return &pb.LS2C_CardTroopOperateRes{Info: convert(info)}, nil, 0
 }
 
 // CardTroopOperate
 //
 //	@Description: 卡牌编队接口
 //	@receiver h
-//	@param troopType 详见cmd.CardTroopType
+//	@param troopType 详见pb.CardTroopType
 //	@param troopId 编队id
-//	@param subType 详见cmd.CardTroopSubType
+//	@param subType 详见pb.CardTroopSubType
 //	@param position 卡牌列表
 //	@return error
-//	@return cmd.ErrorCode
-func (h *TroopHandler) CardTroopOperate(troopType cmd.CardTroopType, troopId int32, subType cmd.CardTroopSubType, position []int32) (error, cmd.ErrorCode) {
+//	@return pb.ErrorCode
+func (h *TroopHandler) CardTroopOperate(troopType pb.CardTroopType, troopId int32, subType pb.CardTroopSubType, position []int32) (error, pb.ErrorCode) {
 	errorCode := h.checkTroopOperate(int32(troopType), troopId, position, int32(subType))
-	if errorCode != cmd.ErrorCode_Success {
+	if errorCode != pb.ErrorCode_Success {
 		return fmt.Errorf("card troop param check failed"), errorCode
 	}
 
 	errorCode = h.handleTroopOperate(int32(troopType), troopId, position, subType)
-	if errorCode != cmd.ErrorCode_Success {
+	if errorCode != pb.ErrorCode_Success {
 		return fmt.Errorf("handle troop operate failed"), errorCode
 	}
 
-	return nil, cmd.ErrorCode_Success
+	return nil, pb.ErrorCode_Success
 }
 
 // 编队操作参数校验
-func (h *TroopHandler) checkTroopOperate(typ, troopId int32, positions []int32, subType int32) cmd.ErrorCode {
+func (h *TroopHandler) checkTroopOperate(typ, troopId int32, positions []int32, subType int32) pb.ErrorCode {
 	errCode := h.CheckTroopTypAndId(typ, troopId)
-	if errCode != cmd.ErrorCode_Success {
+	if errCode != pb.ErrorCode_Success {
 		return errCode
 	}
 	// 队伍数据check
@@ -281,42 +211,42 @@ func (h *TroopHandler) checkTroopOperate(typ, troopId int32, positions []int32, 
 	for index, cardId := range positions {
 		// 位置check
 		if !isValidCardPos(int32(index + 1)) {
-			return cmd.ErrorCode_InvalidTroopPosition
+			return pb.ErrorCode_InvalidTroopPosition
 		}
 
 		// 卡牌是否拥有
 		if cardId != 0 && !h.actor.CardHandler.IsExistCard(uint32(cardId)) {
-			return cmd.ErrorCode_CardNotExist
+			return pb.ErrorCode_CardNotExist
 		}
 		// 重复元素
 		if cardId != 0 {
 			if _, ok := temp[cardId]; ok {
-				return cmd.ErrorCode_InvalidParam
+				return pb.ErrorCode_InvalidParam
 			}
 			temp[cardId] = 1
 		}
 
 		// 阵亡角色仍可以上阵
-		//if typ == int32(cmd.CardTroopType_CardTroopType_Normal) && subType == int32(cmd.CardTroopSubType_Map_In) && cardId > 0 {
+		// if typ == int32(pb.CardTroopType_CardTroopType_Normal) && subType == int32(pb.CardTroopSubType_Map_In) && cardId > 0 {
 		//	card, _ := h.actor.CardHandler.GetCard(uint32(cardId))
 		//	if card.Hp <= 0 {
-		//		return cmd.ErrorCode_Chapter_no_live_in_troop
+		//		return pb.ErrorCode_Chapter_no_live_in_troop
 		//	}
-		//}
+		// }
 	}
 
-	return cmd.ErrorCode_Success
+	return pb.ErrorCode_Success
 }
 
 // 编队逻辑处理
-func (h *TroopHandler) handleTroopOperate(typ, troopId int32, positions []int32, subType cmd.CardTroopSubType) cmd.ErrorCode {
+func (h *TroopHandler) handleTroopOperate(typ, troopId int32, positions []int32, subType pb.CardTroopSubType) pb.ErrorCode {
 	cardTroopInfo, err := h.getTroopInfo(typ, troopId)
 	if err != nil {
-		return cmd.ErrorCode_InternalError
+		return pb.ErrorCode_InternalError
 	}
 
 	// 埋点log
-	//threading.RunSafe(func() {
+	// threading.RunSafe(func() {
 	//	lilith.WriteDataLog(&lilith.TroopOperate{
 	//		CustomHeadInfo:  lilith.BuildCustomHeadInfo(lilith.LogType_TroopOperate, h.actor.uid, h.actor.Account.CliDeviceInfo),
 	//		TroopType:       typ,
@@ -325,7 +255,7 @@ func (h *TroopHandler) handleTroopOperate(typ, troopId int32, positions []int32,
 	//		AfterPositions:  lilith.ConvertList2Str(positions),
 	//		SubType:         int32(subType),
 	//	})
-	//})
+	// })
 	threading.RunSafe(func() {
 		e := &taptap.TroopOperate{
 			PropertyFieldInfo: taptap.BuildPropertyFieldInfo(h.actor.Account.CliDeviceInfo),
@@ -345,7 +275,7 @@ func (h *TroopHandler) handleTroopOperate(typ, troopId int32, positions []int32,
 	if err != nil {
 		h.Error("save user card troop to db failed. err: ", err)
 	}
-	return cmd.ErrorCode_Success
+	return pb.ErrorCode_Success
 }
 
 func isValidTroopId(id int32) bool {
@@ -353,13 +283,13 @@ func isValidTroopId(id int32) bool {
 }
 
 // 获取玩法信息
-func (h *TroopHandler) getTroopTypeInfo(typ int32) (*cmd.PServerCardTroopInfo, error) {
+func (h *TroopHandler) getTroopTypeInfo(typ int32) (*pb.PServerCardTroopInfo, error) {
 	// 初始化
 	troopData := h.actor.GetTroopData()
 	if _, ok := troopData.Troop[typ]; !ok {
-		troopData.Troop[typ] = &cmd.PServerCardTroopInfo{
+		troopData.Troop[typ] = &pb.PServerCardTroopInfo{
 			TroopType:  typ,
-			Troop:      make(map[int32]*cmd.ServerCardTroopInfo),
+			Troop:      make(map[int32]*pb.ServerCardTroopInfo),
 			UseTroopId: 0,
 			Foods:      make([]int32, 0),
 		}
@@ -373,7 +303,7 @@ func (h *TroopHandler) getTroopTypeInfo(typ int32) (*cmd.PServerCardTroopInfo, e
 }
 
 // 找对应的troop数据
-func (h *TroopHandler) getTroopInfo(typ, troopId int32) (*cmd.ServerCardTroopInfo, error) {
+func (h *TroopHandler) getTroopInfo(typ, troopId int32) (*pb.ServerCardTroopInfo, error) {
 	troopTypeInfo, err := h.getTroopTypeInfo(typ)
 	if err != nil {
 		return nil, err
@@ -384,14 +314,14 @@ func (h *TroopHandler) getTroopInfo(typ, troopId int32) (*cmd.ServerCardTroopInf
 			return nil, err
 		}
 		// 初始化
-		troop := &cmd.ServerCardTroopInfo{
+		troop := &pb.ServerCardTroopInfo{
 			TroopId:   troopId,
 			TroopName: "",
 			Card:      make([]int32, 0),
 		}
 
 		if troopTypeInfo.Troop == nil {
-			troopTypeInfo.Troop = make(map[int32]*cmd.ServerCardTroopInfo)
+			troopTypeInfo.Troop = make(map[int32]*pb.ServerCardTroopInfo)
 		}
 		troopTypeInfo.Troop[troopId] = troop
 		err = h.SaveDB()
@@ -418,11 +348,11 @@ func (h *TroopHandler) getCardTroopSize(typ int32) int32 {
 }
 
 func isValidCardPos(pos int32) bool {
-	return pos > int32(cmd.CardTroopPos_CardTroopPos_None) && int32(cmd.CardTroopPos_CardTroopPos_Max) > pos
+	return pos > int32(pb.CardTroopPos_CardTroopPos_None) && int32(pb.CardTroopPos_CardTroopPos_Max) > pos
 }
 
 func isValidCardTroopType(typ int32) bool {
-	return typ > int32(cmd.CardTroopType_CardTroopType_None) && int32(cmd.CardTroopType_CardTroopType_Max) > typ
+	return typ > int32(pb.CardTroopType_CardTroopType_None) && int32(pb.CardTroopType_CardTroopType_Max) > typ
 }
 
 func isValidFood(food []int32) bool {
@@ -440,7 +370,7 @@ func isValidFood(food []int32) bool {
 			return false
 		}
 
-		if cfg.GetType() != int32(cmd.ItemType_Food) {
+		if cfg.GetType() != int32(pb.ItemType_Food) {
 			return false
 		}
 		// 重复参数
@@ -453,16 +383,16 @@ func isValidFood(food []int32) bool {
 	return true
 }
 
-func convert(info *cmd.ServerCardTroopInfo) *cmd.ClientCardTroopInfo {
-	return &cmd.ClientCardTroopInfo{
+func convert(info *pb.ServerCardTroopInfo) *pb.ClientCardTroopInfo {
+	return &pb.ClientCardTroopInfo{
 		TroopId:   info.TroopId,
 		TroopName: info.TroopName,
 		Card:      info.Card,
 	}
 }
 
-func convertList(infos map[int32]*cmd.ServerCardTroopInfo) []*cmd.ClientCardTroopInfo {
-	troops := make([]*cmd.ClientCardTroopInfo, 0)
+func convertList(infos map[int32]*pb.ServerCardTroopInfo) []*pb.ClientCardTroopInfo {
+	troops := make([]*pb.ClientCardTroopInfo, 0)
 	for _, v := range infos {
 		troops = append(troops, convert(v))
 	}
@@ -485,7 +415,7 @@ func (h *TroopHandler) GetTroopFoodLog(typ int32) []int32 {
 
 // SaveUseTroopId 记录玩法最后使用的troopId
 func (h *TroopHandler) SaveUseTroopId(typ int32, troopId int32) {
-	if errCode := h.CheckTroopTypAndId(typ, troopId); errCode != cmd.ErrorCode_Success {
+	if errCode := h.CheckTroopTypAndId(typ, troopId); errCode != pb.ErrorCode_Success {
 		h.Errorf("SaveUseTroopId param check failed. type %d, troopId %d", typ, troopId)
 		return
 	}
@@ -508,7 +438,7 @@ func (h *TroopHandler) SaveUseTroopId(typ int32, troopId int32) {
 // GetTroopCardIds 按照位置升序获取card ids
 func (h *TroopHandler) GetTroopCardIds(typ, troopId int32) []int32 {
 	// 参数check
-	if errCode := h.CheckTroopTypAndId(typ, troopId); errCode != cmd.ErrorCode_Success {
+	if errCode := h.CheckTroopTypAndId(typ, troopId); errCode != pb.ErrorCode_Success {
 		return []int32{}
 	}
 	info, err := h.getTroopInfo(typ, troopId)
@@ -519,17 +449,17 @@ func (h *TroopHandler) GetTroopCardIds(typ, troopId int32) []int32 {
 }
 
 // CheckTroopTypAndId 检查输入参数合法性
-func (h *TroopHandler) CheckTroopTypAndId(typ, troopId int32) cmd.ErrorCode {
+func (h *TroopHandler) CheckTroopTypAndId(typ, troopId int32) pb.ErrorCode {
 	// 玩法类型check
 	if !isValidCardTroopType(typ) {
 		h.Errorf("CheckTroopTypAndId check Type err type :%v, ", typ)
-		return cmd.ErrorCode_InvalidCardTroopType
+		return pb.ErrorCode_InvalidCardTroopType
 	}
 	// 队伍id check
 	if !isValidTroopId(troopId) {
 		h.Errorf("CheckTroopTypAndId check failed, troopId: %v, cfg: %+v ", troopId, excel.GetConfigMgr().GetCfg())
-		return cmd.ErrorCode_InvalidCardTroopId
+		return pb.ErrorCode_InvalidCardTroopId
 	}
 
-	return cmd.ErrorCode_Success
+	return pb.ErrorCode_Success
 }

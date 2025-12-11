@@ -3,7 +3,7 @@ package useractor
 import (
 	"time"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/service"
 )
 
@@ -14,13 +14,13 @@ user actor data struct
 */
 
 type UserData struct {
-	Data      *cmd.PlayerData
-	Account   *cmd.UserData
-	OrderData *cmd.OrderData
+	Data      *pb.PlayerData
+	Account   *pb.UserData
+	OrderData *pb.OrderData
 }
 
-//// 全量加载用户数据
-//func (s *UserActor) loadDBDataByDBType() error {
+// // 全量加载用户数据
+// func (s *UserActor) loadDBDataByDBType() error {
 //	// 从db中加载数据
 //	for _, handler := range s.handlersMap {
 //		_, err := loadPlayerData1(s, handler)
@@ -63,7 +63,7 @@ type UserData struct {
 //	}
 //
 //	return nil
-//}
+// }
 
 func (u *UserActor) loadAllData(bMini ...bool) error {
 	var (
@@ -87,8 +87,8 @@ func (u *UserActor) loadAllData(bMini ...bool) error {
 	return nil
 }
 
-//// 加载账号数据
-//func (u *UserActor) loadAccountData() error {
+// // 加载账号数据
+// func (u *UserActor) loadAccountData() error {
 //	if dbData, err := loadPlayerData(u, service.MongoDbType_MongoAccount, db.KeyAccountInfo(u.GetUID()), u.Account); err != nil {
 //		//if errors.Is(err, service.DB_ERROR_NOT_EXIST) {
 //		//	if err = u.AccountHandler.Init(); err != nil {
@@ -107,7 +107,7 @@ func (u *UserActor) loadAllData(bMini ...bool) error {
 //	}
 //
 //	return nil
-//}
+// }
 
 // 全量加载用户数据
 func (u *UserActor) loadDBDataByDBType(dbType service.MongoDbType, bMini ...bool) error {
@@ -133,7 +133,7 @@ func (u *UserActor) loadDBDataByDBType(dbType service.MongoDbType, bMini ...bool
 	return nil
 }
 
-func (x *UserData) GetUserData() *cmd.PServerRoleBaseInfo {
+func (x *UserData) GetUserData() *pb.PServerRoleBaseInfo {
 	data := x.Data.Base
 	if data == nil {
 		return nil
@@ -147,172 +147,172 @@ func (x *UserData) GetUserData() *cmd.PServerRoleBaseInfo {
 	return data
 }
 
-func (x *UserData) GetUserCardData() *cmd.PCardData {
+func (x *UserData) GetUserCardData() *pb.PCardData {
 	cards := x.Data.Cards
 	if cards.Card == nil {
-		cards.Card = make(map[uint32]*cmd.CardData)
+		cards.Card = make(map[uint32]*pb.CardData)
 	}
 
 	return cards
 }
 
-func (x *UserData) GetTroopData() *cmd.PCardTroopsInfo {
+func (x *UserData) GetTroopData() *pb.PCardTroopsInfo {
 	data := x.Data.Troops
 	if data.Troop == nil {
-		data.Troop = make(map[int32]*cmd.PServerCardTroopInfo)
+		data.Troop = make(map[int32]*pb.PServerCardTroopInfo)
 	}
 
 	return data
 }
 
-func (x *UserData) GetCampData() *cmd.PPlayerCampBlob {
+func (x *UserData) GetCampData() *pb.PPlayerCampBlob {
 	data := x.Data.Camp
 	if data.DecorationBuilding == nil {
-		data.DecorationBuilding = make(map[int64]*cmd.PPlayerCampDecorationBuilding)
+		data.DecorationBuilding = make(map[int64]*pb.PPlayerCampDecorationBuilding)
 	}
 	if data.BuildingUnlockList == nil {
 		data.BuildingUnlockList = make(map[int32]int32)
 	}
 	if data.Camp == nil {
-		data.Camp = make(map[int32]*cmd.PPlayerCampServerCamp)
+		data.Camp = make(map[int32]*pb.PPlayerCampServerCamp)
 	}
 	return data
 }
 
-func (x *UserData) GetCurrencyData() *cmd.PCurrencyInfo {
+func (x *UserData) GetCurrencyData() *pb.PCurrencyInfo {
 	data := x.Data.Currency
 	if data.Currencyx == nil {
-		data.Currencyx = make(map[int32]*cmd.CurrencyItem)
+		data.Currencyx = make(map[int32]*pb.CurrencyItem)
 	}
 	return data
 }
 
-func (x *UserData) GetTutorialData() *cmd.PPlayerBeginnerTutorialBlob {
+func (x *UserData) GetTutorialData() *pb.PPlayerBeginnerTutorialBlob {
 	data := x.Data.Tutorial
 	if data.FinishMasterTutorial == nil {
-		data.FinishMasterTutorial = make([]*cmd.PPlayerDBBeginnerTutorialBlob, 0)
+		data.FinishMasterTutorial = make([]*pb.PPlayerDBBeginnerTutorialBlob, 0)
 	}
 	if data.FinishFunctionTutorial == nil {
-		data.FinishFunctionTutorial = make([]*cmd.PPlayerDBBeginnerTutorialBlob, 0)
+		data.FinishFunctionTutorial = make([]*pb.PPlayerDBBeginnerTutorialBlob, 0)
 	}
 	return data
 }
 
-func (x *UserData) GetPoolsData() *cmd.PServerCardPoolInfos {
+func (x *UserData) GetPoolsData() *pb.PServerCardPoolInfos {
 	data := x.Data.Pools
 	if data.TypeInfos == nil {
-		data.TypeInfos = make(map[int32]*cmd.PServerCardPoolType)
+		data.TypeInfos = make(map[int32]*pb.PServerCardPoolType)
 	}
 	if data.Newbie == nil {
-		data.Newbie = &cmd.PNewbiePoolInfo{
+		data.Newbie = &pb.PNewbiePoolInfo{
 			Select:  0,
-			Results: make([]*cmd.PNewbiePoolLog, 0),
+			Results: make([]*pb.PNewbiePoolLog, 0),
 		}
 	}
 	return data
 }
 
-func (x *UserData) GetCampPoolsData() *cmd.PServerCampPoolInfos {
+func (x *UserData) GetCampPoolsData() *pb.PServerCampPoolInfos {
 	data := x.Data.CampPools
 	if data.TypeInfos == nil {
-		data.TypeInfos = make(map[int32]*cmd.PServerCampPoolType)
+		data.TypeInfos = make(map[int32]*pb.PServerCampPoolType)
 	}
 	return data
 }
 
-func (x *UserData) GetHandBookData() *cmd.PHandbookInfo {
+func (x *UserData) GetHandBookData() *pb.PHandbookInfo {
 	data := x.Data.Handbooks
 	if data.HandBookItem == nil {
-		data.HandBookItem = make(map[uint32]*cmd.ServerHandBookItem, 0)
+		data.HandBookItem = make(map[uint32]*pb.ServerHandBookItem, 0)
 	}
 	return data
 }
 
-func (x *UserData) GetQuestionData() *cmd.PUserQuestions {
+func (x *UserData) GetQuestionData() *pb.PUserQuestions {
 	data := x.Data.Question
 	if data.Questions == nil {
-		data.Questions = make(map[string]*cmd.PQuestion, 0)
+		data.Questions = make(map[string]*pb.PQuestion, 0)
 	}
 	return data
 }
 
-func (x *UserData) GetLevelsData() *cmd.LS2DB_LevelInfos {
+func (x *UserData) GetLevelsData() *pb.LS2DB_LevelInfos {
 	levelsData := x.Data.LevelsData
 	if levelsData.LevelInfos == nil {
-		levelsData.LevelInfos = make(map[int32]*cmd.LS2DB_LevelInfo)
+		levelsData.LevelInfos = make(map[int32]*pb.LS2DB_LevelInfo)
 	}
 	if levelsData.PLevelSummary == nil {
-		levelsData.PLevelSummary = &cmd.PServerLevelSummary{}
+		levelsData.PLevelSummary = &pb.PServerLevelSummary{}
 	}
 	if levelsData.PLevelSummary.MonsterTicketInfoMap == nil {
-		levelsData.PLevelSummary.MonsterTicketInfoMap = make(map[int32]*cmd.LevelMonsterTicketInfo, 0)
+		levelsData.PLevelSummary.MonsterTicketInfoMap = make(map[int32]*pb.LevelMonsterTicketInfo, 0)
 	}
 	if levelsData.PLevelSummary.LevelSummaryMap == nil {
-		levelsData.PLevelSummary.LevelSummaryMap = make(map[int32]*cmd.LevelSummary, 0)
+		levelsData.PLevelSummary.LevelSummaryMap = make(map[int32]*pb.LevelSummary, 0)
 	}
 
 	if levelsData.FinishedOnceEvents == nil {
-		levelsData.FinishedOnceEvents = make(map[int32]*cmd.FinishedOnceEvent)
+		levelsData.FinishedOnceEvents = make(map[int32]*pb.FinishedOnceEvent)
 	}
 
 	return levelsData
 }
 
-func (x *UserData) GetStoryFlagData() *cmd.LS2DB_StoryFlagData {
+func (x *UserData) GetStoryFlagData() *pb.LS2DB_StoryFlagData {
 	flagData := x.Data.StoryFlagData
 	if flagData.Flags == nil {
-		flagData.Flags = make(map[string]*cmd.FlagInfo)
+		flagData.Flags = make(map[string]*pb.FlagInfo)
 	}
 
 	return flagData
 }
 
-func (x *UserData) GetShopData() *cmd.LS2DB_ShopData {
+func (x *UserData) GetShopData() *pb.LS2DB_ShopData {
 	shopData := x.Data.ShopData
 	if shopData.ShopInfos == nil {
-		shopData.ShopInfos = make(map[int32]*cmd.ShopInfo)
+		shopData.ShopInfos = make(map[int32]*pb.ShopInfo)
 	}
 
 	return shopData
 }
 
-func (x *UserData) GetEquipData() *cmd.PEquipData {
+func (x *UserData) GetEquipData() *pb.PEquipData {
 	data := x.Data.EquipData
 	if data.Equips == nil {
-		data.Equips = make(map[uint64]*cmd.PCommonEquipInfo)
+		data.Equips = make(map[uint64]*pb.PCommonEquipInfo)
 	}
 	return data
 }
 
-func (x *UserData) GetCardSkinData() *cmd.PSkinData {
+func (x *UserData) GetCardSkinData() *pb.PSkinData {
 	data := x.Data.SkinData
 	if data.Skins == nil {
-		data.Skins = make(map[int32]*cmd.CardSkinData)
+		data.Skins = make(map[int32]*pb.CardSkinData)
 	}
 	return data
 }
 
-func (x *UserData) GetDutyData() *cmd.PDutyData {
+func (x *UserData) GetDutyData() *pb.PDutyData {
 	data := x.Data.DutyData
 	if data.DailyTask == nil {
-		data.DailyTask = make(map[int32]*cmd.TaskInfoItem)
+		data.DailyTask = make(map[int32]*pb.TaskInfoItem)
 	}
 	if data.UnlockTag == nil {
-		data.UnlockTag = make(map[int32]*cmd.TaskInfoItem)
+		data.UnlockTag = make(map[int32]*pb.TaskInfoItem)
 	}
 	if data.Active == nil {
-		data.Active = make(map[int32]*cmd.ActiveInfoItem)
+		data.Active = make(map[int32]*pb.ActiveInfoItem)
 	}
 	if data.WeeklyTask == nil {
-		data.WeeklyTask = make(map[int32]*cmd.TaskInfoItem)
+		data.WeeklyTask = make(map[int32]*pb.TaskInfoItem)
 	}
 	return data
 }
 
-func (x *UserData) GetGuideTaskData() *cmd.PGuideTaskData {
+func (x *UserData) GetGuideTaskData() *pb.PGuideTaskData {
 	data := x.Data.GuideTaskData
 	if data.Tasks == nil {
-		data.Tasks = make(map[int32]*cmd.TaskInfoItem)
+		data.Tasks = make(map[int32]*pb.TaskInfoItem)
 	}
 	if data.Complete == nil {
 		data.Complete = make(map[int32]int32)
@@ -320,29 +320,29 @@ func (x *UserData) GetGuideTaskData() *cmd.PGuideTaskData {
 	return data
 }
 
-func (x *UserData) GetSignData() *cmd.PSignData {
+func (x *UserData) GetSignData() *pb.PSignData {
 	data := x.Data.Sign
 	if data.Sign == nil {
-		data.Sign = make(map[int32]*cmd.PCommonSignInfo)
+		data.Sign = make(map[int32]*pb.PCommonSignInfo)
 	}
 	return data
 }
 
-func (x *UserData) GetQuestData() *cmd.PQuestData {
+func (x *UserData) GetQuestData() *pb.PQuestData {
 	data := x.Data.QuestData
 	if data.CompleteQuests == nil {
 		data.CompleteQuests = make([]int32, 0)
 	}
 	if data.OpenQuests == nil {
-		data.OpenQuests = make(map[int32]*cmd.PCommonQuestInfo)
+		data.OpenQuests = make(map[int32]*pb.PCommonQuestInfo)
 	}
 	return data
 }
 
-func (x *UserData) GetAchieveData() *cmd.PUserAchieves {
+func (x *UserData) GetAchieveData() *pb.PUserAchieves {
 	data := x.Data.AchieveData
 	if data.SectionReceive == nil {
-		data.SectionReceive = make(map[string]*cmd.PAchieveReceive)
+		data.SectionReceive = make(map[string]*pb.PAchieveReceive)
 	}
 	if data.Achieves == nil {
 		data.Achieves = make(map[string]int32)
@@ -353,55 +353,55 @@ func (x *UserData) GetAchieveData() *cmd.PUserAchieves {
 	return data
 }
 
-func (x *UserData) GetCampaignData() *cmd.PPlayerGeneralCampaign {
+func (x *UserData) GetCampaignData() *pb.PPlayerGeneralCampaign {
 	data := x.Data.CampaignInfo
 	if data.ServerGeneralCampaign == nil {
-		data.ServerGeneralCampaign = &cmd.PServerGeneralCampaign{
+		data.ServerGeneralCampaign = &pb.PServerGeneralCampaign{
 			ResCampaignCompleteCount: 0,
 		}
 	}
 
 	if data.ServerGeneralCampaign.DailyCampaigns == nil {
-		data.ServerGeneralCampaign.DailyCampaigns = make(map[int32]*cmd.PDailyCampaignBase)
+		data.ServerGeneralCampaign.DailyCampaigns = make(map[int32]*pb.PDailyCampaignBase)
 	}
 	if data.ServerGeneralCampaign.ResCampaigns == nil {
-		data.ServerGeneralCampaign.ResCampaigns = make(map[int32]*cmd.PResourceCampaignBase)
+		data.ServerGeneralCampaign.ResCampaigns = make(map[int32]*pb.PResourceCampaignBase)
 	}
 
 	return data
 }
 
-func (x *UserData) GetTrialData() *cmd.PUserTrial {
+func (x *UserData) GetTrialData() *pb.PUserTrial {
 	data := x.Data.TrialData
 	if data.Trial == nil {
-		data.Trial = make(map[int32]*cmd.PTrialInfo)
+		data.Trial = make(map[int32]*pb.PTrialInfo)
 	}
 	return data
 }
 
-func (x *UserData) GetUseLimitData() *cmd.PUseLimitInfo {
+func (x *UserData) GetUseLimitData() *pb.PUseLimitInfo {
 	data := x.Data.UseLimit
 	if data.Items == nil {
-		data.Items = make(map[int32]*cmd.KeyValueItem)
+		data.Items = make(map[int32]*pb.KeyValueItem)
 	}
 	return data
 }
 
-func (x *UserData) GetBlockWayData() *cmd.PBlockWay {
+func (x *UserData) GetBlockWayData() *pb.PBlockWay {
 	data := x.Data.BlockWayData
 	if data.EventList == nil {
-		data.EventList = make(map[int64]*cmd.PBlockWayEvent)
+		data.EventList = make(map[int64]*pb.PBlockWayEvent)
 	}
 	if data.EventType == nil {
-		data.EventType = make(map[int32]*cmd.PBlockWayEventGroup)
+		data.EventType = make(map[int32]*pb.PBlockWayEventGroup)
 	}
 	return data
 }
 
-func (x *UserData) GetRoleDetailData() *cmd.PServerRoleDetailInfo {
+func (x *UserData) GetRoleDetailData() *pb.PServerRoleDetailInfo {
 	data := x.Data.Detail
 	if data.Common == nil {
-		data.Common = &cmd.PCommonRoleBaseInfo{}
+		data.Common = &pb.PCommonRoleBaseInfo{}
 	}
 	if data.Cards == nil {
 		data.Cards = make([]int32, 4, 4)
@@ -412,23 +412,23 @@ func (x *UserData) GetRoleDetailData() *cmd.PServerRoleDetailInfo {
 	return data
 }
 
-func (x *UserData) GetPlayerLevelData() *cmd.PPlayerLevelInfo {
+func (x *UserData) GetPlayerLevelData() *pb.PPlayerLevelInfo {
 	data := x.Data.PlayerLevelData
 	if data.Stamina == nil {
-		data.Stamina = &cmd.PStaminaInfo{}
+		data.Stamina = &pb.PStaminaInfo{}
 	}
 	return data
 }
 
-func (x *UserData) GetUserMailData() *cmd.PUserMailInfo {
+func (x *UserData) GetUserMailData() *pb.PUserMailInfo {
 	data := x.Data.UserMail
 	if data.UserMail == nil {
-		data.UserMail = make(map[int64]*cmd.PMailInfo)
+		data.UserMail = make(map[int64]*pb.PMailInfo)
 	}
 	return data
 }
 
-func (x *UserData) GetFriendData() *cmd.PFriendData {
+func (x *UserData) GetFriendData() *pb.PFriendData {
 	data := x.Data.FriendData
 	if data.Friends == nil {
 		data.Friends = make(map[uint64]int32)
@@ -451,7 +451,7 @@ func (x *UserData) GetFriendData() *cmd.PFriendData {
 	return data
 }
 
-func (x *UserData) GetUserAllianceData() *cmd.PUserAllianceData {
+func (x *UserData) GetUserAllianceData() *pb.PUserAllianceData {
 	data := x.Data.UserAlliance
 	if data.SignLog == nil {
 		data.SignLog = make(map[int64]int64)
@@ -459,39 +459,39 @@ func (x *UserData) GetUserAllianceData() *cmd.PUserAllianceData {
 	return data
 }
 
-func (x *UserData) GetOfflineEventData() *cmd.POfflineEventData {
+func (x *UserData) GetOfflineEventData() *pb.POfflineEventData {
 	data := x.Data.OfflineEventData
 	if data.EventList == nil {
-		data.EventList = make(map[int64]*cmd.OfflineEvent)
+		data.EventList = make(map[int64]*pb.OfflineEvent)
 	}
 	return data
 }
 
-func (x *UserData) GetOrderData() *cmd.OrderData {
+func (x *UserData) GetOrderData() *pb.OrderData {
 	if x.OrderData == nil {
-		x.OrderData = &cmd.OrderData{}
+		x.OrderData = &pb.OrderData{}
 	}
 
 	data := x.OrderData
 	if data.Orders == nil {
-		data.Orders = make(map[string]*cmd.Order)
+		data.Orders = make(map[string]*pb.Order)
 	}
 	if data.HistoryProducts == nil {
 		data.HistoryProducts = make(map[int32]int32)
 	}
 	if data.RefundData == nil {
-		data.RefundData = &cmd.RefundData{
+		data.RefundData = &pb.RefundData{
 			RefundCount:  0,
 			RefundAmount: 0,
 		}
 	}
 	if data.ItemInfo == nil {
-		data.ItemInfo = make(map[int32]*cmd.OrderItemInfo)
+		data.ItemInfo = make(map[int32]*pb.OrderItemInfo)
 	}
 	return data
 }
 
-func (x *UserData) GetChatData() *cmd.PUserChatInfo {
+func (x *UserData) GetChatData() *pb.PUserChatInfo {
 	data := x.Data.ChatInfo
 	if data.LastSendTime == nil {
 		data.LastSendTime = make(map[string]int64, 0)
@@ -502,10 +502,10 @@ func (x *UserData) GetChatData() *cmd.PUserChatInfo {
 	return data
 }
 
-func (x *UserData) GetRelationData() *cmd.PUserRelationData {
+func (x *UserData) GetRelationData() *pb.PUserRelationData {
 	data := x.Data.RelationData
 	if data.RelationData == nil {
-		data.RelationData = make(map[string]*cmd.UserRelationData, 0)
+		data.RelationData = make(map[string]*pb.UserRelationData, 0)
 	}
 	if data.CampCardLifeTime == nil {
 		data.CampCardLifeTime = make(map[string]int64, 0)
@@ -513,16 +513,16 @@ func (x *UserData) GetRelationData() *cmd.PUserRelationData {
 	return data
 }
 
-func (x *UserData) GetCallSysData() *cmd.PUserCallSysData {
+func (x *UserData) GetCallSysData() *pb.PUserCallSysData {
 	data := x.Data.CallSysData
 	if data.Signal == nil {
-		data.Signal = make(map[int32]*cmd.CardSignal, 0)
+		data.Signal = make(map[int32]*pb.CardSignal, 0)
 	}
 	return data
 }
 
-//// 加载玩家数据
-//func loadPlayerData[T proto.Message](userActor *UserActor, mongoDbName service.MongoDbType, dbKey string, dbData T) (T, error) {
+// // 加载玩家数据
+// func loadPlayerData[T proto.Message](userActor *UserActor, mongoDbName service.MongoDbType, dbKey string, dbData T) (T, error) {
 //	if utils.IsNull(dbData) {
 //		dbData = dbData.ProtoReflect().New().Interface().(T)
 //	}
@@ -534,10 +534,10 @@ func (x *UserData) GetCallSysData() *cmd.PUserCallSysData {
 //	}
 //
 //	return dbData, nil
-//}
+// }
 
-//// 加载玩家数据
-//func loadPlayerData1(userActor *UserActor, handler IBaseHandler) (proto.Message, error) {
+// // 加载玩家数据
+// func loadPlayerData1(userActor *UserActor, handler IBaseHandler) (proto.Message, error) {
 //	dbKey, dbData := handler.GetPlayerDataKV()
 //
 //	if !utils.IsNull(dbData) {
@@ -556,7 +556,7 @@ func (x *UserData) GetCallSysData() *cmd.PUserCallSysData {
 //	//data := dbData.ProtoReflect().New().Interface()
 //
 //	return dbData, nil
-//}
+// }
 
 // 保存玩家数据
 /*func savePlayerData[T proto.Message](userActor *UserActor, dbKey string, dbData T) error {

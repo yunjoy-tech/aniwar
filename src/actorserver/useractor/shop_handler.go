@@ -17,7 +17,7 @@ import (
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/clidto"
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/db"
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/excel/data"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/service"
 	"google.golang.org/protobuf/proto"
@@ -34,10 +34,10 @@ func NewShopHandler(actor *UserActor) *ShopHandler {
 	h := &ShopHandler{UABaseHandler: NewUABaseHandler(actor, "ShopHandler")}
 	h.ChildHandler = h
 
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PC2LS_ShopListReq), h.GetShopListReq)                // 请求商店列表
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PC2LS_ShopInfoReq), h.GetShopInfoReq)                // 请求商店信息
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PC2LS_ShopBuyReq), h.ShopBuyReq)                     // 购买
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PC2LS_ShopManualRefreshReq), h.ShopManualRefreshReq) // 手动刷新商店
+	actor.RegisterProtoHandler(int32(pb.Protocols_PC2LS_ShopListReq), h.GetShopListReq)                // 请求商店列表
+	actor.RegisterProtoHandler(int32(pb.Protocols_PC2LS_ShopInfoReq), h.GetShopInfoReq)                // 请求商店信息
+	actor.RegisterProtoHandler(int32(pb.Protocols_PC2LS_ShopBuyReq), h.ShopBuyReq)                     // 购买
+	actor.RegisterProtoHandler(int32(pb.Protocols_PC2LS_ShopManualRefreshReq), h.ShopManualRefreshReq) // 手动刷新商店
 
 	return h
 }
@@ -45,9 +45,9 @@ func NewShopHandler(actor *UserActor) *ShopHandler {
 // Init 初始化模块数据
 func (h *ShopHandler) Init() error {
 	// 初始化
-	h.actor.Data.ShopData = &cmd.LS2DB_ShopData{
+	h.actor.Data.ShopData = &pb.LS2DB_ShopData{
 		Createtime: time.Now().Unix(),
-		ShopInfos:  make(map[int32]*cmd.ShopInfo, 0),
+		ShopInfos:  make(map[int32]*pb.ShopInfo, 0),
 	}
 
 	// 保存
@@ -68,7 +68,7 @@ func (h *ShopHandler) DailyRefresh() error {
 }
 
 func (h *ShopHandler) SetDBData(dbData proto.Message) error {
-	if dbVal, ok := dbData.(*cmd.LS2DB_ShopData); ok {
+	if dbVal, ok := dbData.(*pb.LS2DB_ShopData); ok {
 		h.actor.Data.ShopData = dbVal
 	} else {
 		return fmt.Errorf("SetDBData, 数据类型错误! %v", dbData)
@@ -85,32 +85,32 @@ func (h *ShopHandler) DBTable() (service.MongoDbType, string, proto.Message) {
 func (h *ShopHandler) GetShopListReq(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
 	var (
 		err error
-		//dbShopData *cmd.LS2DB_ShopData
-		resp = &cmd.LS2C_ShopListRes{}
+		// dbShopData *pb.LS2DB_ShopData
+		resp = &pb.LS2C_ShopListRes{}
 	)
 
-	//_, _, reqData := in.MsgId, in.UserId, in.Data
-	var req cmd.C2LS_ShopListReq
+	// _, _, reqData := in.MsgId, in.UserId, in.Data
+	var req pb.C2LS_ShopListReq
 	err = in.UnmarshalData(&req)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
 	// 商店列表信息
-	//dbShopData = h.actor.GetShopData()
+	// dbShopData = h.actor.GetShopData()
 	//
-	//if len(dbShopData.ShopInfos) <= 0 {
+	// if len(dbShopData.ShopInfos) <= 0 {
 	//	resp.ShopInfos = getShopIds()
-	//}
+	// }
 	resp.ShopInfos = getShopIds(req.ShowType)
 
 	// 埋点
-	//threading.RunSafe(func() {
+	// threading.RunSafe(func() {
 	//	lilith.WriteDataLog(&lilith.ShopList{
 	//		CustomHeadInfo: lilith.BuildCustomHeadInfo(lilith.LogType_shop_list, h.actor.uid, h.actor.Account.CliDeviceInfo),
 	//		ShopIds:        lilith.ConvertList2Str(resp.ShopInfos),
 	//	})
-	//})
+	// })
 	threading.RunSafe(func() {
 		e := &taptap.ShopList{
 			PropertyFieldInfo: taptap.BuildPropertyFieldInfo(h.actor.Account.CliDeviceInfo),
@@ -126,61 +126,61 @@ func (h *ShopHandler) GetShopListReq(ctx context.Context, in *base.ProtoMsg) (pr
 func (h *ShopHandler) GetShopInfoReq(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
 	var (
 		err      error
-		shopInfo *cmd.ShopInfo
-		rsp      = &cmd.LS2C_ShopInfoRes{ShopInfo: &cmd.ShopInfo{GoodsIds: make([]*cmd.ShopGoodsInfo, 0)}}
+		shopInfo *pb.ShopInfo
+		rsp      = &pb.LS2C_ShopInfoRes{ShopInfo: &pb.ShopInfo{GoodsIds: make([]*pb.ShopGoodsInfo, 0)}}
 	)
 
-	//_, _, reqData := in.MsgId, in.UserId, in.Data
-	var req cmd.C2LS_ShopInfoReq
+	// _, _, reqData := in.MsgId, in.UserId, in.Data
+	var req pb.C2LS_ShopInfoReq
 	err = in.UnmarshalData(&req)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
 	shopInfo, err = h.getShopInfo(req.ShopId)
 	if err != nil {
-		//// 需要创建新的商店
-		//shopInfo = h.createShopInfo(req.ShopId)
-		//err = h.saveShopData2DB(shopInfo)
-		//if err != nil {
+		// // 需要创建新的商店
+		// shopInfo = h.createShopInfo(req.ShopId)
+		// err = h.saveShopData2DB(shopInfo)
+		// if err != nil {
 		return nil,
 			fmt.Errorf("创建商店报错, saveDB, shopId=%d, err:%+v", req.ShopId, err),
-			int32(cmd.ErrorCode_InternalError)
-		//}
+			int32(pb.ErrorCode_InternalError)
+		// }
 	}
 
 	// 下发指定层级的商品
-	//for _, goods := range shopInfo.GoodsIds {
+	// for _, goods := range shopInfo.GoodsIds {
 	//	goodsCfg := data.GetShopGoodsMgr().GetById(int32(goods.GetGoodsId()))
 	//	if goodsCfg.GetLayer() != int32(req.GetLayerId()) {
 	//		continue
 	//	}
 	//
 	//	rsp.ShopInfo.GoodsIds = append(rsp.ShopInfo.GoodsIds, goods)
-	//}
+	// }
 	//
-	//rsp.ShopInfo.ShopId = req.ShopId
-	//rsp.ShopInfo.ShopLayer = req.LayerId
+	// rsp.ShopInfo.ShopId = req.ShopId
+	// rsp.ShopInfo.ShopLayer = req.LayerId
 	rsp.ShopInfo = shopInfo
 
 	h.Debugf("商店信息请求结果:%+v", rsp)
 
 	// 埋点
-	//threading.RunSafe(func() {
+	// threading.RunSafe(func() {
 	//	lilith.WriteDataLog(&lilith.ShopInfo{
 	//		CustomHeadInfo: lilith.BuildCustomHeadInfo(lilith.LogType_shop_info, h.actor.uid, h.actor.Account.CliDeviceInfo),
 	//		ShopId:         rsp.ShopInfo.ShopId,                                 // id
 	//		ShopLayer:      rsp.ShopInfo.ShopLayer,                              // 商店层级
-	//		ShopGoodsInfo:  lilith.ConvertListStruct2Str(rsp.ShopInfo.GoodsIds), // 商品ids []*cmd.ShopGoodsInfo
+	//		ShopGoodsInfo:  lilith.ConvertListStruct2Str(rsp.ShopInfo.GoodsIds), // 商品ids []*pb.ShopGoodsInfo
 	//		ExpireTimeSec:  rsp.ShopInfo.ExpireTimeSec,                          // 过期时间戳
 	//	})
-	//})
+	// })
 	threading.RunSafe(func() {
 		e := &taptap.ShopInfo{
 			PropertyFieldInfo: taptap.BuildPropertyFieldInfo(h.actor.Account.CliDeviceInfo),
 			ShopId:            rsp.ShopInfo.ShopId,                                 // id
 			ShopLayer:         rsp.ShopInfo.ShopLayer,                              // 商店层级
-			ShopGoodsInfo:     taptap.ConvertListStruct2Str(rsp.ShopInfo.GoodsIds), // 商品ids []*cmd.ShopGoodsInfo
+			ShopGoodsInfo:     taptap.ConvertListStruct2Str(rsp.ShopInfo.GoodsIds), // 商品ids []*pb.ShopGoodsInfo
 			ExpireTimeSec:     rsp.ShopInfo.ExpireTimeSec,                          // 过期时间戳
 		}
 		taptap.WriteDataLog(taptap.LogType_shop_info, h.actor.uid, h.actor.Account.TapUserInfo, e)
@@ -193,25 +193,25 @@ func (h *ShopHandler) GetShopInfoReq(ctx context.Context, in *base.ProtoMsg) (pr
 func (h *ShopHandler) ShopBuyReq(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
 	var (
 		err error
-		rsp = &cmd.LS2C_ShopBuyRes{}
+		rsp = &pb.LS2C_ShopBuyRes{}
 	)
 
 	_, uid, _ := in.MsgId, in.UserId, in.Data
-	var req cmd.C2LS_ShopBuyReq
+	var req pb.C2LS_ShopBuyReq
 	err = in.UnmarshalData(&req)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
 	if req.BuyNum <= 0 {
-		return nil, fmt.Errorf("无效的购买数量, req=%+v", req.BuyNum), int32(cmd.ErrorCode_ParamError)
+		return nil, fmt.Errorf("无效的购买数量, req=%+v", req.BuyNum), int32(pb.ErrorCode_ParamError)
 	}
 
 	shopInfo, err := h.getShopInfo(req.ShopId)
 	if err != nil {
 		return nil,
 			fmt.Errorf("商店过期或不存在, shopId=%d, err:%+v", req.ShopId, err),
-			int32(cmd.ErrorCode_InternalError)
+			int32(pb.ErrorCode_InternalError)
 	}
 
 	for _, eachGoods := range shopInfo.GoodsIds {
@@ -223,16 +223,16 @@ func (h *ShopHandler) ShopBuyReq(ctx context.Context, in *base.ProtoMsg) (proto.
 
 		if goodsCfg.Limit != -1 { // 配置成-1, 表示不做限制
 			if int32(eachGoods.HadBuyCount) >= goodsCfg.Limit {
-				return nil, fmt.Errorf("购买次数不足, shopId=%d, goodsId=%d", req.ShopId, goodsCfg.GetId()), int32(cmd.ErrorCode_Shop_goods_buy_count_limit)
+				return nil, fmt.Errorf("购买次数不足, shopId=%d, goodsId=%d", req.ShopId, goodsCfg.GetId()), int32(pb.ErrorCode_Shop_goods_buy_count_limit)
 			}
 
 			if int32(eachGoods.HadBuyCount+req.GetBuyNum()) > goodsCfg.Limit {
-				return nil, fmt.Errorf("库存不足, shopId=%d, goodsId=%d", req.ShopId, goodsCfg.GetId()), int32(cmd.ErrorCode_Shop_goods_not_enough)
+				return nil, fmt.Errorf("库存不足, shopId=%d, goodsId=%d", req.ShopId, goodsCfg.GetId()), int32(pb.ErrorCode_Shop_goods_not_enough)
 			}
 		}
 
 		if goodsCfg.GetLayer() != shopInfo.ShopLayer {
-			return nil, fmt.Errorf("商品层级不匹配, shopId=%d, goodsId=%d", req.ShopId, goodsCfg.GetId()), int32(cmd.ErrorCode_Shop_goods_invalid_layer)
+			return nil, fmt.Errorf("商品层级不匹配, shopId=%d, goodsId=%d", req.ShopId, goodsCfg.GetId()), int32(pb.ErrorCode_Shop_goods_invalid_layer)
 		}
 
 		dropChange, err, errorCode := h.doBuy(uid, int32(req.BuyNum), goodsCfg, h.actor.comData)
@@ -262,14 +262,14 @@ func (h *ShopHandler) ShopBuyReq(ctx context.Context, in *base.ProtoMsg) (proto.
 	rsp.CommonData = h.actor.comData.FixDownComData()
 
 	// 埋点
-	//threading.RunSafe(func() {
+	// threading.RunSafe(func() {
 	//	lilith.WriteDataLog(&lilith.ShopBuy{
 	//		CustomHeadInfo: lilith.BuildCustomHeadInfo(lilith.LogType_shop_buy, h.actor.uid, h.actor.Account.CliDeviceInfo),
 	//		ShopId:         rsp.ShopId,
 	//		GoodsId:        rsp.GoodsId,
 	//		GoodsInfo:      lilith.ConvertStruct2Str(rsp.GoodsInfo),
 	//	})
-	//})
+	// })
 	threading.RunSafe(func() {
 		e := &taptap.ShopBuy{
 			PropertyFieldInfo: taptap.BuildPropertyFieldInfo(h.actor.Account.CliDeviceInfo),
@@ -288,39 +288,39 @@ func (h *ShopHandler) ShopManualRefreshReq(ctx context.Context, in *base.ProtoMs
 		err error
 	)
 
-	var req cmd.C2LS_ShopManualRefreshReq
+	var req pb.C2LS_ShopManualRefreshReq
 	err = in.UnmarshalData(&req)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
 	shopCfg := data.GetShopMgr().GetById(req.ShopId)
 	if shopCfg == nil {
-		return nil, fmt.Errorf("没有对应的配置, shopId=%d", req.ShopId), int32(cmd.ErrorCode_Shop_not_exist)
+		return nil, fmt.Errorf("没有对应的配置, shopId=%d", req.ShopId), int32(pb.ErrorCode_Shop_not_exist)
 	}
 
 	if 1 != shopCfg.Isauto {
-		return nil, fmt.Errorf("该商店不支持手动刷新, shopId=%d", req.ShopId), int32(cmd.ErrorCode_Shop_cannot_refresh_by_manual)
+		return nil, fmt.Errorf("该商店不支持手动刷新, shopId=%d", req.ShopId), int32(pb.ErrorCode_Shop_cannot_refresh_by_manual)
 	}
 
 	shopInfo, err := h.getShopInfo(req.ShopId)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_Shop_not_exist)
+		return nil, err, int32(pb.ErrorCode_Shop_not_exist)
 	}
 
-	if shopCfg.RefreshLimit != -1 && //配置为-1, 表示不限制
+	if shopCfg.RefreshLimit != -1 && // 配置为-1, 表示不限制
 		shopInfo.ManualRefreshCount >= shopCfg.RefreshLimit {
 
-		return nil, fmt.Errorf("该商店手动刷新达到上限, shopId=%d", req.ShopId), int32(cmd.ErrorCode_Shop_manual_refresh_limit)
+		return nil, fmt.Errorf("该商店手动刷新达到上限, shopId=%d", req.ShopId), int32(pb.ErrorCode_Shop_manual_refresh_limit)
 	}
 
 	// 消耗物品
 	if !GetConsumeMgr(h.actor).CheckKeyValEnough(shopCfg.RefreshCost) {
-		return nil, fmt.Errorf("消耗不足, %v", shopCfg.RefreshCost), int32(cmd.ErrorCode_NotEnoughItem)
+		return nil, fmt.Errorf("消耗不足, %v", shopCfg.RefreshCost), int32(pb.ErrorCode_NotEnoughItem)
 	}
 	err = GetConsumeMgr(h.actor).ConsumeKeyValList(shopCfg.RefreshCost, h.actor.comData, common.CR_Shop_Manual_refresh)
 	if err != nil {
-		return nil, fmt.Errorf("消耗报错, err:%v", err.Error()), int32(cmd.ErrorCode_InternalError)
+		return nil, fmt.Errorf("消耗报错, err:%v", err.Error()), int32(pb.ErrorCode_InternalError)
 	}
 
 	// 创建商品
@@ -334,21 +334,21 @@ func (h *ShopHandler) ShopManualRefreshReq(ctx context.Context, in *base.ProtoMs
 	err = h.SaveDB()
 	if err != nil {
 		h.Errorf(err.Error())
-		return nil, err, int32(cmd.ErrorCode_SaveDBError)
+		return nil, err, int32(pb.ErrorCode_SaveDBError)
 	}
 
-	rsp := &cmd.LS2C_ShopManualRefreshRes{
+	rsp := &pb.LS2C_ShopManualRefreshRes{
 		ShopInfo:   shopInfo,
 		CommonData: h.actor.comData.FixDownComData(),
 	}
 
-	return rsp, nil, int32(cmd.ErrorCode_Success)
+	return rsp, nil, int32(pb.ErrorCode_Success)
 }
 
-func (h *ShopHandler) saveShopData2DB(shopInfo *cmd.ShopInfo) error {
+func (h *ShopHandler) saveShopData2DB(shopInfo *pb.ShopInfo) error {
 	shopData := h.actor.GetShopData()
 	if shopData.ShopInfos == nil {
-		shopData.ShopInfos = make(map[int32]*cmd.ShopInfo, 0)
+		shopData.ShopInfos = make(map[int32]*pb.ShopInfo, 0)
 	}
 	shopData.ShopInfos[shopInfo.ShopId] = shopInfo
 
@@ -357,7 +357,7 @@ func (h *ShopHandler) saveShopData2DB(shopInfo *cmd.ShopInfo) error {
 }
 
 // 尝试更新商店层级
-func (h *ShopHandler) tryUpdateShopLayer(shopInfo *cmd.ShopInfo) {
+func (h *ShopHandler) tryUpdateShopLayer(shopInfo *pb.ShopInfo) {
 	var (
 		err                error
 		nextLayer          int32
@@ -373,7 +373,7 @@ func (h *ShopHandler) tryUpdateShopLayer(shopInfo *cmd.ShopInfo) {
 			continue
 		}
 
-		if goodsCfg.Limit != -1 && //配置成-1, 表示不限制
+		if goodsCfg.Limit != -1 && // 配置成-1, 表示不限制
 			int32(each.HadBuyCount) != goodsCfg.Limit {
 			return
 		}
@@ -393,7 +393,7 @@ func (h *ShopHandler) tryUpdateShopLayer(shopInfo *cmd.ShopInfo) {
 	if nextLayerGoodExist {
 		shopInfo.ShopLayer = nextLayer
 		err = h.SaveDB()
-		//err = h.actor.SaveShopData2DB(h.actor)
+		// err = h.actor.SaveShopData2DB(h.actor)
 		if err != nil {
 			h.Errorf("ShopBuyReq SaveShopData2DB 报错, err:%+v", err)
 		}
@@ -404,9 +404,9 @@ func (h *ShopHandler) tryUpdateShopLayer(shopInfo *cmd.ShopInfo) {
 // @param shopId	商店id
 // @param layerId	层级id
 // @param lastExpireTimeSec	上次过期时间
-func (h *ShopHandler) createShopInfo(shopId, layerIdx int32, lastExpireTimeSec int64) (error, *cmd.ShopInfo) {
+func (h *ShopHandler) createShopInfo(shopId, layerIdx int32, lastExpireTimeSec int64) (error, *pb.ShopInfo) {
 	var (
-		shopGoods = make([]*cmd.ShopGoodsInfo, 0)
+		shopGoods = make([]*pb.ShopGoodsInfo, 0)
 	)
 
 	// 创建商品(所有层)
@@ -426,14 +426,14 @@ func (h *ShopHandler) createShopInfo(shopId, layerIdx int32, lastExpireTimeSec i
 		return err, nil
 	}
 
-	shopInfo := &cmd.ShopInfo{
+	shopInfo := &pb.ShopInfo{
 		ShopId:             shopId,
 		ShopLayer:          1, // 初始层级
 		GoodsIds:           shopGoods,
 		ExpireTimeSec:      nextRefreshTime,
 		ManualRefreshCount: 0, // 手动刷新次数
 	}
-	//下发数据
+	// 下发数据
 	h.actor.comData.AddShopInfo(shopInfo)
 
 	h.Debugf("玩家:%v, 创建商店:%v", h.actor.ID(), shopInfo)
@@ -495,63 +495,63 @@ func (h *ShopHandler) getShopNextRefreshTime(shopId int32, lastExpireTimeSec int
 		nextDailyRefreshTime := lastRefreshTimeSec + cycleTimeSec*(cycle+1)
 
 		return nextDailyRefreshTime, nil
-		//for {
+		// for {
 		//	lastRefreshTimeSec += cycleTimeSec
 		//	if lastRefreshTimeSec > now.Unix() {
 		//		break
 		//	}
-		//}
+		// }
 
 	default:
 		return 0, fmt.Errorf("没有对应的刷新类型, shopId:%d, refreshType:%d", shopId, shopCfg.RefreshType)
 	}
 
-	//return 0, fmt.Errorf("没有对应的刷新类型, shopId:%d, refreshType:%d", shopId, shopCfg.RefreshType)
+	// return 0, fmt.Errorf("没有对应的刷新类型, shopId:%d, refreshType:%d", shopId, shopCfg.RefreshType)
 }
 
-func (h *ShopHandler) doBuy(uid string, buyNum int32, goodsCfg *data.ShopGoodsCfg, commonData *clidto.Comdata) (*cmd.DropChange, error, cmd.ErrorCode) {
+func (h *ShopHandler) doBuy(uid string, buyNum int32, goodsCfg *data.ShopGoodsCfg, commonData *clidto.Comdata) (*pb.DropChange, error, pb.ErrorCode) {
 	costMap := make(map[int32]int32)
 	costMap[goodsCfg.GetPrice().Key] = goodsCfg.GetPrice().Val * buyNum
 
 	if !GetConsumeMgr(h.actor).CheckMapEnough(costMap) {
-		return nil, fmt.Errorf("道具不足, uid=%d", uid), cmd.ErrorCode_CurrencyNotEnough
+		return nil, fmt.Errorf("道具不足, uid=%d", uid), pb.ErrorCode_CurrencyNotEnough
 	}
 
 	if GetDropMgr(h.actor).CheckLimit(goodsCfg.GetItemId().Key, goodsCfg.GetItemId().Val*buyNum) {
-		return nil, fmt.Errorf("已达持有最大数量, uid=%s", uid), cmd.ErrorCode_Shop_item_limit
+		return nil, fmt.Errorf("已达持有最大数量, uid=%s", uid), pb.ErrorCode_Shop_item_limit
 	}
 
 	err := GetConsumeMgr(h.actor).ConsumeList(costMap, commonData, common.CR_Shop_buy)
 	if err != nil {
-		return nil, fmt.Errorf("扣除货币报错, uid=%d", uid), cmd.ErrorCode_InternalError
+		return nil, fmt.Errorf("扣除货币报错, uid=%d", uid), pb.ErrorCode_InternalError
 	}
 
-	//changeItem, err := GetConsumeMgr(h.actor).ConsumeList(costMap, common.CR_Shop_buy)
-	//if err != nil {
-	//	return fmt.Errorf("扣除道具报错, uid=%d", uid), cmd.ErrorCode_InternalError
-	//}
+	// changeItem, err := GetConsumeMgr(h.actor).ConsumeList(costMap, common.CR_Shop_buy)
+	// if err != nil {
+	//	return fmt.Errorf("扣除道具报错, uid=%d", uid), pb.ErrorCode_InternalError
+	// }
 
 	// 判断商品是否超过背包上限
-	//rewardItemCfg := data.GetItemMgr().GetById(goodsCfg.ItemId.Key)
-	//hadItemNum := h.actor.BagHandler.GetItemNum(goodsCfg.ItemId.Key)
-	//if int64(hadItemNum+goodsCfg.ItemId.Val) > rewardItemCfg.NumLimit {
-	//	return nil, fmt.Errorf("已达持有最大数量, uid=%s", uid), cmd.ErrorCode_Shop_item_limit
-	//}
+	// rewardItemCfg := data.GetItemMgr().GetById(goodsCfg.ItemId.Key)
+	// hadItemNum := h.actor.BagHandler.GetItemNum(goodsCfg.ItemId.Key)
+	// if int64(hadItemNum+goodsCfg.ItemId.Val) > rewardItemCfg.NumLimit {
+	//	return nil, fmt.Errorf("已达持有最大数量, uid=%s", uid), pb.ErrorCode_Shop_item_limit
+	// }
 
 	dropChange, err := GetDropMgr(h.actor).DropList2(map[int32]int32{goodsCfg.GetItemId().Key: goodsCfg.GetItemId().Val * buyNum}, true, nil, commonData, common.CR_Shop_buy)
 	if err != nil {
-		return nil, fmt.Errorf("奖励道具报错, uid=%s", uid), cmd.ErrorCode_InternalError
+		return nil, fmt.Errorf("奖励道具报错, uid=%s", uid), pb.ErrorCode_InternalError
 	}
 
-	return dropChange, nil, cmd.ErrorCode_Success
+	return dropChange, nil, pb.ErrorCode_Success
 }
 
 // 从db获取商店信息
-func (h *ShopHandler) getShopInfo(shopId int32) (*cmd.ShopInfo, error) {
+func (h *ShopHandler) getShopInfo(shopId int32) (*pb.ShopInfo, error) {
 	var (
 		err        error
-		dbShopData *cmd.LS2DB_ShopData
-		shopInfo   *cmd.ShopInfo
+		dbShopData *pb.LS2DB_ShopData
+		shopInfo   *pb.ShopInfo
 	)
 	dbShopData = h.actor.GetShopData()
 	if dbShopData == nil {
@@ -591,11 +591,11 @@ func (h *ShopHandler) getShopInfo(shopId int32) (*cmd.ShopInfo, error) {
 }
 
 // 创建商店物品
-func (h *ShopHandler) createShopGoods(shopId int32, layerIdx int32) []*cmd.ShopGoodsInfo {
+func (h *ShopHandler) createShopGoods(shopId int32, layerIdx int32) []*pb.ShopGoodsInfo {
 	var (
-		//layer      = uint32(1) // 初始层级
+		// layer      = uint32(1) // 初始层级
 		tempGoodsCfgs = make([]*data.ShopGoodsCfg, 0)
-		goodsInfos    = make([]*cmd.ShopGoodsInfo, 0)
+		goodsInfos    = make([]*pb.ShopGoodsInfo, 0)
 	)
 
 	data.GetShopGoodsMgr().Foreach(func(cfg *data.ShopGoodsCfg) bool {
@@ -646,7 +646,7 @@ func (h *ShopHandler) createShopGoods(shopId int32, layerIdx int32) []*cmd.ShopG
 	}
 
 	for _, cfg := range finalGoodsCfg {
-		goodsInfo := &cmd.ShopGoodsInfo{
+		goodsInfo := &pb.ShopGoodsInfo{
 			GoodsId:     cfg.GetId(),
 			HadBuyCount: 0,
 		}

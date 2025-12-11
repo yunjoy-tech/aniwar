@@ -13,7 +13,7 @@ import (
 
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/db"
 	excel "gitlab.musadisca-games.com/wangxw/aniwar/src/excel/data"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/service"
 	"google.golang.org/protobuf/proto"
@@ -27,7 +27,7 @@ func NewSkinHandler(actor *UserActor) *SkinHandler {
 	h := &SkinHandler{UABaseHandler: NewUABaseHandler(actor, "SkinHandler")}
 	h.ChildHandler = h
 
-	h.actor.RegisterProtoHandler(int32(cmd.Protocols_PC2LS_CardDressSkinReq), h.DressSkinReq)
+	h.actor.RegisterProtoHandler(int32(pb.Protocols_PC2LS_CardDressSkinReq), h.DressSkinReq)
 
 	return h
 }
@@ -35,9 +35,9 @@ func NewSkinHandler(actor *UserActor) *SkinHandler {
 // Init 初始化模块数据
 func (h *SkinHandler) Init() error {
 	// 初始化
-	h.actor.Data.SkinData = &cmd.PSkinData{
+	h.actor.Data.SkinData = &pb.PSkinData{
 		Createtime: time.Now().Unix(),
-		Skins:      make(map[int32]*cmd.CardSkinData),
+		Skins:      make(map[int32]*pb.CardSkinData),
 	}
 
 	// 保存
@@ -58,7 +58,7 @@ func (h *SkinHandler) DailyRefresh() error {
 }
 
 func (h *SkinHandler) SetDBData(dbData proto.Message) error {
-	if dbVal, ok := dbData.(*cmd.PSkinData); ok {
+	if dbVal, ok := dbData.(*pb.PSkinData); ok {
 		h.actor.Data.SkinData = dbVal
 	} else {
 		return fmt.Errorf("SetDBData, 数据类型错误! %v", dbData)
@@ -71,7 +71,7 @@ func (h *SkinHandler) DBTable() (service.MongoDbType, string, proto.Message) {
 	return service.MongoDbType_MongoGame, db.KeyUserCardSkin(h.actor.ID()), h.actor.Data.SkinData
 }
 
-func (h *SkinHandler) buildSkinList(cardId int32) []*cmd.PCommonSkinInfo {
+func (h *SkinHandler) buildSkinList(cardId int32) []*pb.PCommonSkinInfo {
 	data := h.actor.GetCardSkinData()
 	skinData, ok := data.Skins[cardId]
 	if !ok {
@@ -121,36 +121,36 @@ func (h *SkinHandler) handleRedPoint(commonData *clidto.Comdata, param []int64) 
 }
 
 func (h *SkinHandler) DressSkinReq(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
-	var req cmd.C2LS_CardDressSkinReq
+	var req pb.C2LS_CardDressSkinReq
 	err := in.UnmarshalData(&req)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_DeSerializeError)
+		return nil, err, int32(pb.ErrorCode_DeSerializeError)
 	}
 
 	card, err := h.actor.CardHandler.GetCard(uint32(req.CardId))
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_CardNotExist)
+		return nil, err, int32(pb.ErrorCode_CardNotExist)
 	}
 
 	if !h.IsExistSkin(req.CardId, req.SkinId) {
-		return nil, fmt.Errorf("skin data is empty %d", req.CardId), int32(cmd.ErrorCode_CardSkinNotExist)
+		return nil, fmt.Errorf("skin data is empty %d", req.CardId), int32(pb.ErrorCode_CardSkinNotExist)
 	}
 
 	// 处理逻辑
 	card.SkinId = uint32(req.SkinId)
 	err = h.actor.CardHandler.SaveDB()
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
 	// 埋点log
-	//threading.RunSafe(func() {
+	// threading.RunSafe(func() {
 	//	lilith.WriteDataLog(&lilith.SkinDress{
 	//		CustomHeadInfo: lilith.BuildCustomHeadInfo(lilith.LogType_SkinDress, h.actor.uid, h.actor.Account.CliDeviceInfo),
 	//		CardId:         req.CardId,
 	//		SkinId:         req.SkinId,
 	//	})
-	//})
+	// })
 	threading.RunSafe(func() {
 		e := &taptap.SkinDress{
 			PropertyFieldInfo: taptap.BuildPropertyFieldInfo(h.actor.Account.CliDeviceInfo),
@@ -160,7 +160,7 @@ func (h *SkinHandler) DressSkinReq(ctx context.Context, in *base.ProtoMsg) (prot
 		taptap.WriteDataLog(taptap.LogType_SkinDress, h.actor.uid, h.actor.Account.TapUserInfo, e)
 	})
 
-	return &cmd.LS2C_CardDressSkinRes{Card: h.actor.CardHandler.ToClientData(card)}, nil, 0
+	return &pb.LS2C_CardDressSkinRes{Card: h.actor.CardHandler.ToClientData(card)}, nil, 0
 }
 
 func (h *SkinHandler) IsExistSkin(cardId, skinId int32) bool {
@@ -178,18 +178,18 @@ func (h *SkinHandler) IsExistSkin(cardId, skinId int32) bool {
 	return false
 }
 
-func (h *SkinHandler) tryInitSkin(cardId int32) (*cmd.CardSkinData, error) {
+func (h *SkinHandler) tryInitSkin(cardId int32) (*pb.CardSkinData, error) {
 	skinData, ok := h.actor.GetCardSkinData().Skins[cardId]
 	if !ok {
-		skinData = &cmd.CardSkinData{
+		skinData = &pb.CardSkinData{
 			CardId: cardId,
-			Skins:  make([]*cmd.PCommonSkinInfo, 0),
+			Skins:  make([]*pb.PCommonSkinInfo, 0),
 		}
 		cfg := excel.GetBeastarMgr().GetById(cardId)
 		if cfg == nil {
 			return nil, fmt.Errorf("card not exist %d", cardId)
 		}
-		skinData.Skins = append(skinData.Skins, &cmd.PCommonSkinInfo{
+		skinData.Skins = append(skinData.Skins, &pb.PCommonSkinInfo{
 			SkinId:     cfg.Skin0,
 			IsNew:      false,
 			CreateTime: time.Now().Unix(),
@@ -203,7 +203,7 @@ func (h *SkinHandler) tryInitSkin(cardId int32) (*cmd.CardSkinData, error) {
 	return skinData, nil
 }
 
-func (h *SkinHandler) AddCardSkin(itemCfg *excel.ItemCfg, addNum uint32, commonData *clidto.Comdata) (*cmd.DropChange, error) {
+func (h *SkinHandler) AddCardSkin(itemCfg *excel.ItemCfg, addNum uint32, commonData *clidto.Comdata) (*pb.DropChange, error) {
 	if addNum <= 0 {
 		return nil, fmt.Errorf("illegal param")
 	}
@@ -215,7 +215,7 @@ func (h *SkinHandler) AddCardSkin(itemCfg *excel.ItemCfg, addNum uint32, commonD
 	}
 
 	var (
-		dropChange = &cmd.DropChange{}
+		dropChange = &pb.DropChange{}
 	)
 
 	cardId := skinCfg.GetHeroId()
@@ -228,7 +228,7 @@ func (h *SkinHandler) AddCardSkin(itemCfg *excel.ItemCfg, addNum uint32, commonD
 			return nil, err
 		}
 
-		skinData.Skins = append(skinData.Skins, &cmd.PCommonSkinInfo{
+		skinData.Skins = append(skinData.Skins, &pb.PCommonSkinInfo{
 			SkinId:     skinId,
 			IsNew:      true,
 			CreateTime: time.Now().Unix(),
@@ -244,13 +244,13 @@ func (h *SkinHandler) AddCardSkin(itemCfg *excel.ItemCfg, addNum uint32, commonD
 		}
 
 		// 埋点log
-		//threading.RunSafe(func() {
+		// threading.RunSafe(func() {
 		//	lilith.WriteDataLog(&lilith.SkinDress{
 		//		CustomHeadInfo: lilith.BuildCustomHeadInfo(lilith.LogType_SkinCreate, h.actor.uid, h.actor.Account.CliDeviceInfo),
 		//		CardId:         cardId,
 		//		SkinId:         skinId,
 		//	})
-		//})
+		// })
 		threading.RunSafe(func() {
 			e := &taptap.SkinDress{
 				PropertyFieldInfo: taptap.BuildPropertyFieldInfo(h.actor.Account.CliDeviceInfo),
@@ -269,7 +269,7 @@ func (h *SkinHandler) AddCardSkin(itemCfg *excel.ItemCfg, addNum uint32, commonD
 			h.Error(errx)
 		}
 
-		dropChange.Items = append(dropChange.Items, &cmd.ItemReward{
+		dropChange.Items = append(dropChange.Items, &pb.ItemReward{
 			ItemId: uint32(itemCfg.ItemId),
 			Num:    1,
 		})
@@ -292,10 +292,10 @@ func (h *SkinHandler) AddCardSkin(itemCfg *excel.ItemCfg, addNum uint32, commonD
 	return dropChange, nil
 }
 
-func (h *SkinHandler) getSkinList(cardId int32) []*cmd.PCommonSkinInfo {
+func (h *SkinHandler) getSkinList(cardId int32) []*pb.PCommonSkinInfo {
 	skinData, ok := h.actor.GetCardSkinData().Skins[cardId]
 	if !ok {
-		return []*cmd.PCommonSkinInfo{}
+		return []*pb.PCommonSkinInfo{}
 	}
 	return skinData.Skins
 }

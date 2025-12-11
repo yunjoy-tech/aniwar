@@ -1,7 +1,7 @@
 package logic
 
 import (
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/tcpx"
 	"google.golang.org/protobuf/proto"
 )
@@ -20,7 +20,7 @@ type PendingUser struct {
 	uid     string
 	data    []byte
 	ctx     *tcpx.Context
-	session *cmd.UserSession
+	session *pb.UserSession
 	startTs int64
 	enter   bool
 }
@@ -38,7 +38,7 @@ type PendingUser struct {
 }*/
 
 // GrantLoginToken 每秒钟下发的登录令牌，用于控制登录频率
-//func (m *PendingUserMgr) GrantLoginToken() {
+// func (m *PendingUserMgr) GrantLoginToken() {
 //	for i := 0; i < int(conf.GConf().Base.GateLoginRateLimit); i++ {
 //		select {
 //		case m.ticket <- struct{}{}:
@@ -47,16 +47,16 @@ type PendingUser struct {
 //		}
 //	}
 //	//logger.Debug("grant login token, size:", conf.GConf().Base.GateLoginRateLimit)
-//}
+// }
 
-/*func (m *PendingUserMgr) Push(req *PendingUser) cmd.ErrorCode {
+/*func (m *PendingUserMgr) Push(req *PendingUser) pb.ErrorCode {
 	select {
 	case m.pendingCh <- req:
-		return cmd.ErrorCode_Success
+		return pb.ErrorCode_Success
 	default:
 		logger.Debug("PendingUserMgr drop PendingUser %s", req.uid)
 	}
-	return cmd.ErrorCode_SystemBusy
+	return pb.ErrorCode_SystemBusy
 
 }*/
 

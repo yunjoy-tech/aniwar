@@ -6,7 +6,7 @@ import (
 	"github.com/dapr/go-sdk/service/common"
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/db"
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/sdkconstant"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"net/http"
 )
 
@@ -23,7 +23,7 @@ func (s *IDIPServer) ResetUserName(out *common.Content, reqJson []byte) {
 	// 解析数据
 	req := ResetUserNameReq{}
 	if err := json.Unmarshal(reqJson, &req); err != nil {
-		RetCommonMsg(out, http.StatusInternalServerError, int32(cmd.ErrorCode_InternalError), Internal_Error)
+		RetCommonMsg(out, http.StatusInternalServerError, int32(pb.ErrorCode_InternalError), Internal_Error)
 		return
 	}
 
@@ -32,9 +32,9 @@ func (s *IDIPServer) ResetUserName(out *common.Content, reqJson []byte) {
 	for _, uid := range req.Uids {
 		// 拿玩家的账号数据
 		uaid := s.GetUAID(sdkconstant.GenLilithUid(uid), 0)
-		roleInfo := &cmd.PServerRoleBaseInfo{}
+		roleInfo := &pb.PServerRoleBaseInfo{}
 		if err := s.getUserGameData(db.KeyUserBaseInfo(uaid), roleInfo); err != nil {
-			items = append(items, &RetBaseItems{Ret: int32(cmd.ErrorCode_InternalError), Info: Internal_Error})
+			items = append(items, &RetBaseItems{Ret: int32(pb.ErrorCode_InternalError), Info: Internal_Error})
 			continue
 		}
 
@@ -42,12 +42,12 @@ func (s *IDIPServer) ResetUserName(out *common.Content, reqJson []byte) {
 		key := db.KeyUserBaseInfo(uaid)
 		kvTable, err := db.BuildKvTable(roleInfo, key)
 		if err != nil {
-			items = append(items, &RetBaseItems{Ret: int32(cmd.ErrorCode_InternalError), Info: Internal_Error})
+			items = append(items, &RetBaseItems{Ret: int32(pb.ErrorCode_InternalError), Info: Internal_Error})
 			continue
 		}
 		err = s.SaveMongoGame(key, kvTable, nil)
 		if err != nil {
-			items = append(items, &RetBaseItems{Ret: int32(cmd.ErrorCode_InternalError), Info: Internal_Error})
+			items = append(items, &RetBaseItems{Ret: int32(pb.ErrorCode_InternalError), Info: Internal_Error})
 			continue
 		}
 	}

@@ -20,7 +20,7 @@ import (
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common"
 	myUtils "gitlab.musadisca-games.com/wangxw/aniwar/src/common/utils"
 	excel "gitlab.musadisca-games.com/wangxw/aniwar/src/excel/data"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/guid"
 	"google.golang.org/protobuf/proto"
@@ -34,18 +34,18 @@ func NewMailHandler(actor *UserActor) *MailHandler {
 	h := &MailHandler{UABaseHandler: NewUABaseHandler(actor, "MailHandler")}
 	h.ChildHandler = h
 
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PC2MS_MailListInfosReq), h.MailListInfosReq)
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PC2MS_MailReceiveReq), h.MailReceiveReq) // 领取邮件
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PC2MS_MailReadReq), h.MailReadReq)
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PC2MS_MailDeleteReq), h.MailDeleteReq)
+	actor.RegisterProtoHandler(int32(pb.Protocols_PC2MS_MailListInfosReq), h.MailListInfosReq)
+	actor.RegisterProtoHandler(int32(pb.Protocols_PC2MS_MailReceiveReq), h.MailReceiveReq) // 领取邮件
+	actor.RegisterProtoHandler(int32(pb.Protocols_PC2MS_MailReadReq), h.MailReadReq)
+	actor.RegisterProtoHandler(int32(pb.Protocols_PC2MS_MailDeleteReq), h.MailDeleteReq)
 
 	return h
 }
 
 func (h *MailHandler) Init() error {
-	h.actor.Data.UserMail = &cmd.PUserMailInfo{
+	h.actor.Data.UserMail = &pb.PUserMailInfo{
 		Createtime: time.Now().Unix(),
-		UserMail:   make(map[int64]*cmd.PMailInfo),
+		UserMail:   make(map[int64]*pb.PMailInfo),
 		CheckValue: 0,
 	}
 
@@ -67,7 +67,7 @@ func (h *MailHandler) DailyRefresh() error {
 }
 
 func (h *MailHandler) SetDBData(dbData proto.Message) error {
-	if dbVal, ok := dbData.(*cmd.PUserMailInfo); ok {
+	if dbVal, ok := dbData.(*pb.PUserMailInfo); ok {
 		h.actor.Data.UserMail = dbVal
 	} else {
 		return fmt.Errorf("SetDBData, 数据类型错误! %v", dbData)
@@ -104,43 +104,43 @@ func (h *MailHandler) getNewMailsCount() int32 {
 }
 
 func (h *MailHandler) MailListInfosReq(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
-	var req cmd.C2MS_MailListInfosReq
+	var req pb.C2MS_MailListInfosReq
 	err := in.UnmarshalData(&req)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_DeSerializeError)
+		return nil, err, int32(pb.ErrorCode_DeSerializeError)
 	}
 
 	// check一下全局邮件
 	userMails, delMails, err := h.checkSystemMail()
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
 	// 返回消息
-	mails := make([]*cmd.PMailInfo, 0)
+	mails := make([]*pb.PMailInfo, 0)
 	for _, v := range userMails.UserMail {
 		mails = append(mails, v)
 	}
-	res := &cmd.MS2C_MailListInfosRes{Mails: mails, DelMails: delMails}
+	res := &pb.MS2C_MailListInfosRes{Mails: mails, DelMails: delMails}
 	return res, nil, 0
 }
 
 func (h *MailHandler) MailReceiveReq(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
 
-	var req cmd.C2MS_MailReceiveReq
+	var req pb.C2MS_MailReceiveReq
 	if err := in.UnmarshalData(&req); err != nil {
-		return nil, err, int32(cmd.ErrorCode_DeSerializeError)
+		return nil, err, int32(pb.ErrorCode_DeSerializeError)
 	}
 
 	// check
 	if req.ReceiveType != common.MAIL_RECEIVE_ALL && req.ReceiveType != common.MAIL_RECEIVE_ONE {
-		return nil, fmt.Errorf("param check failed %d", req.ReceiveType), int32(cmd.ErrorCode_ParamError)
+		return nil, fmt.Errorf("param check failed %d", req.ReceiveType), int32(pb.ErrorCode_ParamError)
 	}
 
 	usermail := h.actor.GetUserMailData()
 
 	now := time.Now().Unix()
-	target := make([]*cmd.PMailInfo, 0)
+	target := make([]*pb.PMailInfo, 0)
 	if req.ReceiveType == common.MAIL_RECEIVE_ALL {
 		for _, v := range usermail.UserMail {
 			// 取可以领取的邮件
@@ -162,7 +162,7 @@ func (h *MailHandler) MailReceiveReq(ctx context.Context, in *base.ProtoMsg) (pr
 	h.Debugf("MailReceiveReq  target: %d", len(target))
 	if len(target) > 0 {
 		err, code, rewards, mailIds := h.receiveMailAttachment(target, h.actor.comData)
-		if code != cmd.ErrorCode_Success {
+		if code != pb.ErrorCode_Success {
 			return nil, err, int32(code)
 		}
 		delIds := make([]int64, 0)
@@ -178,7 +178,7 @@ func (h *MailHandler) MailReceiveReq(ctx context.Context, in *base.ProtoMsg) (pr
 		}
 
 		if err = h.SaveDB(); err != nil {
-			return nil, err, int32(cmd.ErrorCode_InternalError)
+			return nil, err, int32(pb.ErrorCode_InternalError)
 		}
 
 		// 埋点log
@@ -204,7 +204,7 @@ func (h *MailHandler) MailReceiveReq(ctx context.Context, in *base.ProtoMsg) (pr
 		})
 
 		// 返回消息
-		res := &cmd.MS2C_MailReceiveRes{
+		res := &pb.MS2C_MailReceiveRes{
 			MailIds:    mailIds,
 			Rewards:    rewards,
 			CommonData: h.actor.comData.FixDownComData(),
@@ -214,18 +214,18 @@ func (h *MailHandler) MailReceiveReq(ctx context.Context, in *base.ProtoMsg) (pr
 		return res, nil, 0
 	}
 
-	return &cmd.MS2C_MailReceiveRes{}, nil, 0
+	return &pb.MS2C_MailReceiveRes{}, nil, 0
 }
 
 func (h *MailHandler) MailReadReq(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
-	var req cmd.C2MS_MailReadReq
+	var req pb.C2MS_MailReadReq
 	if err := in.UnmarshalData(&req); err != nil {
-		return nil, err, int32(cmd.ErrorCode_DeSerializeError)
+		return nil, err, int32(pb.ErrorCode_DeSerializeError)
 	}
 
 	// check
 	if req.ReadType != common.MAIL_READ_ALL && req.ReadType != common.MAIL_READ_ONE {
-		return nil, fmt.Errorf("param check failed %d", req.ReadType), int32(cmd.ErrorCode_ParamError)
+		return nil, fmt.Errorf("param check failed %d", req.ReadType), int32(pb.ErrorCode_ParamError)
 	}
 
 	mail := h.actor.GetUserMailData()
@@ -258,20 +258,20 @@ func (h *MailHandler) MailReadReq(ctx context.Context, in *base.ProtoMsg) (proto
 
 	if change {
 		if err := h.SaveDB(); err != nil {
-			return nil, err, int32(cmd.ErrorCode_InternalError)
+			return nil, err, int32(pb.ErrorCode_InternalError)
 		}
 	}
 
 	// 返回消息
-	res := &cmd.MS2C_MailReadRes{MailIds: mails}
+	res := &pb.MS2C_MailReadRes{MailIds: mails}
 	return res, nil, 0
 }
 
 func (h *MailHandler) MailDeleteReq(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
 
-	var req cmd.C2MS_MailDeleteReq
+	var req pb.C2MS_MailDeleteReq
 	if err := in.UnmarshalData(&req); err != nil {
-		return nil, err, int32(cmd.ErrorCode_DeSerializeError)
+		return nil, err, int32(pb.ErrorCode_DeSerializeError)
 	}
 
 	mailData := h.actor.GetUserMailData()
@@ -298,7 +298,7 @@ func (h *MailHandler) MailDeleteReq(ctx context.Context, in *base.ProtoMsg) (pro
 	}
 
 	if err := h.SaveDB(); err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
 	// 埋点log
@@ -316,7 +316,7 @@ func (h *MailHandler) MailDeleteReq(ctx context.Context, in *base.ProtoMsg) (pro
 		taptap.WriteDataLog(taptap.LogType_MailDelete, h.actor.uid, h.actor.Account.TapUserInfo, e)
 	})
 
-	res := &cmd.MS2C_MailDeleteRes{DelMails: mailIds}
+	res := &pb.MS2C_MailDeleteRes{DelMails: mailIds}
 	return res, nil, 0
 }
 
@@ -326,15 +326,15 @@ func (h *MailHandler) MailDeleteReq(ctx context.Context, in *base.ProtoMsg) (pro
 //	@receiver h
 //	@param mails 待领取的列表
 //	@param commonData
-//	@return cmd.ErrorCode 返回错误码
-//	@return []*cmd.ItemReward 领取到的奖励列表
+//	@return pb.ErrorCode 返回错误码
+//	@return []*pb.ItemReward 领取到的奖励列表
 //	@return []int64 领取完成的邮件id列表
-func (h *MailHandler) receiveMailAttachment(mails []*cmd.PMailInfo, commonData *clidto.Comdata) (error, cmd.ErrorCode, []*cmd.ItemReward, []int64) {
+func (h *MailHandler) receiveMailAttachment(mails []*pb.PMailInfo, commonData *clidto.Comdata) (error, pb.ErrorCode, []*pb.ItemReward, []int64) {
 	// 数量上限检查
-	total := make([]*cmd.ItemReward, 0)
+	total := make([]*pb.ItemReward, 0)
 	received := make([]int64, 0)
-	limitMap := make(map[int32]int32)       // 道具计数
-	campItems := make([]*cmd.ItemReward, 0) // 营地道具特殊处理
+	limitMap := make(map[int32]int32)      // 道具计数
+	campItems := make([]*pb.ItemReward, 0) // 营地道具特殊处理
 	for _, v := range mails {
 		items := myUtils.ConvertItem2(v.Attachments)
 		// 构造新道具数量
@@ -342,7 +342,7 @@ func (h *MailHandler) receiveMailAttachment(mails []*cmd.PMailInfo, commonData *
 		for id, num := range items {
 			// 排除家具类型道具
 			cfg := excel.GetItemMgr().GetById(id)
-			if cfg == nil || cfg.Type == int32(cmd.ItemType_PlayerCamp) {
+			if cfg == nil || cfg.Type == int32(pb.ItemType_PlayerCamp) {
 				continue
 			}
 			newItems[id] = limitMap[id] + num
@@ -351,7 +351,7 @@ func (h *MailHandler) receiveMailAttachment(mails []*cmd.PMailInfo, commonData *
 		if len(mails) == 1 {
 			// 单邮件处理
 			if b {
-				return fmt.Errorf("package is full"), cmd.ErrorCode_PackageIsFull, nil, nil
+				return fmt.Errorf("package is full"), pb.ErrorCode_PackageIsFull, nil, nil
 			}
 		} else {
 			// 多邮件处理
@@ -373,25 +373,25 @@ func (h *MailHandler) receiveMailAttachment(mails []*cmd.PMailInfo, commonData *
 	}
 
 	// 家具下发
-	var retItems []*cmd.ItemReward
+	var retItems []*pb.ItemReward
 	// retItems, err := h.actor.CampHandler.HandleDropMailItem(campItems)
 	// if err != nil {
-	// 	return fmt.Errorf("internal error"), cmd.ErrorCode_InternalError, nil, nil
+	// 	return fmt.Errorf("internal error"), pb.ErrorCode_InternalError, nil, nil
 	// }
 
 	// 附件下发
 	rewards, err := GetDropMgr(h.actor).DropList2(myUtils.ConvertItem2(total), true, nil, commonData, common.CR_Mail_Attachment)
 	if err != nil {
-		return fmt.Errorf("internal error"), cmd.ErrorCode_InternalError, nil, nil
+		return fmt.Errorf("internal error"), pb.ErrorCode_InternalError, nil, nil
 	}
 	retItems = append(retItems, rewards.Items...)
-	return nil, cmd.ErrorCode_Success, retItems, received
+	return nil, pb.ErrorCode_Success, retItems, received
 }
 
 // 排除过期道具,返回家具和非家具
-func fixExpiredItem(mails *cmd.PMailInfo) ([]*cmd.ItemReward, []*cmd.ItemReward) {
-	items := make([]*cmd.ItemReward, 0)
-	campItems := make([]*cmd.ItemReward, 0)
+func fixExpiredItem(mails *pb.PMailInfo) ([]*pb.ItemReward, []*pb.ItemReward) {
+	items := make([]*pb.ItemReward, 0)
+	campItems := make([]*pb.ItemReward, 0)
 	now := time.Now().Unix()
 	for _, attachment := range mails.Attachments {
 		cfg := excel.GetItemMgr().GetById(int32(attachment.ItemId))
@@ -403,7 +403,7 @@ func fixExpiredItem(mails *cmd.PMailInfo) ([]*cmd.ItemReward, []*cmd.ItemReward)
 			continue
 		}
 
-		if cfg.Type == int32(cmd.ItemType_PlayerCamp) {
+		if cfg.Type == int32(pb.ItemType_PlayerCamp) {
 			campItems = append(campItems, attachment)
 		} else {
 			items = append(items, attachment)
@@ -413,7 +413,7 @@ func fixExpiredItem(mails *cmd.PMailInfo) ([]*cmd.ItemReward, []*cmd.ItemReward)
 	return items, campItems
 }
 
-func (h *MailHandler) GMTAddUserMail(req *cmd.S2S_SendGMAddUserMailReq, commonData *clidto.Comdata) error {
+func (h *MailHandler) GMTAddUserMail(req *pb.S2S_SendGMAddUserMailReq, commonData *clidto.Comdata) error {
 	mails := h.actor.GetUserMailData()
 
 	newMail := req.AddMail
@@ -504,7 +504,7 @@ func (h *MailHandler) AddUserMail(mailId int32, reward map[int32]int32, commonDa
 	// 发送邮件
 	for i := 0; i < max; i++ {
 		// 附件处理
-		r := make([]*cmd.ItemReward, 0)
+		r := make([]*pb.ItemReward, 0)
 		for k, v := range attachment {
 			// 道具上限
 			cfg := excel.GetItemMgr().GetById(k)
@@ -519,7 +519,7 @@ func (h *MailHandler) AddUserMail(mailId int32, reward map[int32]int32, commonDa
 			}
 
 			if num > 0 {
-				r = append(r, &cmd.ItemReward{
+				r = append(r, &pb.ItemReward{
 					ItemId: uint32(k),
 					Num:    num,
 				})
@@ -543,7 +543,7 @@ func (h *MailHandler) AddUserMail(mailId int32, reward map[int32]int32, commonDa
 }
 
 // 根据邮件模板创建一封邮件
-func (h *MailHandler) createMail(mailCfg *excel.MailCfg, attachment []*cmd.ItemReward) *cmd.PMailInfo {
+func (h *MailHandler) createMail(mailCfg *excel.MailCfg, attachment []*pb.ItemReward) *pb.PMailInfo {
 	now := time.Now()
 	expireTime := int64(0)
 	if mailCfg.GetExpireTime() > 0 {
@@ -554,7 +554,7 @@ func (h *MailHandler) createMail(mailCfg *excel.MailCfg, attachment []*cmd.ItemR
 	if len(attachment) == 0 {
 		isReceived = common.MAIL_STATUS_NOT_RECEIVE
 	}
-	mail := &cmd.PMailInfo{
+	mail := &pb.PMailInfo{
 		Id:          int64(h.actor.Srv.GenGUID(guid.GUID_MAIL)),
 		Title:       mailCfg.GetTitle(),
 		Content:     mailCfg.GetContent(),
@@ -574,7 +574,7 @@ func (h *MailHandler) createMail(mailCfg *excel.MailCfg, attachment []*cmd.ItemR
 }
 
 // 将系统邮件转换成个人邮件
-func (h *MailHandler) convertMail(uid string, roleId uint64, lang string, mail *cmd.PSysMailInfo) (*cmd.PMailInfo, error) {
+func (h *MailHandler) convertMail(uid string, roleId uint64, lang string, mail *pb.PSysMailInfo) (*pb.PMailInfo, error) {
 	isReceived := common.MAIL_STATUS_UNRECEIVE
 	if len(mail.Attachments) == 0 {
 		isReceived = common.MAIL_STATUS_NOT_RECEIVE
@@ -609,7 +609,7 @@ func (h *MailHandler) convertMail(uid string, roleId uint64, lang string, mail *
 		isReceived = common.MAIL_STATUS_NOT_RECEIVE
 	}
 
-	return &cmd.PMailInfo{
+	return &pb.PMailInfo{
 		Id:          mail.Id,
 		Title:       mail.Title,
 		Content:     mail.Content,
@@ -627,13 +627,13 @@ func (h *MailHandler) convertMail(uid string, roleId uint64, lang string, mail *
 }
 
 // 尝试check系统邮件
-func (h *MailHandler) checkSystemMail() (*cmd.PUserMailInfo, []int64, error) {
+func (h *MailHandler) checkSystemMail() (*pb.PUserMailInfo, []int64, error) {
 
 	// 取个人邮件
 	userMails := h.actor.GetUserMailData()
 
 	// 从ActorServer中获取全局邮件
-	reqMsg := &cmd.AS2LS_CheckSystemMailReq{
+	reqMsg := &pb.AS2LS_CheckSystemMailReq{
 		CurValue: userMails.CheckValue,
 		Level:    int32(h.actor.LoginHandler.getRoleLevel()),
 		VipLevel: 0, // todo 暂时填0
@@ -682,7 +682,7 @@ func (h *MailHandler) checkSystemMail() (*cmd.PUserMailInfo, []int64, error) {
 }
 
 // 根据规则尝试删除邮件,返回删除的邮件id集合
-func (h *MailHandler) tryDelMail(mails map[int64]*cmd.PMailInfo) []int64 {
+func (h *MailHandler) tryDelMail(mails map[int64]*pb.PMailInfo) []int64 {
 	now := time.Now().Unix()
 	keySet := make([]int, 0)
 	target := make([]int64, 0)

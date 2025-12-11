@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	myUtils "gitlab.musadisca-games.com/wangxw/aniwar/src/common/utils"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/baseactor"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/baseconf"
@@ -55,19 +55,19 @@ func NewHotReloadHandler(actor *CenterActor) *HotReloadHandler {
 	}
 	h.ChildHandler = h
 
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PS2S_HotReloadReq), h.HotReloadReq)             //发起热更请求
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PS2S_HotReloadNotifyReq), h.HotReloadNotifyReq) //热更通知结果
+	actor.RegisterProtoHandler(int32(pb.Protocols_PS2S_HotReloadReq), h.HotReloadReq)             // 发起热更请求
+	actor.RegisterProtoHandler(int32(pb.Protocols_PS2S_HotReloadNotifyReq), h.HotReloadNotifyReq) // 热更通知结果
 	return h
 }
 
 func (h *HotReloadHandler) HotReloadReq(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
-	req := &cmd.S2S_HotReloadReq{}
+	req := &pb.S2S_HotReloadReq{}
 	now := time.Now().Unix()
 	in.UnmarshalData(req)
 	logger.Infof("HotReloadReq time:%v req:%+v ", now, req)
-	rsp := &cmd.S2S_HotReloadRes{Progress: map[string]string{}}
+	rsp := &pb.S2S_HotReloadRes{Progress: map[string]string{}}
 	if req.Type == 1 {
-		//通知到所有的actor和idip
+		// 通知到所有的actor和idip
 		h.actor.Data.HotReloadMap = &sync.Map{}
 		h.Send2PubTopic(req, h.actor.Data.SvcMaps[global.ACTOR_SVC], now)
 		h.Send2PubTopic(req, h.actor.Data.SvcMaps[global.IDIP_SVC], now)
@@ -78,10 +78,10 @@ func (h *HotReloadHandler) HotReloadReq(ctx context.Context, in *base.ProtoMsg) 
 		h.Send2PubTopic(req, h.actor.Data.SvcMaps[global.BILL_SVC], now)
 		h.Send2PubTopic(req, h.actor.Data.SvcMaps[global.CENTER_SVC], now)
 
-	} else if req.Type == 99 { //系统邮件刷新
+	} else if req.Type == 99 { // 系统邮件刷新
 		h.actor.Data.HotReloadMap = &sync.Map{}
 		h.Send2PubTopic(req, h.actor.Data.SvcMaps[global.ACTOR_SVC], now)
-	} else { //返回
+	} else { // 返回
 		h.actor.Data.HotReloadMap.Range(func(key, value any) bool {
 			rsp.Progress[key.(string)] = value.(string)
 			return true
@@ -89,13 +89,13 @@ func (h *HotReloadHandler) HotReloadReq(ctx context.Context, in *base.ProtoMsg) 
 
 	}
 
-	return rsp, nil, int32(cmd.ErrorCode_Success)
+	return rsp, nil, int32(pb.ErrorCode_Success)
 }
 
-func (h *HotReloadHandler) Send2PubTopic(req *cmd.S2S_HotReloadReq, svcMap *sync.Map, now int64) {
+func (h *HotReloadHandler) Send2PubTopic(req *pb.S2S_HotReloadReq, svcMap *sync.Map, now int64) {
 	var err error
 	svcMap.Range(func(key, value any) bool {
-		svcData := value.(*cmd.ServiceData)
+		svcData := value.(*pb.ServiceData)
 		svcName := key.(string)
 		if now < svcData.ReportTS+int64(baseconf.GetBaseConf().ServerHeartbeatTimout) {
 			if len(req.Services) > 0 {
@@ -116,7 +116,7 @@ func (h *HotReloadHandler) Send2PubTopic(req *cmd.S2S_HotReloadReq, svcMap *sync
 }
 
 func (h *HotReloadHandler) HotReloadNotifyReq(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
-	req := &cmd.S2S_HotReloadNotifyReq{}
+	req := &pb.S2S_HotReloadNotifyReq{}
 	now := time.Now().Unix()
 	err := in.UnmarshalData(req)
 	fmt.Println("err:", err)
@@ -124,6 +124,6 @@ func (h *HotReloadHandler) HotReloadNotifyReq(ctx context.Context, in *base.Prot
 	if req.Service != "" && req.Ts > 0 {
 		h.actor.Data.HotReloadMap.Store(req.Service, strconv.Itoa(int(req.Ts)))
 	}
-	res := &cmd.S2S_HotReloadNotifyRes{}
-	return res, nil, int32(cmd.ErrorCode_Success)
+	res := &pb.S2S_HotReloadNotifyRes{}
+	return res, nil, int32(pb.ErrorCode_Success)
 }

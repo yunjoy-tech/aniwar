@@ -11,7 +11,7 @@ import (
 	"time"
 
 	"github.com/dapr/go-sdk/service/common"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/metrics"
@@ -29,7 +29,7 @@ func NewLobbyServer() base.IServer {
 	srv.AppId = "lobby"
 	srv.InAddr = ":23001"
 	srv.GRPCPort = "50001"
-	srv.HasPriTopic = true //开启私有频道订阅
+	srv.HasPriTopic = true // 开启私有频道订阅
 	srv.OnPreInit = srv.PreInit
 	srv.OnServerInit = srv.ServerInit
 	srv.OnEventHandler = srv.EventHandler
@@ -88,17 +88,17 @@ func (s *LobbyServer) InvokeHandler(ctx context.Context, in *common.InvocationEv
 	}
 	messageID := msg.MsgId
 
-	logger.Info("lobby InvokeHandler begin: ", in.ContentType, in.Verb, in.QueryString, cmd.Protocols(messageID), messageID, msg.String())
+	logger.Info("lobby InvokeHandler begin: ", in.ContentType, in.Verb, in.QueryString, pb.Protocols(messageID), messageID, msg.String())
 
 	out = &common.Content{}
-	if messageID == int32(cmd.Protocols_PAS2LS_CheckSystemMailReq) {
+	if messageID == int32(pb.Protocols_PAS2LS_CheckSystemMailReq) {
 		out, err = s.CheckSystemMailReq(msg)
-	} else if messageID == int32(cmd.Protocols_PS2S_SendGMAddMailReq) {
+	} else if messageID == int32(pb.Protocols_PS2S_SendGMAddMailReq) {
 		out, err = s.AddSystemMail(msg)
 	} else {
 		out, err = nil, fmt.Errorf("unknown message")
 	}
-	logger.Info("lobby InvokeHandler begin: ", in.ContentType, in.Verb, in.QueryString, cmd.Protocols(messageID), messageID, msg.String())
+	logger.Info("lobby InvokeHandler begin: ", in.ContentType, in.Verb, in.QueryString, pb.Protocols(messageID), messageID, msg.String())
 	return out, err
 }
 

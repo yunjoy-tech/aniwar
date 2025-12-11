@@ -34,7 +34,7 @@ import (
 
 	dapr "github.com/dapr/go-sdk/client"
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/db"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
 	svc "gitlab.musadisca-games.com/wangxw/musae/framework/service"
@@ -65,7 +65,7 @@ func IsValidAppId(appid string) bool {
 	return false
 }
 
-func RpcErr(err error, code cmd.ErrorCode) base.RpcError {
+func RpcErr(err error, code pb.ErrorCode) base.RpcError {
 	if err == nil {
 
 	}
@@ -137,7 +137,7 @@ func (s *Server) Start() error {
 
 	s.InitConfigCenter()
 
-	//if !global.IsDev {
+	// if !global.IsDev {
 	//	//如果配置中心存在server.conf, reload 配置
 	//	szcfg, err := s.GetConfigKeyForStr(db.KeyCfgReloadConf)
 	//	if err == nil && szcfg != "" {
@@ -145,7 +145,7 @@ func (s *Server) Start() error {
 	//			logger.Errorf("service reload cfg err:%s", szcfg)
 	//		}
 	//	}
-	//}
+	// }
 
 	if err := s.OnServerInit(); err != nil {
 		return err
@@ -171,17 +171,17 @@ func (s *Server) Start() error {
 }
 
 func (s *Server) OnUpdateStatus() {
-	req := &cmd.S2S_SvcStatusReq{}
+	req := &pb.S2S_SvcStatusReq{}
 	if global.AppID == global.ACTOR_SVC {
-		req.Actor = map[string]*cmd.ActorStatus{}
+		req.Actor = map[string]*pb.ActorStatus{}
 		res, err := s.Daprc.GrpcClient().GetMetadata(context.Background(), &emptypb.Empty{})
 		if err != nil {
 			logger.Warn("OnUpdateActorCount err:", err)
 			return
 		}
-		status := &cmd.ActorStatus{Counts: []*cmd.ActorCount{}}
+		status := &pb.ActorStatus{Counts: []*pb.ActorCount{}}
 		for _, actor := range res.ActiveActorsCount {
-			status.Counts = append(status.Counts, &cmd.ActorCount{
+			status.Counts = append(status.Counts, &pb.ActorCount{
 				Type:  actor.Type,
 				Count: actor.Count,
 			})
@@ -196,7 +196,7 @@ func (s *Server) OnUpdateStatus() {
 			}
 		}
 
-		//更新用户列表
+		// 更新用户列表
 		var count int32
 		var del []string
 		s.OnlinePlayers.Range(func(key, value any) bool {
@@ -210,7 +210,7 @@ func (s *Server) OnUpdateStatus() {
 		for _, v := range del {
 			s.OnlinePlayers.Delete(v)
 		}
-		status.Counts = append(status.Counts, &cmd.ActorCount{
+		status.Counts = append(status.Counts, &pb.ActorCount{
 			Type:  global.PlayerCountType,
 			Count: count,
 		})
@@ -218,7 +218,7 @@ func (s *Server) OnUpdateStatus() {
 		req.Actor[global.HostName] = status
 	}
 
-	req.Service = &cmd.ServiceData{
+	req.Service = &pb.ServiceData{
 		Name:           s.PrivateTopicID(),
 		StartTime:      global.StartTime,
 		ReportTS:       time.Now().Unix(),
@@ -226,7 +226,7 @@ func (s *Server) OnUpdateStatus() {
 		RollingVersion: global.ROLLING_VERSION,
 	}
 
-	//logger.Debugf("SvcStatusReq: %+v", req)
+	// logger.Debugf("SvcStatusReq: %+v", req)
 	data, err := proto.Marshal(req)
 	if err != nil {
 		logger.Warn("OnUpdateActorCount proto.Marshal  err:", err)
@@ -234,7 +234,7 @@ func (s *Server) OnUpdateStatus() {
 	}
 	msg, err := s.ActorInvoke(global.CenterActorType, global.CenterActorID, &base.ProtoMsg{
 		AppId:   global.ACTOR_SVC,
-		MsgId:   int32(cmd.Protocols_PS2S_SvcStatusReq),
+		MsgId:   int32(pb.Protocols_PS2S_SvcStatusReq),
 		UserId:  "",
 		RoleId:  0,
 		UAID:    global.CenterActorID,
@@ -248,7 +248,7 @@ func (s *Server) OnUpdateStatus() {
 		logger.Warn("ActorInvoke err:", err)
 		return
 	}
-	res := &cmd.S2S_SvcStatusRes{}
+	res := &pb.S2S_SvcStatusRes{}
 	proto.Unmarshal(msg.Data, res)
 
 	for _, actor := range res.Counts {
@@ -270,7 +270,7 @@ func (s *Server) OnUpdateStatus() {
 			global.GateServices = append(global.GateServices, srv.Name)
 		}
 	}
-	//logger.Debugf("OnUpdateActorCount: %+v", res.Counts)
+	// logger.Debugf("OnUpdateActorCount: %+v", res.Counts)
 }
 
 func (s *Server) OnTimerEventCB(cb base.TimerEventCB) {
@@ -286,7 +286,7 @@ func (s *Server) OnTimerEventCB(cb base.TimerEventCB) {
 }
 
 // PlayerIsOnline 是否在线
-func (s *Server) PlayerIsOnline(uid string) (bool, *cmd.UserSession) {
+func (s *Server) PlayerIsOnline(uid string) (bool, *pb.UserSession) {
 	session, _, _ := s.GetUserSession(uid)
 	if session == nil {
 		return false, session
@@ -439,7 +439,7 @@ func (s *Server) UpdateUAIDCache(uid string, playerId uint64, savedb ...bool) er
 func (s *Server) GetPlayerId(uid string) (uint64, error) {
 	// 查询db中的数据
 	var playerId uint64
-	//先查询redis
+	// 先查询redis
 	if kvTable, err := s.GetCacheRedis(db.KeyAccountUAID(uid), nil); err == nil &&
 		kvTable != nil && kvTable.Id > 0 {
 		playerId = kvTable.Id
@@ -449,18 +449,18 @@ func (s *Server) GetPlayerId(uid string) (uint64, error) {
 		return 0, err
 	} else {
 		// 角色存在
-		account := &cmd.UserData{}
+		account := &pb.UserData{}
 		err = proto.Unmarshal(kvTable.Data, account)
 		if err != nil {
 			logger.Warn("proto unmarshal err: ", err)
 			return 0, err
 		}
-		//var sync bool
+		// var sync bool
 		if account.PlayerList != nil && account.PlayerList.Players != nil {
 			player, ok := account.PlayerList.Players[1]
 			if ok && player != nil {
 				playerId = player.Id
-				//uaid缓存失效,更新缓存
+				// uaid缓存失效,更新缓存
 				s.UpdateUAIDCache(uid, playerId, true)
 			} else {
 				if account.PlayerList.PlayerId > 0 {
@@ -482,7 +482,7 @@ func (s *Server) GetPlayerId(uid string) (uint64, error) {
 }
 
 func (s *Server) KickOutUser(uid string) error {
-	//err := s.SaveToken(uid, "")
+	// err := s.SaveToken(uid, "")
 	userSession, err, _ := s.GetUserSession(uid)
 	if err != nil {
 		return err
@@ -558,36 +558,36 @@ func (s *Server) LoadLocalizedStr() error {
 	return nil
 }
 
-func (s *Server) ErrorPack(errCode cmd.ErrorCode) []byte {
-	ret := &cmd.S2C_ErrorCodeNtf{ErrorCode: uint32(errCode)}
-	data, err := s.Pack(cmd.Protocols_PS2C_ErrorCodeNtf, errCode, ret, "") // 错误消息不走加密
+func (s *Server) ErrorPack(errCode pb.ErrorCode) []byte {
+	ret := &pb.S2C_ErrorCodeNtf{ErrorCode: uint32(errCode)}
+	data, err := s.Pack(pb.Protocols_PS2C_ErrorCodeNtf, errCode, ret, "") // 错误消息不走加密
 	if err != nil {
 		data = []byte(fmt.Sprintf("error pack:%s", err.Error()))
 	}
 	return data
 }
 
-func (s *Server) CheckToken(session *cmd.UserSession, token string) (error, cmd.ErrorCode) {
+func (s *Server) CheckToken(session *pb.UserSession, token string) (error, pb.ErrorCode) {
 	if session == nil {
-		return errors.New("无效的session"), cmd.ErrorCode_TokenInvalid
+		return errors.New("无效的session"), pb.ErrorCode_TokenInvalid
 	}
 
-	//currToken, err := s.GetToken(session.Uid)
-	//if err != nil {
+	// currToken, err := s.GetToken(session.Uid)
+	// if err != nil {
 	//	logger.Errorf("GetToken err:%+v", err)
 	//	if s.IsLastToken(session, token) {
-	//		return errors.New("上次的token"), cmd.ErrorCode_KnockedOff
+	//		return errors.New("上次的token"), pb.ErrorCode_KnockedOff
 	//	} else {
-	//		return errors.New("获取token报错"), cmd.ErrorCode_TokenInvalid
+	//		return errors.New("获取token报错"), pb.ErrorCode_TokenInvalid
 	//	}
-	//}
+	// }
 	currToken := session.Token
 
 	if token == "" || token != currToken {
 		if s.IsLastToken(session, token) {
-			return errors.New("上次的token"), cmd.ErrorCode_KnockedOff
+			return errors.New("上次的token"), pb.ErrorCode_KnockedOff
 		} else {
-			return errors.New("获取token报错"), cmd.ErrorCode_TokenInvalid
+			return errors.New("获取token报错"), pb.ErrorCode_TokenInvalid
 		}
 	}
 
@@ -595,17 +595,17 @@ func (s *Server) CheckToken(session *cmd.UserSession, token string) (error, cmd.
 	nowSec := time.Now().Unix()
 	if conf.GConf().DDos.TimeInterval > 0 && // 配置过期时间为0, 表示不做过期时间检查
 		nowSec > session.LimitTs {
-		return errors.New("token失效了"), cmd.ErrorCode_TokenTimeout
+		return errors.New("token失效了"), pb.ErrorCode_TokenTimeout
 	}
 
 	if token == currToken {
-		return nil, cmd.ErrorCode_Success
+		return nil, pb.ErrorCode_Success
 	}
 
-	return errors.New("无效的token"), cmd.ErrorCode_TokenInvalid
+	return errors.New("无效的token"), pb.ErrorCode_TokenInvalid
 }
 
-func (s *Server) IsLastToken(session *cmd.UserSession, token string) bool {
+func (s *Server) IsLastToken(session *pb.UserSession, token string) bool {
 	if session == nil {
 		return false
 	}
@@ -613,11 +613,11 @@ func (s *Server) IsLastToken(session *cmd.UserSession, token string) bool {
 		return false
 	}
 
-	//lastToken, err := s.GetToken(session.Uid)
-	//if err != nil {
+	// lastToken, err := s.GetToken(session.Uid)
+	// if err != nil {
 	//	logger.Errorf("IsLastToken GetToken err:%+v", err)
 	//	return false
-	//}
+	// }
 
 	if session.LastToken == token {
 		return true
@@ -679,11 +679,11 @@ func (s *Server) UpdateTaptapUidCache(unionId string) (int, error) {
 }
 
 // 通知center热更
-func (s *Server) NotifyCenterActor(ntfType int32, files, services []string) (*cmd.S2S_HotReloadRes, error) {
+func (s *Server) NotifyCenterActor(ntfType int32, files, services []string) (*pb.S2S_HotReloadRes, error) {
 
 	logger.Infof("通知center进行热更 type: %v, files: %v, services: %v", ntfType, files, services)
 
-	reqData, err := proto.Marshal(&cmd.S2S_HotReloadReq{
+	reqData, err := proto.Marshal(&pb.S2S_HotReloadReq{
 		Type:     ntfType,
 		Files:    files,
 		Services: services,
@@ -691,8 +691,8 @@ func (s *Server) NotifyCenterActor(ntfType int32, files, services []string) (*cm
 	if err != nil {
 		return nil, err
 	}
-	bytes := s.CenterSrvInvoke(int32(cmd.Protocols_PS2S_HotReloadReq), reqData)
-	res := &cmd.S2S_HotReloadRes{}
+	bytes := s.CenterSrvInvoke(int32(pb.Protocols_PS2S_HotReloadReq), reqData)
+	res := &pb.S2S_HotReloadRes{}
 	if err = proto.Unmarshal(bytes, res); err != nil {
 		return nil, err
 	}

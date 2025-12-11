@@ -10,7 +10,7 @@ import (
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/datahelper"
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/db"
 	excel "gitlab.musadisca-games.com/wangxw/aniwar/src/excel/data"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/service"
 	"google.golang.org/protobuf/proto"
@@ -25,16 +25,16 @@ func NewGuideTaskHandler(actor *UserActor) *GuideTaskHandler {
 	h.ChildHandler = h
 
 	// 协议注册
-	h.actor.RegisterProtoHandler(int32(cmd.Protocols_PC2LS_ReceiveGuideTaskRewardReq), h.ReceiveGuideTaskRewardReq)
+	h.actor.RegisterProtoHandler(int32(pb.Protocols_PC2LS_ReceiveGuideTaskRewardReq), h.ReceiveGuideTaskRewardReq)
 	return h
 }
 
 // Init 初始化模块数据
 func (h *GuideTaskHandler) Init() error {
 	// 初始化
-	h.actor.Data.GuideTaskData = &cmd.PGuideTaskData{
+	h.actor.Data.GuideTaskData = &pb.PGuideTaskData{
 		Createtime: time.Now().Unix(),
-		Tasks:      make(map[int32]*cmd.TaskInfoItem),
+		Tasks:      make(map[int32]*pb.TaskInfoItem),
 		Complete:   make(map[int32]int32),
 	}
 
@@ -56,7 +56,7 @@ func (h *GuideTaskHandler) DailyRefresh() error {
 }
 
 func (h *GuideTaskHandler) SetDBData(dbData proto.Message) error {
-	if dbVal, ok := dbData.(*cmd.PGuideTaskData); ok {
+	if dbVal, ok := dbData.(*pb.PGuideTaskData); ok {
 		h.actor.Data.GuideTaskData = dbVal
 	} else {
 		return fmt.Errorf("SetDBData, 数据类型错误! %v", dbData)
@@ -84,7 +84,7 @@ func (h *GuideTaskHandler) startTaskTimer() error {
 }
 
 // 给任务加个计时器
-func (h *GuideTaskHandler) addTaskTimer(task *cmd.TaskInfoItem) {
+func (h *GuideTaskHandler) addTaskTimer(task *pb.TaskInfoItem) {
 	after := task.ExpireTs - time.Now().Unix()
 	if after <= 0 {
 		return
@@ -119,9 +119,9 @@ func (h *GuideTaskHandler) handleTaskTrigger(e event.IEvent) error {
 	return h.tryUnlockTask()
 }
 
-func (h *GuideTaskHandler) buildGuideTask() []*cmd.TaskInfoItem {
+func (h *GuideTaskHandler) buildGuideTask() []*pb.TaskInfoItem {
 	data := h.actor.GetGuideTaskData()
-	tasks := make([]*cmd.TaskInfoItem, 0)
+	tasks := make([]*pb.TaskInfoItem, 0)
 	for _, task := range data.Tasks {
 		tasks = append(tasks, task)
 	}
@@ -134,9 +134,9 @@ func (h *GuideTaskHandler) ReceiveGuideTaskRewardReq(ctx context.Context, in *ba
 	if err != nil {
 		return nil, err, int32(code)
 	}
-	var req cmd.C2LS_ReceiveGuideTaskRewardReq
+	var req pb.C2LS_ReceiveGuideTaskRewardReq
 	if err = in.UnmarshalData(&req); err != nil {
-		return nil, err, int32(cmd.ErrorCode_DeSerializeError)
+		return nil, err, int32(pb.ErrorCode_DeSerializeError)
 	}
 
 	// 刷新一下数据
@@ -147,11 +147,11 @@ func (h *GuideTaskHandler) ReceiveGuideTaskRewardReq(ctx context.Context, in *ba
 	// 任务不存在
 	task := data.Tasks[req.TaskId]
 	if task == nil || cfg == nil {
-		return nil, fmt.Errorf("task not found %d", req.TaskId), int32(cmd.ErrorCode_TaskNotFound)
+		return nil, fmt.Errorf("task not found %d", req.TaskId), int32(pb.ErrorCode_TaskNotFound)
 	}
 	// 不是可领取状态
 	if task.Status != TASK_STATUS_COMPLETE {
-		return nil, fmt.Errorf("task not complete status %d", task.Status), int32(cmd.ErrorCode_TaskStatusNotComplete)
+		return nil, fmt.Errorf("task not complete status %d", task.Status), int32(pb.ErrorCode_TaskStatusNotComplete)
 	}
 
 	// 领取
@@ -164,10 +164,10 @@ func (h *GuideTaskHandler) ReceiveGuideTaskRewardReq(ctx context.Context, in *ba
 	reward := datahelper.ConvertItem3(cfg.Reward)
 	dropChange, err := GetDropMgr(h.actor).DropList2(reward, true, nil, h.actor.comData, common.CR_FINISH_GUIDE_TASK)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
-	res := &cmd.LS2C_ReceiveGuideTaskRewardRes{
+	res := &pb.LS2C_ReceiveGuideTaskRewardRes{
 		TaskId:     req.TaskId,
 		CommonData: h.actor.comData.FixDownComData(),
 		DropChange: dropChange,

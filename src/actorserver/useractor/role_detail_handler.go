@@ -9,7 +9,7 @@ import (
 	"time"
 
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/db"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/service"
 	"google.golang.org/protobuf/proto"
@@ -24,8 +24,8 @@ func NewRoleDetailHandler(actor *UserActor) *RoleDetailHandler {
 	h.ChildHandler = h
 
 	// 协议注册
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PC2LS_GetRoleInfoReq), h.GetRoleInfoReq)
-	h.actor.RegisterProtoHandler(int32(cmd.Protocols_PC2LS_ChangeShowCardsReq), h.ChangeShowCardsReq)
+	actor.RegisterProtoHandler(int32(pb.Protocols_PC2LS_GetRoleInfoReq), h.GetRoleInfoReq)
+	h.actor.RegisterProtoHandler(int32(pb.Protocols_PC2LS_ChangeShowCardsReq), h.ChangeShowCardsReq)
 
 	return h
 }
@@ -33,7 +33,7 @@ func NewRoleDetailHandler(actor *UserActor) *RoleDetailHandler {
 // Init 初始化模块数据
 func (h *RoleDetailHandler) Init() error {
 	// 初始化
-	h.actor.Data.Detail = &cmd.PServerRoleDetailInfo{
+	h.actor.Data.Detail = &pb.PServerRoleDetailInfo{
 		Createtime: time.Now().Unix(),
 		Common:     h.actor.GetUserData().Common,
 		Cards:      make([]int32, 4, 4),
@@ -57,7 +57,7 @@ func (h *RoleDetailHandler) DailyRefresh() error {
 }
 
 func (h *RoleDetailHandler) SetDBData(dbData proto.Message) error {
-	if dbVal, ok := dbData.(*cmd.PServerRoleDetailInfo); ok {
+	if dbVal, ok := dbData.(*pb.PServerRoleDetailInfo); ok {
 		h.actor.Data.Detail = dbVal
 	} else {
 		return fmt.Errorf("SetDBData, 数据类型错误! %v", dbData)
@@ -71,32 +71,32 @@ func (h *RoleDetailHandler) DBTable() (service.MongoDbType, string, proto.Messag
 }
 
 func (h *RoleDetailHandler) GetRoleInfoReq(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
-	var req cmd.C2LS_GetRoleInfoReq
+	var req pb.C2LS_GetRoleInfoReq
 	err := in.UnmarshalData(&req)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_DeSerializeError)
+		return nil, err, int32(pb.ErrorCode_DeSerializeError)
 	}
 
 	info, err := h.actor.getRoleDetailInfoByRoleId(req.RoleId)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_NotFoundPlayer)
+		return nil, err, int32(pb.ErrorCode_NotFoundPlayer)
 	}
 
 	// 返回消息
-	return &cmd.LS2C_GetRoleInfoRes{Info: h.actor.LoginHandler.toClientDetailInfo(info)}, nil, 0
+	return &pb.LS2C_GetRoleInfoRes{Info: h.actor.LoginHandler.toClientDetailInfo(info)}, nil, 0
 }
 
 func (h *RoleDetailHandler) ChangeShowCardsReq(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
-	var req cmd.C2LS_ChangeShowCardsReq
+	var req pb.C2LS_ChangeShowCardsReq
 	err := in.UnmarshalData(&req)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_DeSerializeError)
+		return nil, err, int32(pb.ErrorCode_DeSerializeError)
 	}
 
 	// 卡牌判定
 	for _, card := range req.Cards {
 		if card > 0 && !h.actor.CardHandler.IsExistCard(uint32(card)) {
-			return nil, fmt.Errorf("card not exist %d", card), int32(cmd.ErrorCode_ParamError)
+			return nil, fmt.Errorf("card not exist %d", card), int32(pb.ErrorCode_ParamError)
 		}
 	}
 
@@ -104,23 +104,23 @@ func (h *RoleDetailHandler) ChangeShowCardsReq(ctx context.Context, in *base.Pro
 	detailData := h.actor.GetRoleDetailData()
 	detailData.Cards = req.Cards
 	if err = h.SaveDB(); err != nil {
-		return nil, err, int32(cmd.ErrorCode_SaveDBError)
+		return nil, err, int32(pb.ErrorCode_SaveDBError)
 	}
 	if err = h.tryUploadRoleInfoToES(); err != nil {
 		h.Error(err)
 	}
 	// 返回
-	cards := make([]*cmd.PClientCardInfo, 0)
+	cards := make([]*pb.PClientCardInfo, 0)
 	for _, id := range req.Cards {
 		card, _ := h.actor.CardHandler.GetCard(uint32(id))
 		if card != nil {
 			clientData := h.actor.CardHandler.ToClientData(card)
 			cards = append(cards, clientData)
 		} else {
-			cards = append(cards, &cmd.PClientCardInfo{}) // 占位用
+			cards = append(cards, &pb.PClientCardInfo{}) // 占位用
 		}
 	}
-	return &cmd.LS2C_ChangeShowCardsRes{Cards: cards}, nil, 0
+	return &pb.LS2C_ChangeShowCardsRes{Cards: cards}, nil, 0
 }
 
 func (h *RoleDetailHandler) tryRefreshRoleDetail() error {

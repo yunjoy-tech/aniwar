@@ -6,7 +6,7 @@ import (
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/datalog/taptap"
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/http/request"
 	myUtils "gitlab.musadisca-games.com/wangxw/aniwar/src/common/utils"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/baseactor"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/baseconf"
@@ -57,23 +57,23 @@ func NewSvcStatusHandler(actor *CenterActor) *SvcStatusHandler {
 	}
 	h.ChildHandler = h
 
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PS2S_SvcStatusReq), h.SvcStatusReq)
+	actor.RegisterProtoHandler(int32(pb.Protocols_PS2S_SvcStatusReq), h.SvcStatusReq)
 	return h
 }
 
 func (h *SvcStatusHandler) SvcStatusReq(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
-	req := &cmd.S2S_SvcStatusReq{}
+	req := &pb.S2S_SvcStatusReq{}
 	now := time.Now().Unix()
 	in.UnmarshalData(req)
-	//logger.Debugf("SvcStatusReq: %s", utils.PrettyJson(req))
+	// logger.Debugf("SvcStatusReq: %s", utils.PrettyJson(req))
 	for svcType := range h.actor.Data.SvcMaps {
 		if req.Service != nil && strings.Contains(req.Service.Name, svcType) {
 			if h.actor.Data.RestartEventTime > 0 {
 				svc, ok := h.actor.Data.SvcMaps[svcType].Load(req.Service.Name)
-				if ok && svc.(*cmd.ServiceData).StartTime != req.Service.StartTime {
+				if ok && svc.(*pb.ServiceData).StartTime != req.Service.StartTime {
 					h.actor.SvcRestartHandler.SvcRestart(req.Service.Name, req.Service.StartTime)
 				}
-				//30分钟后关闭收集
+				// 30分钟后关闭收集
 				if now-h.actor.Data.RestartEventTime > 1800 {
 					h.actor.Data.RestartEventTime = 0
 				}
@@ -93,7 +93,7 @@ func (h *SvcStatusHandler) SvcStatusReq(ctx context.Context, in *base.ProtoMsg) 
 		}
 		h.UpdateActorStatus()
 	}
-	rsp := &cmd.S2S_SvcStatusRes{Counts: []*cmd.ActorCount{
+	rsp := &pb.S2S_SvcStatusRes{Counts: []*pb.ActorCount{
 		{
 			Type:  global.PlayerCountType,
 			Count: h.actor.Data.TotalPlayerCount,
@@ -110,14 +110,14 @@ func (h *SvcStatusHandler) SvcStatusReq(ctx context.Context, in *base.ProtoMsg) 
 
 	for _, svcMap := range h.actor.Data.SvcMaps {
 		svcMap.Range(func(key, value any) bool {
-			svc := value.(*cmd.ServiceData)
+			svc := value.(*pb.ServiceData)
 			if now < svc.ReportTS+int64(baseconf.GetBaseConf().ServerHeartbeatTimout) {
 				rsp.Services = append(rsp.Services, svc)
 			}
 			return true
 		})
 	}
-	return rsp, nil, int32(cmd.ErrorCode_Success)
+	return rsp, nil, int32(pb.ErrorCode_Success)
 }
 
 func (h *SvcStatusHandler) UpdateActorStatus() {
@@ -126,7 +126,7 @@ func (h *SvcStatusHandler) UpdateActorStatus() {
 	h.actor.Data.RoomActorCount = 0
 	now := time.Now().Unix()
 	h.actor.Data.ActorStatusMap.Range(func(key, value any) bool {
-		status := value.(*cmd.ActorStatus)
+		status := value.(*pb.ActorStatus)
 		if status != nil {
 			if now < status.LastTime+int64(baseconf.GetBaseConf().ServerHeartbeatTimout) {
 				for _, actor := range status.Counts {
@@ -159,7 +159,7 @@ func (h *SvcStatusHandler) reportOnlineToTap(total int32) {
 	//      "online":188,
 	//      "timestamp":1489739560
 	//    }]
-	//}
+	// }
 	// 5分钟上报一次
 	if h.actor.Data.UploadTapTs != 0 {
 		nextTime := time.Unix(h.actor.Data.UploadTapTs, 0).Add(time.Minute * 5)

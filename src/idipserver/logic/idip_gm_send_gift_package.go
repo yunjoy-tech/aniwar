@@ -9,7 +9,7 @@ import (
 
 	"github.com/dapr/go-sdk/service/common"
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/actor/stub"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
 	"google.golang.org/protobuf/proto"
@@ -27,7 +27,7 @@ func (s *IDIPServer) SendGiftPackage(out *common.Content, reqJson []byte) {
 	// 解析数据
 	req := SendGiftPackageReq{}
 	if err := json.Unmarshal(reqJson, &req); err != nil {
-		RetCommonMsg(out, http.StatusInternalServerError, int32(cmd.ErrorCode_InternalError), Internal_Error)
+		RetCommonMsg(out, http.StatusInternalServerError, int32(pb.ErrorCode_InternalError), Internal_Error)
 		return
 	}
 	items := make([]*RetItems, 0)
@@ -36,7 +36,7 @@ func (s *IDIPServer) SendGiftPackage(out *common.Content, reqJson []byte) {
 			items = append(items, &RetItems{
 				SvrId:  0,
 				UserId: int32(id),
-				Ret:    int32(cmd.ErrorCode_InternalError),
+				Ret:    int32(pb.ErrorCode_InternalError),
 				Info:   err.Error(),
 			})
 			logger.Error("add error", err)
@@ -48,7 +48,7 @@ func (s *IDIPServer) SendGiftPackage(out *common.Content, reqJson []byte) {
 			errCheck(err, p.PlayerId)
 			continue
 		}
-		rpcCall := &cmd.S2SReceiveGMAddGiftReq{PackageId: int32(p.PackageId)}
+		rpcCall := &pb.S2SReceiveGMAddGiftReq{PackageId: int32(p.PackageId)}
 		userStub := stub.NewUserStub(uaid)
 		data, err := proto.Marshal(rpcCall)
 		if err != nil {
@@ -57,13 +57,13 @@ func (s *IDIPServer) SendGiftPackage(out *common.Content, reqJson []byte) {
 		}
 		in := &base.ProtoMsg{
 			AppId:   s.AppId,
-			MsgId:   int32(cmd.Protocols_PS2AS_ReceiveGMAddGiftReq),
+			MsgId:   int32(pb.Protocols_PS2AS_ReceiveGMAddGiftReq),
 			UserId:  uaid,
 			RoleId:  0,
 			UAID:    uaid,
 			Data:    data,
 			ErrCode: 0,
-			//GUID:    utils.GenIntUUID(),
+			// GUID:    utils.GenIntUUID(),
 			ServerReqIdx: utils.GenIntUUID(),
 			Topic:        "",
 		}

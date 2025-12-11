@@ -10,7 +10,7 @@ import (
 
 	"github.com/dapr/go-sdk/service/common"
 	myCommon "gitlab.musadisca-games.com/wangxw/aniwar/src/common"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/guid"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
@@ -37,29 +37,29 @@ func (s *IDIPServer) SendUserMail2(out *common.Content, reqJson []byte) {
 	// 解析数据
 	req := SendUserMail2Req{}
 	if err := json.Unmarshal(reqJson, &req); err != nil {
-		RetCommonMsg(out, http.StatusInternalServerError, int32(cmd.ErrorCode_InternalError), Internal_Error)
+		RetCommonMsg(out, http.StatusInternalServerError, int32(pb.ErrorCode_InternalError), Internal_Error)
 		return
 	}
 
 	// 附件奖励
-	attachments := make([]*cmd.ItemReward, 0)
+	attachments := make([]*pb.ItemReward, 0)
 	for _, item := range req.Items {
 		itemId, err := strconv.Atoi(item.ItemId)
 		if err != nil {
-			RetCommonMsg(out, http.StatusInternalServerError, int32(cmd.ErrorCode_ParamError), Param_Error)
+			RetCommonMsg(out, http.StatusInternalServerError, int32(pb.ErrorCode_ParamError), Param_Error)
 			return
 		}
 		if item.ItemCount <= 0 {
 			continue
 		}
-		attachments = append(attachments, &cmd.ItemReward{
+		attachments = append(attachments, &pb.ItemReward{
 			ItemId: uint32(itemId),
 			Num:    uint32(item.ItemCount),
 		})
 	}
 	// 货币配置支持
 	if req.Currency > 0 {
-		attachments = append(attachments, &cmd.ItemReward{
+		attachments = append(attachments, &pb.ItemReward{
 			ItemId: myCommon.CURRENCY_ITEM_ID_2005,
 			Num:    uint32(req.Currency),
 		})
@@ -69,7 +69,7 @@ func (s *IDIPServer) SendUserMail2(out *common.Content, reqJson []byte) {
 		if err != nil || coin.CoinValue <= 0 {
 			continue
 		}
-		attachments = append(attachments, &cmd.ItemReward{
+		attachments = append(attachments, &pb.ItemReward{
 			ItemId: uint32(id),
 			Num:    uint32(coin.CoinValue),
 		})
@@ -93,18 +93,18 @@ func (s *IDIPServer) SendUserMail2(out *common.Content, reqJson []byte) {
 	}
 
 	// 多语言支持
-	langMap := make(map[string]*cmd.S2S_SendGMAddUserMailReqLanguage)
+	langMap := make(map[string]*pb.S2S_SendGMAddUserMailReqLanguage)
 	for lang, m := range req.Mails {
-		langMap[lang] = &cmd.S2S_SendGMAddUserMailReqLanguage{Content: m}
+		langMap[lang] = &pb.S2S_SendGMAddUserMailReqLanguage{Content: m}
 	}
 
 	mailID := s.GenGUID(guid.GUID_MAIL)
 	if mailID == 0 {
-		RetCommonMsg(out, http.StatusInternalServerError, int32(cmd.ErrorCode_InternalError), Internal_Error)
+		RetCommonMsg(out, http.StatusInternalServerError, int32(pb.ErrorCode_InternalError), Internal_Error)
 		return
 	}
 	// 构建邮件数据
-	mail := &cmd.PMailInfo{
+	mail := &pb.PMailInfo{
 		Id:          int64(mailID),
 		Title:       "",
 		Content:     "",
@@ -119,7 +119,7 @@ func (s *IDIPServer) SendUserMail2(out *common.Content, reqJson []byte) {
 		GiftsType:   myCommon.MAIL_REWARD_TYPE_OTHER,
 	}
 
-	reqData := &cmd.S2S_SendGMAddUserMailReq{
+	reqData := &pb.S2S_SendGMAddUserMailReq{
 		AddMail:      mail,
 		LangMap:      langMap,
 		QuestionId:   questionId,
@@ -127,7 +127,7 @@ func (s *IDIPServer) SendUserMail2(out *common.Content, reqJson []byte) {
 	}
 	data, err := proto.Marshal(reqData)
 	if err != nil {
-		RetCommonMsg(out, http.StatusInternalServerError, int32(cmd.ErrorCode_InternalError), Internal_Error)
+		RetCommonMsg(out, http.StatusInternalServerError, int32(pb.ErrorCode_InternalError), Internal_Error)
 		return
 	}
 
@@ -141,13 +141,13 @@ func (s *IDIPServer) SendUserMail2(out *common.Content, reqJson []byte) {
 
 		in := &base.ProtoMsg{
 			AppId:   s.AppId,
-			MsgId:   int32(cmd.Protocols_PS2AS_ReceiveGMAddMailReq),
+			MsgId:   int32(pb.Protocols_PS2AS_ReceiveGMAddMailReq),
 			UserId:  uaid,
 			RoleId:  0,
 			UAID:    uaid,
 			Data:    data,
 			ErrCode: 0,
-			//GUID:    utils.GenIntUUID(),
+			// GUID:    utils.GenIntUUID(),
 			ServerReqIdx: utils.GenIntUUID(),
 			Topic:        "",
 		}

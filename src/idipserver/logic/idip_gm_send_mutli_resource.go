@@ -9,7 +9,7 @@ import (
 
 	"github.com/dapr/go-sdk/service/common"
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/actor/stub"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
 	"google.golang.org/protobuf/proto"
 )
@@ -26,7 +26,7 @@ func (s *IDIPServer) SendMultiResource(out *common.Content, reqJson []byte) {
 	// 解析数据
 	req := SendMultiResourceReq{}
 	if err := json.Unmarshal(reqJson, &req); err != nil {
-		RetCommonMsg(out, http.StatusInternalServerError, int32(cmd.ErrorCode_InternalError), Internal_Error)
+		RetCommonMsg(out, http.StatusInternalServerError, int32(pb.ErrorCode_InternalError), Internal_Error)
 		return
 	}
 
@@ -37,19 +37,19 @@ func (s *IDIPServer) SendMultiResource(out *common.Content, reqJson []byte) {
 			addMap := make(map[int32]int32)
 			err := json.Unmarshal([]byte(each.Items), &addMap)
 			if err != nil {
-				items = append(items, &RetBaseItems{Ret: int32(cmd.ErrorCode_InternalError), Info: Internal_Error})
+				items = append(items, &RetBaseItems{Ret: int32(pb.ErrorCode_InternalError), Info: Internal_Error})
 				continue
 			}
-			rpcCall := &cmd.S2SReceiveGMAddResReq{Items: addMap, Coins: map[int32]int32{}}
+			rpcCall := &pb.S2SReceiveGMAddResReq{Items: addMap, Coins: map[int32]int32{}}
 			for range GMAddItem(s, []int{each.Uid}, rpcCall) {
-				items = append(items, &RetBaseItems{Ret: int32(cmd.ErrorCode_InternalError), Info: Internal_Error})
+				items = append(items, &RetBaseItems{Ret: int32(pb.ErrorCode_InternalError), Info: Internal_Error})
 			}
 		} else if each.GiftCode != "" {
 			if err := s.addGiftCode(each.Uid, each.GiftCode); err != nil {
-				items = append(items, &RetBaseItems{Ret: int32(cmd.ErrorCode_InternalError), Info: Internal_Error})
+				items = append(items, &RetBaseItems{Ret: int32(pb.ErrorCode_InternalError), Info: Internal_Error})
 			}
 		} else {
-			items = append(items, &RetBaseItems{Ret: int32(cmd.ErrorCode_InternalError), Info: Internal_Error})
+			items = append(items, &RetBaseItems{Ret: int32(pb.ErrorCode_InternalError), Info: Internal_Error})
 		}
 	}
 
@@ -66,7 +66,7 @@ func (s *IDIPServer) addGiftCode(uid int, code string) error {
 	if err != nil {
 		return err
 	}
-	rpcCall := &cmd.C2LS_UseGiftCodeReq{Code: code}
+	rpcCall := &pb.C2LS_UseGiftCodeReq{Code: code}
 	userStub := stub.NewUserStub(uaid)
 	data, err := proto.Marshal(rpcCall)
 	if err != nil {
@@ -74,13 +74,13 @@ func (s *IDIPServer) addGiftCode(uid int, code string) error {
 	}
 	in := &base.ProtoMsg{
 		AppId:   s.AppId,
-		MsgId:   int32(cmd.Protocols_PS2AS_ReceiveGMAddGiftCodeReq),
+		MsgId:   int32(pb.Protocols_PS2AS_ReceiveGMAddGiftCodeReq),
 		UserId:  uaid,
 		RoleId:  0,
 		UAID:    uaid,
 		Data:    data,
 		ErrCode: 0,
-		//GUID:    utils.GenIntUUID(),
+		// GUID:    utils.GenIntUUID(),
 		ServerReqIdx: utils.GenIntUUID(),
 		Topic:        "",
 	}

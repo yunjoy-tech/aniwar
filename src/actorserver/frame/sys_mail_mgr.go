@@ -8,20 +8,20 @@ import (
 
 	"github.com/dapr/go-sdk/service/common"
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/datalog/taptap"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
 )
 
 type SysMailMgr struct {
-	Data *cmd.PSystemMailInfo
+	Data *pb.PSystemMailInfo
 	Srv  *ActorServer
 }
 
 func NewSysMailMgr(srv *ActorServer) *SysMailMgr {
 	return &SysMailMgr{
-		Data: &cmd.PSystemMailInfo{
-			SystemMail: make(map[int64]*cmd.PSysMailInfo),
+		Data: &pb.PSystemMailInfo{
+			SystemMail: make(map[int64]*pb.PSysMailInfo),
 			Max:        0,
 		},
 		Srv: srv,
@@ -29,7 +29,7 @@ func NewSysMailMgr(srv *ActorServer) *SysMailMgr {
 }
 
 func (m *SysMailMgr) AddSystemMailReq(in *base.ProtoMsg) (*common.Content, error) {
-	req := &cmd.S2S_SendGMAddMailReq{}
+	req := &pb.S2S_SendGMAddMailReq{}
 	if err := in.UnmarshalData(req); err != nil {
 		return nil, err
 	}
@@ -38,7 +38,7 @@ func (m *SysMailMgr) AddSystemMailReq(in *base.ProtoMsg) (*common.Content, error
 	addMail := req.AddMail
 
 	// 1.拉取db数据
-	sysMails := &cmd.PSystemMailInfo{}
+	sysMails := &pb.PSystemMailInfo{}
 	err := m.Srv.GetSystemMail(sysMails)
 	if err != nil {
 		return nil, err
@@ -68,15 +68,15 @@ func (m *SysMailMgr) AddSystemMailReq(in *base.ProtoMsg) (*common.Content, error
 	taptap.GlobalMailAdd(m.Srv.AppId, global.APP_VERSION, "", global.ROLLING_VERSION, "actorserver", addMail.Id)
 
 	logger.Infof("新增系统邮件成功 sysMails: %+v", sysMails)
-	return m.Srv.sendPacket(in, int32(cmd.Protocols_PS2S_SendGMAddMailRes), &cmd.S2S_SendGMAddMailRes{})
+	return m.Srv.sendPacket(in, int32(pb.Protocols_PS2S_SendGMAddMailRes), &pb.S2S_SendGMAddMailRes{})
 }
 
-func (m *SysMailMgr) CheckSystemMailReq(req *cmd.AS2LS_CheckSystemMailReq) (*cmd.AS2LS_CheckSystemMailRes, error) {
+func (m *SysMailMgr) CheckSystemMailReq(req *pb.AS2LS_CheckSystemMailReq) (*pb.AS2LS_CheckSystemMailRes, error) {
 
 	logger.Infof("尝试拉取系统邮件 req: %+v", req)
 
 	sysMails := m.Data
-	add := make([]*cmd.PSysMailInfo, 0)
+	add := make([]*pb.PSysMailInfo, 0)
 	var max int64
 	now := time.Now().Unix()
 	if req.CurValue < sysMails.Max {
@@ -126,5 +126,5 @@ func (m *SysMailMgr) CheckSystemMailReq(req *cmd.AS2LS_CheckSystemMailReq) (*cmd
 		max = sysMails.Max
 	}
 
-	return &cmd.AS2LS_CheckSystemMailRes{AddMails: add, MaxValue: max}, nil
+	return &pb.AS2LS_CheckSystemMailRes{AddMails: add, MaxValue: max}, nil
 }

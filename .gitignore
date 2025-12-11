@@ -20,9 +20,7 @@ output/res/battle/*
 src/excel/data
 src/excel/pb
 src/excel/proto
-src/proto/cmd
 src/common/datalog/proto/logcmd
-src/proto/protocol
 vendor
 output/bin/win/actorserver.exe
 output/bin/win/gateserver.exe

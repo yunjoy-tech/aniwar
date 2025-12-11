@@ -14,7 +14,7 @@ import (
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/db"
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/utils"
 	excel "gitlab.musadisca-games.com/wangxw/aniwar/src/excel/data"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/service"
 	"google.golang.org/protobuf/proto"
@@ -33,16 +33,16 @@ func NewPlayerLevelHandler(actor *UserActor) *PlayerLevelHandler {
 	h := &PlayerLevelHandler{UABaseHandler: NewUABaseHandler(actor, "PlayerLevelHandler")}
 	h.ChildHandler = h
 
-	h.actor.RegisterProtoHandler(int32(cmd.Protocols_PC2LS_PlayerStaminaBuyReq), h.PlayerStaminaBuyReq)
+	h.actor.RegisterProtoHandler(int32(pb.Protocols_PC2LS_PlayerStaminaBuyReq), h.PlayerStaminaBuyReq)
 
 	return h
 }
 
 func (h *PlayerLevelHandler) Init() error {
 	// 初始化玩家业务信息
-	h.actor.Data.PlayerLevelData = &cmd.PPlayerLevelInfo{
+	h.actor.Data.PlayerLevelData = &pb.PPlayerLevelInfo{
 		Createtime: time.Now().Unix(),
-		Stamina: &cmd.PStaminaInfo{
+		Stamina: &pb.PStaminaInfo{
 			Value:            excel.GetConfigMgr().GetCfg().NEWACCOUNTSTAMINA,
 			LastRecoveryTime: time.Now().Unix(),
 		},
@@ -66,7 +66,7 @@ func (h *PlayerLevelHandler) DailyRefresh() error {
 }
 
 func (h *PlayerLevelHandler) SetDBData(dbData proto.Message) error {
-	if dbVal, ok := dbData.(*cmd.PPlayerLevelInfo); ok {
+	if dbVal, ok := dbData.(*pb.PPlayerLevelInfo); ok {
 		h.actor.Data.PlayerLevelData = dbVal
 	} else {
 		return fmt.Errorf("SetDBData, 数据类型错误! %v", dbData)
@@ -81,10 +81,10 @@ func (h *PlayerLevelHandler) DBTable() (service.MongoDbType, string, proto.Messa
 
 func (h *PlayerLevelHandler) PlayerStaminaBuyReq(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
 
-	var req cmd.C2LS_PlayerStaminaBuyReq
+	var req pb.C2LS_PlayerStaminaBuyReq
 	err := in.UnmarshalData(&req)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
 	stamina := h.GetPlayerStamina()
@@ -92,29 +92,29 @@ func (h *PlayerLevelHandler) PlayerStaminaBuyReq(ctx context.Context, in *base.P
 	// 购买次数
 	limit := excel.GetConfigMgr().GetCfg().STAMINA_PURCHASE_LIMIT
 	if stamina.BuyCount >= limit {
-		return nil, fmt.Errorf("stamina buy count is limit"), int32(cmd.ErrorCode_StaminaBuyCountLimit)
+		return nil, fmt.Errorf("stamina buy count is limit"), int32(pb.ErrorCode_StaminaBuyCountLimit)
 	}
 
 	// 硬上限
 	hardLimit := excel.GetConfigMgr().GetCfg().STAMINA_HARD_LIMIT
 	value := excel.GetConfigMgr().GetCfg().STAMINA_PURCHASE_VALUE
 	if stamina.GetValue()+value > hardLimit {
-		return nil, fmt.Errorf("stamina value is limit"), int32(cmd.ErrorCode_StaminaValueLimit)
+		return nil, fmt.Errorf("stamina value is limit"), int32(pb.ErrorCode_StaminaValueLimit)
 	}
 
 	// 货币检查
 	cfg := excel.GetStaminaPurchaseMgr().GetById(stamina.BuyCount + 1)
 	if cfg == nil {
-		return nil, fmt.Errorf("stamina config not found %d", stamina.BuyCount+1), int32(cmd.ErrorCode_NotFoundConfig)
+		return nil, fmt.Errorf("stamina config not found %d", stamina.BuyCount+1), int32(pb.ErrorCode_NotFoundConfig)
 	}
 	if !GetConsumeMgr(h.actor).CheckKeyValEnough([]*excel.KeyVal{cfg.Cost}) {
-		return nil, fmt.Errorf("currency not enough"), int32(cmd.ErrorCode_CurrencyNotEnough)
+		return nil, fmt.Errorf("currency not enough"), int32(pb.ErrorCode_CurrencyNotEnough)
 	}
 
 	// 买一次
 	err = GetConsumeMgr(h.actor).ConsumeKeyValList([]*excel.KeyVal{cfg.Cost}, h.actor.comData, common.CR_STAMINA_BUY)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
 	stamina.BuyCount++
@@ -122,9 +122,9 @@ func (h *PlayerLevelHandler) PlayerStaminaBuyReq(ctx context.Context, in *base.P
 
 	_, err = GetDropMgr(h.actor).DropList2(map[int32]int32{common.ITEM_ID_STAMINA_1004: value}, true, nil, h.actor.comData, common.CR_STAMINA_BUY)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
-	return &cmd.LS2C_PlayerStaminaBuyRes{CommonData: h.actor.comData.FixDownComData()}, nil, 0
+	return &pb.LS2C_PlayerStaminaBuyRes{CommonData: h.actor.comData.FixDownComData()}, nil, 0
 }
 
 // AddStamina 增加玩家体力
@@ -158,7 +158,7 @@ func (h *PlayerLevelHandler) AddStamina(value int32, commonData *clidto.Comdata,
 	}
 
 	// 体力增加埋点
-	//threading.RunSafe(func() {
+	// threading.RunSafe(func() {
 	//	lilith.WriteDataLog(&lilith.StaminaChange{
 	//		CustomHeadInfo: lilith.BuildCustomHeadInfo(lilith.LogType_StaminaChange, h.actor.uid, h.actor.Account.CliDeviceInfo),
 	//		Action:         int32(reason),                          // 变化来源
@@ -168,7 +168,7 @@ func (h *PlayerLevelHandler) AddStamina(value int32, commonData *clidto.Comdata,
 	//		Flow:           "in",                                   // 流向，获得为"in" 消耗为"out"
 	//		Level:          h.actor.GetUserData().Common.RoleLevel, // 玩家等级
 	//	})
-	//})
+	// })
 	threading.RunSafe(func() {
 		e := &taptap.StaminaChange{
 			PropertyFieldInfo: taptap.BuildPropertyFieldInfo(h.actor.Account.CliDeviceInfo),
@@ -215,7 +215,7 @@ func (h *PlayerLevelHandler) SubStamina(value int32, commonData *clidto.Comdata,
 
 	// 扣除体力埋点
 	if value > 0 {
-		//threading.RunSafe(func() {
+		// threading.RunSafe(func() {
 		//	lilith.WriteDataLog(&lilith.StaminaChange{
 		//		CustomHeadInfo: lilith.BuildCustomHeadInfo(lilith.LogType_StaminaChange, h.actor.uid, h.actor.Account.CliDeviceInfo),
 		//		Action:         int32(reason),                          // 变化来源
@@ -225,7 +225,7 @@ func (h *PlayerLevelHandler) SubStamina(value int32, commonData *clidto.Comdata,
 		//		Flow:           "out",                                  // 流向，获得为"in" 消耗为"out"
 		//		Level:          h.actor.GetUserData().Common.RoleLevel, // 玩家等级
 		//	})
-		//})
+		// })
 		threading.RunSafe(func() {
 			e := &taptap.StaminaChange{
 				PropertyFieldInfo: taptap.BuildPropertyFieldInfo(h.actor.Account.CliDeviceInfo),
@@ -250,7 +250,7 @@ func (h *PlayerLevelHandler) SubStamina(value int32, commonData *clidto.Comdata,
 	return nil
 }
 
-func (h *PlayerLevelHandler) buildPlayerStaminaInfo() *cmd.PStaminaInfo {
+func (h *PlayerLevelHandler) buildPlayerStaminaInfo() *pb.PStaminaInfo {
 
 	// 刷新数据
 	stamina := h.tryRecovery()
@@ -267,12 +267,12 @@ func (h *PlayerLevelHandler) CheckStaminaEnough(value int32) bool {
 	return stamina.GetValue() >= value
 }
 
-func (h *PlayerLevelHandler) GetPlayerStamina() *cmd.PStaminaInfo {
+func (h *PlayerLevelHandler) GetPlayerStamina() *pb.PStaminaInfo {
 	return h.tryRecovery()
 }
 
 // 尝试刷新回复值
-func (h *PlayerLevelHandler) tryRecovery() *cmd.PStaminaInfo {
+func (h *PlayerLevelHandler) tryRecovery() *pb.PStaminaInfo {
 	stamina := h.actor.GetPlayerLevelData().Stamina
 
 	now := time.Now().Unix()
@@ -331,18 +331,18 @@ func (h *PlayerLevelHandler) CheckLimit(value int32) bool {
 	return false
 }
 
-func (h *PlayerLevelHandler) useStaminaItemCheck(itemId, itemNum int32) cmd.ErrorCode {
+func (h *PlayerLevelHandler) useStaminaItemCheck(itemId, itemNum int32) pb.ErrorCode {
 	cfg := excel.GetItemMgr().GetById(itemId)
 	if cfg == nil {
-		return cmd.ErrorCode_NotFoundConfig
+		return pb.ErrorCode_NotFoundConfig
 	}
 
 	stamina := h.GetPlayerStamina()
 	hardLimit := excel.GetConfigMgr().GetCfg().STAMINA_HARD_LIMIT
 	if stamina.GetValue()+cfg.UseEffectShow*itemNum > hardLimit {
-		return cmd.ErrorCode_StaminaValueLimit
+		return pb.ErrorCode_StaminaValueLimit
 	}
-	return cmd.ErrorCode_Success
+	return pb.ErrorCode_Success
 }
 
 func (h *PlayerLevelHandler) useStaminaItem(commonData *clidto.Comdata, itemId, itemNum int32) error {

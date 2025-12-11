@@ -6,38 +6,32 @@ import (
 	"errors"
 	"fmt"
 	dapr "github.com/dapr/go-sdk/client"
+	"github.com/xuri/excelize/v2"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/common"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/clidto"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/conf"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/datahelper"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/db"
+	myUtils "gitlab.musadisca-games.com/wangxw/aniwar/src/common/utils"
+	excel "gitlab.musadisca-games.com/wangxw/aniwar/src/excel/data"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/idipserver/logic"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
+	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
+	"gitlab.musadisca-games.com/wangxw/musae/framework/global"
+	"gitlab.musadisca-games.com/wangxw/musae/framework/guid"
+	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
+	"gitlab.musadisca-games.com/wangxw/musae/framework/service"
+	svc "gitlab.musadisca-games.com/wangxw/musae/framework/service"
+	"gitlab.musadisca-games.com/wangxw/musae/framework/state"
+	"gitlab.musadisca-games.com/wangxw/musae/framework/threading"
+	"gitlab.musadisca-games.com/wangxw/musae/framework/utils"
+	"gitlab.musadisca-games.com/wangxw/musae/framework/wordfilter"
+	"google.golang.org/protobuf/proto"
 	"math/rand"
 	"strconv"
 	"strings"
 	"sync"
 	"time"
-
-	svc "gitlab.musadisca-games.com/wangxw/musae/framework/service"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/wordfilter"
-
-	"gitlab.musadisca-games.com/wangxw/musae/framework/utils"
-
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/conf"
-
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/db"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/global"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/state"
-
-	"github.com/xuri/excelize/v2"
-
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/clidto"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/datahelper"
-	myUtils "gitlab.musadisca-games.com/wangxw/aniwar/src/common/utils"
-	excel "gitlab.musadisca-games.com/wangxw/aniwar/src/excel/data"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/idipserver/logic"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/guid"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/service"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/threading"
-	"google.golang.org/protobuf/proto"
 )
 
 type GmHandler struct {
@@ -54,16 +48,16 @@ func NewGmHandler(actor *UserActor) *GmHandler {
 	}
 	h.ChildHandler = h
 
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PC2LS_UseGameCommandReq), h.UseGameCommandReq) // gm指令处理
+	actor.RegisterProtoHandler(int32(pb.Protocols_PC2LS_UseGameCommandReq), h.UseGameCommandReq) // gm指令处理
 
 	//
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PS2AS_ReceiveGMAddResReq), h.GMAddRes)             // GM-添加道具
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PS2AS_ReceiveGMCostResReq), h.GMCostRes)           // GM-扣除道具
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PS2AS_ReceiveGMAddGiftReq), h.GMAddGift)           // GM-获取礼包道具
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PS2AS_ReceiveGMAddMailReq), h.GMAddMail)           // GM-添加个人邮件
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PS2AS_GetUserInfo), h.GMGetUserInfo)               // GM-获取个人信息
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PS2AS_GmExecuteReq), h.GMExecute)                  // GM-执行个人gm
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PS2AS_S2SSaveOfflineDataReq), h.GMSaveOfflineData) // GM-保存离线数据
+	actor.RegisterProtoHandler(int32(pb.Protocols_PS2AS_ReceiveGMAddResReq), h.GMAddRes)             // GM-添加道具
+	actor.RegisterProtoHandler(int32(pb.Protocols_PS2AS_ReceiveGMCostResReq), h.GMCostRes)           // GM-扣除道具
+	actor.RegisterProtoHandler(int32(pb.Protocols_PS2AS_ReceiveGMAddGiftReq), h.GMAddGift)           // GM-获取礼包道具
+	actor.RegisterProtoHandler(int32(pb.Protocols_PS2AS_ReceiveGMAddMailReq), h.GMAddMail)           // GM-添加个人邮件
+	actor.RegisterProtoHandler(int32(pb.Protocols_PS2AS_GetUserInfo), h.GMGetUserInfo)               // GM-获取个人信息
+	actor.RegisterProtoHandler(int32(pb.Protocols_PS2AS_GmExecuteReq), h.GMExecute)                  // GM-执行个人gm
+	actor.RegisterProtoHandler(int32(pb.Protocols_PS2AS_S2SSaveOfflineDataReq), h.GMSaveOfflineData) // GM-保存离线数据
 
 	// 注册gm指令处理方法
 	h.RegisterCmdHandler(common.GM_ACTOR_DEL, h.GMDelActor)
@@ -136,21 +130,21 @@ func (h *GmHandler) RegisterCmdHandler(name string, handler CmdLogicFunc) {
 }
 
 func (h *GmHandler) GMExecute(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
-	req := &cmd.S2AS_ExcuteGMReq{}
+	req := &pb.S2AS_ExcuteGMReq{}
 	err := in.UnmarshalData(req)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 	handler := h.Cmds[req.CmdName]
 	if handler == nil {
 		h.Debugf("GM指令不存在：%s", req.CmdName)
-		return nil, errors.New("GM指令不存在"), int32(cmd.ErrorCode_ParamError)
+		return nil, errors.New("GM指令不存在"), int32(pb.ErrorCode_ParamError)
 	}
 	args := strings.Split(req.OptVal, " ")
 	err = handler(args, h.actor.comData)
 	if err != nil {
 		h.Errorf("GM handle err: %v", err)
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
 	rsp := &base.ProtoMsg{}
@@ -159,10 +153,10 @@ func (h *GmHandler) GMExecute(ctx context.Context, in *base.ProtoMsg) (proto.Mes
 
 // 保存离线数据
 func (h *GmHandler) GMSaveOfflineData(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
-	req := &cmd.S2SSaveOfflineDataReq{}
+	req := &pb.S2SSaveOfflineDataReq{}
 	err := in.UnmarshalData(req)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
 	// h.actor.OfflineDataHandler.saveOfflineData(req)
@@ -216,45 +210,45 @@ func (h *GmHandler) GMGetUserInfo(ctx context.Context, in *base.ProtoMsg) (proto
 	}
 	data, err := json.Marshal(rsp)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
-	return &cmd.S2AS_GetUserInfoRes{User: string(data)}, nil, 0
+	return &pb.S2AS_GetUserInfoRes{User: string(data)}, nil, 0
 }
 
 func (h *GmHandler) GMAddMail(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
-	req := &cmd.S2S_SendGMAddUserMailReq{}
+	req := &pb.S2S_SendGMAddUserMailReq{}
 	err := in.UnmarshalData(req)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 	if err = h.actor.MailHandler.GMTAddUserMail(req, h.actor.comData); err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 	return req, nil, 0
 }
 
 func (h *GmHandler) GMAddGift(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
 
-	req := &cmd.S2SReceiveGMAddGiftReq{}
+	req := &pb.S2SReceiveGMAddGiftReq{}
 	err := in.UnmarshalData(req)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 	cfg := excel.GetPackageMgr().GetById(req.PackageId)
 	if cfg == nil {
-		return nil, errors.New("配置不存在"), int32(cmd.ErrorCode_ConfigError)
+		return nil, errors.New("配置不存在"), int32(pb.ErrorCode_ConfigError)
 	}
 
 	_, err = GetDropMgr(h.actor).DropList2(cfg.Itemcontain, true, nil, h.actor.comData, common.CR_GM)
 
-	return &cmd.S2SReceiveGMAddResRsp{}, nil, 0
+	return &pb.S2SReceiveGMAddResRsp{}, nil, 0
 }
 
 func (h *GmHandler) GMCostRes(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
-	req := &cmd.S2SReceiveGMCostResReq{}
+	req := &pb.S2SReceiveGMCostResReq{}
 	err := in.UnmarshalData(req)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 	costItem := make(map[int32]int32)
 	for item, itemNum := range req.Items {
@@ -265,18 +259,18 @@ func (h *GmHandler) GMCostRes(ctx context.Context, in *base.ProtoMsg) (proto.Mes
 	}
 	err = GetConsumeMgr(h.actor).ConsumeList(costItem, h.actor.comData, common.CR_GM)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
-	return &cmd.S2SReceiveGMAddResRsp{}, nil, 0
+	return &pb.S2SReceiveGMAddResRsp{}, nil, 0
 }
 
 func (h *GmHandler) GMAddRes(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
 
-	var req cmd.S2SReceiveGMAddResReq
+	var req pb.S2SReceiveGMAddResReq
 	err := in.UnmarshalData(&req)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 	costItem := make(map[uint32]uint32)
 	for item, itemNum := range req.Items {
@@ -287,19 +281,19 @@ func (h *GmHandler) GMAddRes(ctx context.Context, in *base.ProtoMsg) (proto.Mess
 	}
 	_, err = GetDropMgr(h.actor).DropList(costItem, true, nil, h.actor.comData, common.CR_GM)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
-	return &cmd.S2SReceiveGMAddResRsp{}, nil, 0
+	return &pb.S2SReceiveGMAddResRsp{}, nil, 0
 
 }
 
 func (h *GmHandler) UseGameCommandReq(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
 
-	var req cmd.C2LS_UseGameCommandReq
+	var req pb.C2LS_UseGameCommandReq
 	err := in.UnmarshalData(&req)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
 	h.Debugf("req: %+v", &req)
@@ -307,16 +301,16 @@ func (h *GmHandler) UseGameCommandReq(ctx context.Context, in *base.ProtoMsg) (p
 	handler := h.Cmds[req.Cmd]
 	if handler == nil {
 		h.Debugf("GM指令不存在：%s", req.Cmd)
-		return nil, errors.New("GM指令不存在"), int32(cmd.ErrorCode_ParamError)
+		return nil, errors.New("GM指令不存在"), int32(pb.ErrorCode_ParamError)
 	}
 
 	err = handler(req.Param, h.actor.comData)
 	if err != nil {
 		h.Errorf("GM handle err: %v", err)
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
-	rsp := &cmd.LS2C_UseGameCommandRes{CommonData: h.actor.comData.FixDownComData()}
+	rsp := &pb.LS2C_UseGameCommandRes{CommonData: h.actor.comData.FixDownComData()}
 	return rsp, nil, 0
 }
 
@@ -353,7 +347,7 @@ func (h *GmHandler) GmAddFavoriteExp(param []string, commonData *clidto.Comdata)
 		return err
 	}
 	card, errCode := h.actor.CardHandler.AddFavoriteExpById(int32(cardId), uint32(exp))
-	if errCode != cmd.ErrorCode_Success {
+	if errCode != pb.ErrorCode_Success {
 		return fmt.Errorf("add favorite exp failed, code: %d", int32(errCode))
 	}
 	commonData.Data.Card = append(commonData.Data.Card, card)
@@ -514,7 +508,7 @@ func (h *GmHandler) GmTestCmd(param []string, comdata *clidto.Comdata) error {
 	}
 
 	// 构建协议数据
-	req := &cmd.C2MS_MailReceiveReq{} // <<<=== 协议体，根据要调试的协议修改
+	req := &pb.C2MS_MailReceiveReq{} // <<<=== 协议体，根据要调试的协议修改
 
 	// 填充参数(如果协议需要参数的话)
 	typ, err := strconv.Atoi(param[1]) // <<<=== 参数列表，根据不同的协议填充参数
@@ -652,11 +646,11 @@ func (h *GmHandler) GmTestBattleChapter(param []string, commonData *clidto.Comda
 }
 
 func (h *GmHandler) testCheckBattle() error {
-	SelfTeam := &cmd.BattleTeam{
-		CardList: []*cmd.BattleCard{
+	SelfTeam := &pb.BattleTeam{
+		CardList: []*pb.BattleCard{
 			{
 				Pos: 1,
-				CardInfo: &cmd.PClientCardInfo{Common: &cmd.PCommonCardInfo{
+				CardInfo: &pb.PClientCardInfo{Common: &pb.PCommonCardInfo{
 					CardId:            2,
 					CardLevel:         5,
 					CardExp:           45,
@@ -670,7 +664,7 @@ func (h *GmHandler) testCheckBattle() error {
 					EquipId:           []uint64{0, 0, 0},
 					FavoriteLevel:     0,
 					FavoriteExp:       0,
-					Skins: []*cmd.PCommonSkinInfo{
+					Skins: []*pb.PCommonSkinInfo{
 						{
 							SkinId:     2,
 							IsNew:      false,
@@ -689,7 +683,7 @@ func (h *GmHandler) testCheckBattle() error {
 		FoodList: nil,
 	}
 
-	_, err, _ := h.actor.BattleHandler.CheckBattle(1, 1, cmd.BattleResult_BattleResult_Winer, SelfTeam, 73, nil, nil)
+	_, err, _ := h.actor.BattleHandler.CheckBattle(1, 1, pb.BattleResult_BattleResult_Winer, SelfTeam, 73, nil, nil)
 	if err != nil {
 		h.Errorf(err.Error())
 		return err
@@ -765,12 +759,12 @@ func (h *GmHandler) GMTestErrCode(param []string, commonData *clidto.Comdata) er
 
 // GMCleanItem 清空道具数据
 func (h *GmHandler) GMCleanItem(param []string, commonData *clidto.Comdata) error {
-	h.actor.Data.ItemData.Items = make(map[uint64]*cmd.PCommonItemInfo, 0)
+	h.actor.Data.ItemData.Items = make(map[uint64]*pb.PCommonItemInfo, 0)
 	err := h.actor.BagHandler.SaveDB()
 	if err != nil {
 		return err
 	}
-	commonData.Data.Items = make([]*cmd.PCommonItemInfo, 0)
+	commonData.Data.Items = make([]*pb.PCommonItemInfo, 0)
 	return nil
 }
 
@@ -856,7 +850,7 @@ func (h *GmHandler) GmTestDrop(param []string, commonData *clidto.Comdata) error
 
 func (h *GmHandler) test_UGCStringCheck(str string, cType int32, f bool) (bool, error) {
 	// if f {
-	//	reqMsg := &cmd.C2LS_HeartBeatReq{}
+	//	reqMsg := &pb.C2LS_HeartBeatReq{}
 	//	_, err := h.actor.Srv.SvcInvoke(global.IDIP_SVC, h.actor.GetUID(), h.actor.roleId, h.actor.ID(), reqMsg)
 	//	if err != nil {
 	//		h.Error(err)
@@ -1045,8 +1039,8 @@ func (h *GmHandler) GMTestAchieve(param []string, commonData *clidto.Comdata) er
 }
 
 func (h *GmHandler) testExcelBattleEventReq(dataId string) error {
-	reqMsg := &cmd.CheckUp{
-		TestExcelBattleEventReq: &cmd.TestExcelBattleEventReq{
+	reqMsg := &pb.CheckUp{
+		TestExcelBattleEventReq: &pb.TestExcelBattleEventReq{
 			Id: dataId,
 		},
 	}
@@ -1064,7 +1058,7 @@ func (h *GmHandler) testExcelBattleEventReq(dataId string) error {
 	}
 	logger.Debugf("protoMsg：%v", protoMsg.Str())
 
-	checkResp := &cmd.CheckDown{}
+	checkResp := &pb.CheckDown{}
 	err = protoMsg.UnmarshalData(checkResp)
 	if err != nil {
 		h.Errorf(err.Error())
@@ -1087,8 +1081,8 @@ func (h *GmHandler) GMTestRoom(param []string, commonData *clidto.Comdata) error
 
 	switch operate {
 	case 1: // 创建房间
-		reqMsg := &cmd.C2LS_CreateRoomReq{
-			PlayType: cmd.RoomModel_RoomModel_tug,
+		reqMsg := &pb.C2LS_CreateRoomReq{
+			PlayType: pb.RoomModel_RoomModel_tug,
 			// PlayerUid: h.actor.uid,
 		}
 
@@ -1099,7 +1093,7 @@ func (h *GmHandler) GMTestRoom(param []string, commonData *clidto.Comdata) error
 		}
 
 		msg := base.ProtoMsg{
-			MsgId:  int32(cmd.Protocols_PC2LS_CreateRoomReq),
+			MsgId:  int32(pb.Protocols_PC2LS_CreateRoomReq),
 			AppId:  global.ACTOR_SVC,
 			UserId: h.actor.uid,
 			RoleId: 0,
@@ -1120,7 +1114,7 @@ func (h *GmHandler) GMTestRoom(param []string, commonData *clidto.Comdata) error
 		//	h.Error(err)
 		// }
 	case 2: // 进入房间
-		reqMsg := &cmd.C2LS_JoinRoomReq{
+		reqMsg := &pb.C2LS_JoinRoomReq{
 			// PlayerUid: h.actor.uid,
 			RoomId: roomId,
 		}
@@ -1132,7 +1126,7 @@ func (h *GmHandler) GMTestRoom(param []string, commonData *clidto.Comdata) error
 		}
 
 		msg := base.ProtoMsg{
-			MsgId:  int32(cmd.Protocols_PC2LS_JoinRoomReq),
+			MsgId:  int32(pb.Protocols_PC2LS_JoinRoomReq),
 			AppId:  global.ACTOR_SVC,
 			UserId: h.actor.uid,
 			RoleId: 0,
@@ -1227,7 +1221,7 @@ func (h *GmHandler) GmTestCheckBattleReloadExcel(param []string, comdata *clidto
 	battleTopic := param[0]
 	fileName := param[1]
 
-	hotReloadReq := &cmd.S2S_HotReloadReq{
+	hotReloadReq := &pb.S2S_HotReloadReq{
 		Type:     0,
 		Files:    []string{fileName},
 		Services: nil,

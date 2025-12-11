@@ -11,7 +11,7 @@ import (
 	"gitlab.musadisca-games.com/wangxw/musae/framework/utils"
 
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/com_order"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
 	"google.golang.org/protobuf/proto"
 
@@ -107,9 +107,9 @@ func (s *BillServer) PayHandler(ctx context.Context, in *common.InvocationEvent)
 		return reply2Lilith(in, logic.FAIL), err
 	}
 
-	//测试代码
-	//payCbi := com_order.BuildPayCbi("myorderId", 1, 1)
-	//apiReq.Ext = payCbi
+	// 测试代码
+	// payCbi := com_order.BuildPayCbi("myorderId", 1, 1)
+	// apiReq.Ext = payCbi
 
 	SdkParamBytes, err := json.Marshal(apiReq)
 	if err != nil {
@@ -119,7 +119,7 @@ func (s *BillServer) PayHandler(ctx context.Context, in *common.InvocationEvent)
 	}
 
 	// 通知下发奖励
-	actorData, err := proto.Marshal(&cmd.S2S_BillCallbackReq{
+	actorData, err := proto.Marshal(&pb.S2S_BillCallbackReq{
 		CpOrderId:   cbiObj.CpOrderId,
 		SdkParamStr: string(SdkParamBytes),
 	})
@@ -132,13 +132,13 @@ func (s *BillServer) PayHandler(ctx context.Context, in *common.InvocationEvent)
 	// 转为自己的uid
 	_, err = s.UserInvoke(cbiObj.Uaid, &base.ProtoMsg{
 		AppId:   s.AppId,
-		MsgId:   int32(cmd.Protocols_PS2S_BillCallbackReq),
+		MsgId:   int32(pb.Protocols_PS2S_BillCallbackReq),
 		UserId:  cbiObj.Uaid,
 		RoleId:  0,
 		UAID:    cbiObj.Uaid,
 		Data:    actorData,
 		ErrCode: 0,
-		//GUID:    utils.GenIntUUID(),
+		// GUID:    utils.GenIntUUID(),
 		ServerReqIdx: utils.GenIntUUID(),
 		Topic:        "",
 	})
@@ -148,13 +148,13 @@ func (s *BillServer) PayHandler(ctx context.Context, in *common.InvocationEvent)
 		return reply2Lilith(in, logic.FAIL), err
 	}
 
-	//// 已下发奖励
-	//dbOrder.OrderStatus = cmd.OrderStatus_OrderStatus_reward
-	//s.SaveMongoAndRedisDB(dbMongoType, dbKey, dbOrders, nil)
+	// // 已下发奖励
+	// dbOrder.OrderStatus = pb.OrderStatus_OrderStatus_reward
+	// s.SaveMongoAndRedisDB(dbMongoType, dbKey, dbOrders, nil)
 
 	// 成功通知
-	//out.Data = []byte(logic.SUCCESS) // return success
-	//return out, nil
+	// out.Data = []byte(logic.SUCCESS) // return success
+	// return out, nil
 	return reply2Lilith(in, logic.SUCCESS), err
 }
 
@@ -168,8 +168,8 @@ func reply2Lilith(req *common.InvocationEvent, msg string) *common.Content {
 	return out
 }
 
-//// 解析参数
-//func parseLilithPayCallbackReq(argsMap map[string]interface{}) *LilithPayCallbackReq {
+// // 解析参数
+// func parseLilithPayCallbackReq(argsMap map[string]interface{}) *LilithPayCallbackReq {
 //	apiReq := &LilithPayCallbackReq{
 //		Serial:       getInt32(argsMap["serial"]),
 //		PayType:      getInt32(argsMap["pay_type"]),
@@ -184,10 +184,10 @@ func reply2Lilith(req *common.InvocationEvent, msg string) *common.Content {
 //	}
 //
 //	return apiReq
-//}
+// }
 
-//// LilithPayCallbackReq Lilith支付回调参数
-//type LilithPayCallbackReq struct {
+// // LilithPayCallbackReq Lilith支付回调参数
+// type LilithPayCallbackReq struct {
 //	Serial       int32  `json:"serial"`        // 订单号
 //	PayType      int32  `json:"pay_type"`      // 支付平台类型(iOS/Alipay/...)
 //	AppId        int32  `json:"app_id"`        // app id
@@ -199,10 +199,10 @@ func reply2Lilith(req *common.InvocationEvent, msg string) *common.Content {
 //	PayEnv       int32  `json:"pay_env"`       // 支付环境
 //	Sign         string `json:"sign"`          // 签名
 //	//Cbi          *com_order.CbiObj `json:"com_order"`           // 透传解析结构
-//}
+// }
 
-//// 解析参数
-//func parseLilithRefundReq(argsMap map[string]interface{}) *LilithRefundReq {
+// // 解析参数
+// func parseLilithRefundReq(argsMap map[string]interface{}) *LilithRefundReq {
 //	apiReq := &LilithRefundReq{
 //		Serial: getInt32(argsMap["serial"]),
 //		AppId:  getInt32(argsMap["app_id"]),
@@ -212,43 +212,43 @@ func reply2Lilith(req *common.InvocationEvent, msg string) *common.Content {
 //	}
 //
 //	return apiReq
-//}
+// }
 //
-//// LilithRefundReq Lilith退款回调参数
-//type LilithRefundReq struct {
+// // LilithRefundReq Lilith退款回调参数
+// type LilithRefundReq struct {
 //	Serial int32  `json:"serial"`  // 订单号
 //	AppId  int32  `json:"app_id"`  // app id
 //	AppUid int32  `json:"app_uid"` // 用户平台id TODO 需确认该字段是否有？文档中不存在
 //	Ext    string `json:"ext"`     // CP自定义数据(长度限制255)
 //	Sign   string `json:"sign"`    // 签名
-//}
+// }
 
 func genSignStr(reqStr string, excludeSignKeys []string, reqObj any) string {
-	//// sign和pay_env不参与验签
-	//signData := lo.OmitByKeys[string, []string](params, []string{"sign", "pay_env"})
+	// // sign和pay_env不参与验签
+	// signData := lo.OmitByKeys[string, []string](params, []string{"sign", "pay_env"})
 	//
-	//// 按key的字典序取值
-	//keys := lo.Keys(signData)
-	//sort.Strings(keys)
-	//strSlice := make([]string, 0, len(keys))
-	//for _, k := range keys {
+	// // 按key的字典序取值
+	// keys := lo.Keys(signData)
+	// sort.Strings(keys)
+	// strSlice := make([]string, 0, len(keys))
+	// for _, k := range keys {
 	//	value := ""
 	//	if len(signData[k]) > 0 {
 	//		value = signData[k][0]
 	//	}
 	//	strSlice = append(strSlice, fmt.Sprintf("%s=%s", k, value))
-	//}
+	// }
 	//
-	//return strings.Join(strSlice[:], "&")
+	// return strings.Join(strSlice[:], "&")
 	if excludeSignKeys == nil {
 		excludeSignKeys = make([]string, 0)
 	}
 
-	////默认sign参数不参与前面
-	//signKey := "sign"
-	//if !gameUtils.ArrayContain(excludeSignKeys, signKey) {
+	// //默认sign参数不参与前面
+	// signKey := "sign"
+	// if !gameUtils.ArrayContain(excludeSignKeys, signKey) {
 	//	excludeSignKeys = append(excludeSignKeys, signKey)
-	//}
+	// }
 
 	// url decode
 	unescape, err := url.QueryUnescape(reqStr)
@@ -265,9 +265,9 @@ func genSignStr(reqStr string, excludeSignKeys []string, reqObj any) string {
 	}
 
 	// json解析
-	//m := make(map[string]string)
+	// m := make(map[string]string)
 	err = json.Unmarshal(decodeBytes, reqObj)
-	//err = json.Unmarshal([]byte(unescape), &m)
+	// err = json.Unmarshal([]byte(unescape), &m)
 	if err != nil {
 		logger.Errorf(err.Error())
 		return ""
@@ -276,7 +276,7 @@ func genSignStr(reqStr string, excludeSignKeys []string, reqObj any) string {
 	return string(decodeBytes)
 }
 
-//func getInt32(i interface{}) int32 {
+// func getInt32(i interface{}) int32 {
 //	s, ok := i.(string)
 //	if !ok {
 //		return 0
@@ -288,13 +288,13 @@ func genSignStr(reqStr string, excludeSignKeys []string, reqObj any) string {
 //	}
 //
 //	return int32(atoi)
-//}
+// }
 //
-//func getString(i interface{}) string {
+// func getString(i interface{}) string {
 //	s, ok := i.(string)
 //	if !ok {
 //		return ""
 //	}
 //
 //	return s
-//}
+// }

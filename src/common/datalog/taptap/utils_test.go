@@ -2,12 +2,12 @@ package taptap
 
 import (
 	"fmt"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"testing"
 )
 
 func TestConvertStruct2Str(t *testing.T) {
-	s := &cmd.ItemReward{
+	s := &pb.ItemReward{
 		ItemId: 999,
 		Num:    666,
 	}
@@ -26,7 +26,7 @@ func TestConvertStruct2Str(t *testing.T) {
 }
 
 func TestConvertListStruct2Str(t *testing.T) {
-	s := &cmd.ItemReward{
+	s := &pb.ItemReward{
 		ItemId: 999,
 		Num:    666,
 	}

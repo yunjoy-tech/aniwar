@@ -3,7 +3,7 @@ package utils
 import (
 	"bufio"
 	"fmt"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
 	"os"
 	"reflect"
@@ -66,7 +66,7 @@ func GotBoolParam(params ...bool) bool {
 	return ret
 }
 
-func ConvertItem(items []*cmd.KeyValueItem) map[int32]int32 {
+func ConvertItem(items []*pb.KeyValueItem) map[int32]int32 {
 	costs := make(map[int32]int32)
 	for _, v := range items {
 		costs[v.Key] += v.Value
@@ -75,7 +75,7 @@ func ConvertItem(items []*cmd.KeyValueItem) map[int32]int32 {
 }
 
 // PPlayerCampFunctionBuildingFormula
-func ConvertCampFormula(items []*cmd.PPlayerCampFunctionBuildingFormula) map[int32]int32 {
+func ConvertCampFormula(items []*pb.PPlayerCampFunctionBuildingFormula) map[int32]int32 {
 	costs := make(map[int32]int32)
 
 	for _, v := range items {
@@ -84,7 +84,7 @@ func ConvertCampFormula(items []*cmd.PPlayerCampFunctionBuildingFormula) map[int
 	return costs
 }
 
-func ConvertItem2(items []*cmd.ItemReward) map[int32]int32 {
+func ConvertItem2(items []*pb.ItemReward) map[int32]int32 {
 	costs := make(map[int32]int32)
 	for _, v := range items {
 		costs[int32(v.ItemId)] += int32(v.Num)
@@ -92,7 +92,7 @@ func ConvertItem2(items []*cmd.ItemReward) map[int32]int32 {
 	return costs
 }
 
-func ConvertItem4(items []*cmd.CostItem) map[uint64]uint32 {
+func ConvertItem4(items []*pb.CostItem) map[uint64]uint32 {
 	costs := make(map[uint64]uint32)
 	for _, v := range items {
 		costs[v.UniqueId] += v.Num
@@ -100,10 +100,10 @@ func ConvertItem4(items []*cmd.CostItem) map[uint64]uint32 {
 	return costs
 }
 
-func ConvertToKVItem(source map[int32]int32) []*cmd.KeyValueItem {
-	var ret []*cmd.KeyValueItem
+func ConvertToKVItem(source map[int32]int32) []*pb.KeyValueItem {
+	var ret []*pb.KeyValueItem
 	for k, v := range source {
-		ret = append(ret, &cmd.KeyValueItem{
+		ret = append(ret, &pb.KeyValueItem{
 			Key:   k,
 			Value: v,
 		})
@@ -134,10 +134,10 @@ func ReflectNew(target interface{}) {
 
 	ttt := reflect.New(t)
 	logger.Debugf("ReflectNew ttt %+v, %+v, %+v", ttt.Type(), ttt.Kind(), ttt.Kind())
-	//logger.Debugf("ReflectNew --- ttt, %T - %p, %T - %p", target, target, ttt, ttt)
+	// logger.Debugf("ReflectNew --- ttt, %T - %p, %T - %p", target, target, ttt, ttt)
 	logger.Debugf("ReflectNew --- ttt1, %+v, %+v", reflect.ValueOf(target), reflect.TypeOf(target))
-	//logger.Debugf("ReflectNew --- ttt2, %+v, %+v", reflect.ValueOf(ttt), reflect.TypeOf(ttt))
-	//logger.Debugf("ReflectNew --- ttt2, %+v, %+v", reflect.ValueOf(ttt.Elem()), reflect.TypeOf(ttt.Elem()))
+	// logger.Debugf("ReflectNew --- ttt2, %+v, %+v", reflect.ValueOf(ttt), reflect.TypeOf(ttt))
+	// logger.Debugf("ReflectNew --- ttt2, %+v, %+v", reflect.ValueOf(ttt.Elem()), reflect.TypeOf(ttt.Elem()))
 	//
 	logger.Debugf("ReflectNew --- ttt4, %+v, %+v", reflect.ValueOf(ttt.Interface()), reflect.TypeOf(ttt.Interface()))
 	logger.Debugf("ReflectNew --- ttt3, %+v, %+v", reflect.ValueOf(ttt.Elem().Interface()), reflect.TypeOf(ttt.Elem().Interface()))

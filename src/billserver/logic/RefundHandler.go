@@ -16,7 +16,7 @@ import (
 	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
 	"google.golang.org/protobuf/proto"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 
 	excel "gitlab.musadisca-games.com/wangxw/aniwar/src/excel/data"
 
@@ -104,7 +104,7 @@ func (s *BillServer) RefundHandler(ctx context.Context, in *common.InvocationEve
 	dbMongoType, dbKey := com_order.OrderDBTable(myUid)
 
 	// 查找订单
-	dbOrders := &cmd.OrderData{}
+	dbOrders := &pb.OrderData{}
 	_, err = s.LoadMongoDB(dbMongoType, dbKey, dbOrders)
 
 	refundData := dbOrders.RefundData
@@ -120,7 +120,7 @@ func (s *BillServer) RefundHandler(ctx context.Context, in *common.InvocationEve
 	if refundData.RefundCount >= 2 || refundData.RefundAmount >= 648*100 /*单位:分*/ {
 		// 封号
 		// 通知下发奖励
-		actorData, err := proto.Marshal(&cmd.S2AS_ExcuteGMReq{
+		actorData, err := proto.Marshal(&pb.S2AS_ExcuteGMReq{
 			CmdName: gameCommon.GM_BANNED,                                        // 封禁
 			OptVal:  fmt.Sprintf("%v %s", gameCommon.TIME_SEC_1_YEAR*10, "异常退款"), // 封禁时长(秒)+封禁原因
 		})
@@ -132,13 +132,13 @@ func (s *BillServer) RefundHandler(ctx context.Context, in *common.InvocationEve
 
 		_, err = s.UserInvoke(myUid, &base.ProtoMsg{
 			AppId:   s.AppId,
-			MsgId:   int32(cmd.Protocols_PS2AS_GmExecuteReq),
+			MsgId:   int32(pb.Protocols_PS2AS_GmExecuteReq),
 			UserId:  myUid,
 			RoleId:  0,
 			UAID:    myUid,
 			Data:    actorData,
 			ErrCode: 0,
-			//GUID:    utils.GenIntUUID(),
+			// GUID:    utils.GenIntUUID(),
 			ServerReqIdx: utils.GenIntUUID(),
 			Topic:        "",
 		})

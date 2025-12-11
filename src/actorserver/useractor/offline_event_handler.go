@@ -13,7 +13,7 @@ import (
 	"gitlab.musadisca-games.com/wangxw/musae/framework/service"
 
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 )
 
 type OfflineEventHandler struct {
@@ -27,23 +27,23 @@ func NewOfflineEventHandler(actor *UserActor) *OfflineEventHandler {
 
 	// 离线事件调用
 	// 好友模块
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PS2S_DelFriendReq), h.SrvDelFriendReq)
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PS2S_AddFriendApplyReq), h.SrvAddFriendApplyReq)
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PS2S_AgreeFriendApplyReq), h.SrvAgreeFriendApplyReq)
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PS2S_SendFriendPointReq), h.SendFriendPointReq)
+	actor.RegisterProtoHandler(int32(pb.Protocols_PS2S_DelFriendReq), h.SrvDelFriendReq)
+	actor.RegisterProtoHandler(int32(pb.Protocols_PS2S_AddFriendApplyReq), h.SrvAddFriendApplyReq)
+	actor.RegisterProtoHandler(int32(pb.Protocols_PS2S_AgreeFriendApplyReq), h.SrvAgreeFriendApplyReq)
+	actor.RegisterProtoHandler(int32(pb.Protocols_PS2S_SendFriendPointReq), h.SendFriendPointReq)
 	// 联盟模块
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PS2S_ExitAllianceNtf), h.ExitAllianceNtf)
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PS2S_JoinAllianceNtf), h.JoinAllianceNtf)
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PS2S_CheckInAllianceReq), h.CheckInAllianceReq)
+	actor.RegisterProtoHandler(int32(pb.Protocols_PS2S_ExitAllianceNtf), h.ExitAllianceNtf)
+	actor.RegisterProtoHandler(int32(pb.Protocols_PS2S_JoinAllianceNtf), h.JoinAllianceNtf)
+	actor.RegisterProtoHandler(int32(pb.Protocols_PS2S_CheckInAllianceReq), h.CheckInAllianceReq)
 	// 聊天模块
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PS2S_PushMessageToUserReq), h.PushMessageToUserReq) //私聊推送消息
+	actor.RegisterProtoHandler(int32(pb.Protocols_PS2S_PushMessageToUserReq), h.PushMessageToUserReq) // 私聊推送消息
 	return h
 }
 
 func (h *OfflineEventHandler) Init() error {
-	h.actor.Data.OfflineEventData = &cmd.POfflineEventData{
+	h.actor.Data.OfflineEventData = &pb.POfflineEventData{
 		Createtime: time.Now().Unix(),
-		EventList:  make(map[int64]*cmd.OfflineEvent),
+		EventList:  make(map[int64]*pb.OfflineEvent),
 	}
 
 	// 保存
@@ -64,7 +64,7 @@ func (h *OfflineEventHandler) DailyRefresh() error {
 }
 
 func (h *OfflineEventHandler) SetDBData(dbData proto.Message) error {
-	if dbVal, ok := dbData.(*cmd.POfflineEventData); ok {
+	if dbVal, ok := dbData.(*pb.POfflineEventData); ok {
 		h.actor.Data.OfflineEventData = dbVal
 	} else {
 		return fmt.Errorf("SetDBData, 数据类型错误! %v", dbData)
@@ -120,7 +120,7 @@ func (h *OfflineEventHandler) ExecOfflineEvent() {
 // 生成离线事件
 func (h *OfflineEventHandler) SaveOfflineEvent(in *base.ProtoMsg, expire int64) (err error) {
 	data := h.actor.GetOfflineEventData()
-	e := &cmd.OfflineEvent{
+	e := &pb.OfflineEvent{
 		Msg:        in,
 		CreateTime: time.Now().Unix(),
 		ExpireTime: expire,
@@ -146,21 +146,21 @@ func (h *OfflineEventHandler) addItem(params map[int32]int32) error {
 // 检查是否存在联盟
 func (h *OfflineEventHandler) CheckInAllianceReq(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
 	var err error
-	var data *cmd.PUserAllianceData
+	var data *pb.PUserAllianceData
 	// 是否在线
 	if h.actor.IsMiniMode {
 		// 从cache中捞数据
 		data, err = h.actor.getAllianceDataByRoleId(in.RoleId)
 		if err != nil {
 			h.Errorf("加载数据失败 err: %v", err)
-			return &cmd.S2S_CheckInAllianceRes{Exist: true, Outdate: 0}, nil, 0
+			return &pb.S2S_CheckInAllianceRes{Exist: true, Outdate: 0}, nil, 0
 		}
 	} else {
 		// 从actor中捞数据
 		data = h.actor.GetUserAllianceData()
 	}
 
-	return &cmd.S2S_CheckInAllianceRes{Exist: data.AllianceId > 0, Outdate: data.ApplyOutdateTs}, nil, 0
+	return &pb.S2S_CheckInAllianceRes{Exist: data.AllianceId > 0, Outdate: data.ApplyOutdateTs}, nil, 0
 }
 
 // 加入联盟后续处理
@@ -169,16 +169,16 @@ func (h *OfflineEventHandler) JoinAllianceNtf(ctx context.Context, in *base.Prot
 	if h.actor.IsMiniMode {
 		err = h.SaveOfflineEvent(in, 0)
 	} else {
-		req := &cmd.S2S_JoinAllianceNtf{}
+		req := &pb.S2S_JoinAllianceNtf{}
 		if err = in.UnmarshalData(req); err != nil {
-			return nil, err, int32(cmd.ErrorCode_DeSerializeError)
+			return nil, err, int32(pb.ErrorCode_DeSerializeError)
 		}
 		err = h.actor.UserAllianceHandler.HandleJoinAlliance(req.Alliance)
 	}
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
-	return &cmd.S2S_JoinAllianceNtf{}, nil, 0
+	return &pb.S2S_JoinAllianceNtf{}, nil, 0
 }
 
 func (h *OfflineEventHandler) ExitAllianceNtf(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
@@ -191,9 +191,9 @@ func (h *OfflineEventHandler) ExitAllianceNtf(ctx context.Context, in *base.Prot
 		err = h.actor.UserAllianceHandler.HandleExitAlliance(2)
 	}
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
-	return &cmd.S2S_ExitAllianceNtf{}, nil, 0
+	return &pb.S2S_ExitAllianceNtf{}, nil, 0
 }
 
 func (h *OfflineEventHandler) SrvDelFriendReq(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
@@ -203,16 +203,16 @@ func (h *OfflineEventHandler) SrvDelFriendReq(ctx context.Context, in *base.Prot
 	if h.actor.IsMiniMode {
 		err = h.SaveOfflineEvent(in, 0)
 	} else {
-		req := &cmd.S2S_DelFriendReq{}
+		req := &pb.S2S_DelFriendReq{}
 		if err = in.UnmarshalData(req); err != nil {
-			return nil, err, int32(cmd.ErrorCode_DeSerializeError)
+			return nil, err, int32(pb.ErrorCode_DeSerializeError)
 		}
 		err = h.actor.FriendHandler.HandleDelFriend(map[int32]int32{int32(req.RoleId): 0})
 	}
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
-	return &cmd.S2S_DelFriendRes{}, nil, 0
+	return &pb.S2S_DelFriendRes{}, nil, 0
 }
 
 func (h *OfflineEventHandler) SrvAddFriendApplyReq(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
@@ -221,17 +221,17 @@ func (h *OfflineEventHandler) SrvAddFriendApplyReq(ctx context.Context, in *base
 	if h.actor.IsMiniMode {
 		err = h.SaveOfflineEvent(in, 0)
 	} else {
-		req := &cmd.S2S_AddFriendApplyReq{}
+		req := &pb.S2S_AddFriendApplyReq{}
 		if err = in.UnmarshalData(req); err != nil {
-			return nil, err, int32(cmd.ErrorCode_DeSerializeError)
+			return nil, err, int32(pb.ErrorCode_DeSerializeError)
 		}
 		err = h.actor.FriendHandler.HandleAddFriendApply(map[int32]int32{int32(req.RoleId): 0})
 	}
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
-	return &cmd.S2S_AddFriendApplyRes{}, nil, 0
+	return &pb.S2S_AddFriendApplyRes{}, nil, 0
 }
 
 func (h *OfflineEventHandler) SrvAgreeFriendApplyReq(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
@@ -239,17 +239,17 @@ func (h *OfflineEventHandler) SrvAgreeFriendApplyReq(ctx context.Context, in *ba
 	if h.actor.IsMiniMode {
 		err = h.SaveOfflineEvent(in, 0)
 	} else {
-		req := &cmd.S2S_AgreeFriendApplyReq{}
+		req := &pb.S2S_AgreeFriendApplyReq{}
 		if err = in.UnmarshalData(req); err != nil {
-			return nil, err, int32(cmd.ErrorCode_DeSerializeError)
+			return nil, err, int32(pb.ErrorCode_DeSerializeError)
 		}
 		err = h.actor.FriendHandler.HandleAgreeFriendApply(map[int32]int32{int32(req.RoleId): 0})
 	}
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
-	return &cmd.S2S_AgreeFriendApplyRes{}, nil, 0
+	return &pb.S2S_AgreeFriendApplyRes{}, nil, 0
 }
 
 func (h *OfflineEventHandler) SendFriendPointReq(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
@@ -258,34 +258,34 @@ func (h *OfflineEventHandler) SendFriendPointReq(ctx context.Context, in *base.P
 	if h.actor.IsMiniMode {
 		err = h.SaveOfflineEvent(in, 0)
 	} else {
-		req := &cmd.S2S_SendFriendPointReq{}
+		req := &pb.S2S_SendFriendPointReq{}
 		if err = in.UnmarshalData(req); err != nil {
-			return nil, err, int32(cmd.ErrorCode_DeSerializeError)
+			return nil, err, int32(pb.ErrorCode_DeSerializeError)
 		}
 		err = h.actor.FriendHandler.HandleSendFriendPoint(map[int32]int32{int32(req.RoleId): 0})
 	}
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
-	return &cmd.S2S_SendFriendPointRes{}, nil, 0
+	return &pb.S2S_SendFriendPointRes{}, nil, 0
 }
 
 func (h *OfflineEventHandler) PushMessageToUserReq(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
-	//roleId := in.RoleId
-	req := &cmd.S2S_PushMessageToUserReq{}
+	// roleId := in.RoleId
+	req := &pb.S2S_PushMessageToUserReq{}
 	if err := in.UnmarshalData(req); err != nil {
-		return nil, err, int32(cmd.ErrorCode_DeSerializeError)
+		return nil, err, int32(pb.ErrorCode_DeSerializeError)
 	}
-	res := &cmd.S2S_PushMessageToUserRes{}
+	res := &pb.S2S_PushMessageToUserRes{}
 	// 是否在线
 	if h.actor.IsMiniMode {
-		//err = h.SaveOfflineEvent(cmd.OfflineOperateType_DelFriend, 0, in.UserId, map[int32]int32{int32(req.RoleId): 0})
+		// err = h.SaveOfflineEvent(pb.OfflineOperateType_DelFriend, 0, in.UserId, map[int32]int32{int32(req.RoleId): 0})
 		// 不在线不做处理，
-		return res, nil, int32(cmd.ErrorCode_Success)
+		return res, nil, int32(pb.ErrorCode_Success)
 	}
 	if err, code := h.actor.UserChatHandler.PushMessageToUserReq(req, req.GetChannelId()); err != nil {
 		return nil, err, code
 	}
-	return res, nil, int32(cmd.ErrorCode_Success)
+	return res, nil, int32(pb.ErrorCode_Success)
 }

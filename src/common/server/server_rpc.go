@@ -12,7 +12,7 @@ import (
 
 	dapr "github.com/dapr/go-sdk/client"
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/actor/stub"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/global"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
@@ -32,7 +32,7 @@ func (s *Server) Send2BC(aid string, msg proto.Message) error {
 	return nil
 }
 
-func (s *Server) Send2Gates(aid string, pids map[string]*cmd.ActorUserInfo, msg proto.Message) error {
+func (s *Server) Send2Gates(aid string, pids map[string]*pb.ActorUserInfo, msg proto.Message) error {
 	pidMap := map[string][]string{}
 	for _, pid := range pids {
 		if _, ok := pidMap[pid.GateId]; !ok {
@@ -48,7 +48,7 @@ func (s *Server) Send2Gates(aid string, pids map[string]*cmd.ActorUserInfo, msg 
 	return nil
 }
 
-func (s *Server) Send2Gate(aid string, pid *cmd.ActorUserInfo, msg proto.Message) error {
+func (s *Server) Send2Gate(aid string, pid *pb.ActorUserInfo, msg proto.Message) error {
 	if pid == nil {
 		return nil
 	}
@@ -85,7 +85,7 @@ func (s *Server) PubTopicEvent(eType svc.EVENT_TYPE, topicName, aid string, uids
 		goto OnFail
 	}
 
-	msgId, ok = cmd.Protocols_value[string("P"+msg.ProtoReflect().Descriptor().Name())]
+	msgId, ok = pb.Protocols_value[string("P"+msg.ProtoReflect().Descriptor().Name())]
 	if !ok {
 		err = fmt.Errorf("invalid msgId")
 		goto OnFail
@@ -95,14 +95,14 @@ func (s *Server) PubTopicEvent(eType svc.EVENT_TYPE, topicName, aid string, uids
 		goto OnFail
 	}
 
-	logger.Debugf("PubTopicEvent ProtoData msgId:%v len:%v data:%+v", cmd.Protocols(msgId), len(data), data)
+	logger.Debugf("PubTopicEvent ProtoData msgId:%v len:%v data:%+v", pb.Protocols(msgId), len(data), data)
 
-	md = metadata.Pairs("msg-id", fmt.Sprintf("%v", cmd.Protocols(msgId)))
+	md = metadata.Pairs("msg-id", fmt.Sprintf("%v", pb.Protocols(msgId)))
 	ctx = metadata.NewOutgoingContext(ctx, md)
 	if err = s.Daprc.PublishEvent(ctx, string(eType), topicName, data,
 		dapr.PublishEventWithMetadata(map[string]string{svc.REDIS_TTL_NAME: strconv.Itoa(svc.PUBSUB_TTL_SEC)}),
-		//dapr.PublishEventWithContentType("application/json"),
-		dapr.PublishEventWithContentType("application/octet-stream"), //application/octet-stream
+		// dapr.PublishEventWithContentType("application/json"),
+		dapr.PublishEventWithContentType("application/octet-stream"), // application/octet-stream
 	); err != nil {
 		goto OnFail
 	}
@@ -137,7 +137,7 @@ func (s *Server) SvcInvoke(appId, uid string, roleId uint64, uaid string, msg pr
 	}
 
 	name := msg.ProtoReflect().Descriptor().Name()
-	msgId, ok := cmd.Protocols_value[string("P"+name)]
+	msgId, ok := pb.Protocols_value[string("P"+name)]
 	if !ok {
 		logger.Warnf("[server]:SvcInvoke invalid msg: %v %v %+v", uid, appId, msg)
 	}
@@ -167,20 +167,20 @@ func (s *Server) SvcInvokeByData(appId, uid string, roleId uint64, uaid string, 
 	}
 	data, err = msg.Marshal()
 	if err != nil {
-		logger.Debug("SvcInvokeByData msg marshal err :", appId, cmd.Protocols(msgId), uid, err)
+		logger.Debug("SvcInvokeByData msg marshal err :", appId, pb.Protocols(msgId), uid, err)
 		return nil, err
 	}
-	logger.Debugf("SvcInvokeByData Begin  appId:%s msgId:%v uid:%s len:%v", appId, cmd.Protocols(msgId), uid, len(data))
+	logger.Debugf("SvcInvokeByData Begin  appId:%s msgId:%v uid:%s len:%v", appId, pb.Protocols(msgId), uid, len(data))
 
 	ctx := context.Background()
 	startTime := time.Now()
-	md := metadata.Pairs("msg-id", fmt.Sprintf("%v", cmd.Protocols(msgId)))
+	md := metadata.Pairs("msg-id", fmt.Sprintf("%v", pb.Protocols(msgId)))
 	ctx = metadata.NewOutgoingContext(ctx, md)
 	out, err = s.Daprc.InvokeMethodWithContent(ctx, appId, "RpcCall", "post",
-		&dapr.DataContent{Data: data, ContentType: "text/plain"}) //text/plain
+		&dapr.DataContent{Data: data, ContentType: "text/plain"}) // text/plain
 	metrics.HistogramPut(metrics.SrvInvokeDelayHist, time.Since(startTime).Milliseconds(), metrics.Invoke)
 	metrics.GaugeInc(metrics.InvokePubCount)
-	logger.Debugf("SvcInvokeByData End appId:%s msgId:%v uid:%s err:%v", appId, cmd.Protocols(msgId), uid, err)
+	logger.Debugf("SvcInvokeByData End appId:%s msgId:%v uid:%s err:%v", appId, pb.Protocols(msgId), uid, err)
 	return out, err
 }
 
@@ -202,11 +202,11 @@ func (s *Server) userInvoke(uaid string, msg *base.ProtoMsg, isEvent bool) (*bas
 	if isEvent {
 		invokeName = "UserInvokeEvent"
 	}
-	logger.Debugf("===>>>%s-Begin Msg:%v UAID:%s MSG-REQ:%s,", invokeName, cmd.Protocols(msg.MsgId), uaid, msg.Str())
+	logger.Debugf("===>>>%s-Begin Msg:%v UAID:%s MSG-REQ:%s,", invokeName, pb.Protocols(msg.MsgId), uaid, msg.Str())
 	userStub := stub.NewUserStub(uaid)
 	s.ImpActorStub(userStub)
 	ctx := context.Background()
-	md := metadata.Pairs("msg-id", fmt.Sprintf("%v", cmd.Protocols(msg.MsgId)))
+	md := metadata.Pairs("msg-id", fmt.Sprintf("%v", pb.Protocols(msg.MsgId)))
 	ctx = metadata.NewOutgoingContext(ctx, md)
 	var ret *base.ProtoMsg
 	var err error
@@ -221,10 +221,10 @@ func (s *Server) userInvoke(uaid string, msg *base.ProtoMsg, isEvent bool) (*bas
 	var errStr string
 	if err != nil {
 		errStr = err.Error()
-	} else if ret != nil && ret.MsgId == int32(cmd.Protocols_PS2C_ErrorCodeNtf) {
+	} else if ret != nil && ret.MsgId == int32(pb.Protocols_PS2C_ErrorCodeNtf) {
 		errStr = string(ret.Data)
 	}
-	logger.Debugf("===>>>%s-End Delay:%d Msg:%v UAID:%s MSG-RET:%s Err:%v", invokeName, delayTime, cmd.Protocols(msg.MsgId), uaid, ret.Str(), errStr)
+	logger.Debugf("===>>>%s-End Delay:%d Msg:%v UAID:%s MSG-RET:%s Err:%v", invokeName, delayTime, pb.Protocols(msg.MsgId), uaid, ret.Str(), errStr)
 	logger.WarnDelayf(delayTime, "")
 
 	return ret, err
@@ -236,10 +236,10 @@ func (s *Server) ActorInvoke(actorType, actorId string, msg *base.ProtoMsg) (*ba
 		msg.ReqIdx = utils.GenIntUUID()
 	}
 	ctx := context.Background()
-	md := metadata.Pairs("msg-id", fmt.Sprintf("%v", cmd.Protocols(msg.MsgId)))
+	md := metadata.Pairs("msg-id", fmt.Sprintf("%v", pb.Protocols(msg.MsgId)))
 	ctx = metadata.NewOutgoingContext(ctx, md)
-	if cmd.Protocols(msg.MsgId) != cmd.Protocols_PS2S_SvcStatusReq {
-		logger.Debugf("===>>>ActorInvoke-Begin Actor:%v Msg:%v AID:%s MSG-REQ:%s", actorType, cmd.Protocols(msg.MsgId), actorId, msg.Str())
+	if pb.Protocols(msg.MsgId) != pb.Protocols_PS2S_SvcStatusReq {
+		logger.Debugf("===>>>ActorInvoke-Begin Actor:%v Msg:%v AID:%s MSG-REQ:%s", actorType, pb.Protocols(msg.MsgId), actorId, msg.Str())
 	}
 	var ret *base.ProtoMsg
 	var invokeErr error
@@ -267,12 +267,12 @@ func (s *Server) ActorInvoke(actorType, actorId string, msg *base.ProtoMsg) (*ba
 	var err error
 	if invokeErr != nil {
 		err = invokeErr
-		//ret.ErrCode = int32(cmd.ErrorCode_RpcInvokeError) // 返给客户端errCode
-	} else if ret != nil && ret.MsgId == int32(cmd.Protocols_PS2C_ErrorCodeNtf) {
+		// ret.ErrCode = int32(pb.ErrorCode_RpcInvokeError) // 返给客户端errCode
+	} else if ret != nil && ret.MsgId == int32(pb.Protocols_PS2C_ErrorCodeNtf) {
 		err = errors.New(string(ret.Data))
 	}
-	if cmd.Protocols(msg.MsgId) != cmd.Protocols_PS2S_SvcStatusReq {
-		logger.Debugf("===>>>ActorInvoke-End Actor:%v Delay:%d Msg:%v AID:%s MSG-RET:%s Err:%+v", actorType, delayTime, cmd.Protocols(msg.MsgId), actorId, ret.Str(), err)
+	if pb.Protocols(msg.MsgId) != pb.Protocols_PS2S_SvcStatusReq {
+		logger.Debugf("===>>>ActorInvoke-End Actor:%v Delay:%d Msg:%v AID:%s MSG-RET:%s Err:%+v", actorType, delayTime, pb.Protocols(msg.MsgId), actorId, ret.Str(), err)
 	}
 	logger.WarnDelayf(delayTime, "ActorInvoke Actor:%s", actorType)
 	return ret, err
@@ -297,14 +297,14 @@ func (s *Server) DeleteActor(actorType, actorId string) error {
 }
 
 // UserActor调用,isEvent为true使用离线模式
-func (s *Server) CallUserActor(isEvent bool, roleId uint64, msgId int32, reqMsg proto.Message, rspMsg proto.Message) (error, cmd.ErrorCode) {
+func (s *Server) CallUserActor(isEvent bool, roleId uint64, msgId int32, reqMsg proto.Message, rspMsg proto.Message) (error, pb.ErrorCode) {
 	callData, err := proto.Marshal(reqMsg)
 	if err != nil {
-		return err, cmd.ErrorCode_SerializeError
+		return err, pb.ErrorCode_SerializeError
 	}
 	uaid, err := s.GetUAIDByRoleId(roleId)
 	if err != nil {
-		return err, cmd.ErrorCode_NotFoundPlayer
+		return err, pb.ErrorCode_NotFoundPlayer
 	}
 	in := &base.ProtoMsg{
 		AppId:   s.AppId,
@@ -325,14 +325,14 @@ func (s *Server) CallUserActor(isEvent bool, roleId uint64, msgId int32, reqMsg 
 	}
 	if rsp.ErrCode != 0 || err != nil {
 		logger.Error("UserEventInvoke handle failed. errCode: %d, err: %v", rsp.ErrCode, err)
-		return fmt.Errorf("UserEventInvoke handle failed"), cmd.ErrorCode_RpcInvokeError
+		return fmt.Errorf("UserEventInvoke handle failed"), pb.ErrorCode_RpcInvokeError
 	}
 	// 解析数据
 	if rspMsg != nil {
 		err = proto.Unmarshal(rsp.Data, rspMsg)
 		if err != nil {
-			return err, cmd.ErrorCode_DeSerializeError
+			return err, pb.ErrorCode_DeSerializeError
 		}
 	}
-	return nil, cmd.ErrorCode_Success
+	return nil, pb.ErrorCode_Success
 }

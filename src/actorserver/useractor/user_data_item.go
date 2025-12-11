@@ -9,26 +9,26 @@ import (
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common"
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/utils"
 	excel "gitlab.musadisca-games.com/wangxw/aniwar/src/excel/data"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/safe"
 )
 
-func (x *UserData) GetUserItems() *cmd.PCommonItemInfos {
+func (x *UserData) GetUserItems() *pb.PCommonItemInfos {
 	itemData := x.Data.ItemData
 	if itemData.Items == nil {
-		itemData.Items = make(map[uint64]*cmd.PCommonItemInfo)
+		itemData.Items = make(map[uint64]*pb.PCommonItemInfo)
 	}
 
 	return x.Data.ItemData
 }
 
 // AddItems 添加道具
-func (x *UserData) AddItems(uid string, reason common.ChangeReason, itemInfos ...*cmd.PCommonItemInfo) ([]*cmd.ItemReward, []*cmd.PCommonItemInfo, map[int32]int32, error) {
+func (x *UserData) AddItems(uid string, reason common.ChangeReason, itemInfos ...*pb.PCommonItemInfo) ([]*pb.ItemReward, []*pb.PCommonItemInfo, map[int32]int32, error) {
 	var (
-		changeItems = make([]*cmd.ItemReward, 0)      // 变化量
-		finalItems  = make([]*cmd.PCommonItemInfo, 0) // 最终量
-		limitItems  = make(map[int32]int32)           // 超上限数据
+		changeItems = make([]*pb.ItemReward, 0)      // 变化量
+		finalItems  = make([]*pb.PCommonItemInfo, 0) // 最终量
+		limitItems  = make(map[int32]int32)          // 超上限数据
 	)
 	for _, item := range itemInfos {
 		if item.ItemNum <= 0 {
@@ -63,7 +63,7 @@ func (x *UserData) AddItems(uid string, reason common.ChangeReason, itemInfos ..
 			finalItems = append(finalItems, item)
 		}
 
-		//threading.RunSafe(func() {
+		// threading.RunSafe(func() {
 		//	lilith.WriteDataLog(&lilith.ItemFlow{
 		//		HeadInfo:   lilith.BuildHeadInfo(lilith.LogType_ItemFlow, uid, device),
 		//		RoleId:     strconv.FormatUint(x.Data.Base.Common.RoleId, 10),
@@ -77,7 +77,7 @@ func (x *UserData) AddItems(uid string, reason common.ChangeReason, itemInfos ..
 		//		ItemAfter:  int64(afterNum),
 		//		Recharge:   0,
 		//	})
-		//})
+		// })
 		threading.RunSafe(func() {
 			e := &taptap.ItemFlow{
 				PropertyFieldInfo: taptap.BuildPropertyFieldInfo(x.Account.CliDeviceInfo),
@@ -95,7 +95,7 @@ func (x *UserData) AddItems(uid string, reason common.ChangeReason, itemInfos ..
 			taptap.WriteDataLog(taptap.LogType_ItemFlow, uid, x.Account.TapUserInfo, e)
 		})
 
-		changeItems = append(changeItems, &cmd.ItemReward{ItemId: item.BaseId, Num: item.ItemNum})
+		changeItems = append(changeItems, &pb.ItemReward{ItemId: item.BaseId, Num: item.ItemNum})
 		if limitNum > 0 {
 			limitItems[int32(item.BaseId)] = limitNum
 		}
@@ -105,9 +105,9 @@ func (x *UserData) AddItems(uid string, reason common.ChangeReason, itemInfos ..
 }
 
 // SubItems 扣除道具
-func (x *UserData) SubItems(costItemUniqueId uint64, costNum uint32, uid string, reason common.ChangeReason) (*cmd.PCommonItemInfo, []*excel.ItemReward, error) {
+func (x *UserData) SubItems(costItemUniqueId uint64, costNum uint32, uid string, reason common.ChangeReason) (*pb.PCommonItemInfo, []*excel.ItemReward, error) {
 	var (
-		ret             = &cmd.PCommonItemInfo{}
+		ret             = &pb.PCommonItemInfo{}
 		exchangeRewards = make([]*excel.ItemReward, 0)
 	)
 
@@ -133,7 +133,7 @@ func (x *UserData) SubItems(costItemUniqueId uint64, costNum uint32, uid string,
 			})
 		}
 
-		//threading.RunSafe(func() {
+		// threading.RunSafe(func() {
 		//	lilith.WriteDataLog(&lilith.ItemFlow{
 		//		HeadInfo:   lilith.BuildHeadInfo(lilith.LogType_ItemFlow, uid, device),
 		//		RoleId:     strconv.FormatUint(x.Data.Base.Common.RoleId, 10),
@@ -147,7 +147,7 @@ func (x *UserData) SubItems(costItemUniqueId uint64, costNum uint32, uid string,
 		//		ItemAfter:  int64(target.GetItemNum()),
 		//		Recharge:   0,
 		//	})
-		//})
+		// })
 		threading.RunSafe(func() {
 			e := &taptap.ItemFlow{
 				PropertyFieldInfo: taptap.BuildPropertyFieldInfo(x.Account.CliDeviceInfo),
@@ -166,7 +166,7 @@ func (x *UserData) SubItems(costItemUniqueId uint64, costNum uint32, uid string,
 		})
 		// 埋点log
 		if reason == common.CR_Destroy_EXP_ITEM {
-			//threading.RunSafe(func() {
+			// threading.RunSafe(func() {
 			//	lilith.WriteDataLog(&lilith.DestroyExpireItem{
 			//		CustomHeadInfo: lilith.BuildCustomHeadInfo(lilith.LogType_DestroyExpireItem, uid, x.Account.CliDeviceInfo),
 			//		Id:             int64(costItemUniqueId),
@@ -175,7 +175,7 @@ func (x *UserData) SubItems(costItemUniqueId uint64, costNum uint32, uid string,
 			//		Expire:         int64(target.ExpirationTimestamp),
 			//		Exchange:       lilith.ConvertMap2Str(map[int32]int32{itemCfg.Change.ItemId: itemCfg.Change.Num * int32(costNum)}),
 			//	})
-			//})
+			// })
 			threading.RunSafe(func() {
 				e := &taptap.DestroyExpireItem{
 					PropertyFieldInfo: taptap.BuildPropertyFieldInfo(x.Account.CliDeviceInfo),

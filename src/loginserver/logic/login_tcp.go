@@ -4,7 +4,7 @@ import (
 	"strconv"
 
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/conf"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/baseconf"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/errorx"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
@@ -18,7 +18,7 @@ func (s *LoginServer) OnTcp(c *tcpx.Context) {
 		logger.Warn(errorx.Wrap(e).Error())
 		return
 	}
-	logger.Debug("OnTcp: ", c.ClientIP(), c.Network(), cmd.Protocols(messageID), len(c.Stream), c.Stream)
+	logger.Debug("OnTcp: ", c.ClientIP(), c.Network(), pb.Protocols(messageID), len(c.Stream), c.Stream)
 
 	data, err := tcpx.BodyBytesOf(c.Stream)
 	if err != nil {
@@ -33,9 +33,9 @@ func (s *LoginServer) OnTcp(c *tcpx.Context) {
 		return
 	}
 
-	//TODO test code wangxw
-	switch cmd.Protocols(messageID) {
-	case cmd.Protocols_PC2LS_LoginReq:
+	// TODO test code wangxw
+	switch pb.Protocols(messageID) {
+	case pb.Protocols_PC2LS_LoginReq:
 		block := make([]byte, dataLen)
 		copy(block, data)
 		req := &Msg{
@@ -49,16 +49,16 @@ func (s *LoginServer) OnTcp(c *tcpx.Context) {
 			s.pushMsg(req)
 		} else {
 			res := s.handleLoginReq(req)
-			if res.ErrCode == int32(cmd.ErrorCode_Success) {
-				err = req.ctx.Reply(int32(cmd.Protocols_PLS2C_LoginRes), res.ErrCode, res)
+			if res.ErrCode == int32(pb.ErrorCode_Success) {
+				err = req.ctx.Reply(int32(pb.Protocols_PLS2C_LoginRes), res.ErrCode, res)
 			} else {
-				err = req.ctx.Reply(int32(cmd.Protocols_PS2C_ErrorCodeNtf), res.ErrCode, &cmd.S2C_ErrorCodeNtf{ErrorCode: uint32(res.ErrCode), Param: []string{strconv.Itoa(int(res.ErrCode))}})
+				err = req.ctx.Reply(int32(pb.Protocols_PS2C_ErrorCodeNtf), res.ErrCode, &pb.S2C_ErrorCodeNtf{ErrorCode: uint32(res.ErrCode), Param: []string{strconv.Itoa(int(res.ErrCode))}})
 			}
 			if err != nil {
 				logger.Error(err.Error())
 			}
 		}
-	case cmd.Protocols_PC2LS_HeartBeatReq:
+	case pb.Protocols_PC2LS_HeartBeatReq:
 		return
 	default:
 		logger.Warnf("invalid protocol,close conn,msgId:%d", messageID)

@@ -10,7 +10,7 @@ import (
 
 	"github.com/dapr/go-sdk/service/common"
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/actor/stub"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
 	"google.golang.org/protobuf/proto"
@@ -30,15 +30,15 @@ func (s *IDIPServer) SubSingleResource(out *common.Content, reqJson []byte) {
 	// 解析数据
 	req := &SubSingleResourceReq{}
 	if err := json.Unmarshal(reqJson, req); err != nil {
-		RetCommonMsg(out, http.StatusInternalServerError, int32(cmd.ErrorCode_InternalError), Internal_Error)
+		RetCommonMsg(out, http.StatusInternalServerError, int32(pb.ErrorCode_InternalError), Internal_Error)
 		return
 	}
 	itemId, err := strconv.Atoi(req.Restype)
 	if err != nil {
-		RetCommonMsg(out, http.StatusInternalServerError, int32(cmd.ErrorCode_InternalError), Param_Error)
+		RetCommonMsg(out, http.StatusInternalServerError, int32(pb.ErrorCode_InternalError), Param_Error)
 		return
 	}
-	rpcCall := &cmd.S2SReceiveGMCostResReq{Items: map[int32]int32{int32(itemId): int32(req.Num)}}
+	rpcCall := &pb.S2SReceiveGMCostResReq{Items: map[int32]int32{int32(itemId): int32(req.Num)}}
 	items := GMCostItem(s, req.Uids, rpcCall)
 	// 返回结果数据
 	if len(items) > 0 {
@@ -48,14 +48,14 @@ func (s *IDIPServer) SubSingleResource(out *common.Content, reqJson []byte) {
 	}
 }
 
-func GMCostItem(s *IDIPServer, uids []int, rpcCall *cmd.S2SReceiveGMCostResReq) []*RetItems {
+func GMCostItem(s *IDIPServer, uids []int, rpcCall *pb.S2SReceiveGMCostResReq) []*RetItems {
 	items := make([]*RetItems, 0)
 	errCheck := func(err error, id int) {
 		if err != nil {
 			items = append(items, &RetItems{
 				SvrId:  0,
 				UserId: int32(id),
-				Ret:    int32(cmd.ErrorCode_InternalError),
+				Ret:    int32(pb.ErrorCode_InternalError),
 				Info:   err.Error(),
 			})
 			logger.Error("add error", err)
@@ -75,13 +75,13 @@ func GMCostItem(s *IDIPServer, uids []int, rpcCall *cmd.S2SReceiveGMCostResReq) 
 		}
 		in := &base.ProtoMsg{
 			AppId:   s.AppId,
-			MsgId:   int32(cmd.Protocols_PS2AS_ReceiveGMCostResReq),
+			MsgId:   int32(pb.Protocols_PS2AS_ReceiveGMCostResReq),
 			UserId:  uaid,
 			RoleId:  0,
 			UAID:    uaid,
 			Data:    data,
 			ErrCode: 0,
-			//GUID:    utils.GenIntUUID(),
+			// GUID:    utils.GenIntUUID(),
 			ServerReqIdx: utils.GenIntUUID(),
 			Topic:        "",
 		}

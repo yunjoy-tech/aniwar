@@ -15,7 +15,7 @@ import (
 
 	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
 	"google.golang.org/protobuf/proto"
 )
@@ -28,8 +28,8 @@ func NewBattleHandler(actor *UserActor) *BattleHandler {
 	h := &BattleHandler{UABaseHandler: NewUABaseHandler(actor, "BattleHandler")}
 	h.ChildHandler = h
 
-	// actor.RegisterProtoHandler(int32(cmd.Protocols_PC2LS_StartBattleEventReq), h.BattleStartReq)      // 战斗开始
-	// actor.RegisterProtoHandler(int32(cmd.Protocols_PC2LS_LevelBattleEventReq), h.BattleEndReq) // 战斗事件
+	// actor.RegisterProtoHandler(int32(pb.Protocols_PC2LS_StartBattleEventReq), h.BattleStartReq)      // 战斗开始
+	// actor.RegisterProtoHandler(int32(pb.Protocols_PC2LS_LevelBattleEventReq), h.BattleEndReq) // 战斗事件
 
 	return h
 }
@@ -57,58 +57,58 @@ func (h *BattleHandler) DBTable() (service.MongoDbType, string, proto.Message) {
 func (h *BattleHandler) BattleStartReq(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
 	var (
 		err error
-		// errCode cmd.ErrorCode
+		// errCode pb.ErrorCode
 		// uid     string
-		rsp *cmd.LS2C_StartBattleEventRes
+		rsp *pb.LS2C_StartBattleEventRes
 	)
 
-	var req cmd.C2LS_StartBattleEventReq
+	var req pb.C2LS_StartBattleEventReq
 	err = in.UnmarshalData(&req)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_DeSerializeError)
+		return nil, err, int32(pb.ErrorCode_DeSerializeError)
 	}
 
-	return rsp, nil, int32(cmd.ErrorCode_Success)
+	return rsp, nil, int32(pb.ErrorCode_Success)
 }
 
 func (h *BattleHandler) LevelBattleEventReq(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
 	var (
 		err     error
-		errCode cmd.ErrorCode = cmd.ErrorCode_Success
+		errCode pb.ErrorCode = pb.ErrorCode_Success
 		// uid     string
-		rsp *cmd.LS2C_LevelBattleEventRes
+		rsp *pb.LS2C_LevelBattleEventRes
 	)
 
-	var req cmd.C2LS_LevelBattleEventReq
+	var req pb.C2LS_LevelBattleEventReq
 	err = in.UnmarshalData(&req)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_DeSerializeError)
+		return nil, err, int32(pb.ErrorCode_DeSerializeError)
 	}
 
 	return rsp, nil, int32(errCode)
 }
 
 func (h *BattleHandler) CheckBattle(
-	battleId uint64, battleRandomSeed uint32, battleResult cmd.BattleResult,
-	selfBattleTeam *cmd.BattleTeam, battleEventId int32, battleFrameData []*cmd.FrameCommand,
-	versionData *cmd.CheckBattleVersionData) (*cmd.CheckBattleRes, error, cmd.ErrorCode) {
+	battleId uint64, battleRandomSeed uint32, battleResult pb.BattleResult,
+	selfBattleTeam *pb.BattleTeam, battleEventId int32, battleFrameData []*pb.FrameCommand,
+	versionData *pb.CheckBattleVersionData) (*pb.CheckBattleRes, error, pb.ErrorCode) {
 
-	reqMsg := &cmd.CheckUp{
+	reqMsg := &pb.CheckUp{
 		VersionData: versionData,
-		CheckBattleReq: &cmd.CheckBattleReq{
+		CheckBattleReq: &pb.CheckBattleReq{
 			BattleId:         battleId,
 			BattleRandomSeed: battleRandomSeed,
 			BattleResult:     battleResult,
 			// EventId:          battleEventId,
 			SelfTeam:        selfBattleTeam,
 			BattleEventId:   battleEventId,
-			BattleFrameData: battleFrameData, /*&cmd.BattleFrameData{
-				CommandSetDestination:      make([]*cmd.CommandSetDestination, 0),
-				CommandSetTarget:           make([]*cmd.CommandSetTarget, 0),
-				CommandTriggerGroundObject: make([]*cmd.CommandTriggerGroundObject, 0),
-				CommandUseComboSkill:       make([]*cmd.CommandUseComboSkill, 0),
-				CommandUseItem:             make([]*cmd.CommandUseItem, 0),
-				CommandUseSkill:            make([]*cmd.CommandUseSkill, 0),
+			BattleFrameData: battleFrameData, /*&pb.BattleFrameData{
+				CommandSetDestination:      make([]*pb.CommandSetDestination, 0),
+				CommandSetTarget:           make([]*pb.CommandSetTarget, 0),
+				CommandTriggerGroundObject: make([]*pb.CommandTriggerGroundObject, 0),
+				CommandUseComboSkill:       make([]*pb.CommandUseComboSkill, 0),
+				CommandUseItem:             make([]*pb.CommandUseItem, 0),
+				CommandUseSkill:            make([]*pb.CommandUseSkill, 0),
 			},*/
 		},
 		// Name: "test-battle",
@@ -117,7 +117,7 @@ func (h *BattleHandler) CheckBattle(
 	if baseconf.GetBaseConf().OpenCheckBattle == 0 {
 		// 关闭战斗校验
 		logger.Debugf("战斗校验未开启：uid:%s, %v", h.actor.GetUID(), battleId)
-		return nil, nil, cmd.ErrorCode_Success
+		return nil, nil, pb.ErrorCode_Success
 	}
 
 	logger.Debugf("开始战斗校验：uid:%s, %v", h.actor.GetUID(), battleId)
@@ -125,43 +125,43 @@ func (h *BattleHandler) CheckBattle(
 	out, err := h.actor.Srv.SvcInvoke(global.BATTLE_SVC, h.actor.GetUID(), h.actor.roleId, h.actor.ID(), reqMsg)
 	if err != nil {
 		h.Errorf(err.Error())
-		return nil, err, cmd.ErrorCode_RpcInvokeError
+		return nil, err, pb.ErrorCode_RpcInvokeError
 	}
 
 	protoMsg, err := base.UnPackProtoMsg(out)
 	if err != nil {
 		h.Errorf(err.Error())
-		return nil, err, cmd.ErrorCode_UnrealizedTypeError
+		return nil, err, pb.ErrorCode_UnrealizedTypeError
 	}
 	logger.Debugf("protoMsg：%v", protoMsg.Str())
 
-	checkResp := &cmd.CheckDown{}
+	checkResp := &pb.CheckDown{}
 	err = protoMsg.UnmarshalData(checkResp)
 	if err != nil {
 		h.Errorf(err.Error())
-		return nil, err, cmd.ErrorCode_UnrealizedTypeError
+		return nil, err, pb.ErrorCode_UnrealizedTypeError
 	}
 	logger.Debugf("校验结果：%v", checkResp)
 
-	if checkResp != nil && checkResp.CheckBattleRes.CheckBattleResult == cmd.CheckBattleResult_CBR_version_fail {
-		return nil, fmt.Errorf("校验失败, 版本不匹配, %v", checkResp), cmd.ErrorCode_VersionLimit
+	if checkResp != nil && checkResp.CheckBattleRes.CheckBattleResult == pb.CheckBattleResult_CBR_version_fail {
+		return nil, fmt.Errorf("校验失败, 版本不匹配, %v", checkResp), pb.ErrorCode_VersionLimit
 	}
 
-	if checkResp == nil || checkResp.CheckBattleRes.CheckBattleResult != cmd.CheckBattleResult_CBR_success {
-		return nil, fmt.Errorf("校验失败, %v", checkResp), cmd.ErrorCode_CheckBattle_fail
+	if checkResp == nil || checkResp.CheckBattleRes.CheckBattleResult != pb.CheckBattleResult_CBR_success {
+		return nil, fmt.Errorf("校验失败, %v", checkResp), pb.ErrorCode_CheckBattle_fail
 	}
 
-	return checkResp.CheckBattleRes, nil, cmd.ErrorCode_Success
+	return checkResp.CheckBattleRes, nil, pb.ErrorCode_Success
 }
 
-func (h *BattleHandler) buildSelfBattleCards(troopType cmd.CardTroopType, troopId int32, playerLevelData *cmd.PlayerLevelData) *cmd.BattleTeam {
+func (h *BattleHandler) buildSelfBattleCards(troopType pb.CardTroopType, troopId int32, playerLevelData *pb.PlayerLevelData) *pb.BattleTeam {
 	var (
-		battleTeam = &cmd.BattleTeam{
-			CardList: make([]*cmd.BattleCard, 0),
-			FoodList: make([]*cmd.KeyValueItem, 0),
+		battleTeam = &pb.BattleTeam{
+			CardList: make([]*pb.BattleCard, 0),
+			FoodList: make([]*pb.KeyValueItem, 0),
 		}
-		// battleCards = make([]*cmd.BattleCard, 0)
-		// foodItems   = make([]*cmd.KeyValueItem, 0)
+		// battleCards = make([]*pb.BattleCard, 0)
+		// foodItems   = make([]*pb.KeyValueItem, 0)
 	)
 
 	troopInfo, err := h.actor.TroopHandler.getTroopInfo(int32(troopType), troopId)
@@ -184,11 +184,11 @@ func (h *BattleHandler) buildSelfBattleCards(troopType cmd.CardTroopType, troopI
 	return battleTeam
 }
 
-func (h *BattleHandler) buildCampaignCards(campaignTeam *cmd.GeneralCampaignTeam, campaignType common.CAMPAIGN_TYPE) *cmd.BattleTeam {
+func (h *BattleHandler) buildCampaignCards(campaignTeam *pb.GeneralCampaignTeam, campaignType common.CAMPAIGN_TYPE) *pb.BattleTeam {
 	var (
-		battleTeam = &cmd.BattleTeam{
-			CardList: make([]*cmd.BattleCard, 0),
-			FoodList: make([]*cmd.KeyValueItem, 0),
+		battleTeam = &pb.BattleTeam{
+			CardList: make([]*pb.BattleCard, 0),
+			FoodList: make([]*pb.KeyValueItem, 0),
 		}
 	)
 
@@ -200,12 +200,12 @@ func (h *BattleHandler) buildCampaignCards(campaignTeam *cmd.GeneralCampaignTeam
 	cardList := h.buildBattleCards(cardIds, nil)
 	battleTeam.CardList = cardList
 
-	var troopType cmd.CardTroopType
+	var troopType pb.CardTroopType
 	switch campaignType {
 	case common.CAMPAIGN_TYPE_97, common.CAMPAIGN_TYPE_98: // 队伍类型4
-		troopType = cmd.CardTroopType_CardTroopType_Resource_Campaign
+		troopType = pb.CardTroopType_CardTroopType_Resource_Campaign
 	case common.CAMPAIGN_TYPE_100: // 队伍类型3
-		troopType = cmd.CardTroopType_CardTroopType_Electric_Campaign
+		troopType = pb.CardTroopType_CardTroopType_Electric_Campaign
 	default:
 		h.Errorf("未支持的关卡类型, campaignType=%d", campaignType)
 	}
@@ -217,9 +217,9 @@ func (h *BattleHandler) buildCampaignCards(campaignTeam *cmd.GeneralCampaignTeam
 	return battleTeam
 }
 
-func (h *BattleHandler) buildBattleCards(cardIds []int32, playerLevelData *cmd.PlayerLevelData) []*cmd.BattleCard {
+func (h *BattleHandler) buildBattleCards(cardIds []int32, playerLevelData *pb.PlayerLevelData) []*pb.BattleCard {
 	var (
-		cardList = make([]*cmd.BattleCard, 0)
+		cardList = make([]*pb.BattleCard, 0)
 	)
 
 	for pos, cardId := range cardIds {
@@ -260,7 +260,7 @@ func (h *BattleHandler) buildBattleCards(cardIds []int32, playerLevelData *cmd.P
 			return cardList
 		}
 
-		bCard := &cmd.BattleCard{
+		bCard := &pb.BattleCard{
 			Pos:      int32(pos),
 			CardInfo: h.actor.CardHandler.ToClientData(card),
 			CardHp:   cardHp,
@@ -273,9 +273,9 @@ func (h *BattleHandler) buildBattleCards(cardIds []int32, playerLevelData *cmd.P
 	return cardList
 }
 
-func (h *BattleHandler) buildBattleFoods(troopType cmd.CardTroopType, playerLevelData *cmd.PlayerLevelData) []*cmd.KeyValueItem {
+func (h *BattleHandler) buildBattleFoods(troopType pb.CardTroopType, playerLevelData *pb.PlayerLevelData) []*pb.KeyValueItem {
 	var (
-		foodList = make([]*cmd.KeyValueItem, 0)
+		foodList = make([]*pb.KeyValueItem, 0)
 	)
 
 	// 食物列表
@@ -288,7 +288,7 @@ func (h *BattleHandler) buildBattleFoods(troopType cmd.CardTroopType, playerLeve
 			continue
 		}
 		// 要是UseFoods有记录，就取useFoods 里的数量
-		if troopType == cmd.CardTroopType_CardTroopType_Normal {
+		if troopType == pb.CardTroopType_CardTroopType_Normal {
 			markItemNum := GetMarkItemNum(playerLevelData, foodId)
 			item.Value = utils.Min(item.Value, markItemNum)
 			h.Debug("传入战斗校验的食物数量:", foodId, item.Value)
@@ -299,7 +299,7 @@ func (h *BattleHandler) buildBattleFoods(troopType cmd.CardTroopType, playerLeve
 	return foodList
 }
 
-func GetMarkItemNum(playerLevelData *cmd.PlayerLevelData, foodId int32) int32 {
+func GetMarkItemNum(playerLevelData *pb.PlayerLevelData, foodId int32) int32 {
 	maxFoodNum := excel.GetConfigMgr().GetCfg().FOOD_BATTLEUSE_LIMIT
 	if playerLevelData != nil {
 		for _, v := range playerLevelData.UseFoods {

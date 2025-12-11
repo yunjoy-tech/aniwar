@@ -13,7 +13,7 @@ import (
 
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common"
 	excel "gitlab.musadisca-games.com/wangxw/aniwar/src/excel/data"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 )
 
 type ConsumeMgr struct {
@@ -33,7 +33,7 @@ func GetConsumeMgr(userActor *UserActor) *ConsumeMgr {
 }
 
 // 已经过期了
-func hasExpiration(item *cmd.PCommonItemInfo) bool {
+func hasExpiration(item *pb.PCommonItemInfo) bool {
 	if item.ExpirationTimestamp == 0 {
 		return false
 	}
@@ -103,7 +103,7 @@ func (m *ConsumeMgr) doConsumeByUniqueId(uniqueId uint64, costNum uint32, common
 	return err
 }
 
-func (m *ConsumeMgr) ConsumeKeyValItemList(items []*cmd.KeyValueItem, commonData *clidto.Comdata, reason common.ChangeReason) error {
+func (m *ConsumeMgr) ConsumeKeyValItemList(items []*pb.KeyValueItem, commonData *clidto.Comdata, reason common.ChangeReason) error {
 	itemList := utils.ConvertItem(items)
 	return m.ConsumeList(itemList, commonData, reason)
 }
@@ -147,15 +147,15 @@ func (m *ConsumeMgr) doConsume(itemCfg *excel.ItemCfg, costNum uint32, commonDat
 		err error
 	)
 
-	switch cmd.ItemType(itemCfg.Type) {
-	case cmd.ItemType_Currency:
+	switch pb.ItemType(itemCfg.Type) {
+	case pb.ItemType_Currency:
 		err = m.actor.CurrencyHandler.SubCurrency(itemCfg.ItemId, int64(costNum), commonData, reason)
 
-	case cmd.ItemType_Consumable,
-		cmd.ItemType_Material,
-		cmd.ItemType_Food,
-		cmd.ItemType_Gift,
-		cmd.ItemType_Quest:
+	case pb.ItemType_Consumable,
+		pb.ItemType_Material,
+		pb.ItemType_Food,
+		pb.ItemType_Gift,
+		pb.ItemType_Quest:
 		costItem, exchangeRewards, errx := m.actor.SubItems(uint64(itemCfg.ItemId), costNum, m.actor.uid, reason)
 		err = errx
 		if err == nil {
@@ -163,7 +163,7 @@ func (m *ConsumeMgr) doConsume(itemCfg *excel.ItemCfg, costNum uint32, commonDat
 			err = m.actor.BagHandler.SaveDB()
 			m.ExchangeRewards = append(m.ExchangeRewards, exchangeRewards...)
 		}
-	case cmd.ItemType_Stamina:
+	case pb.ItemType_Stamina:
 		err = m.actor.PlayerLevelHandler.SubStamina(int32(costNum), commonData, reason)
 
 	default:
@@ -171,7 +171,7 @@ func (m *ConsumeMgr) doConsume(itemCfg *excel.ItemCfg, costNum uint32, commonDat
 	}
 
 	// 特殊道具消耗
-	if itemCfg.Type == int32(cmd.ItemType_Food) {
+	if itemCfg.Type == int32(pb.ItemType_Food) {
 		errx := m.actor.eventManager.SyncPublish(event.NewBasicEvent(TASK_EVENT_USE_FOOD, []int32{TASK_TYPE_111}, map[string]interface{}{
 			"count": int32(costNum),
 		}))
@@ -243,7 +243,7 @@ func (m *ConsumeMgr) CheckKeyValEnough(items []*excel.KeyVal) bool {
 	return true
 }
 
-func (m *ConsumeMgr) CheckKeyValItemEnough(items []*cmd.KeyValueItem) bool {
+func (m *ConsumeMgr) CheckKeyValItemEnough(items []*pb.KeyValueItem) bool {
 	for _, kv := range items {
 		if !m.CheckEnough(kv.Key, kv.Value) {
 			return false
@@ -271,20 +271,20 @@ func (m *ConsumeMgr) CheckEnough(costId, costNum int32) bool {
 	}
 
 	switch cfg.Type {
-	case int32(cmd.ItemType_Currency):
+	case int32(pb.ItemType_Currency):
 		return m.actor.CurrencyHandler.CheckEnough(cfg.ItemId, int64(costNum))
 
-	case int32(cmd.ItemType_Consumable),
-		int32(cmd.ItemType_Material),
-		int32(cmd.ItemType_Food),
-		int32(cmd.ItemType_Gift),
-		int32(cmd.ItemType_Quest):
+	case int32(pb.ItemType_Consumable),
+		int32(pb.ItemType_Material),
+		int32(pb.ItemType_Food),
+		int32(pb.ItemType_Gift),
+		int32(pb.ItemType_Quest):
 		itemInfo := m.actor.GetUserItems().Items[uint64(costId)]
 		if itemInfo != nil && !hasExpiration(itemInfo) && int32(itemInfo.ItemNum) >= costNum {
 			return true
 		}
 
-	case int32(cmd.ItemType_Stamina):
+	case int32(pb.ItemType_Stamina):
 		return m.actor.PlayerLevelHandler.CheckStaminaEnough(costNum)
 
 	default:

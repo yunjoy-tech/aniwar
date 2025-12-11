@@ -14,7 +14,7 @@ import (
 
 	"github.com/dapr/go-sdk/service/common"
 	"github.com/gin-gonic/gin"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/metrics"
@@ -30,7 +30,7 @@ func NewBillServer() base.IServer {
 	srv.AppId = "bill"
 	srv.InAddr = ":28001"
 	srv.GRPCPort = "50001"
-	srv.HasPriTopic = true //开启私有频道订阅
+	srv.HasPriTopic = true // 开启私有频道订阅
 	srv.OnPreInit = srv.PreInit
 	srv.OnServerInit = srv.ServerInit
 	srv.OnEventHandler = srv.EventHandler
@@ -65,12 +65,12 @@ func (s *BillServer) ServerInit() error {
 	s.LiveTime = time.Now().Unix() // 创建server时间戳
 	// 服务启动埋点
 	taptap.ServiceStart(s.AppId, global.APP_VERSION, "", global.ROLLING_VERSION, "billserver")
-	//if err := s.Server.LoadExcel(); err != nil {
+	// if err := s.Server.LoadExcel(); err != nil {
 	//	return err
-	//}
-	//if err := excel.GetShopGiftMgr().LoadByFileName(s.DataDir, excel.GetShopGiftMgr().GetDataFileName()); err != nil {
+	// }
+	// if err := excel.GetShopGiftMgr().LoadByFileName(s.DataDir, excel.GetShopGiftMgr().GetDataFileName()); err != nil {
 	//	return err
-	//}
+	// }
 	return nil
 }
 
@@ -117,7 +117,7 @@ func (s *BillServer) InvokeHandler(ctx context.Context, in *common.InvocationEve
 		DataTypeURL: in.DataTypeURL,
 	}
 
-	req := &cmd.RpcCallReq{}
+	req := &pb.RpcCallReq{}
 	if err := json.Unmarshal(in.Data, req); err != nil {
 		logger.Debug("C2SMsg - Unmarshal error")
 	}

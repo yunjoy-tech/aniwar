@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/dapr/go-sdk/service/common"
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/db"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
 	"strings"
@@ -12,9 +12,9 @@ import (
 
 func (s *LobbyServer) AddSystemMail(msg *base.ProtoMsg) (*common.Content, error) {
 	messageID, uid, roleId, uaid := msg.MsgId, msg.UserId, msg.RoleId, msg.UAID
-	req := &cmd.S2S_SendGMAddMailReq{}
+	req := &pb.S2S_SendGMAddMailReq{}
 	if err := msg.UnmarshalData(req); err != nil {
-		logger.Debug("proto.Unmarshal error: msgId:", cmd.Protocols(messageID), messageID)
+		logger.Debug("proto.Unmarshal error: msgId:", pb.Protocols(messageID), messageID)
 		return nil, err
 	}
 	if err := s.addSystemMail(req.AddMail); err != nil {
@@ -28,20 +28,20 @@ func (s *LobbyServer) CheckSystemMailReq(msg *base.ProtoMsg) (*common.Content, e
 
 	messageID, uid, roleId, uaid := msg.MsgId, msg.UserId, msg.RoleId, msg.UAID
 
-	var req cmd.AS2LS_CheckSystemMailReq
+	var req pb.AS2LS_CheckSystemMailReq
 	if err := msg.UnmarshalData(&req); err != nil {
-		logger.Debug("proto.Unmarshal error: msgId:", cmd.Protocols(messageID), messageID)
+		logger.Debug("proto.Unmarshal error: msgId:", pb.Protocols(messageID), messageID)
 		return nil, err
 	}
 
-	sysMails := &cmd.PSystemMailInfo{}
+	sysMails := &pb.PSystemMailInfo{}
 	err := s.LoadDB(db.KeySystemMail(), sysMails)
 	if err != nil {
 		return nil, fmt.Errorf("mail get redis err. %v", err)
 	}
 
 	// check
-	add := make([]*cmd.PSysMailInfo, 0)
+	add := make([]*pb.PSysMailInfo, 0)
 	var max int64
 	if sysMails.SystemMail != nil {
 		if req.CurValue < sysMails.Max {
@@ -81,13 +81,13 @@ func (s *LobbyServer) CheckSystemMailReq(msg *base.ProtoMsg) (*common.Content, e
 		}
 	}
 
-	res := &cmd.AS2LS_CheckSystemMailRes{AddMails: add, MaxValue: max}
-	return s.sendPacket(uid, roleId, uaid, int32(cmd.Protocols_PAS2LS_CheckSystemMailRes), res)
+	res := &pb.AS2LS_CheckSystemMailRes{AddMails: add, MaxValue: max}
+	return s.sendPacket(uid, roleId, uaid, int32(pb.Protocols_PAS2LS_CheckSystemMailRes), res)
 }
 
 // 新增系统邮件
-func (s *LobbyServer) addSystemMail(mail *cmd.PSysMailInfo) error {
-	sysMails := &cmd.PSystemMailInfo{}
+func (s *LobbyServer) addSystemMail(mail *pb.PSysMailInfo) error {
+	sysMails := &pb.PSystemMailInfo{}
 	err := s.LoadDB(db.KeySystemMail(), sysMails)
 	if err != nil {
 		return fmt.Errorf("mail get redis err")
@@ -95,7 +95,7 @@ func (s *LobbyServer) addSystemMail(mail *cmd.PSysMailInfo) error {
 
 	// 容错处理
 	if sysMails.SystemMail == nil {
-		sysMails.SystemMail = make(map[int64]*cmd.PSysMailInfo)
+		sysMails.SystemMail = make(map[int64]*pb.PSysMailInfo)
 	}
 
 	// 初始化邮件

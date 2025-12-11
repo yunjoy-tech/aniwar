@@ -10,7 +10,7 @@ import (
 
 	"github.com/dapr/go-sdk/service/common"
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/utils"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/baseconf"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/errorx"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
@@ -31,7 +31,7 @@ func (s *LoginServer) OnHttp(ctx context.Context, in *common.InvocationEvent) (o
 	logger.Infof("OnLogin [LoginStep] ContentType:%s, Verb:%s, QueryString:%s, len:%s", in.ContentType, in.Verb, in.QueryString, len(in.Data))
 
 	curTime := time.Now()
-	//白名单校验 TODO
+	// 白名单校验 TODO
 	ip, err := utils.GetIP(in.Request)
 	if err != nil {
 		logger.Warn("OnLogin get ip failed. ", err.Error())
@@ -47,13 +47,13 @@ func (s *LoginServer) OnHttp(ctx context.Context, in *common.InvocationEvent) (o
 
 	clientVersion := in.Request.Header.Get("client-version")
 	platform := in.Request.Header.Get("platform")
-	//客户端版本验证
+	// 客户端版本验证
 	if conf.GConf().Base.VersionCheck {
 		logger.Infof("VersionCheck clientVersion:%s", clientVersion)
 		err = s.VersionCheckExt(platform, clientVersion)
 		if err != nil {
 			logger.Warnf("VersionCheck error:%s", err.Error())
-			out.Data = s.ErrorPack(cmd.ErrorCode_VersionLimit)
+			out.Data = s.ErrorPack(pb.ErrorCode_VersionLimit)
 			return out, nil
 		}
 	}
@@ -77,8 +77,8 @@ func (s *LoginServer) OnHttp(ctx context.Context, in *common.InvocationEvent) (o
 	}
 
 	res := s.handleLoginReq(&Msg{msgId: messageId, Data: data, ClientIp: ip})
-	if res.ErrCode == int32(cmd.ErrorCode_Success) {
-		data, err = s.Pack(cmd.Protocols_PLS2C_LoginRes, cmd.ErrorCode_Success, res, "")
+	if res.ErrCode == int32(pb.ErrorCode_Success) {
+		data, err = s.Pack(pb.Protocols_PLS2C_LoginRes, pb.ErrorCode_Success, res, "")
 		delayTime := time.Since(curTime).Milliseconds()
 		metrics.HistogramPut(metrics.LoginDelayHist, delayTime, metrics.Delay)
 		logger.Debugf("===>>>OnLoginDelay, uid:%s, delay:%d, len:%v", res.AccountId, delayTime, len(data))
@@ -86,7 +86,7 @@ func (s *LoginServer) OnHttp(ctx context.Context, in *common.InvocationEvent) (o
 		taptap.LoginDelayComm(res.AccountId, nil, nil, messageId, delayTime)
 
 	} else {
-		data, err = s.Pack(cmd.Protocols_PS2C_ErrorCodeNtf, cmd.ErrorCode(res.ErrCode), &cmd.S2C_ErrorCodeNtf{ErrorCode: uint32(res.ErrCode), Param: []string{strconv.Itoa(int(res.ErrCode))}}, "")
+		data, err = s.Pack(pb.Protocols_PS2C_ErrorCodeNtf, pb.ErrorCode(res.ErrCode), &pb.S2C_ErrorCodeNtf{ErrorCode: uint32(res.ErrCode), Param: []string{strconv.Itoa(int(res.ErrCode))}}, "")
 	}
 	if err != nil {
 		logger.Warnf("OnLogin res pack err: %s", errorx.Wrap(err).Error())

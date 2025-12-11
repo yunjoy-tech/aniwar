@@ -14,13 +14,13 @@ import (
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common"
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/clidto"
 	excel "gitlab.musadisca-games.com/wangxw/aniwar/src/excel/data"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
 	"google.golang.org/protobuf/proto"
 )
 
 type ItemUseFunc = func(*clidto.Comdata, int32, int32) error
-type ItemUseCheckFunc = func(int32, int32) cmd.ErrorCode
+type ItemUseCheckFunc = func(int32, int32) pb.ErrorCode
 
 type BagHandler struct {
 	*UABaseHandler
@@ -36,10 +36,10 @@ func NewBagHandler(actor *UserActor) *BagHandler {
 	}
 	h.ChildHandler = h
 
-	h.actor.RegisterProtoHandler(int32(cmd.Protocols_PC2LS_UseItemReq), h.UseItemReq)                     // 使用道具
-	h.actor.RegisterProtoHandler(int32(cmd.Protocols_PLS2S_DestroyExpireItemReq), h.DestroyExpireItemReq) // 销毁过期道具
-	h.actor.RegisterProtoHandler(int32(cmd.Protocols_PC2LS_ItemBuyReq), h.ItemBuyReq)                     // 购买道具
-	h.actor.RegisterProtoHandler(int32(cmd.Protocols_PS2S_ReduceUserItemReq), h.ReduceUserItem)           // gm 扣除道具
+	h.actor.RegisterProtoHandler(int32(pb.Protocols_PC2LS_UseItemReq), h.UseItemReq)                     // 使用道具
+	h.actor.RegisterProtoHandler(int32(pb.Protocols_PLS2S_DestroyExpireItemReq), h.DestroyExpireItemReq) // 销毁过期道具
+	h.actor.RegisterProtoHandler(int32(pb.Protocols_PC2LS_ItemBuyReq), h.ItemBuyReq)                     // 购买道具
+	h.actor.RegisterProtoHandler(int32(pb.Protocols_PS2S_ReduceUserItemReq), h.ReduceUserItem)           // gm 扣除道具
 
 	return h
 }
@@ -47,9 +47,9 @@ func NewBagHandler(actor *UserActor) *BagHandler {
 // Init 初始化模块数据
 func (h *BagHandler) Init() error {
 	// 初始化
-	h.actor.Data.ItemData = &cmd.PCommonItemInfos{
+	h.actor.Data.ItemData = &pb.PCommonItemInfos{
 		Createtime: time.Now().Unix(),
-		Items:      make(map[uint64]*cmd.PCommonItemInfo),
+		Items:      make(map[uint64]*pb.PCommonItemInfo),
 	}
 
 	// 保存
@@ -71,7 +71,7 @@ func (h *BagHandler) DailyRefresh() error {
 }
 
 func (h *BagHandler) SetDBData(dbData proto.Message) error {
-	if dbVal, ok := dbData.(*cmd.PCommonItemInfos); ok {
+	if dbVal, ok := dbData.(*pb.PCommonItemInfos); ok {
 		h.actor.Data.ItemData = dbVal
 	} else {
 		return fmt.Errorf("SetDBData, 数据类型错误! %v", dbData)
@@ -90,30 +90,30 @@ func (h *BagHandler) tryInitMap() {
 		return
 	}
 	// 注册使用道具方法
-	h.UseHandlerMap[int32(cmd.ItemType_Consumable)*100+int32(cmd.ItemConsumableType_StaminaWater)] = h.actor.PlayerLevelHandler.useStaminaItem
+	h.UseHandlerMap[int32(pb.ItemType_Consumable)*100+int32(pb.ItemConsumableType_StaminaWater)] = h.actor.PlayerLevelHandler.useStaminaItem
 	// 注册前置校验方法
-	h.CheckHandlerMap[int32(cmd.ItemType_Consumable)*100+int32(cmd.ItemConsumableType_StaminaWater)] = h.actor.PlayerLevelHandler.useStaminaItemCheck
+	h.CheckHandlerMap[int32(pb.ItemType_Consumable)*100+int32(pb.ItemConsumableType_StaminaWater)] = h.actor.PlayerLevelHandler.useStaminaItemCheck
 	h.Debugf("tryInitMap init==== %s", h.actor.ID())
 }
 
 // UseItemReq 使用道具
 func (h *BagHandler) UseItemReq(_ context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
-	var req cmd.C2LS_UseItemReq
+	var req pb.C2LS_UseItemReq
 	if err := in.UnmarshalData(&req); err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
 	// 检查配置
 	itemCfg := excel.GetItemMgr().GetById(int32(req.ItemId))
 	if itemCfg == nil {
-		return nil, fmt.Errorf("item config not found"), int32(cmd.ErrorCode_NotFoundConfig)
+		return nil, fmt.Errorf("item config not found"), int32(pb.ErrorCode_NotFoundConfig)
 	}
 	costItem := make(map[int32]int32)
 	costItem[int32(req.ItemId)] = int32(req.ItemNum)
 	consumeMgr := GetConsumeMgr(h.actor)
 	// 检查道具是否充足
 	if int32(req.ItemNum) <= 0 && !consumeMgr.CheckMapEnough(costItem) {
-		return nil, fmt.Errorf("item not enough"), int32(cmd.ErrorCode_NotEnoughItem)
+		return nil, fmt.Errorf("item not enough"), int32(pb.ErrorCode_NotEnoughItem)
 	}
 	h.tryInitMap()
 	// 取注册的执行逻辑
@@ -121,25 +121,25 @@ func (h *BagHandler) UseItemReq(_ context.Context, in *base.ProtoMsg) (proto.Mes
 	useFunc := h.UseHandlerMap[k]
 	checkFunc := h.CheckHandlerMap[k]
 	if useFunc == nil || checkFunc == nil {
-		return nil, fmt.Errorf("item use func not implemented %d", k), int32(cmd.ErrorCode_InternalError)
+		return nil, fmt.Errorf("item use func not implemented %d", k), int32(pb.ErrorCode_InternalError)
 	}
 
 	// 校验方法执行
 	code := checkFunc(int32(req.ItemId), int32(req.ItemNum))
-	if code != cmd.ErrorCode_Success {
+	if code != pb.ErrorCode_Success {
 		return nil, fmt.Errorf("item check failed"), int32(code)
 	}
 
 	// 扣除道具
 	err := consumeMgr.doConsume(itemCfg, req.ItemNum, h.actor.comData, common.CR_UseItem)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
 	// 执行其他逻辑
 	err = useFunc(h.actor.comData, int32(req.ItemId), int32(req.ItemNum))
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
 	// 埋点log
@@ -159,24 +159,24 @@ func (h *BagHandler) UseItemReq(_ context.Context, in *base.ProtoMsg) (proto.Mes
 		taptap.WriteDataLog(taptap.LogType_UseItem, h.actor.uid, h.actor.Account.TapUserInfo, e)
 	})
 
-	return &cmd.LS2C_UseItemRes{ErrCode: cmd.ErrorCode_Success, CommonData: h.actor.comData.FixDownComData()}, nil, 0
+	return &pb.LS2C_UseItemRes{ErrCode: pb.ErrorCode_Success, CommonData: h.actor.comData.FixDownComData()}, nil, 0
 }
 
 func (h *BagHandler) DestroyExpireItemReq(_ context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
-	var req cmd.C2LS_DestroyExpireItemReq
+	var req pb.C2LS_DestroyExpireItemReq
 	if err := in.UnmarshalData(&req); err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
 	// 检查是否过期, 过期了才销毁
 	for _, uniqueId := range req.ItemUniqueIds {
 		target := h.actor.GetUserItems().Items[uniqueId]
 		if target == nil {
-			return nil, fmt.Errorf("not found item %d", uniqueId), int32(cmd.ErrorCode_NotFoundItem)
+			return nil, fmt.Errorf("not found item %d", uniqueId), int32(pb.ErrorCode_NotFoundItem)
 		}
 
 		if !hasExpiration(target) {
-			return nil, fmt.Errorf("item not expire %d", target.ExpirationTimestamp), int32(cmd.ErrorCode_Had_Not_Expiration)
+			return nil, fmt.Errorf("item not expire %d", target.ExpirationTimestamp), int32(pb.ErrorCode_Had_Not_Expiration)
 		}
 	}
 
@@ -189,18 +189,18 @@ func (h *BagHandler) DestroyExpireItemReq(_ context.Context, in *base.ProtoMsg) 
 
 	_, err = GetDropMgr(h.actor).DropListByItems(consumeMgr.ExchangeRewards, true, nil, h.actor.comData, common.CR_Destroy_EXP_ITEM)
 
-	return &cmd.LS2C_DestroyExpireItemRes{ErrCode: cmd.ErrorCode_Success, CommonData: h.actor.comData.FixDownComData()}, nil, 0
+	return &pb.LS2C_DestroyExpireItemRes{ErrCode: pb.ErrorCode_Success, CommonData: h.actor.comData.FixDownComData()}, nil, 0
 }
 
 func (h *BagHandler) ItemBuyReq(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
 
-	var req cmd.C2LS_ItemBuyReq
+	var req pb.C2LS_ItemBuyReq
 	if err := in.UnmarshalData(&req); err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
 	if len(req.Items) == 0 {
-		return &cmd.LS2C_ItemBuyRes{}, nil, 0
+		return &pb.LS2C_ItemBuyRes{}, nil, 0
 	}
 
 	needItem := make(map[int32]int32)
@@ -209,7 +209,7 @@ func (h *BagHandler) ItemBuyReq(ctx context.Context, in *base.ProtoMsg) (proto.M
 	for _, v := range req.Items {
 		cfg := excel.GetDirectPurchaseMgr().GetById(v.Key)
 		if cfg == nil || v.Value <= 0 {
-			return nil, fmt.Errorf("param error"), int32(cmd.ErrorCode_ParamError)
+			return nil, fmt.Errorf("param error"), int32(pb.ErrorCode_ParamError)
 		}
 		needItem[v.Key] = v.Value
 		costItem[cfg.Price.Key] = cfg.Price.Val * v.Value
@@ -217,19 +217,19 @@ func (h *BagHandler) ItemBuyReq(ctx context.Context, in *base.ProtoMsg) (proto.M
 
 	// 货币是否足够
 	if !GetConsumeMgr(h.actor).CheckMapEnough(costItem) {
-		return nil, fmt.Errorf("item not enough"), int32(cmd.ErrorCode_CurrencyNotEnough)
+		return nil, fmt.Errorf("item not enough"), int32(pb.ErrorCode_CurrencyNotEnough)
 	}
 
 	// 扣除货币
 	err := GetConsumeMgr(h.actor).ConsumeList(costItem, h.actor.comData, common.CR_BuyItem)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
 	// 发道具
 	_, err = GetDropMgr(h.actor).DropList2(needItem, true, nil, h.actor.comData, common.CR_BuyItem)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
 	for _, v := range req.Items {
@@ -256,38 +256,38 @@ func (h *BagHandler) ItemBuyReq(ctx context.Context, in *base.ProtoMsg) (proto.M
 		})
 	}
 
-	return &cmd.LS2C_ItemBuyRes{CommonData: h.actor.comData.FixDownComData()}, nil, 0
+	return &pb.LS2C_ItemBuyRes{CommonData: h.actor.comData.FixDownComData()}, nil, 0
 }
 
 func (h *BagHandler) ReduceUserItem(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
-	var req cmd.S2S_ReduceUserItemReq
+	var req pb.S2S_ReduceUserItemReq
 	err := in.UnmarshalData(&req)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
 	// 道具消耗check
 	if !GetConsumeMgr(h.actor).CheckEnough(req.GetItemId(), req.GetNum()) {
-		return nil, fmt.Errorf("item not enough"), int32(cmd.ErrorCode_NotEnoughItem)
+		return nil, fmt.Errorf("item not enough"), int32(pb.ErrorCode_NotEnoughItem)
 	}
 
 	// 扣除道具
 	err = GetConsumeMgr(h.actor).ConsumeList(map[int32]int32{req.GetItemId(): req.GetNum()}, h.actor.comData, common.CR_GM)
 	if err != nil {
 		h.Error("ConsumeList err:", err)
-		return nil, fmt.Errorf("item not enough"), int32(cmd.ErrorCode_InternalError)
+		return nil, fmt.Errorf("item not enough"), int32(pb.ErrorCode_InternalError)
 	}
-	rsp := &cmd.S2S_ReduceUserItemRes{}
+	rsp := &pb.S2S_ReduceUserItemRes{}
 
-	return rsp, nil, int32(cmd.ErrorCode_Success)
+	return rsp, nil, int32(pb.ErrorCode_Success)
 }
 
 // 推送真实的道具数据
-func (h *BagHandler) buildItemList() []*cmd.PCommonItemInfo {
+func (h *BagHandler) buildItemList() []*pb.PCommonItemInfo {
 	userItems := h.actor.UserData.GetUserItems().Items
-	items := make([]*cmd.PCommonItemInfo, 0)
+	items := make([]*pb.PCommonItemInfo, 0)
 	for _, info := range userItems {
-		items = append(items, &cmd.PCommonItemInfo{
+		items = append(items, &pb.PCommonItemInfo{
 			BaseId:              info.BaseId,
 			UniqueId:            info.UniqueId,
 			ItemNum:             info.ItemNum,
@@ -298,11 +298,11 @@ func (h *BagHandler) buildItemList() []*cmd.PCommonItemInfo {
 	return items
 }
 
-// func (h *BagHandler) GetItemValueById(itemId int32) []*cmd.KeyValueItem {
+// func (h *BagHandler) GetItemValueById(itemId int32) []*pb.KeyValueItem {
 //	return h.GetItemValue([]int32{itemId})
 // }
 
-func (h *BagHandler) GetItemValueById(itemId int32) *cmd.KeyValueItem {
+func (h *BagHandler) GetItemValueById(itemId int32) *pb.KeyValueItem {
 	items := h.GetItemValueByIds(itemId)
 	if len(items) <= 0 {
 		// 没有数据
@@ -312,11 +312,11 @@ func (h *BagHandler) GetItemValueById(itemId int32) *cmd.KeyValueItem {
 	return items[0]
 }
 
-func (h *BagHandler) GetItemValueByIds(items ...int32) []*cmd.KeyValueItem {
-	result := make([]*cmd.KeyValueItem, 0, len(items))
+func (h *BagHandler) GetItemValueByIds(items ...int32) []*pb.KeyValueItem {
+	result := make([]*pb.KeyValueItem, 0, len(items))
 
 	for _, itemId := range items {
-		temp := &cmd.KeyValueItem{
+		temp := &pb.KeyValueItem{
 			Key:   itemId,
 			Value: h.GetItemNum(itemId),
 		}
@@ -334,7 +334,7 @@ func (h *BagHandler) GetItemNum(itemId int32) int32 {
 	return 0
 }
 
-func (h *BagHandler) GetItemByUniqueId(uniqueId uint64) *cmd.PCommonItemInfo {
+func (h *BagHandler) GetItemByUniqueId(uniqueId uint64) *pb.PCommonItemInfo {
 	item := h.actor.GetUserItems().Items[uniqueId]
 	if item != nil {
 		return item
@@ -344,10 +344,10 @@ func (h *BagHandler) GetItemByUniqueId(uniqueId uint64) *cmd.PCommonItemInfo {
 }
 
 // GetMulItemNum 获取多个道具的数量
-func (h *BagHandler) GetMulItemNum(itemIds []int32) []*cmd.KeyValueItem {
-	items := make([]*cmd.KeyValueItem, 0, len(itemIds))
+func (h *BagHandler) GetMulItemNum(itemIds []int32) []*pb.KeyValueItem {
+	items := make([]*pb.KeyValueItem, 0, len(itemIds))
 	for _, id := range itemIds {
-		items = append(items, &cmd.KeyValueItem{
+		items = append(items, &pb.KeyValueItem{
 			Key:   id,
 			Value: h.GetItemNum(id),
 		})

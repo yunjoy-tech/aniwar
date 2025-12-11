@@ -1,7 +1,7 @@
 package taptap
 
 import (
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 )
 
 // 系统字段定义
@@ -194,12 +194,12 @@ type MailDelete struct {
 // 完成剧情物件交互(completequestobject)
 type CompleteQuestObject struct {
 	*PropertyFieldInfo
-	ObjectId       int32  `json:"#object_id"`                 //物件配置id
-	StepId         int32  `json:"#step_id"`                   //对应的步骤id
-	QuestId        int32  `json:"#quest_id"`                  //对应的任务id
-	CompleteQuest  string `json:"#complete_quest,omitempty"`  //完成的任务id列表 []int32
-	CompleteStep   string `json:"#complete_step,omitempty"`   //当前任务完成的步骤id列表 []int32
-	CompleteObject string `json:"#complete_object,omitempty"` //当前步骤完成的物件id列表 []int32
+	ObjectId       int32  `json:"#object_id"`                 // 物件配置id
+	StepId         int32  `json:"#step_id"`                   // 对应的步骤id
+	QuestId        int32  `json:"#quest_id"`                  // 对应的任务id
+	CompleteQuest  string `json:"#complete_quest,omitempty"`  // 完成的任务id列表 []int32
+	CompleteStep   string `json:"#complete_step,omitempty"`   // 当前任务完成的步骤id列表 []int32
+	CompleteObject string `json:"#complete_object,omitempty"` // 当前步骤完成的物件id列表 []int32
 }
 
 // 卡牌突破
@@ -238,17 +238,17 @@ type CardCharacterBreak struct {
 // 体力恢复
 type CardEatFood struct {
 	*PropertyFieldInfo
-	CardId   uint32              `json:"#card_id"`   // 突破卡牌id
-	Items    []*cmd.KeyValueItem `json:"#items"`     // 使用的食物道具列表
-	BeforeHp uint32              `json:"#before_hp"` // 喂养前的体力值
-	AfterHp  uint32              `json:"#after_hp"`  // 喂养后的体力值
+	CardId   uint32             `json:"#card_id"`   // 突破卡牌id
+	Items    []*pb.KeyValueItem `json:"#items"`     // 使用的食物道具列表
+	BeforeHp uint32             `json:"#before_hp"` // 喂养前的体力值
+	AfterHp  uint32             `json:"#after_hp"`  // 喂养后的体力值
 }
 
 // 卡牌升级
 type CardLevelUp struct {
 	*PropertyFieldInfo
 	CardId   int32  `json:"#card_id"`         // 突破卡牌id
-	Items    string `json:"#items,omitempty"` // 使用的食物道具列表 []*cmd.KeyValueItem
+	Items    string `json:"#items,omitempty"` // 使用的食物道具列表 []*pb.KeyValueItem
 	AddExp   int32  `json:"#add_exp"`         // 本次增加的经验值
 	BeforeLv uint32 `json:"#before_lv"`       // 升级前等级
 	AfterLv  uint32 `json:"#after_lv"`        // 升级后等级
@@ -364,11 +364,11 @@ type UseItem struct {
 // 销毁过期道具(destroyexpireitem)
 type DestroyExpireItem struct {
 	*PropertyFieldInfo
-	Id       int64  `json:"#id"`                 //唯一id
-	ItemId   int32  `json:"#com_item_id"`        //销毁道具配置id
-	ItemNum  int32  `json:"#item_num"`           //销毁数量
-	Expire   int64  `json:"#expire"`             //过期时间戳
-	Exchange string `json:"#exchange,omitempty"` //补偿道具列表 map[int32]int32
+	Id       int64  `json:"#id"`                 // 唯一id
+	ItemId   int32  `json:"#com_item_id"`        // 销毁道具配置id
+	ItemNum  int32  `json:"#item_num"`           // 销毁数量
+	Expire   int64  `json:"#expire"`             // 过期时间戳
+	Exchange string `json:"#exchange,omitempty"` // 补偿道具列表 map[int32]int32
 }
 
 // 购买道具(itembuy)
@@ -383,18 +383,18 @@ type ItemBuy struct {
 // 道具兑换货币(currencyexchange)
 type CurrencyExchange struct {
 	*PropertyFieldInfo
-	MoneyType   int32  `json:"#money_type"`     //兑换的货币类型
-	Cost        string `json:"#cost,omitempty"` //消耗道具列表 map[uint64]uint32
-	ExchangeNum uint64 `json:"#exchange_num"`   //可兑换货币数量
+	MoneyType   int32  `json:"#money_type"`     // 兑换的货币类型
+	Cost        string `json:"#cost,omitempty"` // 消耗道具列表 map[uint64]uint32
+	ExchangeNum uint64 `json:"#exchange_num"`   // 可兑换货币数量
 }
 
 // 二级货币购买(currencybuy)
 type CurrencyBuy struct {
 	*PropertyFieldInfo
-	MoneyType   int32 `json:"#money_type"`   //购买的货币类型
-	ExchangeNum int32 `json:"#exchange_num"` //获得二级货币数量
-	CostType    int32 `json:"#cost_type"`    //消耗一级货币类型
-	CostNum     int32 `json:"#cost_num"`     //消耗一级货币数量
+	MoneyType   int32 `json:"#money_type"`   // 购买的货币类型
+	ExchangeNum int32 `json:"#exchange_num"` // 获得二级货币数量
+	CostType    int32 `json:"#cost_type"`    // 消耗一级货币类型
+	CostNum     int32 `json:"#cost_num"`     // 消耗一级货币数量
 }
 
 // 修改值日生(changedutycard)
@@ -407,171 +407,171 @@ type ChangeDutyCard struct {
 // 领取任务奖励(receivedailyreward)
 type ReceiveDailyReward struct {
 	*PropertyFieldInfo
-	TaskId   int32  `json:"#task_id"`          //任务id
-	TaskType int32  `json:"#task_type"`        //任务类型
-	CondId   int32  `json:"#cond_id"`          //完成条件类型
-	Target   int32  `json:"#target"`           //目标值
-	Active   int32  `json:"#active"`           //领取的活跃度
-	Reward   string `json:"#reward,omitempty"` //领取的奖励 map[int32]int32
+	TaskId   int32  `json:"#task_id"`          // 任务id
+	TaskType int32  `json:"#task_type"`        // 任务类型
+	CondId   int32  `json:"#cond_id"`          // 完成条件类型
+	Target   int32  `json:"#target"`           // 目标值
+	Active   int32  `json:"#active"`           // 领取的活跃度
+	Reward   string `json:"#reward,omitempty"` // 领取的奖励 map[int32]int32
 }
 
 // 领取活跃度奖励(receiveactivereward)
 type ReceiveActiveReward struct {
 	*PropertyFieldInfo
-	ActiveNode int32  `json:"#active_node"`      //待领取的活跃度节点值
-	ActiveType int32  `json:"#active_type"`      //活跃度类型
-	Reward     string `json:"#reward,omitempty"` //领取的奖励 map[int32]int32
+	ActiveNode int32  `json:"#active_node"`      // 待领取的活跃度节点值
+	ActiveType int32  `json:"#active_type"`      // 活跃度类型
+	Reward     string `json:"#reward,omitempty"` // 领取的奖励 map[int32]int32
 }
 
 // 修建建筑
 type MakeFuncBuilding struct {
 	*PropertyFieldInfo
-	ItemId       int32  `json:"#com_item_id"`    //功能建筑道具id
-	Id           int32  `json:"#id"`             //建筑唯一id
-	BuildingId   int64  `json:"#building_id"`    //建筑配置id
-	Lv           int32  `json:"#level"`          //建筑等级
-	BuildingType int32  `json:"#building_type"`  //建筑类型id
-	Costs        string `json:"#cost,omitempty"` //建造消耗材料 map[int32]int32
+	ItemId       int32  `json:"#com_item_id"`    // 功能建筑道具id
+	Id           int32  `json:"#id"`             // 建筑唯一id
+	BuildingId   int64  `json:"#building_id"`    // 建筑配置id
+	Lv           int32  `json:"#level"`          // 建筑等级
+	BuildingType int32  `json:"#building_type"`  // 建筑类型id
+	Costs        string `json:"#cost,omitempty"` // 建造消耗材料 map[int32]int32
 }
 
 // 建筑升级
 type BuildingLevelUp struct {
 	*PropertyFieldInfo
-	Id           int32  `json:"#id"`             //建筑唯一id
-	BuildingId   int64  `json:"#building_id"`    //建筑配置id
-	BuildingType int32  `json:"#building_type"`  //建筑类型id
-	Costs        string `json:"#cost,omitempty"` //建造消耗材料 map[int32]int32
-	BeforeLv     int32  `json:"#before_lv"`      //升级前等级
-	AfterLv      int32  `json:"#after_lv"`       //升级后等级
+	Id           int32  `json:"#id"`             // 建筑唯一id
+	BuildingId   int64  `json:"#building_id"`    // 建筑配置id
+	BuildingType int32  `json:"#building_type"`  // 建筑类型id
+	Costs        string `json:"#cost,omitempty"` // 建造消耗材料 map[int32]int32
+	BeforeLv     int32  `json:"#before_lv"`      // 升级前等级
+	AfterLv      int32  `json:"#after_lv"`       // 升级后等级
 }
 
 // 熔炉熔炼
 type CampFurnaceoPerate struct {
 	*PropertyFieldInfo
-	Id         int32  `json:"#id"`                //建筑唯一id
-	BuildingId int64  `json:"#building_id"`       //建筑id
-	Lv         int32  `json:"#level"`             //建筑等级
-	Formula    string `json:"#formula,omitempty"` //熔炼产出材料 []*cmd.PPlayerCampFunctionBuildingFormula
-	StartTs    int64  `json:"#start_ts"`          //队列开始时间戳
-	EndTs      int64  `json:"#end_ts"`            //队列结束时间戳
-	Costs      string `json:"#cost,omitempty"`    //建造消耗材料   map[int32]int32
-	QueueId    int64  `json:"#queue_id"`          //队列id
+	Id         int32  `json:"#id"`                // 建筑唯一id
+	BuildingId int64  `json:"#building_id"`       // 建筑id
+	Lv         int32  `json:"#level"`             // 建筑等级
+	Formula    string `json:"#formula,omitempty"` // 熔炼产出材料 []*pb.PPlayerCampFunctionBuildingFormula
+	StartTs    int64  `json:"#start_ts"`          // 队列开始时间戳
+	EndTs      int64  `json:"#end_ts"`            // 队列结束时间戳
+	Costs      string `json:"#cost,omitempty"`    // 建造消耗材料   map[int32]int32
+	QueueId    int64  `json:"#queue_id"`          // 队列id
 }
 
 // 熔炉队列取消
 type CancelFurnaceQueue struct {
 	*PropertyFieldInfo
-	Id         int32  `json:"#id"`                //建筑唯一id
-	BuildingId int64  `json:"#building_id"`       //建筑id
-	Lv         int32  `json:"#level"`             //建筑等级
-	QueueId    int64  `json:"#queue_id"`          //队列id
-	Formula    string `json:"#formula,omitempty"` //消耗材料 []*cmd.PPlayerCampFunctionBuildingFormula
-	Costs      string `json:"#cost,omitempty"`    //建造消耗材料 map[uint32]uint32
+	Id         int32  `json:"#id"`                // 建筑唯一id
+	BuildingId int64  `json:"#building_id"`       // 建筑id
+	Lv         int32  `json:"#level"`             // 建筑等级
+	QueueId    int64  `json:"#queue_id"`          // 队列id
+	Formula    string `json:"#formula,omitempty"` // 消耗材料 []*pb.PPlayerCampFunctionBuildingFormula
+	Costs      string `json:"#cost,omitempty"`    // 建造消耗材料 map[uint32]uint32
 }
 
 // 领取队列奖励
 type GetqueueReward struct {
 	*PropertyFieldInfo
-	Id         int32  `json:"#id"`               //建筑唯一id
-	BuildingId int64  `json:"#building_id"`      //建筑id
-	Lv         int32  `json:"#level"`            //建筑等级
-	QueueId    int64  `json:"#queue_id"`         //队列id
-	Reward     string `json:"#reward,omitempty"` //产出奖励 map[uint32]uint32
+	Id         int32  `json:"#id"`               // 建筑唯一id
+	BuildingId int64  `json:"#building_id"`      // 建筑id
+	Lv         int32  `json:"#level"`            // 建筑等级
+	QueueId    int64  `json:"#queue_id"`         // 队列id
+	Reward     string `json:"#reward,omitempty"` // 产出奖励 map[uint32]uint32
 }
 
 // 光合树收获
 type CamptreeReward struct {
 	*PropertyFieldInfo
-	Id          int32  `json:"#id"`               //建筑唯一id
-	BuildingId  int64  `json:"#building_id"`      //建筑配置id
-	Reward      string `json:"#reward,omitempty"` //领取的奖励 map[int32]int32
-	Lv          int32  `json:"#level"`            //光合树当前等级
-	BeforeEndTs int64  `json:"#before_end_ts"`    //领取前的结束时间戳
-	AfterEndTs  int64  `json:"#after_end_ts"`     //领取后的结束时间戳
-	UseTime     int64  `json:"#use_time"`         //奖励的折算时间
+	Id          int32  `json:"#id"`               // 建筑唯一id
+	BuildingId  int64  `json:"#building_id"`      // 建筑配置id
+	Reward      string `json:"#reward,omitempty"` // 领取的奖励 map[int32]int32
+	Lv          int32  `json:"#level"`            // 光合树当前等级
+	BeforeEndTs int64  `json:"#before_end_ts"`    // 领取前的结束时间戳
+	AfterEndTs  int64  `json:"#after_end_ts"`     // 领取后的结束时间戳
+	UseTime     int64  `json:"#use_time"`         // 奖励的折算时间
 }
 
 // 材料研究转换
 type CampmaterialConver struct {
 	*PropertyFieldInfo
-	Id         int32  `json:"#id"`                //建筑唯一id
-	BuildingId int64  `json:"#building_id"`       //建筑id
-	Lv         int32  `json:"#level"`             //建筑等级
-	Formula    string `json:"#formula,omitempty"` //消耗材料 map[int32]int32
-	Reward     string `json:"#reward,omitempty"`  //产出奖励 map[uint32]uint32
+	Id         int32  `json:"#id"`                // 建筑唯一id
+	BuildingId int64  `json:"#building_id"`       // 建筑id
+	Lv         int32  `json:"#level"`             // 建筑等级
+	Formula    string `json:"#formula,omitempty"` // 消耗材料 map[int32]int32
+	Reward     string `json:"#reward,omitempty"`  // 产出奖励 map[uint32]uint32
 }
 
 // 食物制作
 type CampMakeFood struct {
 	*PropertyFieldInfo
-	Id         int32  `json:"#id"`          //建筑唯一id
-	BuildingId int64  `json:"#building_id"` //建筑id
-	Lv         int32  `json:"#level"`       //建筑等级
-	FoodId     int32  `json:"#food_id"`     //食谱id
-	Cost       string `json:"#cost"`        //消耗材料
-	Reward     string `json:"#reward"`      //食物产出
+	Id         int32  `json:"#id"`          // 建筑唯一id
+	BuildingId int64  `json:"#building_id"` // 建筑id
+	Lv         int32  `json:"#level"`       // 建筑等级
+	FoodId     int32  `json:"#food_id"`     // 食谱id
+	Cost       string `json:"#cost"`        // 消耗材料
+	Reward     string `json:"#reward"`      // 食物产出
 }
 
 // 装备打造
 type CampequipFoundry struct {
 	*PropertyFieldInfo
-	Id         int32  `json:"#id"`                //建筑唯一id
-	BuildingId int64  `json:"#building_id"`       //建筑id
-	Lv         int32  `json:"#level"`             //建筑等级
-	Formula    string `json:"#formula,omitempty"` //消耗材料 map[int32]int32
-	Equips     string `json:"#equips,omitempty"`  //装备唯一id列表 []int64
+	Id         int32  `json:"#id"`                // 建筑唯一id
+	BuildingId int64  `json:"#building_id"`       // 建筑id
+	Lv         int32  `json:"#level"`             // 建筑等级
+	Formula    string `json:"#formula,omitempty"` // 消耗材料 map[int32]int32
+	Equips     string `json:"#equips,omitempty"`  // 装备唯一id列表 []int64
 }
 
 // 营地角色上阵
 type CamproleChange struct {
 	*PropertyFieldInfo
-	Count      int    `json:"#counter"`               //当前上阵数量上限
-	BeforeCard string `json:"#before_card,omitempty"` //上阵前卡牌列表 []int32
-	AfterCard  string `json:"#after_card,omitempty"`  //上阵后卡牌列表 []uint32
+	Count      int    `json:"#counter"`               // 当前上阵数量上限
+	BeforeCard string `json:"#before_card,omitempty"` // 上阵前卡牌列表 []int32
+	AfterCard  string `json:"#after_card,omitempty"`  // 上阵后卡牌列表 []uint32
 }
 
 // 家具打造
 type CampBuildingFoundry struct {
 	*PropertyFieldInfo
-	Id         int32  `json:"#id"`             //建筑唯一id
-	BuildingId int64  `json:"#building_id"`    //建筑配置id
-	Lv         int32  `json:"#level"`          //建筑等级
-	ItemId     int32  `json:"#com_item_id"`    //待制造的家具id
-	Num        int32  `json:"#counter"`        //待制造的数量
-	Cost       string `json:"#cost,omitempty"` //消耗材料 map[int32]int32
+	Id         int32  `json:"#id"`             // 建筑唯一id
+	BuildingId int64  `json:"#building_id"`    // 建筑配置id
+	Lv         int32  `json:"#level"`          // 建筑等级
+	ItemId     int32  `json:"#com_item_id"`    // 待制造的家具id
+	Num        int32  `json:"#counter"`        // 待制造的数量
+	Cost       string `json:"#cost,omitempty"` // 消耗材料 map[int32]int32
 }
 
 // 商人兑换奖励
 type CampTraderExchange struct {
 	*PropertyFieldInfo
-	Id         int32  `json:"#id"`               //建筑唯一id
-	BuildingId int64  `json:"#building_id"`      //建筑id
-	Lv         int32  `json:"#level"`            //建筑等级
-	TraderId   int32  `json:"#trader_id"`        //兑换清单id
-	Category   int32  `json:"#category"`         //清单分类
-	Quality    int32  `json:"#quality"`          //清单品质
-	Costs      string `json:"#cost,omitempty"`   //消耗 map[int32]int32
-	Reward     string `json:"#reward,omitempty"` //奖励 cmd.KeyValueItem
+	Id         int32  `json:"#id"`               // 建筑唯一id
+	BuildingId int64  `json:"#building_id"`      // 建筑id
+	Lv         int32  `json:"#level"`            // 建筑等级
+	TraderId   int32  `json:"#trader_id"`        // 兑换清单id
+	Category   int32  `json:"#category"`         // 清单分类
+	Quality    int32  `json:"#quality"`          // 清单品质
+	Costs      string `json:"#cost,omitempty"`   // 消耗 map[int32]int32
+	Reward     string `json:"#reward,omitempty"` // 奖励 pb.KeyValueItem
 }
 
 // 商人清单刷新
 type CampTraderRefresh struct {
 	*PropertyFieldInfo
-	Id         int32  `json:"#id"`                    //建筑唯一id
-	BuildingId int64  `json:"#building_id"`           //建筑id
-	Lv         int32  `json:"#level"`                 //建筑等级
-	BeforeList string `json:"#before_data,omitempty"` //刷新前的清单列表 []*cmd.PPlayerCampTraderList
-	AfterList  string `json:"#after_data,omitempty"`  //刷新后的清单列表 []*cmd.PPlayerCampTraderList
+	Id         int32  `json:"#id"`                    // 建筑唯一id
+	BuildingId int64  `json:"#building_id"`           // 建筑id
+	Lv         int32  `json:"#level"`                 // 建筑等级
+	BeforeList string `json:"#before_data,omitempty"` // 刷新前的清单列表 []*pb.PPlayerCampTraderList
+	AfterList  string `json:"#after_data,omitempty"`  // 刷新后的清单列表 []*pb.PPlayerCampTraderList
 }
 
 // PPlayerCampTraderListTemp 商人清单刷新列表
 type PPlayerCampTraderListTemp struct {
-	Id       int32  `json:"#id"`               //建筑唯一id
-	Category int32  `json:"#category"`         //1=今日强推，2=今日杂货
-	Status   int32  `json:"#status"`           //1=未兑换，2=已兑换
-	Quality  int32  `json:"#quality"`          //品质
-	Costs    string `json:"#cost,omitempty"`   //消耗物 []*cmd.KeyValueItem
-	Reward   string `json:"#reward,omitempty"` //奖励 KeyValueItem
+	Id       int32  `json:"#id"`               // 建筑唯一id
+	Category int32  `json:"#category"`         // 1=今日强推，2=今日杂货
+	Status   int32  `json:"#status"`           // 1=未兑换，2=已兑换
+	Quality  int32  `json:"#quality"`          // 品质
+	Costs    string `json:"#cost,omitempty"`   // 消耗物 []*pb.KeyValueItem
+	Reward   string `json:"#reward,omitempty"` // 奖励 KeyValueItem
 }
 
 func NewPPlayerCampTraderListTemp(id, category, status, quality int32, costs, reward string) *PPlayerCampTraderListTemp {
@@ -588,37 +588,37 @@ func NewPPlayerCampTraderListTemp(id, category, status, quality int32, costs, re
 // 建筑卡牌驻守
 type CampBuildingUpcard struct {
 	*PropertyFieldInfo
-	Id         int32 `json:"#id"`             //建筑唯一id
-	BuildingId int64 `json:"#building_id"`    //建筑id
-	Lv         int32 `json:"#level"`          //建筑等级
-	BeforeCard int32 `json:"#before_card_id"` //上阵前的卡牌
-	AfterCard  int32 `json:"#after_card_id"`  //上阵后的卡牌
+	Id         int32 `json:"#id"`             // 建筑唯一id
+	BuildingId int64 `json:"#building_id"`    // 建筑id
+	Lv         int32 `json:"#level"`          // 建筑等级
+	BeforeCard int32 `json:"#before_card_id"` // 上阵前的卡牌
+	AfterCard  int32 `json:"#after_card_id"`  // 上阵后的卡牌
 }
 
 // 建筑卡牌下阵
 type CampBuildingDownCard struct {
 	*PropertyFieldInfo
-	Id         int32 `json:"#id"`             //建筑唯一id
-	BuildingId int64 `json:"#building_id"`    //建筑配置id
-	Lv         int32 `json:"#level"`          //建筑等级
-	BeforeCard int32 `json:"#before_card_id"` //上阵前的卡牌
-	AfterCard  int32 `json:"#after_card_id"`  //上阵后的卡牌
+	Id         int32 `json:"#id"`             // 建筑唯一id
+	BuildingId int64 `json:"#building_id"`    // 建筑配置id
+	Lv         int32 `json:"#level"`          // 建筑等级
+	BeforeCard int32 `json:"#before_card_id"` // 上阵前的卡牌
+	AfterCard  int32 `json:"#after_card_id"`  // 上阵后的卡牌
 }
 
 // 布局修改
 type CampSaveLayout struct {
 	*PropertyFieldInfo
-	BeforeAtmosphere int32 `json:"#before_value"` //切换前氛围值
-	AfterAtmosphere  int32 `json:"#after_value"`  //切换后氛围值
+	BeforeAtmosphere int32 `json:"#before_value"` // 切换前氛围值
+	AfterAtmosphere  int32 `json:"#after_value"`  // 切换后氛围值
 }
 
 // 切换布局方案
 type CampSwitchLayout struct {
 	*PropertyFieldInfo
-	CampId           int32 `json:"#camp_id"`      //营地id
-	LayoutId         int32 `json:"#layout_id"`    //布局id
-	BeforeAtmosphere int32 `json:"#before_value"` //切换前氛围值
-	AfterAtmosphere  int32 `json:"#after_value"`  //切换后氛围值
+	CampId           int32 `json:"#camp_id"`      // 营地id
+	LayoutId         int32 `json:"#layout_id"`    // 布局id
+	BeforeAtmosphere int32 `json:"#before_value"` // 切换前氛围值
+	AfterAtmosphere  int32 `json:"#after_value"`  // 切换后氛围值
 }
 
 // 大地图-进入
@@ -631,9 +631,9 @@ type LevelEnter struct {
 // 大地图-退出
 type LevelExit struct {
 	*PropertyFieldInfo
-	BattleResult int64  `json:"#result_type"`     // 战斗结果 cmd.BattleResult
+	BattleResult int64  `json:"#result_type"`     // 战斗结果 pb.BattleResult
 	LevelId      int32  `json:"#level_id"`        // 关卡id
-	BattleCards  string `json:"#cards,omitempty"` // 卡牌信息 []*cmd.PPlayerBattleCard
+	BattleCards  string `json:"#cards,omitempty"` // 卡牌信息 []*pb.PPlayerBattleCard
 	Foods        string `json:"#items,omitempty"` // 食物itemId列表 []*int32
 	Collection   uint32 `json:"#cost_value"`      // 消耗采集点数
 }
@@ -651,11 +651,11 @@ type LevelBattleEnd struct {
 	NiwaId        int32  `json:"#map_id"`            // 地图id
 	EventId       int32  `json:"#event_id"`          // 事件Id
 	QuestObjectId uint32 `json:"#object_id"`         // 物件id
-	Monster       string `json:"#monster,omitempty"` // 怪物 []*cmd.PClientLevelBattleEventMonster
-	BattleResult  int64  `json:"#result_type"`       // 战斗结果 cmd.BattleResult
-	BattleCards   string `json:"#cards,omitempty"`   // 卡牌信息 []*cmd.PPlayerBattleCard
+	Monster       string `json:"#monster,omitempty"` // 怪物 []*pb.PClientLevelBattleEventMonster
+	BattleResult  int64  `json:"#result_type"`       // 战斗结果 pb.BattleResult
+	BattleCards   string `json:"#cards,omitempty"`   // 卡牌信息 []*pb.PPlayerBattleCard
 	Foods         string `json:"#items,omitempty"`   // 食物itemId列表 []*int32
-	CostFoods     string `json:"#cost,omitempty"`    // 消耗食物信息 []*cmd.KeyValueItem
+	CostFoods     string `json:"#cost,omitempty"`    // 消耗食物信息 []*pb.KeyValueItem
 }
 
 // 大地图-事件处理
@@ -675,24 +675,24 @@ type LevelChooseNiwaPath struct {
 // 大地图-解锁传送点
 type LevelUnlockPoint struct {
 	*PropertyFieldInfo
-	//NiwaId        int32  `json:"niwa_id"`         // 地图id
-	//EventId       int32  `json:"event_id"`        // 事件Id
+	// NiwaId        int32  `json:"niwa_id"`         // 地图id
+	// EventId       int32  `json:"event_id"`        // 事件Id
 	UnlockedPointId string `json:"#ids"` // 节点id []int32
 }
 
 // 大地图-返回大本营
 type LevelBackToBC struct {
 	*PropertyFieldInfo
-	//NiwaId        int32  `json:"niwa_id"`         // 地图id
-	//EventId       int32  `json:"event_id"`        // 事件Id
-	//UnlockedPointId []int32 `json:"unlocked_point_id"` // 节点id
+	// NiwaId        int32  `json:"niwa_id"`         // 地图id
+	// EventId       int32  `json:"event_id"`        // 事件Id
+	// UnlockedPointId []int32 `json:"unlocked_point_id"` // 节点id
 }
 
 // 日替-获取日替副本列表
 type CampaignList struct {
 	*PropertyFieldInfo
 	OpenCampaigns string `json:"#ids"` // 日替关卡当日开放列表 []int32
-	//GeneralCampaigns *cmd.PClientGeneralCampaign `json:"general_campaigns"` // 日替关卡数据
+	// GeneralCampaigns *pb.PClientGeneralCampaign `json:"general_campaigns"` // 日替关卡数据
 }
 
 // 日替-获取日替副本列表
@@ -700,7 +700,7 @@ type CampaignEnter struct {
 	*PropertyFieldInfo
 	CampaignId    int32  `json:"#level_id"` // 副本id
 	SubCampaignId int32  `json:"#sub_type"` // 副本子类型
-	Teams         string `json:"#teams"`    // 队伍信息 []*cmd.GeneralCampaignTeam
+	Teams         string `json:"#teams"`    // 队伍信息 []*pb.GeneralCampaignTeam
 }
 
 // 日替-开始战斗
@@ -716,7 +716,7 @@ type CampaignBattleEnd struct {
 	CampaignId    int32 `json:"#level_id"`    // 关卡id
 	SubCampaignId int32 `json:"#sub_type"`    // 子关卡id
 	BattleScore   int32 `json:"#score"`       // 得分
-	BattleResult  int64 `json:"#result_type"` // 战斗结果 cmd.BattleResult
+	BattleResult  int64 `json:"#result_type"` // 战斗结果 pb.BattleResult
 }
 
 // 商店-列表
@@ -730,7 +730,7 @@ type ShopInfo struct {
 	*PropertyFieldInfo
 	ShopId        int32  `json:"#id"`              // id
 	ShopLayer     int32  `json:"#layout_id"`       // 商店层级
-	ShopGoodsInfo string `json:"#items,omitempty"` // 商品ids []*cmd.ShopGoodsInfo
+	ShopGoodsInfo string `json:"#items,omitempty"` // 商品ids []*pb.ShopGoodsInfo
 	ExpireTimeSec int64  `json:"#expire"`          // 过期时间戳
 }
 
@@ -739,7 +739,7 @@ type ShopBuy struct {
 	*PropertyFieldInfo
 	ShopId    int32  `json:"#id"`       // 商店id
 	GoodsId   int32  `json:"#goods_id"` // 商品id
-	GoodsInfo string `json:"#items"`    // 商品信息 *cmd.ShopGoodsInfo
+	GoodsInfo string `json:"#items"`    // 商品信息 *pb.ShopGoodsInfo
 }
 
 // 玩家体力变化

@@ -6,21 +6,21 @@ import (
 
 	"github.com/dapr/go-sdk/actor"
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/actorserver/frame"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/baseactor"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/global"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/service"
 )
 
 type AllianceData struct {
-	Data *cmd.PServerAllianceInfo
+	Data *pb.PServerAllianceInfo
 }
 
 type AllianceActor struct {
 	*frame.CommonActor
 	*AllianceData
 
-	//Cache *CacheMgr
+	// Cache *CacheMgr
 
 	AllianceHandler *AllianceHandler
 }
@@ -30,7 +30,7 @@ func New() actor.Server {
 		CommonActor:  frame.NewCommonActor(frame.GSrv),
 		AllianceData: &AllianceData{},
 	}
-	//a.Cache = NewCacheMgr(a)
+	// a.Cache = NewCacheMgr(a)
 	a.ActorType = global.AllianceActorType
 	a.SetActor(a)
 

@@ -17,7 +17,7 @@ import (
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/conf"
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/db"
 	comn "gitlab.musadisca-games.com/wangxw/aniwar/src/common/server"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/metrics"
@@ -51,7 +51,7 @@ func NewLoginServer() base.IServer {
 	srv.InAddr = ":21001"
 	srv.GRPCPort = "50001"
 	srv.OutAddr = ":12001"
-	srv.HasPriTopic = true //开启私有频道订阅
+	srv.HasPriTopic = true // 开启私有频道订阅
 	srv.OnPreInit = srv.PreInit
 	srv.OnServerInit = srv.ServerInit
 	srv.OnConnect = srv.OnNetConnect
@@ -77,7 +77,7 @@ func (s *LoginServer) PreInit() error {
 }
 
 func (s *LoginServer) ServerInit() error {
-	//注册login接口
+	// 注册login接口
 	s.RegisterRpcHandler("/api", s.OnHttp)
 	//
 	if conf.GConf().BaseConf().LoginReqRate > 0 && conf.GConf().BaseConf().LoginReqQueue > 0 {
@@ -168,7 +168,7 @@ func (s *LoginServer) InvokeHandler(ctx context.Context, in *common.InvocationEv
 		DataTypeURL: in.DataTypeURL,
 	}
 
-	req := &cmd.RpcCallReq{}
+	req := &pb.RpcCallReq{}
 	if err := json.Unmarshal(in.Data, req); err != nil {
 		logger.Debug("C2SMsg - Unmarshal error")
 	}
@@ -217,7 +217,7 @@ func (s *LoginServer) Main() {
 }
 
 func (s *LoginServer) handleKickOut(uid string) error {
-	ntf := &cmd.S2S_KickoutPlayerNtf{
+	ntf := &pb.S2S_KickoutPlayerNtf{
 		Reason: "account_multi_login",
 	}
 	data, err := proto.Marshal(ntf)
@@ -228,11 +228,11 @@ func (s *LoginServer) handleKickOut(uid string) error {
 
 	// 调用userInvoke
 	in := &base.ProtoMsg{}
-	in.MsgId = int32(cmd.Protocols_PS2S_KickoutPlayerNtf)
+	in.MsgId = int32(pb.Protocols_PS2S_KickoutPlayerNtf)
 	in.Data = data
 	in.UserId = uid
 	in.AppId = s.AppId
-	//in.GUID = utils.GenIntUUID()
+	// in.GUID = utils.GenIntUUID()
 	in.ReqIdx = 0
 	userStub := stub.NewUserStub(uid)
 	s.ImpActorStub(userStub)
@@ -256,7 +256,7 @@ func (s *LoginServer) checkAccountBanned(accountId string) int64 {
 	if kvTable == nil {
 		return 0
 	}
-	account := &cmd.UserData{}
+	account := &pb.UserData{}
 	err = proto.Unmarshal(kvTable.Data, account)
 	if err != nil {
 		logger.Warn("proto unmarshal err: ", err)

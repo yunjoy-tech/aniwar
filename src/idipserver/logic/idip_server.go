@@ -8,7 +8,7 @@ import (
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/datalog/taptap"
 	comn "gitlab.musadisca-games.com/wangxw/aniwar/src/common/server"
 	excel "gitlab.musadisca-games.com/wangxw/aniwar/src/excel/data"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/baseconf"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/global"
@@ -139,14 +139,14 @@ func (s *IDIPServer) InvokeHandler(ctx context.Context, in *common.InvocationEve
 	}
 
 	messageID, uid := msg.MsgId, msg.UserId
-	logger.Debug("idip.server ===>>> ", uid, cmd.Protocols(messageID), messageID)
+	logger.Debug("idip.server ===>>> ", uid, pb.Protocols(messageID), messageID)
 
-	logger.Debug("InvokeHandler: ", in.ContentType, in.Verb, in.QueryString, cmd.Protocols(messageID), msg.String())
+	logger.Debug("InvokeHandler: ", in.ContentType, in.Verb, in.QueryString, pb.Protocols(messageID), msg.String())
 
-	if messageID == int32(cmd.Protocols_PC2LS_HeartBeatReq) { // 测试useractor 调用 svcinvoke 到 idipserver
+	if messageID == int32(pb.Protocols_PC2LS_HeartBeatReq) { // 测试useractor 调用 svcinvoke 到 idipserver
 		logger.Debug("idip ===>>> test ugc gm command...")
 	} else {
-		logger.Warn("idip ===>>> 未处理的handle, check it!, messageID=", cmd.Protocols(messageID), string(messageID))
+		logger.Warn("idip ===>>> 未处理的handle, check it!, messageID=", pb.Protocols(messageID), string(messageID))
 		return nil, fmt.Errorf("unrealized message id %d", messageID)
 	}
 

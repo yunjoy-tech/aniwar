@@ -9,7 +9,7 @@ import (
 
 	"github.com/dapr/go-sdk/service/common"
 	myCommon "gitlab.musadisca-games.com/wangxw/aniwar/src/common"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/global"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/guid"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
@@ -44,29 +44,29 @@ func (s *IDIPServer) SendSysMail(out *common.Content, reqJson []byte) {
 	// 解析数据
 	req := SendSysMailReq{}
 	if err := json.Unmarshal(reqJson, &req); err != nil {
-		RetCommonMsg(out, http.StatusInternalServerError, int32(cmd.ErrorCode_InternalError), Internal_Error)
+		RetCommonMsg(out, http.StatusInternalServerError, int32(pb.ErrorCode_InternalError), Internal_Error)
 		return
 	}
 	logger.Infof("handle SendSysMail req: %+v", req)
 	// 附件奖励
-	attachments := make([]*cmd.ItemReward, 0)
+	attachments := make([]*pb.ItemReward, 0)
 	for _, item := range req.Items {
 		itemId, err := strconv.Atoi(item.ItemId)
 		if err != nil {
-			RetCommonMsg(out, http.StatusInternalServerError, int32(cmd.ErrorCode_ParamError), Param_Error)
+			RetCommonMsg(out, http.StatusInternalServerError, int32(pb.ErrorCode_ParamError), Param_Error)
 			return
 		}
 		if item.ItemCount <= 0 {
 			continue
 		}
-		attachments = append(attachments, &cmd.ItemReward{
+		attachments = append(attachments, &pb.ItemReward{
 			ItemId: uint32(itemId),
 			Num:    uint32(item.ItemCount),
 		})
 	}
 	// 货币配置支持
 	if req.Currency > 0 {
-		attachments = append(attachments, &cmd.ItemReward{
+		attachments = append(attachments, &pb.ItemReward{
 			ItemId: myCommon.CURRENCY_ITEM_ID_2005,
 			Num:    uint32(req.Currency),
 		})
@@ -76,7 +76,7 @@ func (s *IDIPServer) SendSysMail(out *common.Content, reqJson []byte) {
 		if err != nil || coin.CoinValue <= 0 {
 			continue
 		}
-		attachments = append(attachments, &cmd.ItemReward{
+		attachments = append(attachments, &pb.ItemReward{
 			ItemId: uint32(id),
 			Num:    uint32(coin.CoinValue),
 		})
@@ -109,11 +109,11 @@ func (s *IDIPServer) SendSysMail(out *common.Content, reqJson []byte) {
 	mailID := s.GenGUID(guid.GUID_MAIL)
 	if mailID == 0 {
 		logger.Error("get mail id error")
-		RetCommonMsg(out, http.StatusInternalServerError, int32(cmd.ErrorCode_ParamError), Param_Error)
+		RetCommonMsg(out, http.StatusInternalServerError, int32(pb.ErrorCode_ParamError), Param_Error)
 		return
 	}
 	// 构建邮件数据
-	mail := &cmd.PSysMailInfo{
+	mail := &pb.PSysMailInfo{
 		Id:             int64(mailID),
 		Title:          req.Title,
 		Content:        req.Context,
@@ -134,11 +134,11 @@ func (s *IDIPServer) SendSysMail(out *common.Content, reqJson []byte) {
 		MaxVip:         int32(req.VipLevelMax),
 		Os:             req.Os,
 	}
-	reqMsg := &cmd.S2S_SendGMAddMailReq{AddMail: mail}
+	reqMsg := &pb.S2S_SendGMAddMailReq{AddMail: mail}
 	_, err := s.SvcInvoke(global.ACTOR_SVC, "", 0, "", reqMsg)
 	if err != nil {
 		logger.Error("add sys mail error", err)
-		RetCommonMsg(out, http.StatusInternalServerError, int32(cmd.ErrorCode_ParamError), Param_Error)
+		RetCommonMsg(out, http.StatusInternalServerError, int32(pb.ErrorCode_ParamError), Param_Error)
 		return
 	}
 	RetCommonMsg(out, http.StatusOK, int32(RET_CODE_SUCCESS), SUCCESS)

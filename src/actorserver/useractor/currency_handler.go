@@ -15,7 +15,7 @@ import (
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/db"
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/utils"
 	excel "gitlab.musadisca-games.com/wangxw/aniwar/src/excel/data"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/service"
 	"google.golang.org/protobuf/proto"
@@ -29,8 +29,8 @@ func NewCurrencyHandler(actor *UserActor) *CurrencyHandler {
 	h := &CurrencyHandler{UABaseHandler: NewUABaseHandler(actor, "CurrencyHandler")}
 	h.ChildHandler = h
 
-	h.actor.RegisterProtoHandler(int32(cmd.Protocols_PC2LS_CurrencyExchangeReq), h.CurrencyExchangeReq)
-	h.actor.RegisterProtoHandler(int32(cmd.Protocols_PC2LS_CurrencyBuyReq), h.CurrencyBuyReq)
+	h.actor.RegisterProtoHandler(int32(pb.Protocols_PC2LS_CurrencyExchangeReq), h.CurrencyExchangeReq)
+	h.actor.RegisterProtoHandler(int32(pb.Protocols_PC2LS_CurrencyBuyReq), h.CurrencyBuyReq)
 
 	return h
 }
@@ -38,17 +38,17 @@ func NewCurrencyHandler(actor *UserActor) *CurrencyHandler {
 // Init 初始化模块数据
 func (h *CurrencyHandler) Init() error {
 	// 初始数据
-	currencyMap := make(map[int32]*cmd.CurrencyItem)
-	currencyMap[common.CURRENCY_ITEM_ID_2010] = &cmd.CurrencyItem{
+	currencyMap := make(map[int32]*pb.CurrencyItem)
+	currencyMap[common.CURRENCY_ITEM_ID_2010] = &pb.CurrencyItem{
 		Key:   common.CURRENCY_ITEM_ID_2010,
 		Value: 999,
 	}
-	currencyMap[common.CURRENCY_ITEM_ID_2011] = &cmd.CurrencyItem{
+	currencyMap[common.CURRENCY_ITEM_ID_2011] = &pb.CurrencyItem{
 		Key:   common.CURRENCY_ITEM_ID_2011,
 		Value: 999,
 	}
 
-	h.actor.Data.Currency = &cmd.PCurrencyInfo{
+	h.actor.Data.Currency = &pb.PCurrencyInfo{
 		Createtime: time.Now().Unix(),
 		Currencyx:  currencyMap,
 	}
@@ -71,7 +71,7 @@ func (h *CurrencyHandler) DailyRefresh() error {
 }
 
 func (h *CurrencyHandler) SetDBData(dbData proto.Message) error {
-	if dbVal, ok := dbData.(*cmd.PCurrencyInfo); ok {
+	if dbVal, ok := dbData.(*pb.PCurrencyInfo); ok {
 		h.actor.Data.Currency = dbVal
 	} else {
 		return fmt.Errorf("SetDBData, 数据类型错误! %v", dbData)
@@ -84,10 +84,10 @@ func (h *CurrencyHandler) DBTable() (service.MongoDbType, string, proto.Message)
 	return service.MongoDbType_MongoGame, db.KeyUserCurrency(h.actor.ID()), h.actor.Data.Currency
 }
 
-func (h *CurrencyHandler) buildCurrencyList() []*cmd.CurrencyItem {
-	items := make([]*cmd.CurrencyItem, 0)
+func (h *CurrencyHandler) buildCurrencyList() []*pb.CurrencyItem {
+	items := make([]*pb.CurrencyItem, 0)
 	for _, v := range h.actor.GetCurrencyData().Currencyx {
-		data := &cmd.CurrencyItem{
+		data := &pb.CurrencyItem{
 			Key:   v.GetKey(),
 			Value: v.GetValue(),
 		}
@@ -97,45 +97,45 @@ func (h *CurrencyHandler) buildCurrencyList() []*cmd.CurrencyItem {
 }
 
 func (h *CurrencyHandler) CurrencyExchangeReq(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
-	var req cmd.C2LS_CurrencyExchangeReq
+	var req pb.C2LS_CurrencyExchangeReq
 	err := in.UnmarshalData(&req)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_DeSerializeError)
+		return nil, err, int32(pb.ErrorCode_DeSerializeError)
 	}
 
 	// 是否可以兑换
 	cfg := excel.GetCoinageMgr().GetById(req.CurrencyType)
 	if cfg == nil {
-		return nil, fmt.Errorf("currency unsupport exchange %d", req.CurrencyType), int32(cmd.ErrorCode_CurrencyUnsupportExchange)
+		return nil, fmt.Errorf("currency unsupport exchange %d", req.CurrencyType), int32(pb.ErrorCode_CurrencyUnsupportExchange)
 	}
 
 	// 道具检查
 	costs := utils.ConvertItem4(req.GetCosts())
 	sum, errorCode := h.exchangeCheck(cfg, costs)
-	if errorCode != cmd.ErrorCode_Success {
+	if errorCode != pb.ErrorCode_Success {
 		return nil, fmt.Errorf("param check failed"), int32(errorCode)
 	}
 
 	item, err := h.GetValue(req.CurrencyType)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
 	// 硬上限
 	if sum+item.GetValue() > getHardLimit(req.CurrencyType) {
-		return nil, fmt.Errorf("currency up to hard limit"), int32(cmd.ErrorCode_CurrencyUpToLimit)
+		return nil, fmt.Errorf("currency up to hard limit"), int32(pb.ErrorCode_CurrencyUpToLimit)
 	}
 
 	// 扣道具
 	err = GetConsumeMgr(h.actor).ConsumeListByUniqueId(costs, h.actor.comData, common.CR_Currency_Exchange)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
 	// 加货币值
 	_, err = GetDropMgr(h.actor).DropList2(map[int32]int32{req.CurrencyType: int32(sum)}, true, nil, h.actor.comData, common.CR_Currency_Exchange)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
 	// 埋点log
@@ -157,17 +157,17 @@ func (h *CurrencyHandler) CurrencyExchangeReq(ctx context.Context, in *base.Prot
 		taptap.WriteDataLog(taptap.LogType_CurrencyExchange, h.actor.uid, h.actor.Account.TapUserInfo, e)
 	})
 
-	return &cmd.LS2C_CurrencyExchangeRes{CommonData: h.actor.comData.FixDownComData()}, nil, 0
+	return &pb.LS2C_CurrencyExchangeRes{CommonData: h.actor.comData.FixDownComData()}, nil, 0
 }
 
-func (h *CurrencyHandler) exchangeCheck(cfg *excel.CoinageCfg, costs map[uint64]uint32) (int64, cmd.ErrorCode) {
+func (h *CurrencyHandler) exchangeCheck(cfg *excel.CoinageCfg, costs map[uint64]uint32) (int64, pb.ErrorCode) {
 	sum := int64(0)
 	// 是否可用道具
 	for uniqueId, num := range costs {
 		f := true
 		item := h.actor.BagHandler.GetItemByUniqueId(uniqueId)
 		if item == nil {
-			return 0, cmd.ErrorCode_ParamError
+			return 0, pb.ErrorCode_ParamError
 		}
 
 		for _, keyVal := range cfg.BuyEffect {
@@ -177,59 +177,59 @@ func (h *CurrencyHandler) exchangeCheck(cfg *excel.CoinageCfg, costs map[uint64]
 			}
 		}
 		if f {
-			return 0, cmd.ErrorCode_ParamError
+			return 0, pb.ErrorCode_ParamError
 		}
 	}
 
 	// 道具是否足够
 	if !GetConsumeMgr(h.actor).CheckMapEnoughByUniqueId(costs) {
-		return 0, cmd.ErrorCode_NotEnoughItem
+		return 0, pb.ErrorCode_NotEnoughItem
 	}
 
-	return sum, cmd.ErrorCode_Success
+	return sum, pb.ErrorCode_Success
 }
 
 func (h *CurrencyHandler) CurrencyBuyReq(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
-	var req cmd.C2LS_CurrencyBuyReq
+	var req pb.C2LS_CurrencyBuyReq
 	err := in.UnmarshalData(&req)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_DeSerializeError)
+		return nil, err, int32(pb.ErrorCode_DeSerializeError)
 	}
 
 	// 是否可以兑换
 	cfg := excel.GetCoinageMgr().GetById(req.CurrencyType)
 	if cfg == nil {
-		return nil, fmt.Errorf("currency unsupport exchange %d", req.CurrencyType), int32(cmd.ErrorCode_CurrencyUnsupportExchange)
+		return nil, fmt.Errorf("currency unsupport exchange %d", req.CurrencyType), int32(pb.ErrorCode_CurrencyUnsupportExchange)
 	}
 
 	// 货币检查
 	itemCfg := excel.GetItemMgr().GetById(cfg.CurrencyExchange.GetKey())
 	if itemCfg == nil {
-		return nil, fmt.Errorf("item config not found %d", 0), int32(cmd.ErrorCode_NotFoundConfig)
+		return nil, fmt.Errorf("item config not found %d", 0), int32(pb.ErrorCode_NotFoundConfig)
 	}
 	if !h.CheckEnough(itemCfg.ItemId, int64(req.GetNum())) {
-		return nil, fmt.Errorf("currency not enough"), int32(cmd.ErrorCode_CurrencyNotEnough)
+		return nil, fmt.Errorf("currency not enough"), int32(pb.ErrorCode_CurrencyNotEnough)
 	}
 	sum := cfg.CurrencyExchange.GetVal() * req.GetNum()
 
 	item, err := h.GetValue(req.CurrencyType)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 	if int64(sum)+item.GetValue() > getHardLimit(req.CurrencyType) {
-		return nil, fmt.Errorf("currency up to hard limit"), int32(cmd.ErrorCode_CurrencyUpToLimit)
+		return nil, fmt.Errorf("currency up to hard limit"), int32(pb.ErrorCode_CurrencyUpToLimit)
 	}
 
 	// 扣货币
 	err = GetConsumeMgr(h.actor).ConsumeList(map[int32]int32{itemCfg.ItemId: req.GetNum()}, h.actor.comData, common.CR_Currency_Exchange)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
 	// 加货币
 	_, err = GetDropMgr(h.actor).DropList2(map[int32]int32{req.CurrencyType: sum}, true, nil, h.actor.comData, common.CR_Currency_Exchange)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
 	// 埋点log
@@ -254,7 +254,7 @@ func (h *CurrencyHandler) CurrencyBuyReq(ctx context.Context, in *base.ProtoMsg)
 	})
 
 	// 消息返回
-	rsp := &cmd.LS2C_CurrencyBuyRes{CommonData: h.actor.comData.FixDownComData()}
+	rsp := &pb.LS2C_CurrencyBuyRes{CommonData: h.actor.comData.FixDownComData()}
 	return rsp, nil, 0
 }
 
@@ -494,13 +494,13 @@ func (h *CurrencyHandler) SubCurrency(typ int32, value int64, commonData *clidto
 	return h.SubValue(typ, value, commonData, reason)
 }
 
-func (h *CurrencyHandler) GetValue(typ int32) (*cmd.CurrencyItem, error) {
+func (h *CurrencyHandler) GetValue(typ int32) (*pb.CurrencyItem, error) {
 	if !isValidType(typ) {
 		return nil, fmt.Errorf("GetValue. unknown currency type: %d", typ)
 	}
 
 	if _, ok := h.actor.GetCurrencyData().Currencyx[typ]; !ok {
-		h.actor.GetCurrencyData().Currencyx[typ] = &cmd.CurrencyItem{
+		h.actor.GetCurrencyData().Currencyx[typ] = &pb.CurrencyItem{
 			Key:   typ,
 			Value: 0,
 		}
@@ -530,7 +530,7 @@ func isValidType(typ int32) bool {
 	if cfg == nil {
 		return false
 	}
-	return cfg.Type == int32(cmd.ItemType_Currency)
+	return cfg.Type == int32(pb.ItemType_Currency)
 }
 
 // 获取硬上限

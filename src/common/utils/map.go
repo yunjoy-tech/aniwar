@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"sort"
 )
 
@@ -22,7 +22,7 @@ type MapKeyType interface {
 }
 
 type MapKeyNumberTypeExtra interface {
-	int | int8 | int16 | int32 | int64 | uint | uint8 | uint16 | uint32 | uint64 | float32 | float64 | *cmd.PCommonCardInfo
+	int | int8 | int16 | int32 | int64 | uint | uint8 | uint16 | uint32 | uint64 | float32 | float64 | *pb.PCommonCardInfo
 }
 
 type MapKeyNumberType interface {
@@ -35,9 +35,9 @@ type MapValueNumberType interface {
 
 func MergeItems(source, add map[int32]int32) {
 	for key, value := range add {
-		//if value <= 0 {
+		// if value <= 0 {
 		//	continue
-		//}
+		// }
 		if v, ok := source[key]; ok {
 			source[key] = v + value
 		} else {
@@ -162,7 +162,7 @@ func Map2List[K MapKeyType, T any](m map[K]T) []T {
 //	@param m2
 //	@return bool
 func CompareSameMap(m1, m2 map[int32]int32) bool {
-	//return reflect.DeepEqual(m1, m2)
+	// return reflect.DeepEqual(m1, m2)
 	if len(m1) != len(m2) {
 		return false
 	}
@@ -180,10 +180,10 @@ func CompareSameMap(m1, m2 map[int32]int32) bool {
 	return true
 }
 
-func MapToKeyValueItem(source map[int32]int32) []*cmd.KeyValueItem {
-	item := make([]*cmd.KeyValueItem, 0, len(source))
+func MapToKeyValueItem(source map[int32]int32) []*pb.KeyValueItem {
+	item := make([]*pb.KeyValueItem, 0, len(source))
 	for key, value := range source {
-		item = append(item, &cmd.KeyValueItem{
+		item = append(item, &pb.KeyValueItem{
 			Key:   key,
 			Value: value,
 		})
@@ -191,7 +191,7 @@ func MapToKeyValueItem(source map[int32]int32) []*cmd.KeyValueItem {
 	return item
 }
 
-func KeyValueItem2Map(source []*cmd.KeyValueItem) map[int32]int32 {
+func KeyValueItem2Map(source []*pb.KeyValueItem) map[int32]int32 {
 	item := make(map[int32]int32, len(source))
 	for _, value := range source {
 		item[value.Key] = value.Value

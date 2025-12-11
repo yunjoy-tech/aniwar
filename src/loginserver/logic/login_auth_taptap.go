@@ -13,7 +13,7 @@ import (
 	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/service"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 )
 
 // TaptapLoginResp taptap登陆请求结果
@@ -31,19 +31,19 @@ type TaptapLoginData struct {
 	UnionId string `json:"unionid"` // 授权用户唯一标识，一个玩家在一个厂商的所有游戏中 unionid 都是一样的，不同厂商 unionid 不同
 }
 
-func (s *LoginServer) handleAuthTaptap(unionId, accessToken, extra string) (int, *cmd.TaptapUserInfo, cmd.ErrorCode) {
+func (s *LoginServer) handleAuthTaptap(unionId, accessToken, extra string) (int, *pb.TaptapUserInfo, pb.ErrorCode) {
 	var uid int
 
 	// 解析json数据
-	taptapUser := &cmd.TaptapUserInfo{}
+	taptapUser := &pb.TaptapUserInfo{}
 	err := json.Unmarshal([]byte(extra), taptapUser)
 	if err != nil {
 		logger.Errorf("extra data unmarshal failed. extra=%s", extra)
-		return uid, nil, cmd.ErrorCode_Account_auth_fail
+		return uid, nil, pb.ErrorCode_Account_auth_fail
 	}
 	if accessToken == "" || unionId == "" || taptapUser.MacKey == "" || taptapUser.Token == "" {
 		logger.Warnf("taptap, 登陆请求验证, 无请求参数")
-		return uid, nil, cmd.ErrorCode_Account_auth_fail
+		return uid, nil, pb.ErrorCode_Account_auth_fail
 	}
 
 	// 校验token
@@ -66,7 +66,7 @@ func (s *LoginServer) handleAuthTaptap(unionId, accessToken, extra string) (int,
 	req, err := http.NewRequest(http.MethodGet, reqURL, nil)
 	if err != nil {
 		logger.Error(err)
-		return uid, nil, cmd.ErrorCode_InternalError
+		return uid, nil, pb.ErrorCode_InternalError
 	}
 
 	// 添加请求头
@@ -75,44 +75,44 @@ func (s *LoginServer) handleAuthTaptap(unionId, accessToken, extra string) (int,
 	resp, err := client.Do(req)
 	if err != nil {
 		logger.Error(err)
-		return uid, nil, cmd.ErrorCode_InternalError
+		return uid, nil, pb.ErrorCode_InternalError
 	}
 	defer resp.Body.Close()
 	// http请求异常
 	if resp.StatusCode == http.StatusUnauthorized {
-		return uid, nil, cmd.ErrorCode_TapTapLoginInfoExpire
+		return uid, nil, pb.ErrorCode_TapTapLoginInfoExpire
 	}
 	if resp.StatusCode == http.StatusInternalServerError {
-		return uid, nil, cmd.ErrorCode_TapTapServerError
+		return uid, nil, pb.ErrorCode_TapTapServerError
 	}
 
 	respBody, err := io.ReadAll(resp.Body)
 	if err != nil {
 		logger.Error(err)
-		return uid, nil, cmd.ErrorCode_InternalError
+		return uid, nil, pb.ErrorCode_InternalError
 	}
 	logger.Debugf("taptap auth respond: %s", string(respBody))
 
 	tapRes := &TaptapLoginResp{}
 	err = json.Unmarshal(respBody, tapRes)
 	if err != nil {
-		return uid, nil, cmd.ErrorCode_DeSerializeError
+		return uid, nil, pb.ErrorCode_DeSerializeError
 	}
 	if !tapRes.Success || tapRes.Data.UnionId != unionId {
-		return uid, nil, cmd.ErrorCode_Account_auth_fail
+		return uid, nil, pb.ErrorCode_Account_auth_fail
 	}
 
 	// 映射查询
 	uid, err = s.GetTaptapUid(unionId)
 	if err != nil && !errors.Is(err, service.DB_ERROR_NOT_EXIST) {
-		return uid, nil, cmd.ErrorCode_Account_auth_fail
+		return uid, nil, pb.ErrorCode_Account_auth_fail
 	}
 	// 创建映射
 	if uid == 0 {
 		uid, err = s.UpdateTaptapUidCache(unionId)
 		if err != nil {
-			return uid, nil, cmd.ErrorCode_Account_auth_fail
+			return uid, nil, pb.ErrorCode_Account_auth_fail
 		}
 	}
-	return uid, taptapUser, cmd.ErrorCode_Success
+	return uid, taptapUser, pb.ErrorCode_Success
 }

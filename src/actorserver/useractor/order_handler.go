@@ -29,7 +29,7 @@ import (
 	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/utils"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/service"
 	"google.golang.org/protobuf/proto"
@@ -43,11 +43,11 @@ func NewOrderHandler(actor *UserActor) *OrderHandler {
 	h := &OrderHandler{UABaseHandler: NewUABaseHandler(actor, "OrderHandler")}
 	h.ChildHandler = h
 
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PC2LS_CreateOrderReq), h.CreateOrderReq)          // 创建订单 C2S
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PS2S_BillCallbackReq), h.BillCallbackReq)         // bill服务通知下发奖励
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PC2LS_CheckOrderReq), h.CheckOrderReq)            // 检查订单 C2S
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PS2S_OrderListReq), h.OrderListReq)               // 查看订单列表(角色id)
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PS2S_ReplacementOrderReq), h.ReplacementOrderReq) // 补单
+	actor.RegisterProtoHandler(int32(pb.Protocols_PC2LS_CreateOrderReq), h.CreateOrderReq)          // 创建订单 C2S
+	actor.RegisterProtoHandler(int32(pb.Protocols_PS2S_BillCallbackReq), h.BillCallbackReq)         // bill服务通知下发奖励
+	actor.RegisterProtoHandler(int32(pb.Protocols_PC2LS_CheckOrderReq), h.CheckOrderReq)            // 检查订单 C2S
+	actor.RegisterProtoHandler(int32(pb.Protocols_PS2S_OrderListReq), h.OrderListReq)               // 查看订单列表(角色id)
+	actor.RegisterProtoHandler(int32(pb.Protocols_PS2S_ReplacementOrderReq), h.ReplacementOrderReq) // 补单
 
 	return h
 }
@@ -75,7 +75,7 @@ func (h *OrderHandler) DailyRefresh() error {
 }
 
 func (h *OrderHandler) SetDBData(dbData proto.Message) error {
-	if dbVal, ok := dbData.(*cmd.OrderData); ok {
+	if dbVal, ok := dbData.(*pb.OrderData); ok {
 		h.actor.OrderData = dbVal
 	} else {
 		return fmt.Errorf("SetDBData, 数据类型错误! %v", dbData)
@@ -87,7 +87,7 @@ func (h *OrderHandler) SetDBData(dbData proto.Message) error {
 func (h *OrderHandler) DBTable() (service.MongoDbType, string, proto.Message) {
 	dbTable, dbKey := com_order.OrderDBTable(h.actor.GetUID())
 	return dbTable, dbKey, h.actor.OrderData
-	//return service.MongoDbType_MongoAccount, db.KeyUserOrderInfo(h.actor.GetUID()), h.actor.OrderDatas
+	// return service.MongoDbType_MongoAccount, db.KeyUserOrderInfo(h.actor.GetUID()), h.actor.OrderDatas
 }
 
 func (h *OrderHandler) CreateOrderReq(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
@@ -98,24 +98,24 @@ func (h *OrderHandler) CreateOrderReq(ctx context.Context, in *base.ProtoMsg) (p
 
 	if conf.GConf().Base.CanPay == 0 {
 		// 充值关闭
-		return nil, errors.New("充值功能关闭"), int32(cmd.ErrorCode_Order_pay_closed)
+		return nil, errors.New("充值功能关闭"), int32(pb.ErrorCode_Order_pay_closed)
 	}
 
-	var req cmd.C2LS_CreateOrderReq
+	var req pb.C2LS_CreateOrderReq
 	err = in.UnmarshalData(&req)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
 	productCfg := excel.GetShopGiftMgr().GetById(req.ProductId)
 	if productCfg == nil {
-		return nil, fmt.Errorf("无效的ProductId=%d", req.ProductId), int32(cmd.ErrorCode_NotFoundConfig)
+		return nil, fmt.Errorf("无效的ProductId=%d", req.ProductId), int32(pb.ErrorCode_NotFoundConfig)
 	}
 
-	//rechargeCfg := excel.GetShopRechargeMgr().GetById(productCfg.)
-	//if rechargeCfg == nil {
-	//	return nil, fmt.Errorf("无效的payId=%d", productCfg.RechargeId), int32(cmd.ErrorCode_NotFoundConfig)
-	//}
+	// rechargeCfg := excel.GetShopRechargeMgr().GetById(productCfg.)
+	// if rechargeCfg == nil {
+	//	return nil, fmt.Errorf("无效的payId=%d", productCfg.RechargeId), int32(pb.ErrorCode_NotFoundConfig)
+	// }
 
 	// 月卡商品检查
 	err, code := h.checkCanBuy(req.ProductId)
@@ -138,32 +138,32 @@ func (h *OrderHandler) CreateOrderReq(ctx context.Context, in *base.ProtoMsg) (p
 	}
 
 	orderId := utils.GenStrUUID()
-	order := &cmd.Order{
+	order := &pb.Order{
 		CreateTs:      now.Unix(),
 		UpdateTs:      now.Unix(),
 		Uid:           h.actor.uid,
 		RoleId:        h.actor.roleId,
 		CpOrderId:     orderId,
-		OrderStatus:   cmd.OrderStatus_OrderStatus_default,
+		OrderStatus:   pb.OrderStatus_OrderStatus_default,
 		CpProductId:   req.ProductId,
 		PayId:         productCfg.Id,
 		ProductType:   productCfg.ProductType,
 		RechargePrice: strconv.Itoa(int(productCfg.PayCount)),
 		PaymentTs:     0,
-		PaymentType:   cmd.PaymentType_PaymentType_min,
+		PaymentType:   pb.PaymentType_PaymentType_min,
 		CpCbi:         com_order.BuildPayCbi(h.actor.Account.Account.Uid, h.actor.ID(), orderId, productCfg.Id),
 		ApiParams:     "",
 	}
 
 	orderData := h.actor.GetOrderData()
-	//orderDatas.OrderList = append(orderDatas.OrderList, order)
+	// orderDatas.OrderList = append(orderDatas.OrderList, order)
 	orderData.Orders[order.CpOrderId] = order
 	err = h.SaveDB(true)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_SaveDBError)
+		return nil, err, int32(pb.ErrorCode_SaveDBError)
 	}
 
-	rsp := &cmd.LS2C_CreateOrderRes{
+	rsp := &pb.LS2C_CreateOrderRes{
 		CpOrderId: order.CpOrderId,
 		Cbi:       order.CpCbi,
 	}
@@ -171,7 +171,7 @@ func (h *OrderHandler) CreateOrderReq(ctx context.Context, in *base.ProtoMsg) (p
 	// 模拟充值
 	h.VirtualPay(order.CpOrderId)
 
-	return rsp, nil, int32(cmd.ErrorCode_Success)
+	return rsp, nil, int32(pb.ErrorCode_Success)
 }
 
 func (h *OrderHandler) BillCallbackReq(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
@@ -179,10 +179,10 @@ func (h *OrderHandler) BillCallbackReq(ctx context.Context, in *base.ProtoMsg) (
 		err error
 	)
 
-	var req cmd.S2S_BillCallbackReq
+	var req pb.S2S_BillCallbackReq
 	err = in.UnmarshalData(&req)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
 	sdkReq := &com_order.LilithPayCallbackReq{}
@@ -190,7 +190,7 @@ func (h *OrderHandler) BillCallbackReq(ctx context.Context, in *base.ProtoMsg) (
 	if err != nil {
 		err = errors.Wrap(err, fmt.Sprintf("解析sdk参数失败, ext:%s", req.SdkParamStr))
 		logger.Errorf(err.Error())
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
 	// 透传参数
@@ -198,38 +198,38 @@ func (h *OrderHandler) BillCallbackReq(ctx context.Context, in *base.ProtoMsg) (
 	if err != nil {
 		err = errors.Wrap(err, fmt.Sprintf("解析透传参数失败, ext:%s", sdkReq.Ext))
 		logger.Errorf(err.Error())
-		return nil, errors.New(fmt.Sprintf("解析透传参数失败:%s, %s", req.CpOrderId, sdkReq.Ext)), int32(cmd.ErrorCode_Order_cbi_invalid)
+		return nil, errors.New(fmt.Sprintf("解析透传参数失败:%s, %s", req.CpOrderId, sdkReq.Ext)), int32(pb.ErrorCode_Order_cbi_invalid)
 	}
 
 	shopGiftCfg := excel.GetShopGiftMgr().GetById(cbiObj.PayId)
 	if shopGiftCfg == nil {
 		err = errors.New(fmt.Sprintf("无效的支付id, payId=%d", cbiObj.PayId))
 		logger.Errorf(err.Error())
-		return nil, err, int32(cmd.ErrorCode_Invalid_order)
+		return nil, err, int32(pb.ErrorCode_Invalid_order)
 	}
 
 	if sdkReq.ProductType != "" /*国内sdk的没有数据*/ && shopGiftCfg.ProductType != sdkReq.ProductType {
 		err = errors.New(fmt.Sprintf("无效的商品ID, %s", sdkReq.ProductType))
 		logger.Errorf(err.Error())
-		return nil, err, int32(cmd.ErrorCode_Invalid_order)
+		return nil, err, int32(pb.ErrorCode_Invalid_order)
 	}
 
 	if shopGiftCfg.PayCount != sdkReq.Amount { // 单位分
 		err = errors.New(fmt.Sprintf("商品金额错误, payId=%d, %d, %d", cbiObj.PayId, shopGiftCfg.Price, sdkReq.Amount))
 		logger.Errorf(err.Error())
-		return nil, err, int32(cmd.ErrorCode_Invalid_order)
+		return nil, err, int32(pb.ErrorCode_Invalid_order)
 	}
 
-	//// 订单信息db配置
-	//dbMongoType, dbKey := com_order.OrderDBTable(cbiObj.AccountId)
-	//// 查找订单
-	//orders := &cmd.OrderData{}
-	//_, err = s.LoadMongoDB(dbMongoType, dbKey, orders)
-	//if err != nil {
+	// // 订单信息db配置
+	// dbMongoType, dbKey := com_order.OrderDBTable(cbiObj.AccountId)
+	// // 查找订单
+	// orders := &pb.OrderData{}
+	// _, err = s.LoadMongoDB(dbMongoType, dbKey, orders)
+	// if err != nil {
 	//	err = errors.Wrap(err, fmt.Sprintf("没有查找到订单信息, dbMongoType:%s, dbKey:%s", dbMongoType, dbKey))
 	//	logger.Errorf(err.Error())
-	//	return nil, err, int32(cmd.ErrorCode_Invalid_order)
-	//}
+	//	return nil, err, int32(pb.ErrorCode_Invalid_order)
+	// }
 
 	order, err, errCode := h.GetOrderById(req.CpOrderId)
 	if err != nil {
@@ -240,13 +240,13 @@ func (h *OrderHandler) BillCallbackReq(ctx context.Context, in *base.ProtoMsg) (
 	order.ApiParams = req.SdkParamStr
 
 	// 下发奖励
-	err, errCode = h.paySendReward(order, cmd.PaymentType_PaymentType_sdk_callback, strconv.Itoa(int(sdkReq.PayType)))
+	err, errCode = h.paySendReward(order, pb.PaymentType_PaymentType_sdk_callback, strconv.Itoa(int(sdkReq.PayType)))
 	if err != nil {
 		return nil, err, int32(errCode)
 	}
 
-	rsp := &cmd.S2S_BillCallbackRes{}
-	return rsp, nil, int32(cmd.ErrorCode_Success)
+	rsp := &pb.S2S_BillCallbackRes{}
+	return rsp, nil, int32(pb.ErrorCode_Success)
 }
 
 func (h *OrderHandler) CheckOrderReq(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
@@ -254,44 +254,44 @@ func (h *OrderHandler) CheckOrderReq(ctx context.Context, in *base.ProtoMsg) (pr
 		err error
 	)
 
-	var req cmd.C2LS_CheckOrderReq
+	var req pb.C2LS_CheckOrderReq
 	err = in.UnmarshalData(&req)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
-	//orderDatas := h.actor.GetOrderData()
+	// orderDatas := h.actor.GetOrderData()
 
-	//var order *cmd.Order
-	//if _order, ok := orderDatas.Orders[req.CpOrderId]; ok {
+	// var order *pb.Order
+	// if _order, ok := orderDatas.Orders[req.CpOrderId]; ok {
 	//	order = _order
-	//} else {
-	//	return nil, errors.New(fmt.Sprintf("无效的订单:%s", req.CpOrderId)), int32(cmd.ErrorCode_Invalid_order)
-	//}
+	// } else {
+	//	return nil, errors.New(fmt.Sprintf("无效的订单:%s", req.CpOrderId)), int32(pb.ErrorCode_Invalid_order)
+	// }
 	order, err, errCode := h.GetOrderById(req.CpOrderId)
 	if err != nil {
 		return nil, err, int32(errCode)
 	}
 
-	if order.OrderStatus != cmd.OrderStatus_OrderStatus_reward &&
-		order.OrderStatus != cmd.OrderStatus_OrderStatus_show {
+	if order.OrderStatus != pb.OrderStatus_OrderStatus_reward &&
+		order.OrderStatus != pb.OrderStatus_OrderStatus_show {
 
-		return nil, errors.New(fmt.Sprintf("订单还未支付完成, %s", req.CpOrderId)), int32(cmd.ErrorCode_Order_do_NOT_pay)
+		return nil, errors.New(fmt.Sprintf("订单还未支付完成, %s", req.CpOrderId)), int32(pb.ErrorCode_Order_do_NOT_pay)
 	}
 
-	order.OrderStatus = cmd.OrderStatus_OrderStatus_show
+	order.OrderStatus = pb.OrderStatus_OrderStatus_show
 	err = h.SaveDB(true)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_SaveDBError)
+		return nil, err, int32(pb.ErrorCode_SaveDBError)
 	}
 
-	rsp := &cmd.LS2C_CheckOrderRes{
+	rsp := &pb.LS2C_CheckOrderRes{
 		OrderStatus: order.OrderStatus,
 		DropChange:  order.DropChange,
 		CommonData:  h.actor.comData.FixDownComData(),
 		ItemInfo:    h.getOrderItemById(order.CpProductId),
 	}
-	return rsp, nil, int32(cmd.ErrorCode_Success)
+	return rsp, nil, int32(pb.ErrorCode_Success)
 }
 
 func (h *OrderHandler) OrderListReq(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
@@ -299,19 +299,19 @@ func (h *OrderHandler) OrderListReq(ctx context.Context, in *base.ProtoMsg) (pro
 		err error
 	)
 
-	var req cmd.S2S_OrderListReq
+	var req pb.S2S_OrderListReq
 	err = in.UnmarshalData(&req)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
 	orderList := h.getOrderList(req.OrderStatus)
 
-	rsp := &cmd.S2S_OrderListRes{
+	rsp := &pb.S2S_OrderListRes{
 		Orders: orderList,
 	}
 
-	return rsp, nil, int32(cmd.ErrorCode_Success)
+	return rsp, nil, int32(pb.ErrorCode_Success)
 }
 
 func (h *OrderHandler) ReplacementOrderReq(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
@@ -319,10 +319,10 @@ func (h *OrderHandler) ReplacementOrderReq(ctx context.Context, in *base.ProtoMs
 		err error
 	)
 
-	var req cmd.S2S_ReplacementOrderReq
+	var req pb.S2S_ReplacementOrderReq
 	err = in.UnmarshalData(&req)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
 	order, err, errCode := h.GetOrderById(req.OrderId)
@@ -331,29 +331,29 @@ func (h *OrderHandler) ReplacementOrderReq(ctx context.Context, in *base.ProtoMs
 	}
 
 	// 下发奖励
-	err, errCode = h.paySendReward(order, cmd.PaymentType_PaymentType_replacement, "")
+	err, errCode = h.paySendReward(order, pb.PaymentType_PaymentType_replacement, "")
 	if err != nil {
 		return nil, err, int32(errCode)
 	}
 
-	rsp := &cmd.S2S_ReplacementOrderRes{
-		//Orders: orderList,
+	rsp := &pb.S2S_ReplacementOrderRes{
+		// Orders: orderList,
 	}
 
-	return rsp, nil, int32(cmd.ErrorCode_Success)
+	return rsp, nil, int32(pb.ErrorCode_Success)
 }
 
-func (h *OrderHandler) GetOrderById(orderId string) (*cmd.Order, error, cmd.ErrorCode) {
+func (h *OrderHandler) GetOrderById(orderId string) (*pb.Order, error, pb.ErrorCode) {
 	orderDatas := h.actor.GetOrderData()
 
-	var order *cmd.Order
+	var order *pb.Order
 	if _order, ok := orderDatas.Orders[orderId]; ok {
 		order = _order
 	} else {
-		return nil, errors.New(fmt.Sprintf("无效的订单:%s", orderId)), cmd.ErrorCode_Invalid_order
+		return nil, errors.New(fmt.Sprintf("无效的订单:%s", orderId)), pb.ErrorCode_Invalid_order
 	}
 
-	return order, nil, cmd.ErrorCode_Success
+	return order, nil, pb.ErrorCode_Success
 }
 
 // 是否是第一次购买
@@ -373,13 +373,13 @@ func (h *OrderHandler) incrPayCount(cpProductId int32) {
 	}
 }
 
-func (h *OrderHandler) getOrderList(orderStatus cmd.OrderStatus) []*cmd.Order {
+func (h *OrderHandler) getOrderList(orderStatus pb.OrderStatus) []*pb.Order {
 	orderDatas := h.actor.GetOrderData()
 
-	orderList := make([]*cmd.Order, 0)
+	orderList := make([]*pb.Order, 0)
 	for _, order := range orderDatas.Orders {
 
-		if orderStatus == cmd.OrderStatus_OrderStatus_Max {
+		if orderStatus == pb.OrderStatus_OrderStatus_Max {
 			// 全量返回
 			orderList = append(orderList, order)
 		} else if order.OrderStatus == orderStatus {
@@ -392,13 +392,13 @@ func (h *OrderHandler) getOrderList(orderStatus cmd.OrderStatus) []*cmd.Order {
 }
 
 // 支付下发奖励
-func (h *OrderHandler) paySendReward(order *cmd.Order, paymentType cmd.PaymentType, payType string) (error, cmd.ErrorCode) {
+func (h *OrderHandler) paySendReward(order *pb.Order, paymentType pb.PaymentType, payType string) (error, pb.ErrorCode) {
 	var (
 		err error
 	)
 
-	if order.OrderStatus != cmd.OrderStatus_OrderStatus_default && order.OrderStatus != cmd.OrderStatus_OrderStatus_payment {
-		return errors.New(fmt.Sprintf("订单已经处理过了:%v", order.OrderStatus)), cmd.ErrorCode_Order_status_unusual
+	if order.OrderStatus != pb.OrderStatus_OrderStatus_default && order.OrderStatus != pb.OrderStatus_OrderStatus_payment {
+		return errors.New(fmt.Sprintf("订单已经处理过了:%v", order.OrderStatus)), pb.ErrorCode_Order_status_unusual
 	}
 
 	shopGiftCfg := excel.GetShopGiftMgr().GetById(order.CpProductId)
@@ -407,11 +407,11 @@ func (h *OrderHandler) paySendReward(order *cmd.Order, paymentType cmd.PaymentTy
 	h.actor.OrderData.TotalRecharge += shopGiftCfg.PayCount
 	// 已支付
 	order.PaymentTs = time.Now().Unix()
-	order.OrderStatus = cmd.OrderStatus_OrderStatus_payment
+	order.OrderStatus = pb.OrderStatus_OrderStatus_payment
 	order.PaymentType = paymentType
 	err = h.SaveDB(true)
 	if err != nil {
-		return err, cmd.ErrorCode_SaveDBError
+		return err, pb.ErrorCode_SaveDBError
 	}
 	h.Infof("充值成功, %+v", order)
 
@@ -431,7 +431,7 @@ func (h *OrderHandler) paySendReward(order *cmd.Order, paymentType cmd.PaymentTy
 
 	dropChange, err := GetDropMgr(h.actor).DropListByItems(rewards, true, nil, h.actor.comData, common.CR_RECHARGE)
 	if err != nil {
-		return err, cmd.ErrorCode_InternalError
+		return err, pb.ErrorCode_InternalError
 	}
 	order.DropChange = dropChange
 
@@ -440,17 +440,17 @@ func (h *OrderHandler) paySendReward(order *cmd.Order, paymentType cmd.PaymentTy
 	// 额外处理
 	h.extraHandle(order.CpProductId)
 	// 修改订单状态
-	order.OrderStatus = cmd.OrderStatus_OrderStatus_reward
+	order.OrderStatus = pb.OrderStatus_OrderStatus_reward
 	err = h.SaveDB(true)
 	if err != nil {
-		return err, cmd.ErrorCode_SaveDBError
+		return err, pb.ErrorCode_SaveDBError
 	}
 	h.Infof("发放奖励成功, %+v", order)
 
 	// 埋点
-	//threading.RunSafe(func() {
+	// threading.RunSafe(func() {
 	//	lilith.WriteDataLog(&lilith.Purchase{
-	//		HeadInfo: lilith.BuildHeadInfo(lilith.LogType_Purchase, h.actor.uid, &cmd.CliDeviceInfo{}),
+	//		HeadInfo: lilith.BuildHeadInfo(lilith.LogType_Purchase, h.actor.uid, &pb.CliDeviceInfo{}),
 	//		RoleId:   h.actor.ID(),
 	//		ItemId:   strconv.Itoa(int(order.CpProductId)),
 	//		Level:    int32(h.actor.Data.Base.Common.RoleLevel),
@@ -463,7 +463,7 @@ func (h *OrderHandler) paySendReward(order *cmd.Order, paymentType cmd.PaymentTy
 	//		Iap:      shopGiftCfg.ProductType,
 	//		PayType:  payType,
 	//	})
-	//})
+	// })
 	threading.RunSafe(func() {
 		e := &taptap.Purchase{
 			PropertyFieldInfo: taptap.BuildPropertyFieldInfo(h.actor.Account.CliDeviceInfo),
@@ -495,7 +495,7 @@ func (h *OrderHandler) paySendReward(order *cmd.Order, paymentType cmd.PaymentTy
 		h.Debugf("不是tap用户, 充值金额不做上报")
 	}
 
-	return nil, cmd.ErrorCode_Success
+	return nil, pb.ErrorCode_Success
 }
 
 // VirtualPay 虚拟充值
@@ -507,7 +507,7 @@ func (h *OrderHandler) VirtualPay(cpOrderId string) {
 
 	channel := h.actor.Account.Account.Channel
 	if !h.actor.Srv.IsPCChannel(channel) && !h.actor.Srv.IsTapChannel(channel) {
-		//不是pc, 不是tap用户, 则不支持模拟充值
+		// 不是pc, 不是tap用户, 则不支持模拟充值
 		h.Debugf("不是tap用户, 不支持模拟充值")
 		return
 	}
@@ -518,7 +518,7 @@ func (h *OrderHandler) VirtualPay(cpOrderId string) {
 		return
 	}
 
-	err, errCode := h.paySendReward(order, cmd.PaymentType_PaymentType_virtual_pay, "")
+	err, errCode := h.paySendReward(order, pb.PaymentType_PaymentType_virtual_pay, "")
 	if err != nil {
 		err = errors.Wrap(err, fmt.Sprintf("errCode:%v", errCode))
 		h.Debugf(err.Error())
@@ -527,21 +527,21 @@ func (h *OrderHandler) VirtualPay(cpOrderId string) {
 }
 
 // 构建订单相关的数据
-func (h *OrderHandler) buildOrderInfo() *cmd.OrderInfo {
-	info := &cmd.OrderInfo{}
+func (h *OrderHandler) buildOrderInfo() *pb.OrderInfo {
+	info := &pb.OrderInfo{}
 	info.HistoryProducts = h.GetHistoryProducts()
 	info.OrderItems = h.GetOrderItemInfo()
 
 	return info
 }
 
-func (h *OrderHandler) GetHistoryProducts() []*cmd.HistoryProduct {
+func (h *OrderHandler) GetHistoryProducts() []*pb.HistoryProduct {
 	var (
-		historyProducts = make([]*cmd.HistoryProduct, 0)
+		historyProducts = make([]*pb.HistoryProduct, 0)
 	)
 
 	for productId, count := range h.actor.OrderData.HistoryProducts {
-		historyProducts = append(historyProducts, &cmd.HistoryProduct{
+		historyProducts = append(historyProducts, &pb.HistoryProduct{
 			ProductId: productId,
 			Count:     count,
 		})
@@ -550,8 +550,8 @@ func (h *OrderHandler) GetHistoryProducts() []*cmd.HistoryProduct {
 	return historyProducts
 }
 
-func (h *OrderHandler) GetOrderItemInfo() []*cmd.OrderItemInfo {
-	ret := make([]*cmd.OrderItemInfo, 0)
+func (h *OrderHandler) GetOrderItemInfo() []*pb.OrderItemInfo {
+	ret := make([]*pb.OrderItemInfo, 0)
 	for _, items := range h.actor.OrderData.ItemInfo {
 		if fixMonthExpire(items) {
 			continue
@@ -561,7 +561,7 @@ func (h *OrderHandler) GetOrderItemInfo() []*cmd.OrderItemInfo {
 	return ret
 }
 
-func (h *OrderHandler) getOrderItemById(productId int32) *cmd.OrderItemInfo {
+func (h *OrderHandler) getOrderItemById(productId int32) *pb.OrderItemInfo {
 	orderData := h.actor.GetOrderData()
 	return orderData.ItemInfo[productId]
 }
@@ -571,7 +571,7 @@ func (h *OrderHandler) extraHandle(productId int32) {
 	orderData := h.actor.GetOrderData()
 	info := orderData.ItemInfo[productId]
 	if info == nil {
-		info = &cmd.OrderItemInfo{ProductId: productId}
+		info = &pb.OrderItemInfo{ProductId: productId}
 		orderData.ItemInfo[productId] = info
 	}
 
@@ -600,25 +600,25 @@ func (h *OrderHandler) extraHandle(productId int32) {
 }
 
 // 订单商品是否能购买
-func (h *OrderHandler) checkCanBuy(productId int32) (error, cmd.ErrorCode) {
+func (h *OrderHandler) checkCanBuy(productId int32) (error, pb.ErrorCode) {
 	orderData := h.actor.GetOrderData()
 	cfg := excel.GetShopGiftMgr().GetById(productId)
 	if cfg == nil {
-		return fmt.Errorf("config not found %v", productId), cmd.ErrorCode_NotFoundConfig
+		return fmt.Errorf("config not found %v", productId), pb.ErrorCode_NotFoundConfig
 	}
 
 	// 月卡类型检查
 	if cfg.PeriodReward > 0 {
 		monthcardCfg := excel.GetMonthcardMgr().GetById(cfg.PeriodReward)
 		if monthcardCfg == nil {
-			return fmt.Errorf("config not found %v", productId), cmd.ErrorCode_NotFoundConfig
+			return fmt.Errorf("config not found %v", productId), pb.ErrorCode_NotFoundConfig
 		}
 		item := orderData.ItemInfo[productId]
 		if item != nil {
 			limit := time.Now().AddDate(0, 0, int(monthcardCfg.DayLimit))
 			target := time.Unix(item.MonthExpire, 0).AddDate(0, 0, int(monthcardCfg.Day))
 			if limit.Before(target) {
-				return fmt.Errorf("product buy limit"), cmd.ErrorCode_Shop_goods_buy_count_limit
+				return fmt.Errorf("product buy limit"), pb.ErrorCode_Shop_goods_buy_count_limit
 			}
 		}
 	}
@@ -633,7 +633,7 @@ func (h *OrderHandler) trySendMonthMail(productId int32) {
 	orderData := h.actor.GetOrderData()
 
 	// 筛选处理数据
-	itemInfos := make(map[int32]*cmd.OrderItemInfo)
+	itemInfos := make(map[int32]*pb.OrderItemInfo)
 	if productId == 0 {
 		itemInfos = orderData.ItemInfo
 	} else {
@@ -668,7 +668,7 @@ func (h *OrderHandler) trySendMonthMail(productId int32) {
 }
 
 // 修正月卡过期时间数据，返回是否过期的标记，过期返回true
-func fixMonthExpire(info *cmd.OrderItemInfo) bool {
+func fixMonthExpire(info *pb.OrderItemInfo) bool {
 	now := time.Now().Unix()
 	var f bool
 	// 维护一下每期月卡到期时间记录

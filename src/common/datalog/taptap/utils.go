@@ -3,7 +3,7 @@ package taptap
 import (
 	"encoding/json"
 	"fmt"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"reflect"
 	"strings"
 )
@@ -15,8 +15,8 @@ type MapKeyNumberType interface {
 	int | int8 | int16 | int32 | int64 | uint | uint8 | uint16 | uint32 | uint64 | float32 | float64 | string
 }
 type MyStructType interface {
-	any | *cmd.ItemReward | *cmd.PPlayerCampFunctionBuildingFormula | *cmd.KeyValueItem | *cmd.ShopGoodsInfo | *cmd.GeneralTeamTemp | *PPlayerCampTraderListTemp |
-		*cmd.PPlayerBattleCard
+	any | *pb.ItemReward | *pb.PPlayerCampFunctionBuildingFormula | *pb.KeyValueItem | *pb.ShopGoodsInfo | *pb.GeneralTeamTemp | *PPlayerCampTraderListTemp |
+		*pb.PPlayerBattleCard
 }
 
 // ConvertList2Str 莉莉丝埋点业务专用

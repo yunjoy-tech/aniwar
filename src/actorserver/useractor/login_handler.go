@@ -3,6 +3,7 @@ package useractor
 import (
 	"context"
 	"fmt"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/builder"
 	"strconv"
 	"time"
 	"unicode/utf8"
@@ -26,7 +27,7 @@ import (
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common"
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/db"
 	excel "gitlab.musadisca-games.com/wangxw/aniwar/src/excel/data"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/service"
 	"google.golang.org/protobuf/proto"
@@ -41,17 +42,17 @@ type LoginHandler struct {
 func NewLoginHandler(actor *UserActor) *LoginHandler {
 	h := &LoginHandler{UABaseHandler: NewUABaseHandler(actor, "LoginHandler")}
 	h.ChildHandler = h
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PS2S_KickoutPlayerNtf), h.KickoutPlayer)
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PC2LS_ChangeNicknameReq), h.ChangeNicknameReq)
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PC2LS_ChangeHeadReq), h.ChangeHeadReq)
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PC2LS_CreateRoleInfoReq), h.CreateRoleInfoReq)
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PC2G_LoginGameReq), h.LoginEnterGame)
+	actor.RegisterProtoHandler(int32(pb.Protocols_PS2S_KickoutPlayerNtf), h.KickoutPlayer)
+	actor.RegisterProtoHandler(int32(pb.Protocols_PC2LS_ChangeNicknameReq), h.ChangeNicknameReq)
+	actor.RegisterProtoHandler(int32(pb.Protocols_PC2LS_ChangeHeadReq), h.ChangeHeadReq)
+	actor.RegisterProtoHandler(int32(pb.Protocols_PC2LS_CreateRoleInfoReq), h.CreateRoleInfoReq)
+	actor.RegisterProtoHandler(int32(pb.Protocols_PC2G_LoginGameReq), h.LoginEnterGame)
 	return h
 }
 
 func (h *LoginHandler) Init() error {
 	now := time.Now().Unix()
-	h.actor.Data.Base = &cmd.PServerRoleBaseInfo{Createtime: now}
+	h.actor.Data.Base = &pb.PServerRoleBaseInfo{Createtime: now}
 
 	// 保存
 	if err := h.SaveDB(true); err != nil {
@@ -93,7 +94,7 @@ func (h *LoginHandler) DailyRefresh() error {
 }
 
 func (h *LoginHandler) SetDBData(dbData proto.Message) error {
-	if dbVal, ok := dbData.(*cmd.PServerRoleBaseInfo); ok {
+	if dbVal, ok := dbData.(*pb.PServerRoleBaseInfo); ok {
 		h.actor.Data.Base = dbVal
 	} else {
 		return fmt.Errorf("SetDBData, 数据类型错误! %v", dbData)
@@ -175,10 +176,10 @@ func (h *LoginHandler) tryUnlockHeads(unlockType, param int32) error {
 }
 
 func (h *LoginHandler) KickoutPlayer(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
-	var req cmd.S2S_KickoutPlayerNtf
+	var req pb.S2S_KickoutPlayerNtf
 	err := in.UnmarshalData(&req)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
 	err = h.sendPlayerKickOutNtf(req.Reason)
@@ -201,10 +202,10 @@ func (h *LoginHandler) changeNickname(newNickname string) {
 }
 
 func (h *LoginHandler) ChangeNicknameReq(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
-	var req cmd.C2LS_ChangeNicknameReq
+	var req pb.C2LS_ChangeNicknameReq
 	err := in.UnmarshalData(&req)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_DeSerializeError)
+		return nil, err, int32(pb.ErrorCode_DeSerializeError)
 	}
 	err, code := h.checkNickName(req.NewNickname, false)
 	if err != nil {
@@ -214,37 +215,37 @@ func (h *LoginHandler) ChangeNicknameReq(ctx context.Context, in *base.ProtoMsg)
 	if err != nil {
 		return nil, err, code
 	}
-	return &cmd.LS2C_ChangeNicknameRes{CommonData: h.actor.comData.FixDownComData()}, nil, 0
+	return &pb.LS2C_ChangeNicknameRes{CommonData: h.actor.comData.FixDownComData()}, nil, 0
 }
 
 func (h *LoginHandler) checkNickName(nickname string, isCreate bool) (error, int32) {
 	nameLen := utf8.RuneCountInString(nickname)
 	if nameLen == 0 || nameLen > 7 {
-		return fmt.Errorf("nickname length is illegal"), int32(cmd.ErrorCode_NicknameInvalid)
+		return fmt.Errorf("nickname length is illegal"), int32(pb.ErrorCode_NicknameInvalid)
 	}
 
 	data := h.actor.GetUserData()
 	if !isCreate && data.Common.RoleName == nickname {
-		return fmt.Errorf("nickname not changed"), int32(cmd.ErrorCode_NicknameInvalid)
+		return fmt.Errorf("nickname not changed"), int32(pb.ErrorCode_NicknameInvalid)
 	}
 
 	// 校验合法性
 	if h.actor.Srv.CheckSpecialLetters(nickname, false) {
-		return fmt.Errorf("nickname invalid"), int32(cmd.ErrorCode_NicknameInvalid)
+		return fmt.Errorf("nickname invalid"), int32(pb.ErrorCode_NicknameInvalid)
 	}
 	result, err := h.actor.Srv.CheckSensitiveWord(common.CHECK_TYPE_PLAYERNAME, nickname)
 	if err != nil {
-		return err, int32(cmd.ErrorCode_InternalError)
+		return err, int32(pb.ErrorCode_InternalError)
 	}
 	if !result {
-		return fmt.Errorf("nickname invalid"), int32(cmd.ErrorCode_NicknameInvalid)
+		return fmt.Errorf("nickname invalid"), int32(pb.ErrorCode_NicknameInvalid)
 	}
 
 	// 扣除改名道具
 	if !isCreate && data.ChangeName > 0 {
 		cost := excel.GetConfigMgr().GetCfg().PLAYER_RENAME_COST
 		if !GetConsumeMgr(h.actor).CheckKeyValEnough([]*excel.KeyVal{cost}) {
-			return fmt.Errorf("item not enough"), int32(cmd.ErrorCode_NotEnoughItem)
+			return fmt.Errorf("item not enough"), int32(pb.ErrorCode_NotEnoughItem)
 		}
 	}
 	return nil, 0
@@ -255,7 +256,7 @@ func (h *LoginHandler) handleChangeNickname(nickname string, isCreate bool) (err
 		cost := excel.GetConfigMgr().GetCfg().PLAYER_RENAME_COST
 		err := GetConsumeMgr(h.actor).ConsumeKeyValList([]*excel.KeyVal{cost}, h.actor.comData, common.CR_CHANGE_NICKNAME)
 		if err != nil {
-			return err, int32(cmd.ErrorCode_InternalError)
+			return err, int32(pb.ErrorCode_InternalError)
 		}
 	}
 	// 保存新的昵称
@@ -266,10 +267,10 @@ func (h *LoginHandler) handleChangeNickname(nickname string, isCreate bool) (err
 }
 
 func (h *LoginHandler) CreateRoleInfoReq(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
-	var req cmd.C2LS_CreateRoleInfoReq
+	var req pb.C2LS_CreateRoleInfoReq
 	err := in.UnmarshalData(&req)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_DeSerializeError)
+		return nil, err, int32(pb.ErrorCode_DeSerializeError)
 	}
 	// 校验昵称
 	err, code := h.checkNickName(req.Nickname, true)
@@ -277,8 +278,8 @@ func (h *LoginHandler) CreateRoleInfoReq(ctx context.Context, in *base.ProtoMsg)
 		return nil, err, code
 	}
 	// 校验性别
-	if req.Sex != int32(cmd.RoleSexType_RoleSexType_Female) && req.Sex != int32(cmd.RoleSexType_RoleSexType_Male) {
-		return nil, fmt.Errorf("illegal param"), int32(cmd.ErrorCode_InvalidParam)
+	if req.Sex != int32(pb.RoleSexType_RoleSexType_Female) && req.Sex != int32(pb.RoleSexType_RoleSexType_Male) {
+		return nil, fmt.Errorf("illegal param"), int32(pb.ErrorCode_InvalidParam)
 	}
 	// 修改昵称
 	err, code = h.handleChangeNickname(req.Nickname, true)
@@ -288,9 +289,9 @@ func (h *LoginHandler) CreateRoleInfoReq(ctx context.Context, in *base.ProtoMsg)
 	// 修改性别
 	h.changeSex(req.Sex)
 	if err = h.SaveDB(); err != nil {
-		return nil, err, int32(cmd.ErrorCode_SaveDBError)
+		return nil, err, int32(pb.ErrorCode_SaveDBError)
 	}
-	return &cmd.LS2C_CreateRoleInfoRes{CommonData: h.actor.comData.FixDownComData()}, nil, 0
+	return &pb.LS2C_CreateRoleInfoRes{CommonData: h.actor.comData.FixDownComData()}, nil, 0
 }
 
 func (h *LoginHandler) changeSex(sex int32) {
@@ -301,10 +302,10 @@ func (h *LoginHandler) changeSex(sex int32) {
 }
 
 func (h *LoginHandler) ChangeHeadReq(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
-	var req cmd.C2LS_ChangeHeadReq
+	var req pb.C2LS_ChangeHeadReq
 	err := in.UnmarshalData(&req)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_DeSerializeError)
+		return nil, err, int32(pb.ErrorCode_DeSerializeError)
 	}
 
 	// 头像是否拥有
@@ -317,18 +318,18 @@ func (h *LoginHandler) ChangeHeadReq(ctx context.Context, in *base.ProtoMsg) (pr
 		}
 	}
 	if !exist {
-		return nil, fmt.Errorf("head not found"), int32(cmd.ErrorCode_ParamError)
+		return nil, fmt.Errorf("head not found"), int32(pb.ErrorCode_ParamError)
 	}
 
 	// 保存
 	data.Common.RoleHead = req.HeadId
 	if err = h.SaveDB(); err != nil {
-		return nil, err, int32(cmd.ErrorCode_SaveDBError)
+		return nil, err, int32(pb.ErrorCode_SaveDBError)
 	}
 
 	h.actor.RoleDetailHandler.ChangeHeadId(req.HeadId)
 	h.Debug("修改头像成功")
-	return &cmd.LS2C_ChangeHeadRes{HeadId: req.HeadId}, nil, 0
+	return &pb.LS2C_ChangeHeadRes{HeadId: req.HeadId}, nil, 0
 }
 
 // 处理头像红点标识
@@ -340,11 +341,11 @@ func (h *LoginHandler) handleRedPoint(commonData *clidto.Comdata, ids []int64) e
 	return h.SaveDB()
 }
 
-func (h *LoginHandler) buildRoleBaseInfo() *cmd.PClientRoleBaseInfo {
+func (h *LoginHandler) buildRoleBaseInfo() *pb.PClientRoleBaseInfo {
 	return toClientBaseInfo(h.actor.GetUserData())
 }
 
-func (h *LoginHandler) toClientDetailInfo(detail *cmd.PServerRoleDetailInfo) *cmd.PClientRoleDetailInfo {
+func (h *LoginHandler) toClientDetailInfo(detail *pb.PServerRoleDetailInfo) *pb.PClientRoleDetailInfo {
 	// 生涯数据
 	lifes := make([]int32, 0)
 	lifes = append(lifes, detail.Lifex[0])
@@ -356,15 +357,15 @@ func (h *LoginHandler) toClientDetailInfo(detail *cmd.PServerRoleDetailInfo) *cm
 		h.Errorf("toClientDetailInfo got err: %v", err)
 	}
 
-	return &cmd.PClientRoleDetailInfo{
+	return &pb.PClientRoleDetailInfo{
 		Common: detail.Common,
 		Lifes:  lifes,
 		Cards:  ret,
 	}
 }
 
-func toClientBaseInfo(server *cmd.PServerRoleBaseInfo) *cmd.PClientRoleBaseInfo {
-	return &cmd.PClientRoleBaseInfo{
+func toClientBaseInfo(server *pb.PServerRoleBaseInfo) *pb.PClientRoleBaseInfo {
+	return &pb.PClientRoleBaseInfo{
 		Common:     server.Common,
 		ChangeName: server.ChangeName,
 		Heads:      server.Heads,
@@ -372,9 +373,9 @@ func toClientBaseInfo(server *cmd.PServerRoleBaseInfo) *cmd.PClientRoleBaseInfo 
 	}
 }
 
-func (h *LoginHandler) getStoryFlags() []*cmd.FlagInfo {
+func (h *LoginHandler) getStoryFlags() []*pb.FlagInfo {
 	var (
-		flagList = make([]*cmd.FlagInfo, 0)
+		flagList = make([]*pb.FlagInfo, 0)
 	)
 
 	// 全量推送
@@ -387,7 +388,7 @@ func (h *LoginHandler) getStoryFlags() []*cmd.FlagInfo {
 }
 
 func (h *LoginHandler) sendPlayerKickOutNtf(reason string) error {
-	ntf := &cmd.GWS2C_KickOutNtf{
+	ntf := &pb.GWS2C_KickOutNtf{
 		Reason: reason,
 	}
 
@@ -452,16 +453,16 @@ func (h *LoginHandler) TryUpdateLastLoginDate() (bool, error) {
 
 func (h *LoginHandler) LoginEnterGame(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
 	h.actor.SetUID(in.UserId)
-	req := &cmd.C2G_LoginGameReq{}
+	req := &pb.C2G_LoginGameReq{}
 	err := in.UnmarshalData(req)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_DeSerializeError)
+		return nil, err, int32(pb.ErrorCode_DeSerializeError)
 	}
 	logger.Infof("OnLoginGame [LoginStep] userId:%s, roleId:%v, uaid:%s, req:%+v", in.UserId, in.RoleId, in.UAID, req)
 
 	h.actor.roleId = in.RoleId
 	if h.actor.roleId == 0 {
-		return nil, errors.New("roleId is 0"), int32(cmd.ErrorCode_InternalError)
+		return nil, errors.New("roleId is 0"), int32(pb.ErrorCode_InternalError)
 	}
 
 	// check role exist, return old role data,not create
@@ -470,7 +471,7 @@ func (h *LoginHandler) LoginEnterGame(ctx context.Context, in *base.ProtoMsg) (p
 	// account, err := h.actor.Srv.GetAccount(db.KeyAccountInfo(h.actor.GetUID()))
 	err = h.actor.loadDBDataByDBType(service.MongoDbType_MongoAccount)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_NotFoundAccount)
+		return nil, err, int32(pb.ErrorCode_NotFoundAccount)
 	}
 
 	curTime := time.Now().Unix()
@@ -487,7 +488,7 @@ func (h *LoginHandler) LoginEnterGame(ctx context.Context, in *base.ProtoMsg) (p
 		if limit, err := h.actor.Srv.GetConfigKeyForInt(db.KeyCfgServerRegisterLimit); err == nil && limit > 0 {
 			count, err := h.actor.Srv.RedisBitCount(context.Background(), db.KeyServerRegisterUsers(), nil)
 			if err != nil || count >= int64(limit) {
-				return nil, err, int32(cmd.ErrorCode_RegisterLimit)
+				return nil, err, int32(pb.ErrorCode_RegisterLimit)
 			}
 			isRegisterLimit = true
 		}
@@ -496,7 +497,7 @@ func (h *LoginHandler) LoginEnterGame(ctx context.Context, in *base.ProtoMsg) (p
 		if err != nil || errCode != 0 {
 			return nil, err, int32(errCode)
 		}
-		// h.actor.Account.PlayerList.UserMap[1] = &cmd.Player{Id: h.actor.roleId, CreateTs: curTime}
+		// h.actor.Account.PlayerList.UserMap[1] = &pb.Player{Id: h.actor.roleId, CreateTs: curTime}
 		// h.actor.Account.PlayerList.Pid = h.actor.roleId
 		// h.actor.Account.PlayerList.UpdateTs = curTime
 		h.actor.AccountHandler.SavePlayer(in.RoleId)
@@ -507,7 +508,7 @@ func (h *LoginHandler) LoginEnterGame(ctx context.Context, in *base.ProtoMsg) (p
 		if isRegisterLimit {
 			_, err = h.actor.Srv.RedisSetBit(context.Background(), db.KeyServerRegisterUsers(), int64(h.actor.roleId), 1)
 			if err != nil {
-				return nil, err, int32(cmd.ErrorCode_InternalError)
+				return nil, err, int32(pb.ErrorCode_InternalError)
 			}
 		}
 
@@ -543,7 +544,7 @@ func (h *LoginHandler) LoginEnterGame(ctx context.Context, in *base.ProtoMsg) (p
 	h.actor.comData = clidto.BuildComData()
 
 	// 构建最新的数据
-	h.actor.comData.Data = &cmd.CliComData{
+	h.actor.comData.Data = &pb.CliComData{
 		ServerTimestamp:     time.Now().UnixMilli(),
 		OpenServerTimestamp: time.Now().Unix() - 60*60*12, // TODO 临时数据
 		NextRefreshTime:     common.GetNextDailyRefreshTime(),
@@ -553,7 +554,7 @@ func (h *LoginHandler) LoginEnterGame(ctx context.Context, in *base.ProtoMsg) (p
 		Equip:               h.actor.EquipHandler.buildEquipList(),
 		Card:                h.actor.CardHandler.buildCardList(),
 		Currency:            h.actor.CurrencyHandler.buildCurrencyList(),
-		Troop:               h.actor.TroopHandler.buildTroopList(),
+		Troop:               builder.BuildTroopList(h.actor.GetTroopData()),
 		Duty:                h.actor.DutyHandler.buildDutyInfo(false),
 		SignGroups:          h.actor.SignHandler.buildSignInfo(),
 		Flags:               h.getStoryFlags(),
@@ -564,7 +565,7 @@ func (h *LoginHandler) LoginEnterGame(ctx context.Context, in *base.ProtoMsg) (p
 		ActivityData:        h.actor.ActivityHandler.formatActivity2Client(),
 	}
 
-	res := &cmd.G2C_LoginGameRes{
+	res := &pb.G2C_LoginGameRes{
 		Err_Code:        errCode,
 		RoleId:          h.actor.roleId,
 		Ticket:          0,
@@ -574,7 +575,7 @@ func (h *LoginHandler) LoginEnterGame(ctx context.Context, in *base.ProtoMsg) (p
 	}
 
 	// 下发副本id
-	if h.actor.GetLevelsData().InSubLevel == cmd.InSubLevelType_yes {
+	if h.actor.GetLevelsData().InSubLevel == pb.InSubLevelType_yes {
 		res.LevelId = h.actor.GetLevelsData().CurrLevelId
 	}
 
@@ -584,20 +585,20 @@ func (h *LoginHandler) LoginEnterGame(ctx context.Context, in *base.ProtoMsg) (p
 	}
 
 	// 向allianceActor 发送topic 信息
-	h.actor.UserAllianceHandler.PushTopic2Alliance(cmd.GateTopicOperator_GTO_bind, in.GetTopic())
+	h.actor.UserAllianceHandler.PushTopic2Alliance(pb.GateTopicOperator_GTO_bind, in.GetTopic())
 
 	h.actor.SetState(State_Online)
-	h.Infof("[UserActor] %s EnterGame State: %v", h.actor.ID(), cmd.ErrorCode(errCode))
+	h.Infof("[UserActor] %s EnterGame State: %v", h.actor.ID(), pb.ErrorCode(errCode))
 	return res, err, errCode
 }
 
-func (h *LoginHandler) CreatePlayer(playerId uint64, ts int64, language string) (error, cmd.ErrorCode) {
+func (h *LoginHandler) CreatePlayer(playerId uint64, ts int64, language string) (error, pb.ErrorCode) {
 
 	// 查询账号,查不到返回错误码
-	roleBaseInfo := &cmd.PCommonRoleBaseInfo{
+	roleBaseInfo := &pb.PCommonRoleBaseInfo{
 		RoleName:        "test",
 		RoleId:          playerId,
-		RoleSex:         uint32(cmd.RoleSexType_RoleSexType_None),
+		RoleSex:         uint32(pb.RoleSexType_RoleSexType_None),
 		RoleLevel:       1,
 		RoleExp:         0,
 		OnlineTime:      ts,
@@ -606,7 +607,7 @@ func (h *LoginHandler) CreatePlayer(playerId uint64, ts int64, language string) 
 		LoginDay:        1,
 	}
 
-	role := &cmd.PServerRoleBaseInfo{
+	role := &pb.PServerRoleBaseInfo{
 		Common:                  roleBaseInfo,
 		IsNewRole:               true,
 		ChangeName:              0,
@@ -622,7 +623,7 @@ func (h *LoginHandler) CreatePlayer(playerId uint64, ts int64, language string) 
 		_, err := h.actor.Srv.GetCache(service.MongoDbType_MongoGame, db.KeyPlayerUAID(playerId), server.ICache(h.actor.Srv))
 		if err == nil || err != nil && !errors.Is(err, service.DB_ERROR_NOT_EXIST) {
 			h.Error("[GateServer] CreatePlayer playerId check failed,", err)
-			return err, cmd.ErrorCode_InternalError
+			return err, pb.ErrorCode_InternalError
 		}
 	}
 
@@ -632,7 +633,7 @@ func (h *LoginHandler) CreatePlayer(playerId uint64, ts int64, language string) 
 	err := h.SaveDB(true)
 	if err != nil {
 		h.Error("[GateServer] SaveDB save db failed,", err)
-		return err, cmd.ErrorCode_SaveDBError
+		return err, pb.ErrorCode_SaveDBError
 	}
 
 	// 更新uaid缓存
@@ -645,7 +646,7 @@ func (h *LoginHandler) CreatePlayer(playerId uint64, ts int64, language string) 
 		h.actor.FixedTime2DB()
 	}()
 
-	return nil, cmd.ErrorCode_Success
+	return nil, pb.ErrorCode_Success
 }
 
 func (h *LoginHandler) DoEnterGame(bNewPlayer bool) (proto.Message, error, int32) {
@@ -657,21 +658,21 @@ func (h *LoginHandler) DoEnterGame(bNewPlayer bool) (proto.Message, error, int32
 		err := h.actor.loadDBDataByDBType(service.MongoDbType_MongoGame)
 		if err != nil {
 			h.Errorf("DoEnterGame, load user data failed: %+v", err)
-			return nil, err, int32(cmd.ErrorCode_InternalError)
+			return nil, err, int32(pb.ErrorCode_InternalError)
 		}
 
 		// 调用EnterGame接口
 		err = h.actor.EnterGame()
 		if err != nil {
 			h.Warnf("DoEnterGame, err:%+v", err)
-			return nil, err, int32(cmd.ErrorCode_InternalError)
+			return nil, err, int32(pb.ErrorCode_InternalError)
 		}
 
 		// 更新最近上线时间
 		err = h.actor.DailyRefreshAll()
 		if err != nil {
 			h.Debugf("dailyRefresh, 获取最后次登陆时间报错, err:%+v", err)
-			return nil, err, int32(cmd.ErrorCode_InternalError)
+			return nil, err, int32(pb.ErrorCode_InternalError)
 		}
 	}
 
@@ -684,13 +685,13 @@ func (h *LoginHandler) DoEnterGame(bNewPlayer bool) (proto.Message, error, int32
 
 		// 初始化默认阵容
 		if err, errCode := h.actor.TroopHandler.CardTroopOperate(
-			cmd.CardTroopType_CardTroopType_Normal, 1, // 固定默认值
-			cmd.CardTroopSubType_Map_Out, excel.GetConfigMgr().GetCfg().DEFAULT_LEVEL_LINEUP); err != nil {
+			pb.CardTroopType_CardTroopType_Normal, 1, // 固定默认值
+			pb.CardTroopSubType_Map_Out, excel.GetConfigMgr().GetCfg().DEFAULT_LEVEL_LINEUP); err != nil {
 			return nil, err, int32(errCode)
 		}
 
 		if err := h.SaveDB(); err != nil {
-			return nil, err, int32(cmd.ErrorCode_InternalError)
+			return nil, err, int32(pb.ErrorCode_InternalError)
 		}
 	}
 
@@ -722,7 +723,7 @@ func (h *LoginHandler) DoEnterGame(bNewPlayer bool) (proto.Message, error, int32
 		taptap.WriteDataLog(taptap.LogType_RoleLogin, h.actor.uid, h.actor.Account.TapUserInfo, e)
 	})
 
-	return nil, nil, int32(cmd.ErrorCode_Success)
+	return nil, nil, int32(pb.ErrorCode_Success)
 }
 
 // 玩家等级

@@ -5,7 +5,7 @@ import (
 
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/actorserver/useractor/event"
 	excel "gitlab.musadisca-games.com/wangxw/aniwar/src/excel/data"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 )
 
 type TaskTriggerMgr struct {
@@ -94,7 +94,7 @@ func (m *TaskTriggerMgr) TriggerTaskGroupByType(groupType int32) []*excel.TaskCf
 }
 
 func (m *TaskTriggerMgr) checkTriggerCondition(groups map[int32]*excel.TaskgroupCfg) []*excel.TaskCfg {
-	tasks := make([]*cmd.KeyValueItem, 0)
+	tasks := make([]*pb.KeyValueItem, 0)
 	for _, cfg := range groups {
 		// 触发条件
 		if !m.checkTriggerType(cfg.TriggerType) {
@@ -105,7 +105,7 @@ func (m *TaskTriggerMgr) checkTriggerCondition(groups map[int32]*excel.Taskgroup
 			continue
 		}
 		for _, taskId := range cfg.TaskId {
-			tasks = append(tasks, &cmd.KeyValueItem{
+			tasks = append(tasks, &pb.KeyValueItem{
 				Key:   cfg.TaskgroupType,
 				Value: taskId,
 			})

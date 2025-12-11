@@ -13,7 +13,7 @@ import (
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/db"
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/rsa"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/errorx"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
@@ -25,7 +25,7 @@ import (
 // Deprecated: Use HandleLoginGame instead.
 /*
 func (s *GateServer) HandleAuth(c *tcpx.Context, messageID int32, data []byte) error {
-	var req cmd.C2DB_SessionAuthReq
+	var req pb.C2DB_SessionAuthReq
 	err := base.UnmarshalData(data, &req)
 	if err != nil {
 		return errors.New("proto.Unmarshal error")
@@ -61,27 +61,27 @@ func (s *GateServer) HandleAuth(c *tcpx.Context, messageID int32, data []byte) e
 }
 */
 
-//func (s *GateServer) ExecuteAuthLogic(req *PendingUser) error {
+// func (s *GateServer) ExecuteAuthLogic(req *PendingUser) error {
 //
-//	msg := req.msg.(*cmd.C2DB_SessionAuthReq)
+//	msg := req.msg.(*pb.C2DB_SessionAuthReq)
 //	user := s.AddUser(msg.AccountId, req.ctx)
 //	//
 //	//// 通知拉起actor
-//	//data, err := proto.Marshal(&cmd.S2S_AccountAuthSuccess{})
+//	//data, err := proto.Marshal(&pb.S2S_AccountAuthSuccess{})
 //	//if err != nil {
 //	//	logger.Error("AccountAuth Marshal failed", req.ctx.ClientIP(), req.ctx.Network())
 //	//}
 //	////notify user actor
-//	//_, _ = user.UserInvoke(int32(cmd.Protocols_PS2S_AccountAuthSuccess), data)
+//	//_, _ = user.UserInvoke(int32(pb.Protocols_PS2S_AccountAuthSuccess), data)
 //
-//	rsp := &cmd.DB2C_SessionAuthRes{AccountId: msg.AccountId, SessionType: msg.SessionType, ErrorCode: uint32(0)}
+//	rsp := &pb.DB2C_SessionAuthRes{AccountId: msg.AccountId, SessionType: msg.SessionType, ErrorCode: uint32(0)}
 //
-//	//err = c.Reply(int32(cmd.Protocols_PDB2C_SessionAuthRes), rsp)
+//	//err = c.Reply(int32(pb.Protocols_PDB2C_SessionAuthRes), rsp)
 //	b, err := proto.Marshal(rsp)
 //	if err != nil {
 //		return fmt.Errorf("OnNetMessage Reply, error:%v", errorx.Wrap(err).Error())
 //	}
-//	err = req.ctx.ReplyWithBody(int32(cmd.Protocols_PDB2C_SessionAuthRes), b)
+//	err = req.ctx.ReplyWithBody(int32(pb.Protocols_PDB2C_SessionAuthRes), b)
 //	if err != nil {
 //		return fmt.Errorf("OnNetMessage Reply, error:%v", errorx.Wrap(err).Error())
 //	}
@@ -89,19 +89,19 @@ func (s *GateServer) HandleAuth(c *tcpx.Context, messageID int32, data []byte) e
 //	metrics.GaugeInc(metrics.GateAuthCount)
 //	logger.Info("AccountAuth Success", req.ctx.ClientIP(), req.ctx.Network(), user.String())
 //	return nil
-//}
+// }
 
-//func (s *GateServer) HandleAuthFail(ctx *tcpx.Context) error {
+// func (s *GateServer) HandleAuthFail(ctx *tcpx.Context) error {
 //
 //
-//	rsp := &cmd.DB2C_SessionAuthRes{ErrorCode: uint32(cmd.ErrorCode_InternalError)}
+//	rsp := &pb.DB2C_SessionAuthRes{ErrorCode: uint32(pb.ErrorCode_InternalError)}
 //
-//	//err = c.Reply(int32(cmd.Protocols_PDB2C_SessionAuthRes), rsp)
+//	//err = c.Reply(int32(pb.Protocols_PDB2C_SessionAuthRes), rsp)
 //	b, err := proto.Marshal(rsp)
 //	if err != nil {
 //		return fmt.Errorf("OnNetMessage Reply, error:%v", errorx.Wrap(err).Error())
 //	}
-//	err = ctx.ReplyWithBody(int32(cmd.Protocols_PDB2C_SessionAuthRes), int32(cmd.ErrorCode_Success), b)
+//	err = ctx.ReplyWithBody(int32(pb.Protocols_PDB2C_SessionAuthRes), int32(pb.ErrorCode_Success), b)
 //	if err != nil {
 //		return fmt.Errorf("OnNetMessage Reply, error:%v", errorx.Wrap(err).Error())
 //	}
@@ -109,7 +109,7 @@ func (s *GateServer) HandleAuth(c *tcpx.Context, messageID int32, data []byte) e
 //	metrics.GaugeInc(metrics.GateAuthFailCount)
 //	logger.Info("AccountAuth Fail")
 //	return nil
-//}
+// }
 
 // 在线玩家个人消息
 func (s *GateServer) privateMsg(msg *base.ProtoMsg) error {
@@ -120,14 +120,14 @@ func (s *GateServer) privateMsg(msg *base.ProtoMsg) error {
 		if user == nil {
 			return fmt.Errorf("user %v invalid ", uid)
 		}
-		err := user.ReplyWithBody(messageID, msg.ReqIdx, cmd.ErrorCode_Success, data)
+		err := user.ReplyWithBody(messageID, msg.ReqIdx, pb.ErrorCode_Success, data)
 		if err != nil {
 			return fmt.Errorf("privateMsg ReplyWithBody %v", err)
 		}
 
 		// 如果是踢人通知
-		switch cmd.Protocols(messageID) {
-		case cmd.Protocols_PGWS2C_KickOutNtf:
+		switch pb.Protocols(messageID) {
+		case pb.Protocols_PGWS2C_KickOutNtf:
 			s.userMgr.Logout(uid, "kickout")
 			if err != nil {
 				return err
@@ -160,11 +160,11 @@ func (s *GateServer) RegisterDeprecatedMsg() {
 	DeprecatedMsgId = sync.Map{}
 
 	// 静态配置
-	//ids := excel.GetConfigMgr().GetCfg().DEPRECATED_MSG_ID
-	//for _, id := range ids {
+	// ids := excel.GetConfigMgr().GetCfg().DEPRECATED_MSG_ID
+	// for _, id := range ids {
 	//	DeprecatedMsgId.Store(id, id)
 	//	logger.Infof("Register Deprecated Msg %d", id)
-	//}
+	// }
 
 	// 动态配置
 	data, err := s.GetFromConfigCenter(db.KeyCfgGlobalDeprecatedMsg)
@@ -187,10 +187,10 @@ func (s *GateServer) RegisterDeprecatedMsg() {
 // 跑马灯推送
 func (s *GateServer) HandlePushRollingNotice(content string) {
 	// 构建消息
-	ntf := &cmd.LS2C_NotifyMessage{
-		ChannelId: cmd.ChatChannel_Channel_system,
-		Message: []*cmd.BroadMessage{{
-			MType:      cmd.MessageType_Message_Type_ServerMsg,
+	ntf := &pb.LS2C_NotifyMessage{
+		ChannelId: pb.ChatChannel_Channel_system,
+		Message: []*pb.BroadMessage{{
+			MType:      pb.MessageType_Message_Type_ServerMsg,
 			FromRoleId: 0,
 			Data:       []string{content},
 			TimeStamp:  time.Now().Unix(),
@@ -202,7 +202,7 @@ func (s *GateServer) HandlePushRollingNotice(content string) {
 		return
 	}
 	msg := &base.ProtoMsg{
-		MsgId:  int32(cmd.Protocols_PLS2C_NotifyMessage),
+		MsgId:  int32(pb.Protocols_PLS2C_NotifyMessage),
 		UserId: "",
 		RoleId: 0,
 		UAID:   "",
@@ -245,8 +245,8 @@ func (s *GateServer) HandlerSrvMsg() {
 func (s *GateServer) HandleRsa(c *tcpx.Context, messageID int32, data []byte) ([]byte, string, error) {
 	var (
 		err error
-		//cliKey string
-		req cmd.C2LS_RsaClientRandomReq
+		// cliKey string
+		req pb.C2LS_RsaClientRandomReq
 	)
 	err = base.UnmarshalData(data, &req)
 	if err != nil {
@@ -257,27 +257,27 @@ func (s *GateServer) HandleRsa(c *tcpx.Context, messageID int32, data []byte) ([
 
 	_, baseStr, rsaKey := rsa.CreateSrvRsaKey(c, req.CliRandomSeed)
 
-	res := &cmd.LS2C_RsaServerRandomRes{
+	res := &pb.LS2C_RsaServerRandomRes{
 		SrvRandomSeed: baseStr,
 	}
-	//logger.Debugf("===>>> RSA\n客户端随机码:%s, 密文:%s\n 服务器随机码:%s, 密文:%s",
+	// logger.Debugf("===>>> RSA\n客户端随机码:%s, 密文:%s\n 服务器随机码:%s, 密文:%s",
 	//	cliKey, req.CliRandomSeed, srvKey, res.SrvRandomSeed)
 	//
-	//// 最终密码规则: MD5(客户端随机码+服务器随机码)
-	//md5Text := tls.RsaVal(cliKey, srvKey)
+	// // 最终密码规则: MD5(客户端随机码+服务器随机码)
+	// md5Text := tls.RsaVal(cliKey, srvKey)
 
-	//md5Val := md5.Sum([]byte(md5Text))
-	//secretKey := fmt.Sprintf("%X", md5Val)
-	//logger.Debug("HandleRsa md5Key: ", secretKey)
+	// md5Val := md5.Sum([]byte(md5Text))
+	// secretKey := fmt.Sprintf("%X", md5Val)
+	// logger.Debug("HandleRsa md5Key: ", secretKey)
 	b, err := proto.Marshal(res)
 	if err != nil {
 		logger.Debugf(err.Error())
 		return nil, "", fmt.Errorf("OnNetMessage Reply proto.Marshal, error:%v", errorx.Wrap(err).Error())
 	}
-	logger.Debugf("OnNetMessage HandleRsa %v %v %v", cmd.Protocols(messageID), &req, res)
+	logger.Debugf("OnNetMessage HandleRsa %v %v %v", pb.Protocols(messageID), &req, res)
 	if c != nil {
 
-		err = c.ReplyWithBody(int32(cmd.Protocols_PLS2C_RsaServerRandomRes), int32(cmd.ErrorCode_Success), b)
+		err = c.ReplyWithBody(int32(pb.Protocols_PLS2C_RsaServerRandomRes), int32(pb.ErrorCode_Success), b)
 		if err != nil {
 			logger.Debugf(err.Error())
 			return nil, "", fmt.Errorf("OnNetMessage Reply ReplyWithBody, error:%v", errorx.Wrap(err).Error())
@@ -297,8 +297,8 @@ func (s *GateServer) HandleRsa(c *tcpx.Context, messageID int32, data []byte) ([
 func (s *GateServer) HandleLoginGate(c *tcpx.Context, messageID int32, data []byte, reqIdx uint32) ([]byte, error) {
 	var (
 		err error
-		//cliKey string
-		req cmd.C2G_LoginGateReq
+		// cliKey string
+		req pb.C2G_LoginGateReq
 	)
 	err = base.UnmarshalData(data, &req)
 	if err != nil {
@@ -309,30 +309,30 @@ func (s *GateServer) HandleLoginGate(c *tcpx.Context, messageID int32, data []by
 
 	// 校验token有效性
 	session, errCode := s.GetSession(req.Token)
-	if errCode != cmd.ErrorCode_Success || session == nil {
+	if errCode != pb.ErrorCode_Success || session == nil {
 		return nil, fmt.Errorf("HandleLoginGate GetSession, errCode:%v", errCode)
 	}
-	//token, err := s.GetToken(session.Uid)
-	//if err != nil {
+	// token, err := s.GetToken(session.Uid)
+	// if err != nil {
 	//	logger.Errorf("GetToken err:%+v", err)
-	//}
-	//if token == "" || token != req.Token {
-	//	return nil, fmt.Errorf("HandleLoginGate GetSession, errCode:%v", cmd.ErrorCode_TokenInvalid)
-	//}
+	// }
+	// if token == "" || token != req.Token {
+	//	return nil, fmt.Errorf("HandleLoginGate GetSession, errCode:%v", pb.ErrorCode_TokenInvalid)
+	// }
 	if err, errCode = s.CheckToken(session, req.Token); err != nil {
 		err = errors.Wrap(err, fmt.Sprintf("HandleLoginGate CheckToken, errCode:%v", errCode))
 		return nil, err
 	}
 
-	res := &cmd.G2C_LoginGateRes{
-		Err_Code: int32(cmd.ErrorCode_Success),
+	res := &pb.G2C_LoginGateRes{
+		Err_Code: int32(pb.ErrorCode_Success),
 	}
 	b, err := proto.Marshal(res)
 	if err != nil {
 		logger.Debugf(err.Error())
 		return nil, fmt.Errorf("reply proto.Marshal, error:%v", errorx.Wrap(err).Error())
 	}
-	logger.Debugf("HandleLoginGate %v %v %v", cmd.Protocols(messageID), &req, res)
+	logger.Debugf("HandleLoginGate %v %v %v", pb.Protocols(messageID), &req, res)
 
 	// 绑定链接
 	user := s.userMgr.AddUser(session.Uid, session.PlayerId, c, session)
@@ -340,14 +340,14 @@ func (s *GateServer) HandleLoginGate(c *tcpx.Context, messageID int32, data []by
 	s.SaveHeartBeat(session.Uid, s.PrivateTopicID())
 
 	// 通知userActor, 广播消息到所有actors, 更新topic
-	err = s.NotifyActorGateTopic(session.Uid, session.Uaid, cmd.GateTopicOperator_GTO_bind)
+	err = s.NotifyActorGateTopic(session.Uid, session.Uaid, pb.GateTopicOperator_GTO_bind)
 	if err != nil {
 		logger.Errorf(err.Error())
 	}
 
 	if c != nil {
 		c.SetAccountId(req.AccountId)
-		err = user.ReplyWithBody(int32(cmd.Protocols_PG2C_LoginGateRes), 0, cmd.ErrorCode_Success, b)
+		err = user.ReplyWithBody(int32(pb.Protocols_PG2C_LoginGateRes), 0, pb.ErrorCode_Success, b)
 		if err != nil {
 			logger.Debugf(err.Error())
 			return nil, fmt.Errorf("reply ReplyWithBody, error:%v", errorx.Wrap(err).Error())

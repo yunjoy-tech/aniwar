@@ -15,7 +15,7 @@ import (
 	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
 
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/sdkconstant"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 )
 
 // LilithLoginResp 莉莉丝登陆验证结果
@@ -31,10 +31,10 @@ type LilithIdentity struct {
 	IsRn    bool `json:"is_rn"`
 }
 
-func (s *LoginServer) handleAuthLilith(appUid int, appToken string) (*LilithLoginResp, cmd.ErrorCode) {
+func (s *LoginServer) handleAuthLilith(appUid int, appToken string) (*LilithLoginResp, pb.ErrorCode) {
 	if appToken == "" {
 		logger.Warnf("lilith, 登陆请求验证, 无请求参数")
-		return nil, cmd.ErrorCode_Account_auth_fail
+		return nil, pb.ErrorCode_Account_auth_fail
 	}
 
 	client := &http.Client{}
@@ -44,7 +44,7 @@ func (s *LoginServer) handleAuthLilith(appUid int, appToken string) (*LilithLogi
 
 	if err != nil {
 		logger.Errorf(err.Error())
-		return nil, cmd.ErrorCode_InternalError
+		return nil, pb.ErrorCode_InternalError
 	}
 	lilithReq.Header.Add("User-Agent", "apifox/1.0.0 (https://www.apifox.cn)")
 	lilithReq.Header.Add("Accept", "*/*")
@@ -55,14 +55,14 @@ func (s *LoginServer) handleAuthLilith(appUid int, appToken string) (*LilithLogi
 	res, err := client.Do(lilithReq)
 	if err != nil {
 		logger.Errorf(err.Error())
-		return nil, cmd.ErrorCode_InternalError
+		return nil, pb.ErrorCode_InternalError
 	}
 	defer res.Body.Close()
 
 	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
 		logger.Errorf(err.Error())
-		return nil, cmd.ErrorCode_InternalError
+		return nil, pb.ErrorCode_InternalError
 	}
 	logger.Warnf("lilith, 请求验证返回:" + string(body)) // {"bind":false,"bind_account":[0],"identity":{"is_adult":false,"is_rn":false},"result":"success"}
 
@@ -71,13 +71,13 @@ func (s *LoginServer) handleAuthLilith(appUid int, appToken string) (*LilithLogi
 	if err != nil {
 		err = errors.Wrap(err, "验证结果失败")
 		logger.Errorf(err.Error())
-		return nil, cmd.ErrorCode_Account_auth_fail
+		return nil, pb.ErrorCode_Account_auth_fail
 	}
 
 	if resp.Result != logic.SUCCESS {
 		err = errors.New(fmt.Sprintf("lilith, 验证结果失败, resp:%v", resp))
 		logger.Errorf(err.Error())
-		return nil, cmd.ErrorCode_Account_auth_fail
+		return nil, pb.ErrorCode_Account_auth_fail
 	}
-	return resp, cmd.ErrorCode_Success
+	return resp, pb.ErrorCode_Success
 }

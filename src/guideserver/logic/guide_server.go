@@ -6,7 +6,7 @@ import (
 	"github.com/dapr/go-sdk/service/common"
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/datalog/taptap"
 	comn "gitlab.musadisca-games.com/wangxw/aniwar/src/common/server"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/global"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
@@ -25,7 +25,7 @@ func NewGuideServer() base.IServer {
 	srv.AppId = "guide"
 	srv.InAddr = ":20001"
 	srv.GRPCPort = "50001"
-	srv.HasPriTopic = true //开启私有频道订阅
+	srv.HasPriTopic = true // 开启私有频道订阅
 	srv.OnPreInit = srv.PreInit
 	srv.OnServerInit = srv.ServerInit
 	srv.OnEventHandler = srv.EventHandler
@@ -48,7 +48,7 @@ func (s *GuideServer) PreInit() error {
 	s.RegisterRpcHandler("/api/notice", s.Notice)
 
 	// test
-	//s.RegisterBindingInvocationHandler("/api/_test", s.test)
+	// s.RegisterBindingInvocationHandler("/api/_test", s.test)
 	return nil
 }
 
@@ -100,8 +100,8 @@ func (s *GuideServer) InvokeHandler(ctx context.Context, in *common.InvocationEv
 	}
 
 	messageID, uid := msg.MsgId, msg.UserId
-	logger.Debug("guide.server ===>>> ", uid, cmd.Protocols(messageID), messageID)
-	logger.Debug("InvokeHandler: ", in.ContentType, in.Verb, in.QueryString, cmd.Protocols(messageID), msg.String())
+	logger.Debug("guide.server ===>>> ", uid, pb.Protocols(messageID), messageID)
+	logger.Debug("InvokeHandler: ", in.ContentType, in.Verb, in.QueryString, pb.Protocols(messageID), msg.String())
 
 	return out, nil
 }

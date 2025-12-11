@@ -9,7 +9,7 @@ import (
 
 	"github.com/dapr/go-sdk/service/common"
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/actor/stub"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
 )
 
@@ -20,8 +20,8 @@ type UserInfoReq struct {
 	UserId   int    `json:"user_id"`   // 游戏内分配的角色唯一ID
 	UserName string `json:"user_name"` // 游戏内角色名称
 	OpenId   string `json:"open_id"`   // sdk厂商提供的账号唯一ID（说明3）
-	//1. UserId，UserName，OpenID三者仅会有一项有值
-	//2. UserName必须支持模糊查询
+	// 1. UserId，UserName，OpenID三者仅会有一项有值
+	// 2. UserName必须支持模糊查询
 }
 
 // 返回结果结构
@@ -35,7 +35,7 @@ func (s *IDIPServer) QueryUserInfo(out *common.Content, reqJson []byte) {
 	// 解析数据
 	req := UserInfoReq{}
 	if err := json.Unmarshal(reqJson, &req); err != nil {
-		RetCommonMsg(out, http.StatusInternalServerError, int32(cmd.ErrorCode_InternalError), Internal_Error)
+		RetCommonMsg(out, http.StatusInternalServerError, int32(pb.ErrorCode_InternalError), Internal_Error)
 		return
 	}
 
@@ -45,12 +45,12 @@ func (s *IDIPServer) QueryUserInfo(out *common.Content, reqJson []byte) {
 		// 按userid查询
 		uaid, err := s.GetUAIDByRoleId(uint64(req.UserId))
 		if err != nil {
-			RetCommonMsg(out, http.StatusInternalServerError, int32(cmd.ErrorCode_InternalError), Internal_Error)
+			RetCommonMsg(out, http.StatusInternalServerError, int32(pb.ErrorCode_InternalError), Internal_Error)
 			return
 		}
 		userInfo, err := s.GetUserInfo2(uaid)
 		if err != nil {
-			RetCommonMsg(out, http.StatusInternalServerError, int32(cmd.ErrorCode_InternalError), err)
+			RetCommonMsg(out, http.StatusInternalServerError, int32(pb.ErrorCode_InternalError), err)
 			return
 		}
 		users = append(users, userInfo)
@@ -60,37 +60,37 @@ func (s *IDIPServer) QueryUserInfo(out *common.Content, reqJson []byte) {
 	} else if req.OpenId != "" {
 		roleId, err := s.GetUidFromOpenId(req.OpenId)
 		if err != nil {
-			RetCommonMsg(out, http.StatusInternalServerError, int32(cmd.ErrorCode_InternalError), Internal_Error)
+			RetCommonMsg(out, http.StatusInternalServerError, int32(pb.ErrorCode_InternalError), Internal_Error)
 			return
 		}
 		userInfo, err := s.GetUserInfo2(roleId)
 		if err != nil {
-			RetCommonMsg(out, http.StatusInternalServerError, int32(cmd.ErrorCode_InternalError), err)
+			RetCommonMsg(out, http.StatusInternalServerError, int32(pb.ErrorCode_InternalError), err)
 			return
 		}
 		users = append(users, userInfo)
 	} else {
-		RetCommonMsg(out, http.StatusInternalServerError, int32(cmd.ErrorCode_ParamError), Param_Error)
+		RetCommonMsg(out, http.StatusInternalServerError, int32(pb.ErrorCode_ParamError), Param_Error)
 		return
 	}
 
 	msg := UserInfoRes{Users: users}
 
 	// 返回结果数据
-	RetCommonMsg(out, http.StatusOK, int32(cmd.ErrorCode_Success), msg)
+	RetCommonMsg(out, http.StatusOK, int32(pb.ErrorCode_Success), msg)
 }
 
 func (s *IDIPServer) GetUserInfo2(roleId string) (*CommonUser, error) {
 	userStub := stub.NewUserStub(roleId)
 	in := &base.ProtoMsg{
 		AppId:   s.AppId,
-		MsgId:   int32(cmd.Protocols_PS2AS_GetUserInfo),
+		MsgId:   int32(pb.Protocols_PS2AS_GetUserInfo),
 		UserId:  roleId,
 		RoleId:  0,
 		UAID:    roleId,
 		Data:    nil,
 		ErrCode: 0,
-		//GUID:    utils.GenIntUUID(),
+		// GUID:    utils.GenIntUUID(),
 		ServerReqIdx: utils.GenIntUUID(),
 		Topic:        "",
 	}
@@ -99,7 +99,7 @@ func (s *IDIPServer) GetUserInfo2(roleId string) (*CommonUser, error) {
 	if rsp.ErrCode != RET_CODE_SUCCESS || err != nil {
 		return nil, err
 	}
-	res := &cmd.S2AS_GetUserInfoRes{}
+	res := &pb.S2AS_GetUserInfoRes{}
 	err = base.UnmarshalData(rsp.Data, res)
 	if err != nil {
 		return nil, err

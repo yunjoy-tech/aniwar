@@ -13,7 +13,7 @@ import (
 	_ "github.com/dapr/go-sdk/actor"
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/actorserver/frame"
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/db"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/baseactor"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/baseconf"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/global"
@@ -24,7 +24,7 @@ import (
 )
 
 type MailData struct {
-	Data *cmd.PSystemMailInfo
+	Data *pb.PSystemMailInfo
 }
 
 type MailActor struct {
@@ -41,7 +41,7 @@ func New() actor.Server {
 	a.ActorType = global.MailActorType
 	a.SetActor(a)
 	a.Srv = frame.GSrv
-	//a.MsgFunc = make(map[int32]base.FProtoMsgHandler)
+	// a.MsgFunc = make(map[int32]base.FProtoMsgHandler)
 	a.HandlersMap = make(map[svc.MongoDbType][]baseactor.IBaseHandler, 0)
 
 	// 协议注册
@@ -104,7 +104,7 @@ func (s *MailActor) LoadNewMail(ctx context.Context, params []byte) error {
 func (s *MailActor) commit2Redis() error {
 	var err error
 	s.Debugf("commit2Redis UserActor, %s", s.ID())
-	cacheMap := make(map[string]*cmd.CacheKeyDataEx, 0)
+	cacheMap := make(map[string]*pb.CacheKeyDataEx, 0)
 	kvTableMap := make(map[string]*state.KvTable, 0)
 	for mongoType, handlers := range s.HandlersMap {
 		for _, handler := range handlers {
@@ -121,9 +121,9 @@ func (s *MailActor) commit2Redis() error {
 				}
 
 				kvTableMap[dbKey] = kvTable
-				cacheMap[dbKey] = &cmd.CacheKeyDataEx{
+				cacheMap[dbKey] = &pb.CacheKeyDataEx{
 					Key: dbKey,
-					//DataLen:     int32(len(kvTable.Data)),
+					// DataLen:     int32(len(kvTable.Data)),
 					MongoDBType: string(mongoType),
 				}
 			}
@@ -158,14 +158,14 @@ func (s *MailActor) getCacheTTL() int {
 	// 设置延迟同步的key
 	gcTime, err := strconv.Atoi(baseconf.GetBaseConf().UserActorGCTime)
 	if err != nil {
-		gcTime = 600 //默认600s秒
+		gcTime = 600 // 默认600s秒
 	}
 
 	return gcTime*2 + 600 // gc后再保留600s
 }
 
 // 设置延迟同步的key
-func (s *MailActor) saveCacheKeyEx(cacheMap map[string]*cmd.CacheKeyDataEx, ttl int) error {
+func (s *MailActor) saveCacheKeyEx(cacheMap map[string]*pb.CacheKeyDataEx, ttl int) error {
 	var (
 		err error
 	)
@@ -206,7 +206,7 @@ func (s *MailActor) loadAllData() error {
 	)
 
 	mongoDBs := []service.MongoDbType{
-		//service.MongoDbType_MongoAccount, // 账号db
+		// service.MongoDbType_MongoAccount, // 账号db
 		service.MongoDbType_MongoGame, // 游戏db
 	}
 

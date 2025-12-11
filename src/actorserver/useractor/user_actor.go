@@ -23,7 +23,7 @@ import (
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/actorserver/useractor/event"
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common"
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/db"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/baseactor"
 	svc "gitlab.musadisca-games.com/wangxw/musae/framework/service"
@@ -111,7 +111,7 @@ func New() actor.Server {
 
 	// a.MsgFunc = make(map[int32]base.FProtoMsgHandler)
 	a.RpcMethods = make(map[string]*baseactor.RpcMethod)
-	a.Data = &cmd.PlayerData{}
+	a.Data = &pb.PlayerData{}
 
 	a.eventManager = event.NewManager(a.ID())
 	a.TaskTypeMgr = NewTaskTypeMgr(a)
@@ -356,7 +356,7 @@ func (u *UserActor) FixedTime2DB() {
 				u.LoginHandler.UpdateOfflineTS(time.Now().Unix())
 
 				// 向allianceActor 发送topic 信息
-				u.UserAllianceHandler.PushTopic2Alliance(cmd.GateTopicOperator_GTO_unbound, "")
+				u.UserAllianceHandler.PushTopic2Alliance(pb.GateTopicOperator_GTO_unbound, "")
 
 				// 下线埋点
 				// threading.RunSafe(func() {
@@ -393,7 +393,7 @@ func (u *UserActor) FixedTime2DB() {
 func (u *UserActor) commit2Redis() error {
 	var err error
 	// u.Debugf("commit2Redis UserActor, %s", u.ID())
-	cacheMap := make(map[string]*cmd.CacheKeyDataEx, 0)
+	cacheMap := make(map[string]*pb.CacheKeyDataEx, 0)
 	kvTableMap := make(map[string]*state.KvTable, 0)
 	for mongoType, handlers := range u.HandlersMap {
 		for _, handler := range handlers {
@@ -410,7 +410,7 @@ func (u *UserActor) commit2Redis() error {
 				}
 
 				kvTableMap[dbKey] = kvTable
-				cacheMap[dbKey] = &cmd.CacheKeyDataEx{
+				cacheMap[dbKey] = &pb.CacheKeyDataEx{
 					Key: dbKey,
 					// DataLen:     int32(len(kvTable.Data)),
 					MongoDBType: string(mongoType),
@@ -473,8 +473,8 @@ func (u *UserActor) PushMsg2Gate(msg proto.Message) error {
 	return err*/
 }
 
-func (u *UserActor) SendErrCode(uid string, code cmd.ErrorCode) {
-	ntf := &cmd.S2C_ErrorCodeNtf{
+func (u *UserActor) SendErrCode(uid string, code pb.ErrorCode) {
+	ntf := &pb.S2C_ErrorCodeNtf{
 		ErrorCode: uint32(code),
 		Param:     nil,
 	}
@@ -489,19 +489,19 @@ func (u *UserActor) UserInvoke(ctx context.Context, in *base.ProtoMsg) (msg *bas
 	if u.IsMiniMode {
 		if err = u.Activate("UserInvoke"); err != nil {
 			msg = &base.ProtoMsg{
-				MsgId:   int32(cmd.Protocols_PS2C_ErrorCodeNtf),
+				MsgId:   int32(pb.Protocols_PS2C_ErrorCodeNtf),
 				UserId:  in.UserId,
 				UAID:    u.ID(),
 				Data:    []byte(err.Error()),
-				ErrCode: int32(cmd.ErrorCode_LoadDBError),
+				ErrCode: int32(pb.ErrorCode_LoadDBError),
 			}
 			return msg, err
 		}
 	}
 
-	if in.MsgId == int32(cmd.Protocols_PS2S_SvcInvokeReq) {
-		msg.MsgId = int32(cmd.Protocols_PS2S_SvcInvokeRes)
-		msg.ErrCode = int32(cmd.ErrorCode_Success)
+	if in.MsgId == int32(pb.Protocols_PS2S_SvcInvokeReq) {
+		msg.MsgId = int32(pb.Protocols_PS2S_SvcInvokeRes)
+		msg.ErrCode = int32(pb.ErrorCode_Success)
 		msg.Data = nil
 		return msg, nil
 	}

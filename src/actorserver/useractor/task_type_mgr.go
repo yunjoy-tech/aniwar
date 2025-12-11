@@ -3,7 +3,7 @@ package useractor
 import (
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/actorserver/useractor/event"
 	excel "gitlab.musadisca-games.com/wangxw/aniwar/src/excel/data"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"time"
 )
 
@@ -169,7 +169,7 @@ func (m *TaskTypeMgr) RegisterTaskTypeHandler(handler event.IListener) {
 
 // --------------------- 任务数据统一创建 ---------------------
 
-func (m *TaskTypeMgr) CreateTaskInfoItemNew(cfg *excel.TaskCfg, canCreate bool) *cmd.TaskInfoItem {
+func (m *TaskTypeMgr) CreateTaskInfoItemNew(cfg *excel.TaskCfg, canCreate bool) *pb.TaskInfoItem {
 	return m.CreateTaskInfoItem(cfg.Id, cfg.TaskType, cfg.TaskValue, cfg.TaskParam1, canCreate) // fixme 过期时间修正
 }
 
@@ -178,8 +178,8 @@ func (m *TaskTypeMgr) CreateTaskInfoItemNew(cfg *excel.TaskCfg, canCreate bool) 
 //	任务创建
 //	-- 生涯型 	直接创建
 //	-- 非生涯型 	判断canCreate  true则判断进度值，false则进度值强制为0
-func (m *TaskTypeMgr) CreateTaskInfoItem(id, typ, target int32, params []int32, canCreate bool, times ...int32) *cmd.TaskInfoItem {
-	var task *cmd.TaskInfoItem
+func (m *TaskTypeMgr) CreateTaskInfoItem(id, typ, target int32, params []int32, canCreate bool, times ...int32) *pb.TaskInfoItem {
+	var task *pb.TaskInfoItem
 	switch typ {
 	case TASK_TYPE_11, TASK_TYPE_12, TASK_TYPE_31, TASK_TYPE_91, TASK_TYPE_92, TASK_TYPE_507, TASK_TYPE_525,
 		TASK_TYPE_104, TASK_TYPE_105, TASK_TYPE_41, TASK_TYPE_313, TASK_TYPE_408, TASK_TYPE_510, TASK_TYPE_527,
@@ -233,8 +233,8 @@ func (m *TaskTypeMgr) CreateTaskInfoItem(id, typ, target int32, params []int32, 
 }
 
 // 通用的构建数据方法
-func (m *TaskTypeMgr) createCommon(id, typ, target int32, params []int32, canCreate bool, times ...int32) *cmd.TaskInfoItem {
-	task := &cmd.TaskInfoItem{
+func (m *TaskTypeMgr) createCommon(id, typ, target int32, params []int32, canCreate bool, times ...int32) *pb.TaskInfoItem {
+	task := &pb.TaskInfoItem{
 		Id:          id,
 		CondId:      typ,
 		CurValue:    0,
@@ -249,8 +249,8 @@ func (m *TaskTypeMgr) createCommon(id, typ, target int32, params []int32, canCre
 	return task
 }
 
-func (m *TaskTypeMgr) createType101(id, typ, target int32, params []int32, canCreate bool, times ...int32) *cmd.TaskInfoItem {
-	task := &cmd.TaskInfoItem{
+func (m *TaskTypeMgr) createType101(id, typ, target int32, params []int32, canCreate bool, times ...int32) *pb.TaskInfoItem {
+	task := &pb.TaskInfoItem{
 		Id:          id,
 		CondId:      typ,
 		CurValue:    0,
@@ -269,8 +269,8 @@ func (m *TaskTypeMgr) createType101(id, typ, target int32, params []int32, canCr
 	return task
 }
 
-func (m *TaskTypeMgr) createType102(id, typ, target int32, params []int32, canCreate bool, times ...int32) *cmd.TaskInfoItem {
-	task := &cmd.TaskInfoItem{
+func (m *TaskTypeMgr) createType102(id, typ, target int32, params []int32, canCreate bool, times ...int32) *pb.TaskInfoItem {
+	task := &pb.TaskInfoItem{
 		Id:          id,
 		CondId:      typ,
 		CurValue:    0,
@@ -292,8 +292,8 @@ func (m *TaskTypeMgr) createType102(id, typ, target int32, params []int32, canCr
 	return task
 }
 
-func (m *TaskTypeMgr) createType103(id, typ, target int32, params []int32, canCreate bool, times ...int32) *cmd.TaskInfoItem {
-	task := &cmd.TaskInfoItem{
+func (m *TaskTypeMgr) createType103(id, typ, target int32, params []int32, canCreate bool, times ...int32) *pb.TaskInfoItem {
+	task := &pb.TaskInfoItem{
 		Id:          id,
 		CondId:      typ,
 		CurValue:    0,
@@ -315,8 +315,8 @@ func (m *TaskTypeMgr) createType103(id, typ, target int32, params []int32, canCr
 	return task
 }
 
-func (m *TaskTypeMgr) createType121(id, typ, target int32, params []int32, canCreate bool, times ...int32) *cmd.TaskInfoItem {
-	task := &cmd.TaskInfoItem{
+func (m *TaskTypeMgr) createType121(id, typ, target int32, params []int32, canCreate bool, times ...int32) *pb.TaskInfoItem {
+	task := &pb.TaskInfoItem{
 		Id:          id,
 		CondId:      typ,
 		CurValue:    0,
@@ -338,13 +338,13 @@ func (m *TaskTypeMgr) createType121(id, typ, target int32, params []int32, canCr
 	return task
 }
 
-func (m *TaskTypeMgr) createType505(id, typ, target int32, params []int32, canCreate bool, times ...int32) *cmd.TaskInfoItem {
+func (m *TaskTypeMgr) createType505(id, typ, target int32, params []int32, canCreate bool, times ...int32) *pb.TaskInfoItem {
 	if len(params) == 0 {
 		m.actor.Debugf("task config err %d", typ)
 		return nil
 	}
 
-	task := &cmd.TaskInfoItem{
+	task := &pb.TaskInfoItem{
 		Id:          id,
 		CondId:      typ,
 		CurValue:    m.actor.CardHandler.GetCardCountByLevel(params[0]),
@@ -360,7 +360,7 @@ func (m *TaskTypeMgr) createType505(id, typ, target int32, params []int32, canCr
 	return task
 }
 
-func (m *TaskTypeMgr) createType401(id, typ, target int32, params []int32, canCreate bool, times ...int32) *cmd.TaskInfoItem {
+func (m *TaskTypeMgr) createType401(id, typ, target int32, params []int32, canCreate bool, times ...int32) *pb.TaskInfoItem {
 	if len(params) == 0 {
 		m.actor.Debugf("task config err %d", typ)
 		return nil
@@ -371,7 +371,7 @@ func (m *TaskTypeMgr) createType401(id, typ, target int32, params []int32, canCr
 		cur = 1
 	}
 
-	task := &cmd.TaskInfoItem{
+	task := &pb.TaskInfoItem{
 		Id:          id,
 		CondId:      typ,
 		CurValue:    cur,
@@ -387,9 +387,9 @@ func (m *TaskTypeMgr) createType401(id, typ, target int32, params []int32, canCr
 	return task
 }
 
-func (m *TaskTypeMgr) createType402(id int32, typ int32, target int32, params []int32, canCreate bool, times ...int32) *cmd.TaskInfoItem {
+func (m *TaskTypeMgr) createType402(id int32, typ int32, target int32, params []int32, canCreate bool, times ...int32) *pb.TaskInfoItem {
 
-	task := &cmd.TaskInfoItem{
+	task := &pb.TaskInfoItem{
 		Id:          id,
 		CondId:      typ,
 		CurValue:    int32(m.actor.CardHandler.GetCardCount()),
@@ -405,13 +405,13 @@ func (m *TaskTypeMgr) createType402(id int32, typ int32, target int32, params []
 	return task
 }
 
-func (m *TaskTypeMgr) createType403(id int32, typ int32, target int32, params []int32, canCreate bool, times ...int32) *cmd.TaskInfoItem {
+func (m *TaskTypeMgr) createType403(id int32, typ int32, target int32, params []int32, canCreate bool, times ...int32) *pb.TaskInfoItem {
 	if len(params) == 0 {
 		m.actor.Debugf("task config err %d", typ)
 		return nil
 	}
 
-	task := &cmd.TaskInfoItem{
+	task := &pb.TaskInfoItem{
 		Id:          id,
 		CondId:      typ,
 		CurValue:    m.actor.CardHandler.GetCardCountByQuality(params[0]),
@@ -427,7 +427,7 @@ func (m *TaskTypeMgr) createType403(id int32, typ int32, target int32, params []
 	return task
 }
 
-func (m *TaskTypeMgr) createType404(id int32, typ int32, target int32, params []int32, canCreate bool, times ...int32) *cmd.TaskInfoItem {
+func (m *TaskTypeMgr) createType404(id int32, typ int32, target int32, params []int32, canCreate bool, times ...int32) *pb.TaskInfoItem {
 	if len(params) == 0 {
 		m.actor.Debugf("task config err %d", typ)
 		return nil
@@ -437,7 +437,7 @@ func (m *TaskTypeMgr) createType404(id int32, typ int32, target int32, params []
 		cur = 1
 	}
 
-	task := &cmd.TaskInfoItem{
+	task := &pb.TaskInfoItem{
 		Id:          id,
 		CondId:      typ,
 		CurValue:    cur,
@@ -453,9 +453,9 @@ func (m *TaskTypeMgr) createType404(id int32, typ int32, target int32, params []
 	return task
 }
 
-func (m *TaskTypeMgr) createType406(id int32, typ int32, target int32, params []int32, canCreate bool, times ...int32) *cmd.TaskInfoItem {
+func (m *TaskTypeMgr) createType406(id int32, typ int32, target int32, params []int32, canCreate bool, times ...int32) *pb.TaskInfoItem {
 
-	task := &cmd.TaskInfoItem{
+	task := &pb.TaskInfoItem{
 		Id:          id,
 		CondId:      typ,
 		CurValue:    m.actor.SkinHandler.getSkinCount(),
@@ -471,8 +471,8 @@ func (m *TaskTypeMgr) createType406(id int32, typ int32, target int32, params []
 	return task
 }
 
-func (m *TaskTypeMgr) createType504(id int32, typ int32, target int32, params []int32, canCreate bool, times ...int32) *cmd.TaskInfoItem {
-	task := &cmd.TaskInfoItem{
+func (m *TaskTypeMgr) createType504(id int32, typ int32, target int32, params []int32, canCreate bool, times ...int32) *pb.TaskInfoItem {
+	task := &pb.TaskInfoItem{
 		Id:          id,
 		CondId:      typ,
 		CurValue:    int32(m.actor.LoginHandler.getRoleLevel()),
@@ -488,7 +488,7 @@ func (m *TaskTypeMgr) createType504(id int32, typ int32, target int32, params []
 	return task
 }
 
-func (m *TaskTypeMgr) createType521(id int32, typ int32, target int32, params []int32, canCreate bool, times ...int32) *cmd.TaskInfoItem {
+func (m *TaskTypeMgr) createType521(id int32, typ int32, target int32, params []int32, canCreate bool, times ...int32) *pb.TaskInfoItem {
 	if len(params) == 0 {
 		m.actor.Debugf("task config err %d", typ)
 		return nil
@@ -497,7 +497,7 @@ func (m *TaskTypeMgr) createType521(id int32, typ int32, target int32, params []
 	// if m.actor.QuestHandler.checkQuestFinish(params[0]) {
 	// 	cur = 1
 	// }
-	task := &cmd.TaskInfoItem{
+	task := &pb.TaskInfoItem{
 		Id:          id,
 		CondId:      typ,
 		CurValue:    cur,
@@ -513,8 +513,8 @@ func (m *TaskTypeMgr) createType521(id int32, typ int32, target int32, params []
 	return task
 }
 
-func (m *TaskTypeMgr) createType501(id int32, typ int32, target int32, params []int32, canCreate bool, times ...int32) *cmd.TaskInfoItem {
-	task := &cmd.TaskInfoItem{
+func (m *TaskTypeMgr) createType501(id int32, typ int32, target int32, params []int32, canCreate bool, times ...int32) *pb.TaskInfoItem {
+	task := &pb.TaskInfoItem{
 		Id:          id,
 		CondId:      typ,
 		CurValue:    m.actor.LoginHandler.getLoginDay(),
@@ -530,13 +530,13 @@ func (m *TaskTypeMgr) createType501(id int32, typ int32, target int32, params []
 	return task
 }
 
-func (m *TaskTypeMgr) createType503(id int32, typ int32, target int32, params []int32, canCreate bool, times ...int32) *cmd.TaskInfoItem {
+func (m *TaskTypeMgr) createType503(id int32, typ int32, target int32, params []int32, canCreate bool, times ...int32) *pb.TaskInfoItem {
 	// 是否真正创建
 	var cur int32
 	if canCreate {
 		cur = 1
 	}
-	task := &cmd.TaskInfoItem{
+	task := &pb.TaskInfoItem{
 		Id:          id,
 		CondId:      typ,
 		CurValue:    cur,
@@ -558,7 +558,7 @@ func (m *TaskTypeMgr) createType503(id int32, typ int32, target int32, params []
 //	任务完成
 //	-- 生涯型	直接增加
 //	-- 非生涯型	判断canCheck	 true则增加进度值，false则进度值保持不变
-func (m *TaskTypeMgr) CheckTaskConditionComplete(task *cmd.TaskInfoItem, e event.IEvent, canCheck bool) bool {
+func (m *TaskTypeMgr) CheckTaskConditionComplete(task *pb.TaskInfoItem, e event.IEvent, canCheck bool) bool {
 	if task == nil {
 		m.actor.Debug("task is nil")
 		return false
@@ -649,7 +649,7 @@ func (m *TaskTypeMgr) CheckTaskConditionComplete(task *cmd.TaskInfoItem, e event
 }
 
 // 任务完成，生涯计数处理
-func (m *TaskTypeMgr) handleTaskAchieveChange(task *cmd.TaskInfoItem) {
+func (m *TaskTypeMgr) handleTaskAchieveChange(task *pb.TaskInfoItem) {
 	// 任务处理
 	err := m.actor.eventManager.SyncPublish(event.NewBasicEvent(TASK_EVENT_TASK_COMPLETE, []int32{}, map[string]interface{}{
 		"task_id": task.Id,
@@ -676,12 +676,12 @@ func (m *TaskTypeMgr) handleTaskAchieveChange(task *cmd.TaskInfoItem) {
 }
 
 // 通用的check逻辑
-func (m *TaskTypeMgr) checkCommon(task *cmd.TaskInfoItem, e event.IEvent) {
+func (m *TaskTypeMgr) checkCommon(task *pb.TaskInfoItem, e event.IEvent) {
 	task.CurValue += 1
 }
 
 // 增加指定数量的通用逻辑
-func (m *TaskTypeMgr) checkCommonCount(task *cmd.TaskInfoItem, e event.IEvent) {
+func (m *TaskTypeMgr) checkCommonCount(task *pb.TaskInfoItem, e event.IEvent) {
 	v, ok := e.Get("count").(int32)
 	if !ok {
 		return
@@ -689,7 +689,7 @@ func (m *TaskTypeMgr) checkCommonCount(task *cmd.TaskInfoItem, e event.IEvent) {
 	task.CurValue += v
 }
 
-func (m *TaskTypeMgr) checkType1(task *cmd.TaskInfoItem, e event.IEvent) {
+func (m *TaskTypeMgr) checkType1(task *pb.TaskInfoItem, e event.IEvent) {
 	monsterIds, ok := e.Get("monster_ids").([]int32)
 	if !ok {
 		return
@@ -697,7 +697,7 @@ func (m *TaskTypeMgr) checkType1(task *cmd.TaskInfoItem, e event.IEvent) {
 	task.CurValue += int32(len(monsterIds))
 }
 
-func (m *TaskTypeMgr) checkType2(task *cmd.TaskInfoItem, e event.IEvent) {
+func (m *TaskTypeMgr) checkType2(task *pb.TaskInfoItem, e event.IEvent) {
 	monsterIds, ok := e.Get("monster_ids").([]int32)
 	if !ok || len(task.Params) == 0 {
 		return
@@ -709,7 +709,7 @@ func (m *TaskTypeMgr) checkType2(task *cmd.TaskInfoItem, e event.IEvent) {
 	}
 }
 
-func (m *TaskTypeMgr) checkType3(task *cmd.TaskInfoItem, e event.IEvent) {
+func (m *TaskTypeMgr) checkType3(task *pb.TaskInfoItem, e event.IEvent) {
 	// 不是大地图
 	if typ, ok := e.Get("type").(bool); ok && typ {
 		return
@@ -718,7 +718,7 @@ func (m *TaskTypeMgr) checkType3(task *cmd.TaskInfoItem, e event.IEvent) {
 	task.CurValue++
 }
 
-func (m *TaskTypeMgr) checkType12(task *cmd.TaskInfoItem, e event.IEvent) {
+func (m *TaskTypeMgr) checkType12(task *pb.TaskInfoItem, e event.IEvent) {
 	resId, ok := e.Get("resource_id").(int32)
 	if !ok || len(task.Params) == 0 {
 		return
@@ -728,7 +728,7 @@ func (m *TaskTypeMgr) checkType12(task *cmd.TaskInfoItem, e event.IEvent) {
 	}
 }
 
-func (m *TaskTypeMgr) checkType91(task *cmd.TaskInfoItem, e event.IEvent) {
+func (m *TaskTypeMgr) checkType91(task *pb.TaskInfoItem, e event.IEvent) {
 	levelId, ok := e.Get("level_id").(int32)
 	if !ok || len(task.Params) == 0 {
 		return
@@ -738,7 +738,7 @@ func (m *TaskTypeMgr) checkType91(task *cmd.TaskInfoItem, e event.IEvent) {
 	}
 }
 
-func (m *TaskTypeMgr) checkType101(task *cmd.TaskInfoItem, e event.IEvent) {
+func (m *TaskTypeMgr) checkType101(task *pb.TaskInfoItem, e event.IEvent) {
 	if len(task.Params) == 0 {
 		task.CurValue += 1
 	} else {
@@ -749,7 +749,7 @@ func (m *TaskTypeMgr) checkType101(task *cmd.TaskInfoItem, e event.IEvent) {
 	}
 }
 
-func (m *TaskTypeMgr) checkType121(task *cmd.TaskInfoItem, e event.IEvent) {
+func (m *TaskTypeMgr) checkType121(task *pb.TaskInfoItem, e event.IEvent) {
 	if len(task.Params) == 0 {
 		task.CurValue += 1
 	} else {
@@ -762,7 +762,7 @@ func (m *TaskTypeMgr) checkType121(task *cmd.TaskInfoItem, e event.IEvent) {
 	}
 }
 
-func (m *TaskTypeMgr) checkType113(task *cmd.TaskInfoItem, e event.IEvent) {
+func (m *TaskTypeMgr) checkType113(task *pb.TaskInfoItem, e event.IEvent) {
 	items, ok := e.Get("items").(map[int32]int32)
 	if !ok || len(task.Params) == 0 {
 		return
@@ -770,7 +770,7 @@ func (m *TaskTypeMgr) checkType113(task *cmd.TaskInfoItem, e event.IEvent) {
 	task.CurValue += items[task.Params[0]]
 }
 
-func (m *TaskTypeMgr) checkType202(task *cmd.TaskInfoItem, e event.IEvent) {
+func (m *TaskTypeMgr) checkType202(task *pb.TaskInfoItem, e event.IEvent) {
 	quality, ok := e.Get("quality").(map[int32]int32)
 	if !ok || len(task.Params) == 0 {
 		return
@@ -778,7 +778,7 @@ func (m *TaskTypeMgr) checkType202(task *cmd.TaskInfoItem, e event.IEvent) {
 	task.CurValue += quality[task.Params[0]]
 }
 
-func (m *TaskTypeMgr) checkType303(task *cmd.TaskInfoItem, e event.IEvent) {
+func (m *TaskTypeMgr) checkType303(task *pb.TaskInfoItem, e event.IEvent) {
 	buildId, ok := e.Get("build_id").(int32)
 	if !ok || len(task.Params) == 0 {
 		return
@@ -788,7 +788,7 @@ func (m *TaskTypeMgr) checkType303(task *cmd.TaskInfoItem, e event.IEvent) {
 	}
 }
 
-func (m *TaskTypeMgr) checkType401(task *cmd.TaskInfoItem, e event.IEvent) {
+func (m *TaskTypeMgr) checkType401(task *pb.TaskInfoItem, e event.IEvent) {
 	cardId, ok := e.Get("cardId").(uint32)
 	if !ok || len(task.Params) == 0 {
 		return
@@ -798,7 +798,7 @@ func (m *TaskTypeMgr) checkType401(task *cmd.TaskInfoItem, e event.IEvent) {
 	}
 }
 
-func (m *TaskTypeMgr) checkType403(task *cmd.TaskInfoItem, e event.IEvent) {
+func (m *TaskTypeMgr) checkType403(task *pb.TaskInfoItem, e event.IEvent) {
 	rarity, ok := e.Get("rarity").(int32)
 	if !ok || len(task.Params) == 0 {
 		return
@@ -808,7 +808,7 @@ func (m *TaskTypeMgr) checkType403(task *cmd.TaskInfoItem, e event.IEvent) {
 	}
 }
 
-func (m *TaskTypeMgr) checkType408(task *cmd.TaskInfoItem, e event.IEvent) {
+func (m *TaskTypeMgr) checkType408(task *pb.TaskInfoItem, e event.IEvent) {
 	poolId, ok := e.Get("pool_id").(int32)
 	if !ok || len(task.Params) == 0 {
 		return
@@ -820,7 +820,7 @@ func (m *TaskTypeMgr) checkType408(task *cmd.TaskInfoItem, e event.IEvent) {
 	}
 }
 
-func (m *TaskTypeMgr) checkType404(task *cmd.TaskInfoItem, e event.IEvent) {
+func (m *TaskTypeMgr) checkType404(task *pb.TaskInfoItem, e event.IEvent) {
 	rarity, ok := e.Get("skin_id").(int32)
 	if !ok || len(task.Params) == 0 {
 		return
@@ -830,13 +830,13 @@ func (m *TaskTypeMgr) checkType404(task *cmd.TaskInfoItem, e event.IEvent) {
 	}
 }
 
-func (m *TaskTypeMgr) checkType502(task *cmd.TaskInfoItem, e event.IEvent) {
+func (m *TaskTypeMgr) checkType502(task *pb.TaskInfoItem, e event.IEvent) {
 	if m.actor.DutyHandler.CheckDailyTaskAllComplete() {
 		task.CurValue = task.TargetValue
 	}
 }
 
-func (m *TaskTypeMgr) checkType504(task *cmd.TaskInfoItem, e event.IEvent) {
+func (m *TaskTypeMgr) checkType504(task *pb.TaskInfoItem, e event.IEvent) {
 	level, ok := e.Get("level").(int32)
 	if !ok {
 		return
@@ -844,14 +844,14 @@ func (m *TaskTypeMgr) checkType504(task *cmd.TaskInfoItem, e event.IEvent) {
 	task.CurValue = level
 }
 
-func (m *TaskTypeMgr) checkType505(task *cmd.TaskInfoItem, e event.IEvent) {
+func (m *TaskTypeMgr) checkType505(task *pb.TaskInfoItem, e event.IEvent) {
 	if len(task.Params) == 0 {
 		return
 	}
 	task.CurValue = m.actor.CardHandler.GetCardCountByLevel(task.Params[0])
 }
 
-func (m *TaskTypeMgr) checkType507(task *cmd.TaskInfoItem, e event.IEvent) {
+func (m *TaskTypeMgr) checkType507(task *pb.TaskInfoItem, e event.IEvent) {
 	typ, ok := e.Get("type").(int32)
 	if !ok {
 		return
@@ -862,7 +862,7 @@ func (m *TaskTypeMgr) checkType507(task *cmd.TaskInfoItem, e event.IEvent) {
 	}
 }
 
-func (m *TaskTypeMgr) checkType510(task *cmd.TaskInfoItem, e event.IEvent) {
+func (m *TaskTypeMgr) checkType510(task *pb.TaskInfoItem, e event.IEvent) {
 	reward, ok := e.Get("reward").(map[int32]int32)
 	if !ok {
 		return
@@ -878,7 +878,7 @@ func (m *TaskTypeMgr) checkType510(task *cmd.TaskInfoItem, e event.IEvent) {
 	}
 }
 
-func (m *TaskTypeMgr) checkType511(task *cmd.TaskInfoItem, e event.IEvent) {
+func (m *TaskTypeMgr) checkType511(task *pb.TaskInfoItem, e event.IEvent) {
 	buildingId, ok := e.Get("build_id").(int32)
 	if ok && buildingId == task.Params[0] {
 		level, ok1 := e.Get("level").(int32)
@@ -888,7 +888,7 @@ func (m *TaskTypeMgr) checkType511(task *cmd.TaskInfoItem, e event.IEvent) {
 	}
 }
 
-func (m *TaskTypeMgr) checkType517(task *cmd.TaskInfoItem, e event.IEvent) {
+func (m *TaskTypeMgr) checkType517(task *pb.TaskInfoItem, e event.IEvent) {
 	buildId, ok := e.Get("build_id").(int32)
 	if !ok {
 		return
@@ -898,7 +898,7 @@ func (m *TaskTypeMgr) checkType517(task *cmd.TaskInfoItem, e event.IEvent) {
 	}
 }
 
-func (m *TaskTypeMgr) checkType518(task *cmd.TaskInfoItem, e event.IEvent) {
+func (m *TaskTypeMgr) checkType518(task *pb.TaskInfoItem, e event.IEvent) {
 	buildId, ok := e.Get("build_id").(int32)
 	cardId, ok1 := e.Get("card_id").(int32)
 	if !ok || !ok1 {
@@ -909,14 +909,14 @@ func (m *TaskTypeMgr) checkType518(task *cmd.TaskInfoItem, e event.IEvent) {
 	}
 }
 
-func (m *TaskTypeMgr) checkType521(task *cmd.TaskInfoItem, e event.IEvent) {
+func (m *TaskTypeMgr) checkType521(task *pb.TaskInfoItem, e event.IEvent) {
 	questId, ok := e.Get("quest_id").(int)
 	if ok && task.Params[0] == int32(questId) {
 		task.CurValue = 1
 	}
 }
 
-func (m *TaskTypeMgr) checkType525(task *cmd.TaskInfoItem, e event.IEvent) {
+func (m *TaskTypeMgr) checkType525(task *pb.TaskInfoItem, e event.IEvent) {
 	reward, ok := e.Get("reward").(map[int32]int32)
 	if !ok {
 		return
@@ -929,7 +929,7 @@ func (m *TaskTypeMgr) checkType525(task *cmd.TaskInfoItem, e event.IEvent) {
 	}
 }
 
-func (m *TaskTypeMgr) checkType527(task *cmd.TaskInfoItem, e event.IEvent) {
+func (m *TaskTypeMgr) checkType527(task *pb.TaskInfoItem, e event.IEvent) {
 	reward, ok := e.Get("reward").(map[int32]int32)
 	if !ok {
 		return

@@ -11,7 +11,7 @@ import (
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common"
 	myUtils "gitlab.musadisca-games.com/wangxw/aniwar/src/common/utils"
 	excel "gitlab.musadisca-games.com/wangxw/aniwar/src/excel/data"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/utils"
 )
 
@@ -29,7 +29,7 @@ func GetDropMgr(actor *UserActor) *DropMgr {
 }
 
 // @param overlying 是否合并奖励
-func mergeDropChange(source, newChange *cmd.DropChange, overlying ...bool) {
+func mergeDropChange(source, newChange *pb.DropChange, overlying ...bool) {
 	if source == nil || newChange == nil {
 		// m.actor.Warnf("mergeDropChange err, source:%v, newChange:%v", source, newChange)
 		return
@@ -38,7 +38,7 @@ func mergeDropChange(source, newChange *cmd.DropChange, overlying ...bool) {
 	// 玩家经验
 	if newChange.RoleExp != nil {
 		if source.RoleExp == nil {
-			source.RoleExp = &cmd.PRoleBattleSettlement{}
+			source.RoleExp = &pb.PRoleBattleSettlement{}
 		}
 
 		source.RoleExp.RoleLevel = newChange.RoleExp.RoleLevel
@@ -57,16 +57,16 @@ func mergeDropChange(source, newChange *cmd.DropChange, overlying ...bool) {
 	}
 }
 
-func mergeItems(items []*cmd.ItemReward) []*cmd.ItemReward {
+func mergeItems(items []*pb.ItemReward) []*pb.ItemReward {
 	tempMap := make(map[uint32]uint32, len(items))
 	for _, v := range items {
 		// TODO 根据id merge 数量
 		tempMap[v.ItemId] += v.Num
 	}
 
-	ret := make([]*cmd.ItemReward, 0, len(tempMap))
+	ret := make([]*pb.ItemReward, 0, len(tempMap))
 	for k, v := range tempMap {
-		ret = append(ret, &cmd.ItemReward{ItemId: k, Num: v})
+		ret = append(ret, &pb.ItemReward{ItemId: k, Num: v})
 	}
 
 	return ret
@@ -75,7 +75,7 @@ func mergeItems(items []*cmd.ItemReward) []*cmd.ItemReward {
 // --------------------------- 统一掉落资源的处理逻辑 ---------------------------
 
 func (m *DropMgr) DropListByItems(dropItemRewards []*excel.ItemReward, isFullMail bool, params []int32,
-	commonData *clidto.Comdata, reason common.ChangeReason) (*cmd.DropChange, error) {
+	commonData *clidto.Comdata, reason common.ChangeReason) (*pb.DropChange, error) {
 
 	items := make(map[uint32]uint32, 0)
 	for _, eachItemReward := range dropItemRewards {
@@ -87,13 +87,13 @@ func (m *DropMgr) DropListByItems(dropItemRewards []*excel.ItemReward, isFullMai
 	}
 
 	if len(items) <= 0 {
-		return &cmd.DropChange{}, nil
+		return &pb.DropChange{}, nil
 	}
 
 	return m.DropList(items, isFullMail, params, commonData, reason)
 }
 
-func (m *DropMgr) DropList2(items map[int32]int32, isFullMail bool, params []int32, commonData *clidto.Comdata, reason common.ChangeReason) (*cmd.DropChange, error) {
+func (m *DropMgr) DropList2(items map[int32]int32, isFullMail bool, params []int32, commonData *clidto.Comdata, reason common.ChangeReason) (*pb.DropChange, error) {
 
 	items2 := make(map[uint32]uint32, 0)
 	for key, val := range items {
@@ -103,7 +103,7 @@ func (m *DropMgr) DropList2(items map[int32]int32, isFullMail bool, params []int
 	return m.DropList(items2, isFullMail, params, commonData, reason)
 }
 
-func (m *DropMgr) DropListByPCommonItemInfo(items map[int32]*cmd.PCommonItemInfo, isFullMail bool, params []int32, commonData *clidto.Comdata, reason common.ChangeReason) (*cmd.DropChange, error) {
+func (m *DropMgr) DropListByPCommonItemInfo(items map[int32]*pb.PCommonItemInfo, isFullMail bool, params []int32, commonData *clidto.Comdata, reason common.ChangeReason) (*pb.DropChange, error) {
 
 	items2 := make(map[uint32]uint32, 0)
 	for _, val := range items {
@@ -113,9 +113,9 @@ func (m *DropMgr) DropListByPCommonItemInfo(items map[int32]*cmd.PCommonItemInfo
 	return m.DropList(items2, isFullMail, params, commonData, reason)
 }
 
-func (m *DropMgr) DropList(items map[uint32]uint32, isFullMail bool, params []int32, commonData *clidto.Comdata, reason common.ChangeReason) (*cmd.DropChange, error) {
+func (m *DropMgr) DropList(items map[uint32]uint32, isFullMail bool, params []int32, commonData *clidto.Comdata, reason common.ChangeReason) (*pb.DropChange, error) {
 	var (
-		dropChange = &cmd.DropChange{}
+		dropChange = &pb.DropChange{}
 	)
 
 	if len(items) <= 0 {
@@ -160,33 +160,33 @@ func (m *DropMgr) DropList(items map[uint32]uint32, isFullMail bool, params []in
 // 奖励物品掉落
 // @param DropChange 给前端的改变量-界面显示
 // @param commonData 给前端最终量-修改前端的缓存数据
-func (m *DropMgr) doDrop(itemCfg *excel.ItemCfg, itemNum uint32, params []int32, commonData *clidto.Comdata, reason common.ChangeReason) (*cmd.DropChange, error) {
+func (m *DropMgr) doDrop(itemCfg *excel.ItemCfg, itemNum uint32, params []int32, commonData *clidto.Comdata, reason common.ChangeReason) (*pb.DropChange, error) {
 
 	var (
 		err        error
-		dropChange = &cmd.DropChange{}
+		dropChange = &pb.DropChange{}
 	)
 
-	switch cmd.ItemType(itemCfg.Type) {
-	case cmd.ItemType_Ability:
+	switch pb.ItemType(itemCfg.Type) {
+	case pb.ItemType_Ability:
 		_, err = m.handleItemTypeAbility(itemCfg, itemNum, params, commonData, dropChange)
 		if err != nil {
 			m.actor.Warnf("doDrop ===>>> handleItemTypeAbility=%v", err)
 		}
 		// if err == nil {
 		//	dropChange.CardExpInfos = append(dropChange.CardExpInfos, expRewards...)
-		//	//dropChange.Items = append(dropChange.Items, &cmd.ItemReward{ItemId: uint32(itemCfg.ItemId), Num: itemNum})
+		//	//dropChange.Items = append(dropChange.Items, &pb.ItemReward{ItemId: uint32(itemCfg.ItemId), Num: itemNum})
 		// }
 
-	case cmd.ItemType_Currency:
+	case pb.ItemType_Currency:
 		err = m.actor.CurrencyHandler.AddCurrency(itemCfg.ItemId, int64(itemNum), commonData, reason)
-		dropChange.Items = append(dropChange.Items, &cmd.ItemReward{ItemId: uint32(itemCfg.ItemId), Num: itemNum})
+		dropChange.Items = append(dropChange.Items, &pb.ItemReward{ItemId: uint32(itemCfg.ItemId), Num: itemNum})
 
-	case cmd.ItemType_Consumable,
-		cmd.ItemType_Material,
-		cmd.ItemType_Food,
-		cmd.ItemType_Gift,
-		cmd.ItemType_Quest:
+	case pb.ItemType_Consumable,
+		pb.ItemType_Material,
+		pb.ItemType_Food,
+		pb.ItemType_Gift,
+		pb.ItemType_Quest:
 		eachChangeItems, eachFinalItems, limitItems, errx := m.handleItemTypeBag(itemCfg, itemNum, reason)
 		err = errx
 		if errx == nil {
@@ -195,29 +195,29 @@ func (m *DropMgr) doDrop(itemCfg *excel.ItemCfg, itemNum uint32, params []int32,
 			myUtils.MergeItems(m.limitItems, limitItems)
 		}
 
-	case cmd.ItemType_Card:
+	case pb.ItemType_Card:
 		drop, errx := m.actor.CardHandler.AddCard(itemCfg, itemNum, commonData)
 		err = errx
 		if drop != nil {
 			dropChange.Items = append(dropChange.Items, drop.Items...)
 		}
 
-	case cmd.ItemType_CardSkin:
+	case pb.ItemType_CardSkin:
 		drop, errx := m.actor.SkinHandler.AddCardSkin(itemCfg, itemNum, commonData)
 		err = errx
 		if drop != nil {
 			dropChange.Items = append(dropChange.Items, drop.Items...)
 		}
 
-	case cmd.ItemType_Equip:
+	case pb.ItemType_Equip:
 		err = m.actor.EquipHandler.CreateAndAddEquip(itemCfg.ItemId, int32(itemNum), commonData)
 		if err == nil {
-			dropChange.Items = append(dropChange.Items, &cmd.ItemReward{ItemId: uint32(itemCfg.ItemId), Num: itemNum})
+			dropChange.Items = append(dropChange.Items, &pb.ItemReward{ItemId: uint32(itemCfg.ItemId), Num: itemNum})
 		}
-	case cmd.ItemType_Stamina: // 更新玩家体力
+	case pb.ItemType_Stamina: // 更新玩家体力
 		err = m.actor.PlayerLevelHandler.AddStamina(int32(itemNum), commonData, reason)
 		if err == nil {
-			dropChange.Items = append(dropChange.Items, &cmd.ItemReward{ItemId: uint32(itemCfg.ItemId), Num: itemNum})
+			dropChange.Items = append(dropChange.Items, &pb.ItemReward{ItemId: uint32(itemCfg.ItemId), Num: itemNum})
 		}
 
 	default:
@@ -230,11 +230,11 @@ func (m *DropMgr) doDrop(itemCfg *excel.ItemCfg, itemNum uint32, params []int32,
 
 // 掉落道具子类型1处理
 func (m *DropMgr) handleItemTypeAbility(itemCfg *excel.ItemCfg, itemNum uint32, params []int32,
-	commonData *clidto.Comdata, dropChange *cmd.DropChange) ([]*cmd.CommonCardExpReward, error) {
+	commonData *clidto.Comdata, dropChange *pb.DropChange) ([]*pb.CommonCardExpReward, error) {
 
 	switch itemCfg.SubType {
-	case int32(cmd.ItemSubType_1_Ability_RoleExp):
-		dropChange.RoleExp = &cmd.PRoleBattleSettlement{
+	case int32(pb.ItemSubType_1_Ability_RoleExp):
+		dropChange.RoleExp = &pb.PRoleBattleSettlement{
 			RoleLevel: m.actor.GetUserData().Common.RoleLevel, // 变化前的等级
 			RoleExp:   itemNum,                                // 这次增加的经验值
 		}
@@ -242,7 +242,7 @@ func (m *DropMgr) handleItemTypeAbility(itemCfg *excel.ItemCfg, itemNum uint32, 
 		_, err := m.actor.LoginHandler.AddRoleExp(uint64(itemNum), commonData)
 		return nil, err
 
-	case int32(cmd.ItemSubType_1_Ability_CardExp):
+	case int32(pb.ItemSubType_1_Ability_CardExp):
 		expRewards, cards := m.actor.CardHandler.AddCardExpByIdList(params, int32(itemNum))
 		dropChange.CardExpInfos = append(dropChange.CardExpInfos, expRewards...)
 		for _, v := range cards {
@@ -250,10 +250,10 @@ func (m *DropMgr) handleItemTypeAbility(itemCfg *excel.ItemCfg, itemNum uint32, 
 		}
 		return expRewards, nil
 
-	case int32(cmd.ItemSubType_1_Ability_CardFavoriteExp):
+	case int32(pb.ItemSubType_1_Ability_CardFavoriteExp):
 		cardId := m.actor.DutyHandler.GetCurDutyCard()
 		card, errCode := m.actor.CardHandler.AddFavoriteExpById(cardId, itemNum)
-		if card == nil || errCode != cmd.ErrorCode_Success {
+		if card == nil || errCode != pb.ErrorCode_Success {
 			break
 		}
 		commonData.Data.Card = append(commonData.Data.Card, card)
@@ -266,7 +266,7 @@ func (m *DropMgr) handleItemTypeAbility(itemCfg *excel.ItemCfg, itemNum uint32, 
 }
 
 // 直接掉落背包的处理
-func (m *DropMgr) handleItemTypeBag(itemCfg *excel.ItemCfg, itemNum uint32, reason common.ChangeReason) ([]*cmd.ItemReward, []*cmd.PCommonItemInfo, map[int32]int32, error) {
+func (m *DropMgr) handleItemTypeBag(itemCfg *excel.ItemCfg, itemNum uint32, reason common.ChangeReason) ([]*pb.ItemReward, []*pb.PCommonItemInfo, map[int32]int32, error) {
 
 	itemInfo := m.CreatePCommonItemInfo(uint32(itemCfg.Id), itemNum)
 	changeItems, finalItems, limitItems, err := m.actor.UserData.AddItems(m.actor.uid, reason, itemInfo)
@@ -284,7 +284,7 @@ func (m *DropMgr) handleItemTypeBag(itemCfg *excel.ItemCfg, itemNum uint32, reas
 	return changeItems, finalItems, limitItems, err
 }
 
-func (m *DropMgr) CreatePCommonItemInfo(itemId, itemNum uint32) *cmd.PCommonItemInfo {
+func (m *DropMgr) CreatePCommonItemInfo(itemId, itemNum uint32) *pb.PCommonItemInfo {
 	// 到期时间
 	expireSec := int64(0)
 	itemCfg := excel.GetItemMgr().GetById(int32(itemId))
@@ -302,7 +302,7 @@ func (m *DropMgr) CreatePCommonItemInfo(itemId, itemNum uint32) *cmd.PCommonItem
 
 	m.actor.Debugf("道具%d, 数量%d, 主键%d, 到期时间%d", itemId, itemNum, uniqueId, expireSec)
 
-	return &cmd.PCommonItemInfo{
+	return &pb.PCommonItemInfo{
 		UniqueId:            uniqueId,
 		BaseId:              itemId,
 		ItemNum:             itemNum,
@@ -328,18 +328,18 @@ func (m *DropMgr) CheckLimit(itemId, itemNum int32) bool {
 	}
 
 	// 按类型检查
-	switch cmd.ItemType(itemCfg.Type) {
-	case cmd.ItemType_Ability:
+	switch pb.ItemType(itemCfg.Type) {
+	case pb.ItemType_Ability:
 		return false
 
-	case cmd.ItemType_Currency:
+	case pb.ItemType_Currency:
 		return m.actor.CurrencyHandler.CheckLimit(itemCfg.ItemId, int64(itemNum))
 
-	case cmd.ItemType_Consumable,
-		cmd.ItemType_Material,
-		cmd.ItemType_Food,
-		cmd.ItemType_Gift,
-		cmd.ItemType_Quest:
+	case pb.ItemType_Consumable,
+		pb.ItemType_Material,
+		pb.ItemType_Food,
+		pb.ItemType_Gift,
+		pb.ItemType_Quest:
 		cur := int32(0)
 		for _, item := range m.actor.GetUserItems().Items {
 			if item.BaseId == uint32(itemId) {
@@ -351,16 +351,16 @@ func (m *DropMgr) CheckLimit(itemId, itemNum int32) bool {
 		}
 		return false
 
-	case cmd.ItemType_Card:
+	case pb.ItemType_Card:
 		return false
 
-	case cmd.ItemType_CardSkin:
+	case pb.ItemType_CardSkin:
 		return false
 
-	case cmd.ItemType_Equip:
+	case pb.ItemType_Equip:
 		return m.actor.EquipHandler.CheckLimit(itemNum)
 
-	case cmd.ItemType_Stamina:
+	case pb.ItemType_Stamina:
 		return m.actor.PlayerLevelHandler.CheckLimit(itemNum)
 
 	default:

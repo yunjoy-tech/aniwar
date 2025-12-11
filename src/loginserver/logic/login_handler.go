@@ -21,7 +21,7 @@ import (
 
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/conf"
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/db"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/baseconf"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/metrics"
@@ -62,10 +62,10 @@ func (s *LoginServer) doHandleMsg() {
 				msg := <-s.ch
 				s.ticketDecSum++
 				res := s.handleLoginReq(msg)
-				if res.ErrCode == int32(cmd.ErrorCode_Success) {
-					err = msg.ctx.Reply(int32(cmd.Protocols_PLS2C_LoginRes), res.ErrCode, res)
+				if res.ErrCode == int32(pb.ErrorCode_Success) {
+					err = msg.ctx.Reply(int32(pb.Protocols_PLS2C_LoginRes), res.ErrCode, res)
 				} else {
-					err = msg.ctx.Reply(int32(cmd.Protocols_PS2C_ErrorCodeNtf), res.ErrCode, &cmd.S2C_ErrorCodeNtf{ErrorCode: uint32(res.ErrCode), Param: []string{strconv.Itoa(int(res.ErrCode))}})
+					err = msg.ctx.Reply(int32(pb.Protocols_PS2C_ErrorCodeNtf), res.ErrCode, &pb.S2C_ErrorCodeNtf{ErrorCode: uint32(res.ErrCode), Param: []string{strconv.Itoa(int(res.ErrCode))}})
 				}
 
 				if err != nil {
@@ -76,19 +76,19 @@ func (s *LoginServer) doHandleMsg() {
 	}
 }
 
-func (s *LoginServer) handleLoginReq(msg *Msg) *cmd.LS2C_LoginRes {
-	req := &cmd.C2LS_LoginReq{}
+func (s *LoginServer) handleLoginReq(msg *Msg) *pb.LS2C_LoginRes {
+	req := &pb.C2LS_LoginReq{}
 	err := proto.Unmarshal(msg.Data, req)
-	res := &cmd.LS2C_LoginRes{}
+	res := &pb.LS2C_LoginRes{}
 	if err != nil {
-		res.ErrCode = int32(cmd.ErrorCode_DeSerializeError)
-		logger.Warnf("OnNetMessage err,%v %v %v %v", err, cmd.Protocols(msg.msgId), req, res)
+		res.ErrCode = int32(pb.ErrorCode_DeSerializeError)
+		logger.Warnf("OnNetMessage err,%v %v %v %v", err, pb.Protocols(msg.msgId), req, res)
 		return res
 	}
 
 	// 配置了登录开关，判定一下
 	if b, err := s.GetConfigKeyForBool(db.KeyCfgLoginSwitch); err == nil && b {
-		res.ErrCode = int32(cmd.ErrorCode_LoginClose)
+		res.ErrCode = int32(pb.ErrorCode_LoginClose)
 		return res
 	}
 
@@ -98,7 +98,7 @@ func (s *LoginServer) handleLoginReq(msg *Msg) *cmd.LS2C_LoginRes {
 		if len(ipArr) > 0 {
 			for _, ip := range ipArr {
 				if len(ip) > 0 && ip == msg.ClientIp {
-					res.ErrCode = int32(cmd.ErrorCode_LoginClose)
+					res.ErrCode = int32(pb.ErrorCode_LoginClose)
 					return res
 				}
 			}
@@ -117,7 +117,7 @@ func (s *LoginServer) handleLoginReq(msg *Msg) *cmd.LS2C_LoginRes {
 	sessionId := utils.GenIntGUID()
 	uid, errCode := s.DoHandleLoginReq(req, res, msg.ClientIp, rsaKey)
 	res.ErrCode = int32(errCode)
-	if res.ErrCode == int32(cmd.ErrorCode_Success) {
+	if res.ErrCode == int32(pb.ErrorCode_Success) {
 		res.AccountId = uid
 		res.GatewayIp = global.TcpAddr
 		res.GatewayPort = uint32(conf.GConf().Base.GatePort)
@@ -147,45 +147,45 @@ func (s *LoginServer) handleLoginReq(msg *Msg) *cmd.LS2C_LoginRes {
 		metrics.GaugeInc(metrics.LoginFailedCount)
 	}
 
-	logger.Infof("handleLoginReq [LoginStep] ErrCode:[%v], req=%s, res=%s", cmd.ErrorCode(res.ErrCode), utils.PrettyJson(req), utils.PrettyJson(res))
+	logger.Infof("handleLoginReq [LoginStep] ErrCode:[%v], req=%s, res=%s", pb.ErrorCode(res.ErrCode), utils.PrettyJson(req), utils.PrettyJson(res))
 	return res
 }
 
-func (s *LoginServer) DoHandleLoginReq(req *cmd.C2LS_LoginReq, res *cmd.LS2C_LoginRes, clientIp string, rsaKey string) (string, cmd.ErrorCode) {
+func (s *LoginServer) DoHandleLoginReq(req *pb.C2LS_LoginReq, res *pb.LS2C_LoginRes, clientIp string, rsaKey string) (string, pb.ErrorCode) {
 	var (
 		err     error
 		uid     string
 		channel string
-		//taptapToken  string
+		// taptapToken  string
 		taptapOpenId string
-		tapUserInfo  *cmd.TaptapUserInfo
+		tapUserInfo  *pb.TaptapUserInfo
 	)
 
 	logger.Infof("请求登陆, LoginChannelType:%s, req:%v", req.LoginChannelType, req)
 
 	switch req.LoginChannelType {
-	case cmd.LoginChannelType_SS_Game:
+	case pb.LoginChannelType_SS_Game:
 		// 还未开通
-		return fmt.Sprintf("%v_%v", "ssgame", req.AccountId), cmd.ErrorCode_Account_auth_fail
-	case cmd.LoginChannelType_Lilith_Game:
+		return fmt.Sprintf("%v_%v", "ssgame", req.AccountId), pb.ErrorCode_Account_auth_fail
+	case pb.LoginChannelType_Lilith_Game:
 		appUidStr := req.AccountId
 		appToken := req.AccountPasswd
 
 		appUid, err := strconv.Atoi(appUidStr)
 		if err != nil {
 			logger.Warnf("lilith, 登陆请求验证, 无效的请求参数 appUidStr=%s, err:%v", appUidStr, err.Error())
-			return "", cmd.ErrorCode_Account_auth_fail
+			return "", pb.ErrorCode_Account_auth_fail
 		}
 
-		if _, errCode := s.handleAuthLilith(appUid, appToken); errCode != cmd.ErrorCode_Success {
+		if _, errCode := s.handleAuthLilith(appUid, appToken); errCode != pb.ErrorCode_Success {
 			return "", errCode
 		} else {
 			uid = sdkconstant.GenLilithUid(appUid)
 			channel = sdkconstant.GenLilithChannel()
 		}
 
-	case cmd.LoginChannelType_Taptap_Game:
-		if id, _tapUserInfo, errCode := s.handleAuthTaptap(req.AccountId, req.AccountPasswd, req.Extra); errCode != cmd.ErrorCode_Success {
+	case pb.LoginChannelType_Taptap_Game:
+		if id, _tapUserInfo, errCode := s.handleAuthTaptap(req.AccountId, req.AccountPasswd, req.Extra); errCode != pb.ErrorCode_Success {
 			return "", errCode
 		} else {
 			uid = sdkconstant.GenTaptapUid(id)
@@ -193,8 +193,8 @@ func (s *LoginServer) DoHandleLoginReq(req *cmd.C2LS_LoginReq, res *cmd.LS2C_Log
 			tapUserInfo = _tapUserInfo
 			taptapOpenId = req.AccountId
 		}
-	case cmd.LoginChannelType_KuaiBao_Game:
-		if errCode := s.handleAuthKuaiBao(req.AccountId, req.AccountPasswd); errCode != cmd.ErrorCode_Success {
+	case pb.LoginChannelType_KuaiBao_Game:
+		if errCode := s.handleAuthKuaiBao(req.AccountId, req.AccountPasswd); errCode != pb.ErrorCode_Success {
 			return "", errCode
 		} else {
 			uid = sdkconstant.GenKuaiBaoUid(req.AccountId)
@@ -202,12 +202,12 @@ func (s *LoginServer) DoHandleLoginReq(req *cmd.C2LS_LoginReq, res *cmd.LS2C_Log
 		}
 
 	default:
-		//判断账号合法的字符
+		// 判断账号合法的字符
 		if accountLegalChar(req.AccountId) {
 			logger.Warnf("无效账号, account=%s", req.AccountId)
-			return "", cmd.ErrorCode_AccountInvalid
+			return "", pb.ErrorCode_AccountInvalid
 		}
-		if errCode := s.handleAuthPC(req); errCode != cmd.ErrorCode_Success {
+		if errCode := s.handleAuthPC(req); errCode != pb.ErrorCode_Success {
 			return "", errCode
 		} else {
 			uid = sdkconstant.GenPCUid(req.AccountId)
@@ -216,20 +216,20 @@ func (s *LoginServer) DoHandleLoginReq(req *cmd.C2LS_LoginReq, res *cmd.LS2C_Log
 	}
 	if uid == "" {
 		logger.Warnf("没有生成对应的账号, account=%s", req.AccountId)
-		return "", cmd.ErrorCode_Account_auth_fail
+		return "", pb.ErrorCode_Account_auth_fail
 	}
 	// 账号白名单检查
 	if b, err := s.GetConfigKeyForBool(db.KeyCfgOpenWhiteList); err == nil && b {
 		if !s.checkWhitelist(uid) {
 			logger.Warnf("登陆白名单验证失败 account=%s", uid)
-			return "", cmd.ErrorCode_LoginClose
+			return "", pb.ErrorCode_LoginClose
 		}
 	}
-	//账号黑名单检查
+	// 账号黑名单检查
 	if b, err := s.GetConfigKeyForBool(db.KeyCfgOpenBlackList); err == nil && b {
 		if s.checkBlacklist(uid) {
 			logger.Warnf("登陆黑名单验证限制 account=%s", uid)
-			return "", cmd.ErrorCode_LoginBlackLimit
+			return "", pb.ErrorCode_LoginBlackLimit
 		}
 	}
 
@@ -237,9 +237,9 @@ func (s *LoginServer) DoHandleLoginReq(req *cmd.C2LS_LoginReq, res *cmd.LS2C_Log
 
 	res.Token, err = auth.EncodeAuthToken(uid, channel, utils.GenStrUUID(), int64(baseconf.GetBaseConf().AccTokenTTL))
 	if err != nil {
-		res.ErrCode = int32(cmd.ErrorCode_InternalError)
+		res.ErrCode = int32(pb.ErrorCode_InternalError)
 		logger.Warnf("create token error, account=%s", req.AccountId)
-		return "", cmd.ErrorCode_InternalError
+		return "", pb.ErrorCode_InternalError
 	}
 	// 验证最后登录时间
 	lastToken := ""
@@ -248,29 +248,29 @@ func (s *LoginServer) DoHandleLoginReq(req *cmd.C2LS_LoginReq, res *cmd.LS2C_Log
 		lastToken = lastSession.Token
 		if now < lastSession.LastLoginTime {
 			logger.Warnf("登录请求过于频繁")
-			return "", cmd.ErrorCode_RepeatMsg
+			return "", pb.ErrorCode_RepeatMsg
 		}
 	}
 
 	// 加载account信息
-	//加锁，防止多次创建
+	// 加锁，防止多次创建
 	ok, err := s.TryLock(uid, db.KeyAccountLoginLock(uid), service.LOCK_TTL_SEC)
 	defer s.UnLock(uid, db.KeyAccountLoginLock(uid))
 	if !ok || err != nil {
 		logger.Errorf("TryLock err:%s, %s, %s", err.Error(), uid, db.KeyAccountLoginLock(uid))
-		return "", cmd.ErrorCode_InternalError
+		return "", pb.ErrorCode_InternalError
 	}
-	//var isCreate bool
+	// var isCreate bool
 	kvTable, err := s.GetMongoAccount(db.KeyAccountInfo(uid), nil)
-	var account *cmd.UserData
+	var account *pb.UserData
 	if err != nil { // 第一次创建，没有账号数据
 		if !errors.Is(err, service.DB_ERROR_NOT_EXIST) {
 			logger.Warn("GetMongoAccount err: ", err)
-			return "", cmd.ErrorCode_InternalError
-		} else { //account数据不存在,创建
+			return "", pb.ErrorCode_InternalError
+		} else { // account数据不存在,创建
 			// 注册开关判定
 			if b, err := s.GetConfigKeyForBool(db.KeyCfgRegisterSwitch); err == nil && b {
-				return "", cmd.ErrorCode_RegisterClose
+				return "", pb.ErrorCode_RegisterClose
 			}
 
 			// 注册IP黑名单判定
@@ -278,8 +278,8 @@ func (s *LoginServer) DoHandleLoginReq(req *cmd.C2LS_LoginReq, res *cmd.LS2C_Log
 				ipArr := strings.Split(str, ",")
 				for _, ip := range ipArr {
 					if len(ip) > 0 && ip == clientIp {
-						res.ErrCode = int32(cmd.ErrorCode_RegisterClose)
-						return "", cmd.ErrorCode_RegisterClose
+						res.ErrCode = int32(pb.ErrorCode_RegisterClose)
+						return "", pb.ErrorCode_RegisterClose
 					}
 				}
 			}
@@ -288,37 +288,37 @@ func (s *LoginServer) DoHandleLoginReq(req *cmd.C2LS_LoginReq, res *cmd.LS2C_Log
 			if limit, err := s.GetConfigKeyForInt(db.KeyCfgServerRegisterLimit); err == nil && limit > 0 {
 				count, err := s.RedisBitCount(context.Background(), db.KeyServerRegisterUsers(), nil)
 				if err != nil || count >= int64(limit) {
-					return "", cmd.ErrorCode_RegisterLimit
+					return "", pb.ErrorCode_RegisterLimit
 				}
 			}
 
 			account = s.createAccount(req.AccountId, uid, channel, now)
-			//isCreate = true
+			// isCreate = true
 			logger.Infof("[LoginServer] createAccount %s", uid)
 		}
 	} else {
-		ud := &cmd.UserData{}
+		ud := &pb.UserData{}
 		err = proto.Unmarshal(kvTable.Data, ud)
 		if err != nil {
 			logger.Warn("proto unmarshal err: ", err)
-			return "", cmd.ErrorCode_InternalError
+			return "", pb.ErrorCode_InternalError
 		}
 		account = ud
 	}
 
 	if account == nil {
 		logger.Errorf("get or create account err: ", err)
-		return "", cmd.ErrorCode_InternalError
+		return "", pb.ErrorCode_InternalError
 	}
 
 	if account.Account.BannedTs > now {
 		logger.Infof("账号封禁中, account: %s, sec: %v", account.Account.Uid, account.Account.BannedTs-now)
-		return "", cmd.ErrorCode_AccountBanned
+		return "", pb.ErrorCode_AccountBanned
 	}
 
 	// 客户端设备信息
 	account.CliDeviceInfo = req.CliDeviceInfo
-	if req.LoginChannelType == cmd.LoginChannelType_Taptap_Game && req.CliDeviceInfo.Channel == "" {
+	if req.LoginChannelType == pb.LoginChannelType_Taptap_Game && req.CliDeviceInfo.Channel == "" {
 		account.CliDeviceInfo.Channel = "taptap"
 	}
 
@@ -327,13 +327,13 @@ func (s *LoginServer) DoHandleLoginReq(req *cmd.C2LS_LoginReq, res *cmd.LS2C_Log
 		account.TapUserInfo = tapUserInfo
 	}
 
-	//存储账号信息
+	// 存储账号信息
 	err = s.SaveAccount(account)
 	if err != nil {
-		return "", cmd.ErrorCode_SaveDBError
+		return "", pb.ErrorCode_SaveDBError
 	}
 
-	//预先拉启UserActor
+	// 预先拉启UserActor
 	if conf.Login().UserActorAhead {
 		threading.GoSafe(func() {
 			player, ok := account.PlayerList.Players[1]
@@ -341,13 +341,13 @@ func (s *LoginServer) DoHandleLoginReq(req *cmd.C2LS_LoginReq, res *cmd.LS2C_Log
 				uaid := s.UAID(uid, player.Id)
 				s.UserInvoke(uaid, &base.ProtoMsg{
 					AppId:   s.AppId,
-					MsgId:   int32(cmd.Protocols_PS2S_SvcInvokeReq),
+					MsgId:   int32(pb.Protocols_PS2S_SvcInvokeReq),
 					UserId:  uid,
 					RoleId:  player.Id,
 					UAID:    uaid,
 					Data:    nil,
 					ErrCode: 0,
-					//GUID:    utils.GenIntUUID(),
+					// GUID:    utils.GenIntUUID(),
 					ServerReqIdx: utils.GenIntUUID(),
 				})
 			}
@@ -361,10 +361,10 @@ func (s *LoginServer) DoHandleLoginReq(req *cmd.C2LS_LoginReq, res *cmd.LS2C_Log
 			heartBeat := s.GetHeartBeat(session.Uid)
 
 			if heartBeat != nil {
-				ret := &cmd.S2C_ErrorCodeNtf{ErrorCode: uint32(cmd.ErrorCode_KnockedOff)}
+				ret := &pb.S2C_ErrorCodeNtf{ErrorCode: uint32(pb.ErrorCode_KnockedOff)}
 				logger.Infof("kickout knocked uid:%s  ", account.Account.Uid)
-				//err = s.Send2GateOne2(session.Uid, strconv.Itoa(int(session.PlayerId)), heartBeat.UserInfo, ret)
-				err = s.Send2Gate(strconv.Itoa(int(session.PlayerId)), &cmd.ActorUserInfo{Uid: session.Uid, GateId: heartBeat.GateTopic}, ret)
+				// err = s.Send2GateOne2(session.Uid, strconv.Itoa(int(session.PlayerId)), heartBeat.UserInfo, ret)
+				err = s.Send2Gate(strconv.Itoa(int(session.PlayerId)), &pb.ActorUserInfo{Uid: session.Uid, GateId: heartBeat.GateTopic}, ret)
 				if err != nil {
 					logger.Errorf("Send2Gate err:%+v", err)
 				}
@@ -373,15 +373,15 @@ func (s *LoginServer) DoHandleLoginReq(req *cmd.C2LS_LoginReq, res *cmd.LS2C_Log
 		}
 	}
 
-	//table := &state.KvTable{Id: 0, UID: accountId, Data: []byte(token), UpSecTS: 0, InSecTS: now}
-	//err = s.SaveGlobalRedis(db.KeyAccountToken(accountId), table, map[string]string{"ttlInSeconds": strconv.Itoa(conf.GConf().Base.AccTokenTTL)})
-	//lastToken := ""
-	//lastSession, _, _ := s.GetUserSession(account.Account.Uid)
-	//if lastSession != nil {
+	// table := &state.KvTable{Id: 0, UID: accountId, Data: []byte(token), UpSecTS: 0, InSecTS: now}
+	// err = s.SaveGlobalRedis(db.KeyAccountToken(accountId), table, map[string]string{"ttlInSeconds": strconv.Itoa(conf.GConf().Base.AccTokenTTL)})
+	// lastToken := ""
+	// lastSession, _, _ := s.GetUserSession(account.Account.Uid)
+	// if lastSession != nil {
 	//	lastToken = lastSession.Token
-	//}
+	// }
 
-	session := &cmd.UserSession{
+	session := &pb.UserSession{
 		Uid:             account.Account.Uid,
 		OpenId:          account.Account.OpenId,
 		Channel:         account.Account.Channel,
@@ -398,9 +398,9 @@ func (s *LoginServer) DoHandleLoginReq(req *cmd.C2LS_LoginReq, res *cmd.LS2C_Log
 		LastRspData:     nil,
 		CryptKey:        rsaKey,
 		DeviceId:        req.CliDeviceInfo.AndroidId,
-		//TaptapToken:     tapUserInfo.Token,
+		// TaptapToken:     tapUserInfo.Token,
 		TaptapOpenId:  taptapOpenId,
-		LastLoginTime: time.Now().Unix() + 5, //相当于login 请求的CD
+		LastLoginTime: time.Now().Unix() + 5, // 相当于login 请求的CD
 	}
 	if tapUserInfo != nil {
 		session.TaptapToken = tapUserInfo.Token
@@ -411,13 +411,13 @@ func (s *LoginServer) DoHandleLoginReq(req *cmd.C2LS_LoginReq, res *cmd.LS2C_Log
 		logger.Error("HandleLogin, token save failed,", req)
 	}
 
-	//err = s.SaveToken(uid, session.Token)
-	//if err != nil {
+	// err = s.SaveToken(uid, session.Token)
+	// if err != nil {
 	//	logger.Errorf("SaveToken err:%+v,", err)
-	//}
+	// }
 	taptap.AccountLoginComm(uid, tapUserInfo, req.CliDeviceInfo, int32(req.LoginChannelType), req.Extra)
 
-	return uid, cmd.ErrorCode_Success
+	return uid, pb.ErrorCode_Success
 }
 
 // 账号合法的字符

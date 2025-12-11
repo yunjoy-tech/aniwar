@@ -9,7 +9,7 @@ import (
 	"github.com/dapr/go-sdk/actor"
 	_ "github.com/dapr/go-sdk/actor"
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/actorserver/frame"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/baseactor"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/global"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/service"
@@ -17,15 +17,15 @@ import (
 )
 
 type RoomData struct {
-	Data *cmd.Room
-	Tug  *cmd.Tug
+	Data *pb.Room
+	Tug  *pb.Tug
 }
 
 type RoomActor struct {
 	*frame.CommonActor
 	RoomData
 
-	//Srv *frame.ActorServer
+	// Srv *frame.ActorServer
 
 	RoomHandler *RoomHandler
 	TugHandler  *TugHandler
@@ -40,13 +40,13 @@ func New() actor.Server {
 	a.SetActor(a)
 
 	a.Srv = frame.GSrv
-	//a.RoomData = &cmd.PvpRoom{}
+	// a.RoomData = &pb.PvpRoom{}
 
-	//a.MsgFunc = make(map[int32]base.FProtoMsgHandler)
+	// a.MsgFunc = make(map[int32]base.FProtoMsgHandler)
 
 	a.HandlersMap = make(map[svc.MongoDbType][]baseactor.IBaseHandler, 0)
 
-	//协议注册
+	// 协议注册
 	a.initHandlers()
 
 	return a
@@ -72,10 +72,10 @@ func (s *RoomActor) Activate(invokeName string) error {
 		}
 		// redis中也没数据，初始化默认的值就行
 		if s.Data == nil {
-			s.Data = &cmd.Room{
+			s.Data = &pb.Room{
 				RoomId:     "",
 				RoomSecret: "",
-				RoomState:  cmd.RoomState_RoomState_idle, // 初始空闲状态
+				RoomState:  pb.RoomState_RoomState_idle, // 初始空闲状态
 				PlayType:   0,
 				OwnerUid:   "",
 				Players:    nil,
@@ -97,15 +97,15 @@ func (s *RoomActor) Deactivate() error {
 		update := time.Unix(s.Data.UpdateTs, 0)
 		gcTime, err := strconv.Atoi(baseconf.GetBaseConf().UserActorGCTime)
 		if err != nil {
-			gcTime = 600 //默认600s秒
+			gcTime = 600 // 默认600s秒
 		}
 		if now.After(update.Add(time.Second * time.Duration(gcTime))) {
 			s.RoomHandler.dismissRoomBySystem()
 			// 清空数据
-			s.Data = &cmd.Room{
+			s.Data = &pb.Room{
 				RoomId:     "",
 				RoomSecret: "",
-				RoomState:  cmd.RoomState_RoomState_idle, // 初始空闲状态
+				RoomState:  pb.RoomState_RoomState_idle, // 初始空闲状态
 				PlayType:   0,
 				OwnerUid:   "",
 				Players:    nil,

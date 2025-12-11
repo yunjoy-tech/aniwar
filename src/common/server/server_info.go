@@ -3,7 +3,7 @@ package server
 import (
 	"fmt"
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/conf"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
 	"google.golang.org/protobuf/proto"
 	"runtime"
@@ -15,7 +15,7 @@ import (
 )
 
 func (s *Server) Info() string {
-	//output version info
+	// output version info
 	maxProcs := runtime.NumCPU()
 	defMaxProcs := runtime.GOMAXPROCS(maxProcs)
 	var szInfo string
@@ -53,19 +53,19 @@ func (s *Server) Info() string {
 	szInfo += (fmt.Sprintf("%-13s: %s\n", "updateAddrARD", conf.SrvAddr().UpdateAddrARD))
 	szInfo += (fmt.Sprintf("%-13s: %s\n", "updateAddrIOS", conf.SrvAddr().UpdateAddrIOS))
 	szInfo += (fmt.Sprintf("%-13v: %s\n", "Args", s.Args))
-	//szInfo += (fmt.Sprintf("\n%s\n", "========== server.conf =========="))
-	//szInfo += (fmt.Sprintf("%s\n", utils.PrettyJson(conf.GConf())))
+	// szInfo += (fmt.Sprintf("\n%s\n", "========== server.conf =========="))
+	// szInfo += (fmt.Sprintf("%s\n", utils.PrettyJson(conf.GConf())))
 	return szInfo
 }
 
 func (s *Server) Status() string {
-	data, err := proto.Marshal(&cmd.S2S_SvcStatusReq{})
+	data, err := proto.Marshal(&pb.S2S_SvcStatusReq{})
 	if err != nil {
 		logger.Warn("proto Marshal  err:", err)
 		return ""
 	}
-	bytes := s.CenterSrvInvoke(int32(cmd.Protocols_PS2S_SvcStatusReq), data)
-	res := &cmd.S2S_SvcStatusRes{}
+	bytes := s.CenterSrvInvoke(int32(pb.Protocols_PS2S_SvcStatusReq), data)
+	res := &pb.S2S_SvcStatusRes{}
 	if err = proto.Unmarshal(bytes, res); err != nil {
 		logger.Warn("proto unmarshal err:", err)
 		return ""

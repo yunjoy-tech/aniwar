@@ -28,7 +28,7 @@ import (
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/db"
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/sdkconstant"
 	myUtils "gitlab.musadisca-games.com/wangxw/aniwar/src/common/utils"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/guid"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
@@ -37,7 +37,7 @@ import (
 )
 
 type UserJsonExport struct {
-	Account *cmd.UserData             `json:"account"`
+	Account *pb.UserData              `json:"account"`
 	Game    map[string]*state.KvTable `json:"game"`
 }
 
@@ -59,7 +59,7 @@ func (s *IDIPServer) InsideGMT(ctx context.Context, in *common.InvocationEvent) 
 	}
 
 	reqJson, code, errMsg := s.PreHandle(in, conf.GConf().GMT.ApiSecret)
-	if code != cmd.ErrorCode_Success {
+	if code != pb.ErrorCode_Success {
 		out.Data = s.GenRet(errMsg)
 		return out, err
 	}
@@ -70,7 +70,7 @@ func (s *IDIPServer) InsideGMT(ctx context.Context, in *common.InvocationEvent) 
 		logger.Error("aniwar record operation failed", err)
 	}
 
-	api := &cmd.GMTApiReq{}
+	api := &pb.GMTApiReq{}
 	if err := json.Unmarshal(reqJson, api); err != nil {
 		logger.Warn("InsideGMT GMTApiReq Unmarshal error")
 	}
@@ -80,7 +80,7 @@ func (s *IDIPServer) InsideGMT(ctx context.Context, in *common.InvocationEvent) 
 		err = s.SaveGMTRecord(api)
 		return out, nil
 	}
-	if handler, ok := InsideGmtHandlerMap[cmd.GMT(api.GetCmd())]; ok {
+	if handler, ok := InsideGmtHandlerMap[pb.GMT(api.GetCmd())]; ok {
 		out.Data = handler(api.GetData())
 	} else {
 		logger.Warn("InsideGmtHandler is not found ", api.GetCmd())
@@ -117,7 +117,7 @@ func (s *IDIPServer) GetUidFromOpenId(id string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	account := &cmd.UserData{}
+	account := &pb.UserData{}
 	err = proto.Unmarshal(kvTable.Data, account)
 	if err != nil {
 		logger.Warn("proto unmarshal err: ", err)
@@ -242,7 +242,7 @@ func (s *IDIPServer) GetMailList(uaid string) []byte {
 	if err != nil {
 		return s.GenRet(err.Error())
 	}
-	info := &cmd.PUserMailInfo{}
+	info := &pb.PUserMailInfo{}
 	if err = base.UnmarshalData(userMail.Data, info); err != nil {
 		return s.GenRet(err.Error())
 	}
@@ -260,7 +260,7 @@ func (s *IDIPServer) GetMailList(uaid string) []byte {
 
 func (s *IDIPServer) GetSysMail() []byte {
 	var data []byte
-	info := &cmd.PSystemMailInfo{}
+	info := &pb.PSystemMailInfo{}
 	err := s.GetSystemMail(info)
 	if err != nil {
 		return s.GenRet(err.Error())
@@ -278,7 +278,7 @@ func (s *IDIPServer) GetSysMail() []byte {
 func (s *IDIPServer) DelSysMail(mailId int64) []byte {
 	logger.Infof("开始删除系统邮件 id: %v", mailId)
 	// 1.获取db数据
-	info := &cmd.PSystemMailInfo{}
+	info := &pb.PSystemMailInfo{}
 	err := s.GetSystemMail(info)
 	if err != nil {
 		return s.GenRet(err.Error())
@@ -305,7 +305,7 @@ func (s *IDIPServer) DelSysMail(mailId int64) []byte {
 	return []byte("success")
 }
 
-func (s *IDIPServer) CheckItem(items []*cmd.CommonItem) []byte {
+func (s *IDIPServer) CheckItem(items []*pb.CommonItem) []byte {
 	ret := struct {
 		NotFound []string `json:"not_found"`
 		NumLimit []string `json:"num_limit"`
@@ -344,7 +344,7 @@ func (s *IDIPServer) UseGMCommand(uid, uaid string, command string, params []str
 		return s.GenRet("command is valid")
 	}
 	logger.Debug("UseGMCommand ", uid, uaid, command, params)
-	req := &cmd.C2LS_UseGameCommandReq{
+	req := &pb.C2LS_UseGameCommandReq{
 		TargetId: 0,
 		Cmd:      command,
 		Param:    params,
@@ -393,7 +393,7 @@ func (s *IDIPServer) UseGMCommand(uid, uaid string, command string, params []str
 				continue
 			}
 
-			pb := &cmd.PUserMailInfo{}
+			pb := &pb.PUserMailInfo{}
 			err = db.ParseKvTable(kvTable, pb)
 			if err != nil {
 				logger.Errorf("parse proto got err %v", err)
@@ -424,7 +424,7 @@ func (s *IDIPServer) UseGMCommand(uid, uaid string, command string, params []str
 
 	// 调用userInvoke
 	in := &base.ProtoMsg{}
-	in.MsgId = int32(cmd.Protocols_PC2LS_UseGameCommandReq)
+	in.MsgId = int32(pb.Protocols_PC2LS_UseGameCommandReq)
 	in.Data = data
 	in.UserId = uid
 	in.AppId = s.AppId
@@ -445,12 +445,12 @@ func (s *IDIPServer) UseGMCommand(uid, uaid string, command string, params []str
 }
 
 func (s *IDIPServer) GetServerList() []byte {
-	data, err := proto.Marshal(&cmd.S2S_SvcStatusReq{})
+	data, err := proto.Marshal(&pb.S2S_SvcStatusReq{})
 	if err != nil {
 		return s.GenRet("")
 	}
-	bytes := s.CenterSrvInvoke(int32(cmd.Protocols_PS2S_SvcStatusReq), data)
-	res := &cmd.S2S_SvcStatusRes{}
+	bytes := s.CenterSrvInvoke(int32(pb.Protocols_PS2S_SvcStatusReq), data)
+	res := &pb.S2S_SvcStatusRes{}
 	if err = proto.Unmarshal(bytes, res); err != nil {
 		return s.GenRet("")
 	}
@@ -463,7 +463,7 @@ func (s *IDIPServer) GetServerList() []byte {
 }
 
 func (s *IDIPServer) GetExcelConfig(sheetName string) []byte {
-	reqMsg := &cmd.S2S_GetExcelConfigReq{SheetName: sheetName}
+	reqMsg := &pb.S2S_GetExcelConfigReq{SheetName: sheetName}
 	rsp, err := s.SvcInvoke(global.ACTOR_SVC, "", 0, "", reqMsg)
 	if err != nil {
 		return []byte(err.Error())
@@ -471,7 +471,7 @@ func (s *IDIPServer) GetExcelConfig(sheetName string) []byte {
 	return rsp
 }
 
-func (s *IDIPServer) GetUserInfo(uaid string, typ cmd.GMT_UserData) []byte {
+func (s *IDIPServer) GetUserInfo(uaid string, typ pb.GMT_UserData) []byte {
 	// 容错处理
 	if uaid == "" {
 		return s.GenRet("data not found")
@@ -480,10 +480,10 @@ func (s *IDIPServer) GetUserInfo(uaid string, typ cmd.GMT_UserData) []byte {
 	uid, _ := s.ConvUAID(uaid)
 	var data []byte
 	switch typ {
-	case cmd.GMT_UserData_Data_All:
+	case pb.GMT_UserData_Data_All:
 		info, _ := s.GetAllUserInfo(uaid, nil)
 		return info
-	case cmd.GMT_UserData_Data_Account:
+	case pb.GMT_UserData_Data_Account:
 		info, err := s.GetAccount(db.KeyAccountInfo(uid))
 		if err != nil {
 			return s.GenRet(err.Error())
@@ -492,12 +492,12 @@ func (s *IDIPServer) GetUserInfo(uaid string, typ cmd.GMT_UserData) []byte {
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-	case cmd.GMT_UserData_Data_Base:
+	case pb.GMT_UserData_Data_Base:
 		table, err := s.GetMongoGame(db.KeyUserBaseInfo(uaid), nil)
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-		info := &cmd.PServerRoleBaseInfo{}
+		info := &pb.PServerRoleBaseInfo{}
 		if err = base.UnmarshalData(table.Data, info); err != nil {
 			return s.GenRet(err.Error())
 		}
@@ -505,12 +505,12 @@ func (s *IDIPServer) GetUserInfo(uaid string, typ cmd.GMT_UserData) []byte {
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-	case cmd.GMT_UserData_Data_Card:
+	case pb.GMT_UserData_Data_Card:
 		table, err := s.GetMongoGame(db.KeyUserCard(uaid), nil)
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-		info := &cmd.PCardData{}
+		info := &pb.PCardData{}
 		if err = base.UnmarshalData(table.Data, info); err != nil {
 			return s.GenRet(err.Error())
 		}
@@ -518,12 +518,12 @@ func (s *IDIPServer) GetUserInfo(uaid string, typ cmd.GMT_UserData) []byte {
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-	case cmd.GMT_UserData_Data_Troops:
+	case pb.GMT_UserData_Data_Troops:
 		table, err := s.GetMongoGame(db.KeyUserCardTroop(uaid), nil)
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-		info := &cmd.PCardTroopsInfo{}
+		info := &pb.PCardTroopsInfo{}
 		if err = base.UnmarshalData(table.Data, info); err != nil {
 			return s.GenRet(err.Error())
 		}
@@ -531,12 +531,12 @@ func (s *IDIPServer) GetUserInfo(uaid string, typ cmd.GMT_UserData) []byte {
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-	case cmd.GMT_UserData_Data_Item:
+	case pb.GMT_UserData_Data_Item:
 		table, err := s.GetMongoGame(db.KeyUserItems(uaid), nil)
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-		info := &cmd.PCommonItemInfos{}
+		info := &pb.PCommonItemInfos{}
 		if err = base.UnmarshalData(table.Data, info); err != nil {
 			return s.GenRet(err.Error())
 		}
@@ -544,12 +544,12 @@ func (s *IDIPServer) GetUserInfo(uaid string, typ cmd.GMT_UserData) []byte {
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-	case cmd.GMT_UserData_Data_Camp:
+	case pb.GMT_UserData_Data_Camp:
 		table, err := s.GetMongoGame(db.KeyUserCamp(uaid), nil)
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-		info := &cmd.PPlayerCampBlob{}
+		info := &pb.PPlayerCampBlob{}
 		if err = base.UnmarshalData(table.Data, info); err != nil {
 			return s.GenRet(err.Error())
 		}
@@ -558,12 +558,12 @@ func (s *IDIPServer) GetUserInfo(uaid string, typ cmd.GMT_UserData) []byte {
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-	case cmd.GMT_UserData_Data_CardPool:
+	case pb.GMT_UserData_Data_CardPool:
 		table, err := s.GetMongoGame(db.KeyUserCardPool(uaid), nil)
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-		info := &cmd.PServerCardPoolInfos{}
+		info := &pb.PServerCardPoolInfos{}
 		if err = base.UnmarshalData(table.Data, info); err != nil {
 			return s.GenRet(err.Error())
 		}
@@ -571,12 +571,12 @@ func (s *IDIPServer) GetUserInfo(uaid string, typ cmd.GMT_UserData) []byte {
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-	case cmd.GMT_UserData_Data_HandBook:
+	case pb.GMT_UserData_Data_HandBook:
 		table, err := s.GetMongoGame(db.KeyUserHandBook(uaid), nil)
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-		info := &cmd.PHandbookInfo{}
+		info := &pb.PHandbookInfo{}
 		if err = base.UnmarshalData(table.Data, info); err != nil {
 			return s.GenRet(err.Error())
 		}
@@ -584,12 +584,12 @@ func (s *IDIPServer) GetUserInfo(uaid string, typ cmd.GMT_UserData) []byte {
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-	case cmd.GMT_UserData_Data_Equip:
+	case pb.GMT_UserData_Data_Equip:
 		table, err := s.GetMongoGame(db.KeyUserEquipInfo(uaid), nil)
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-		info := &cmd.PEquipData{}
+		info := &pb.PEquipData{}
 		if err = base.UnmarshalData(table.Data, info); err != nil {
 			return s.GenRet(err.Error())
 		}
@@ -597,12 +597,12 @@ func (s *IDIPServer) GetUserInfo(uaid string, typ cmd.GMT_UserData) []byte {
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-	case cmd.GMT_UserData_Data_Duty:
+	case pb.GMT_UserData_Data_Duty:
 		table, err := s.GetMongoGame(db.KeyUserDutyInfo(uaid), nil)
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-		info := &cmd.PDutyData{}
+		info := &pb.PDutyData{}
 		if err = base.UnmarshalData(table.Data, info); err != nil {
 			return s.GenRet(err.Error())
 		}
@@ -610,12 +610,12 @@ func (s *IDIPServer) GetUserInfo(uaid string, typ cmd.GMT_UserData) []byte {
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-	case cmd.GMT_UserData_Data_BeginnerTutorial:
+	case pb.GMT_UserData_Data_BeginnerTutorial:
 		table, err := s.GetMongoGame(db.KeyUserTutorial(uaid), nil)
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-		info := &cmd.PPlayerBeginnerTutorialBlob{}
+		info := &pb.PPlayerBeginnerTutorialBlob{}
 		if err = base.UnmarshalData(table.Data, info); err != nil {
 			return s.GenRet(err.Error())
 		}
@@ -623,12 +623,12 @@ func (s *IDIPServer) GetUserInfo(uaid string, typ cmd.GMT_UserData) []byte {
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-	case cmd.GMT_UserData_Data_Quest:
+	case pb.GMT_UserData_Data_Quest:
 		table, err := s.GetMongoGame(db.KeyUserQuestInfo(uaid), nil)
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-		info := &cmd.PQuestData{}
+		info := &pb.PQuestData{}
 		if err = base.UnmarshalData(table.Data, info); err != nil {
 			return s.GenRet(err.Error())
 		}
@@ -636,12 +636,12 @@ func (s *IDIPServer) GetUserInfo(uaid string, typ cmd.GMT_UserData) []byte {
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-	case cmd.GMT_UserData_Data_Skin:
+	case pb.GMT_UserData_Data_Skin:
 		table, err := s.GetMongoGame(db.KeyUserCardSkin(uaid), nil)
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-		info := &cmd.PSkinData{}
+		info := &pb.PSkinData{}
 		if err = base.UnmarshalData(table.Data, info); err != nil {
 			return s.GenRet(err.Error())
 		}
@@ -649,12 +649,12 @@ func (s *IDIPServer) GetUserInfo(uaid string, typ cmd.GMT_UserData) []byte {
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-	case cmd.GMT_UserData_Data_Currency:
+	case pb.GMT_UserData_Data_Currency:
 		table, err := s.GetMongoGame(db.KeyUserCurrency(uaid), nil)
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-		info := &cmd.PCurrencyInfo{}
+		info := &pb.PCurrencyInfo{}
 		if err = base.UnmarshalData(table.Data, info); err != nil {
 			return s.GenRet(err.Error())
 		}
@@ -662,12 +662,12 @@ func (s *IDIPServer) GetUserInfo(uaid string, typ cmd.GMT_UserData) []byte {
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-	case cmd.GMT_UserData_Data_Campaign:
+	case pb.GMT_UserData_Data_Campaign:
 		table, err := s.GetMongoGame(db.KeyCampaign(uaid), nil)
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-		info := &cmd.PPlayerGeneralCampaign{}
+		info := &pb.PPlayerGeneralCampaign{}
 		if err = base.UnmarshalData(table.Data, info); err != nil {
 			return s.GenRet(err.Error())
 		}
@@ -675,12 +675,12 @@ func (s *IDIPServer) GetUserInfo(uaid string, typ cmd.GMT_UserData) []byte {
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-	case cmd.GMT_UserData_Data_Level:
+	case pb.GMT_UserData_Data_Level:
 		table, err := s.GetMongoGame(db.KeyUserLevelInfo(uaid), nil)
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-		info := &cmd.LS2DB_LevelInfos{}
+		info := &pb.LS2DB_LevelInfos{}
 		if err = base.UnmarshalData(table.Data, info); err != nil {
 			return s.GenRet(err.Error())
 		}
@@ -688,12 +688,12 @@ func (s *IDIPServer) GetUserInfo(uaid string, typ cmd.GMT_UserData) []byte {
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-	case cmd.GMT_UserData_Data_Shop:
+	case pb.GMT_UserData_Data_Shop:
 		table, err := s.GetMongoGame(db.KeyUserShopInfo(uaid), nil)
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-		info := &cmd.LS2DB_ShopData{}
+		info := &pb.LS2DB_ShopData{}
 		if err = base.UnmarshalData(table.Data, info); err != nil {
 			return s.GenRet(err.Error())
 		}
@@ -701,12 +701,12 @@ func (s *IDIPServer) GetUserInfo(uaid string, typ cmd.GMT_UserData) []byte {
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-	case cmd.GMT_UserData_Data_StoryFlag:
+	case pb.GMT_UserData_Data_StoryFlag:
 		table, err := s.GetMongoGame(db.KeyUserStoryFlag(uaid), nil)
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-		info := &cmd.LS2DB_StoryFlagData{}
+		info := &pb.LS2DB_StoryFlagData{}
 		if err = base.UnmarshalData(table.Data, info); err != nil {
 			return s.GenRet(err.Error())
 		}
@@ -714,12 +714,12 @@ func (s *IDIPServer) GetUserInfo(uaid string, typ cmd.GMT_UserData) []byte {
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-	case cmd.GMT_UserData_Data_Sign:
+	case pb.GMT_UserData_Data_Sign:
 		table, err := s.GetMongoGame(db.KeyUserSign(uaid), nil)
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-		info := &cmd.PSignData{}
+		info := &pb.PSignData{}
 		if err = base.UnmarshalData(table.Data, info); err != nil {
 			return s.GenRet(err.Error())
 		}
@@ -727,12 +727,12 @@ func (s *IDIPServer) GetUserInfo(uaid string, typ cmd.GMT_UserData) []byte {
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-	case cmd.GMT_UserData_Data_PlayerLevel:
+	case pb.GMT_UserData_Data_PlayerLevel:
 		table, err := s.GetMongoGame(db.KeyUserLevelData(uaid), nil)
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-		info := &cmd.PPlayerLevelInfo{}
+		info := &pb.PPlayerLevelInfo{}
 		if err = base.UnmarshalData(table.Data, info); err != nil {
 			return s.GenRet(err.Error())
 		}
@@ -740,12 +740,12 @@ func (s *IDIPServer) GetUserInfo(uaid string, typ cmd.GMT_UserData) []byte {
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-	case cmd.GMT_UserData_Data_Achievement:
+	case pb.GMT_UserData_Data_Achievement:
 		table, err := s.GetMongoGame(db.KeyUserAchieve(uaid), nil)
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-		info := &cmd.PUserAchieves{}
+		info := &pb.PUserAchieves{}
 		if err = base.UnmarshalData(table.Data, info); err != nil {
 			return s.GenRet(err.Error())
 		}
@@ -753,12 +753,12 @@ func (s *IDIPServer) GetUserInfo(uaid string, typ cmd.GMT_UserData) []byte {
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-	case cmd.GMT_UserData_Data_Trial:
+	case pb.GMT_UserData_Data_Trial:
 		table, err := s.GetMongoGame(db.KeyUserTrial(uaid), nil)
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-		info := &cmd.PUserTrial{}
+		info := &pb.PUserTrial{}
 		if err = base.UnmarshalData(table.Data, info); err != nil {
 			return s.GenRet(err.Error())
 		}
@@ -766,12 +766,12 @@ func (s *IDIPServer) GetUserInfo(uaid string, typ cmd.GMT_UserData) []byte {
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-	case cmd.GMT_UserData_Data_BlockWayEvent:
+	case pb.GMT_UserData_Data_BlockWayEvent:
 		table, err := s.GetMongoGame(db.KeyUserBlockWay(uaid), nil)
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-		info := &cmd.PBlockWay{}
+		info := &pb.PBlockWay{}
 		if err = base.UnmarshalData(table.Data, info); err != nil {
 			return s.GenRet(err.Error())
 		}
@@ -779,12 +779,12 @@ func (s *IDIPServer) GetUserInfo(uaid string, typ cmd.GMT_UserData) []byte {
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-	case cmd.GMT_UserData_Data_Friend:
+	case pb.GMT_UserData_Data_Friend:
 		table, err := s.GetMongoGame(db.KeyUserFriend(uaid), nil)
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-		info := &cmd.PFriendData{}
+		info := &pb.PFriendData{}
 		if err = base.UnmarshalData(table.Data, info); err != nil {
 			return s.GenRet(err.Error())
 		}
@@ -792,12 +792,12 @@ func (s *IDIPServer) GetUserInfo(uaid string, typ cmd.GMT_UserData) []byte {
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-	case cmd.GMT_UserData_Data_CampPool:
+	case pb.GMT_UserData_Data_CampPool:
 		table, err := s.GetMongoGame(db.KeyUserCampPool(uaid), nil)
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-		info := &cmd.PServerCampPoolInfos{}
+		info := &pb.PServerCampPoolInfos{}
 		if err = base.UnmarshalData(table.Data, info); err != nil {
 			return s.GenRet(err.Error())
 		}
@@ -805,12 +805,12 @@ func (s *IDIPServer) GetUserInfo(uaid string, typ cmd.GMT_UserData) []byte {
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-	case cmd.GMT_UserData_Data_UseLimit:
+	case pb.GMT_UserData_Data_UseLimit:
 		table, err := s.GetMongoGame(db.KeyUseLimit(uaid), nil)
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-		info := &cmd.PUseLimitInfo{}
+		info := &pb.PUseLimitInfo{}
 		if err = base.UnmarshalData(table.Data, info); err != nil {
 			return s.GenRet(err.Error())
 		}
@@ -818,12 +818,12 @@ func (s *IDIPServer) GetUserInfo(uaid string, typ cmd.GMT_UserData) []byte {
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-	case cmd.GMT_UserData_Data_OfflineEvent:
+	case pb.GMT_UserData_Data_OfflineEvent:
 		table, err := s.GetMongoGame(db.KeyOfflineEvent(uaid), nil)
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-		info := &cmd.POfflineEventData{}
+		info := &pb.POfflineEventData{}
 		if err = base.UnmarshalData(table.Data, info); err != nil {
 			return s.GenRet(err.Error())
 		}
@@ -831,12 +831,12 @@ func (s *IDIPServer) GetUserInfo(uaid string, typ cmd.GMT_UserData) []byte {
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-	case cmd.GMT_UserData_Data_Relation:
+	case pb.GMT_UserData_Data_Relation:
 		table, err := s.GetMongoGame(db.KeyUserRelation(uaid), nil)
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-		info := &cmd.PUserRelationData{}
+		info := &pb.PUserRelationData{}
 		if err = base.UnmarshalData(table.Data, info); err != nil {
 			return s.GenRet(err.Error())
 		}
@@ -844,12 +844,12 @@ func (s *IDIPServer) GetUserInfo(uaid string, typ cmd.GMT_UserData) []byte {
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-	case cmd.GMT_UserData_Data_UserAlliance:
+	case pb.GMT_UserData_Data_UserAlliance:
 		table, err := s.GetMongoGame(db.KeyUserAlliance(uaid), nil)
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-		info := &cmd.PUserAllianceData{}
+		info := &pb.PUserAllianceData{}
 		if err = base.UnmarshalData(table.Data, info); err != nil {
 			return s.GenRet(err.Error())
 		}
@@ -857,12 +857,12 @@ func (s *IDIPServer) GetUserInfo(uaid string, typ cmd.GMT_UserData) []byte {
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-	case cmd.GMT_UserData_Data_GuideTask:
+	case pb.GMT_UserData_Data_GuideTask:
 		table, err := s.GetMongoGame(db.KeyUserGuideTask(uaid), nil)
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-		info := &cmd.PGuideTaskData{}
+		info := &pb.PGuideTaskData{}
 		if err = base.UnmarshalData(table.Data, info); err != nil {
 			return s.GenRet(err.Error())
 		}
@@ -870,12 +870,12 @@ func (s *IDIPServer) GetUserInfo(uaid string, typ cmd.GMT_UserData) []byte {
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-	case cmd.GMT_UserData_Data_Travel_Level:
+	case pb.GMT_UserData_Data_Travel_Level:
 		table, err := s.GetMongoGame(db.KeyUserTravelLevel(uaid), nil)
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-		info := &cmd.PUserTravelLevelData{}
+		info := &pb.PUserTravelLevelData{}
 		if err = base.UnmarshalData(table.Data, info); err != nil {
 			return s.GenRet(err.Error())
 		}
@@ -883,12 +883,12 @@ func (s *IDIPServer) GetUserInfo(uaid string, typ cmd.GMT_UserData) []byte {
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-	case cmd.GMT_UserData_Data_Activity:
+	case pb.GMT_UserData_Data_Activity:
 		table, err := s.GetMongoGame(db.KeyUserActivity(uaid), nil)
 		if err != nil {
 			return s.GenRet(err.Error())
 		}
-		info := &cmd.PServerUserActivity{}
+		info := &pb.PServerUserActivity{}
 		if err = base.UnmarshalData(table.Data, info); err != nil {
 			return s.GenRet(err.Error())
 		}
@@ -1076,7 +1076,7 @@ func (s *IDIPServer) copyBaseData(uaid string, copyUaid string, roleId uint64, s
 	if err != nil {
 		return s.GenRet(err.Error())
 	}
-	info := &cmd.PServerRoleBaseInfo{}
+	info := &pb.PServerRoleBaseInfo{}
 	if err = base.UnmarshalData(table.Data, info); err != nil {
 		return s.GenRet(err.Error())
 	}
@@ -1109,39 +1109,39 @@ func (s *IDIPServer) copyGameData(key, copyKey string) []byte {
 
 func (s *IDIPServer) GetAllUserInfo(uaid string, m map[string]*state.KvTable) ([]byte, error) {
 
-	playerData := &cmd.PlayerData{
-		Base:             &cmd.PServerRoleBaseInfo{},
-		Cards:            &cmd.PCardData{},
-		Troops:           &cmd.PCardTroopsInfo{},
-		ItemData:         &cmd.PCommonItemInfos{},
-		Camp:             &cmd.PPlayerCampBlob{},
-		Pools:            &cmd.PServerCardPoolInfos{},
-		Handbooks:        &cmd.PHandbookInfo{},
-		EquipData:        &cmd.PEquipData{},
-		DutyData:         &cmd.PDutyData{},
-		Tutorial:         &cmd.PPlayerBeginnerTutorialBlob{},
-		QuestData:        &cmd.PQuestData{},
-		SkinData:         &cmd.PSkinData{},
-		Currency:         &cmd.PCurrencyInfo{},
-		CampaignInfo:     &cmd.PPlayerGeneralCampaign{},
-		LevelsData:       &cmd.LS2DB_LevelInfos{},
-		ShopData:         &cmd.LS2DB_ShopData{},
-		StoryFlagData:    &cmd.LS2DB_StoryFlagData{},
-		Sign:             &cmd.PSignData{},
-		PlayerLevelData:  &cmd.PPlayerLevelInfo{},
-		UserMail:         &cmd.PUserMailInfo{},
-		AchieveData:      &cmd.PUserAchieves{},
-		TrialData:        &cmd.PUserTrial{},
-		BlockWayData:     &cmd.PBlockWay{},
-		FriendData:       &cmd.PFriendData{},
-		CampPools:        &cmd.PServerCampPoolInfos{},
-		UseLimit:         &cmd.PUseLimitInfo{},
-		OfflineEventData: &cmd.POfflineEventData{},
-		RelationData:     &cmd.PUserRelationData{},
-		UserAlliance:     &cmd.PUserAllianceData{},
-		GuideTaskData:    &cmd.PGuideTaskData{},
-		TravelLevelData:  &cmd.PUserTravelLevelData{},
-		ActivityData:     &cmd.PServerUserActivity{},
+	playerData := &pb.PlayerData{
+		Base:             &pb.PServerRoleBaseInfo{},
+		Cards:            &pb.PCardData{},
+		Troops:           &pb.PCardTroopsInfo{},
+		ItemData:         &pb.PCommonItemInfos{},
+		Camp:             &pb.PPlayerCampBlob{},
+		Pools:            &pb.PServerCardPoolInfos{},
+		Handbooks:        &pb.PHandbookInfo{},
+		EquipData:        &pb.PEquipData{},
+		DutyData:         &pb.PDutyData{},
+		Tutorial:         &pb.PPlayerBeginnerTutorialBlob{},
+		QuestData:        &pb.PQuestData{},
+		SkinData:         &pb.PSkinData{},
+		Currency:         &pb.PCurrencyInfo{},
+		CampaignInfo:     &pb.PPlayerGeneralCampaign{},
+		LevelsData:       &pb.LS2DB_LevelInfos{},
+		ShopData:         &pb.LS2DB_ShopData{},
+		StoryFlagData:    &pb.LS2DB_StoryFlagData{},
+		Sign:             &pb.PSignData{},
+		PlayerLevelData:  &pb.PPlayerLevelInfo{},
+		UserMail:         &pb.PUserMailInfo{},
+		AchieveData:      &pb.PUserAchieves{},
+		TrialData:        &pb.PUserTrial{},
+		BlockWayData:     &pb.PBlockWay{},
+		FriendData:       &pb.PFriendData{},
+		CampPools:        &pb.PServerCampPoolInfos{},
+		UseLimit:         &pb.PUseLimitInfo{},
+		OfflineEventData: &pb.POfflineEventData{},
+		RelationData:     &pb.PUserRelationData{},
+		UserAlliance:     &pb.PUserAllianceData{},
+		GuideTaskData:    &pb.PGuideTaskData{},
+		TravelLevelData:  &pb.PUserTravelLevelData{},
+		ActivityData:     &pb.PServerUserActivity{},
 	}
 	{
 		table, err := s.GetMongoGame(db.KeyUserBaseInfo(uaid), nil)
@@ -1568,12 +1568,12 @@ func (s *IDIPServer) GetAllUserInfo(uaid string, m map[string]*state.KvTable) ([
 	return data, nil
 }
 
-func CampRectify(camp *cmd.PPlayerCampBlob) {
+func CampRectify(camp *pb.PPlayerCampBlob) {
 
 }
 
-func (s *IDIPServer) SrvPushExcel(files []*cmd.ExcelFile) []byte {
-	ret := &cmd.GMTPushExcelRet{
+func (s *IDIPServer) SrvPushExcel(files []*pb.ExcelFile) []byte {
+	ret := &pb.GMTPushExcelRet{
 		Code: 2,
 	}
 	cont := context.Background()
@@ -1628,14 +1628,14 @@ func (s *IDIPServer) SrvPushExcel(files []*cmd.ExcelFile) []byte {
 	return s.GenJsonRet(ret)
 }
 
-func (s *IDIPServer) SrvHotReload(req *cmd.GMTSrvHotReloadReq) []byte {
-	ret := &cmd.GMTSrvHotReloadRet{}
+func (s *IDIPServer) SrvHotReload(req *pb.GMTSrvHotReloadReq) []byte {
+	ret := &pb.GMTSrvHotReloadRet{}
 	files := make([]string, 0)
 	for _, v := range req.Files {
 		temp := strings.Split(v, ":")
 		files = append(files, temp[len(temp)-1])
 	}
-	data, err := proto.Marshal(&cmd.S2S_HotReloadReq{
+	data, err := proto.Marshal(&pb.S2S_HotReloadReq{
 		Type:     req.Typ,
 		Files:    files,
 		Services: req.Services,
@@ -1645,8 +1645,8 @@ func (s *IDIPServer) SrvHotReload(req *cmd.GMTSrvHotReloadReq) []byte {
 		ret.Code = 1
 		return s.GenJsonRet(ret)
 	}
-	bytes := s.CenterSrvInvoke(int32(cmd.Protocols_PS2S_HotReloadReq), data)
-	res := &cmd.S2S_HotReloadRes{}
+	bytes := s.CenterSrvInvoke(int32(pb.Protocols_PS2S_HotReloadReq), data)
+	res := &pb.S2S_HotReloadRes{}
 	if err = proto.Unmarshal(bytes, res); err != nil {
 		logger.Warn("proto unmarshal err:", err)
 		ret.Code = 1
@@ -1656,9 +1656,9 @@ func (s *IDIPServer) SrvHotReload(req *cmd.GMTSrvHotReloadReq) []byte {
 	return s.GenJsonRet(ret)
 }
 
-func (s *IDIPServer) SrvRestart(req *cmd.GMTSrvRestartReq) []byte {
-	ret := &cmd.GMTSrvRestartRet{}
-	data, err := proto.Marshal(&cmd.S2S_SvcRestartReq{
+func (s *IDIPServer) SrvRestart(req *pb.GMTSrvRestartReq) []byte {
+	ret := &pb.GMTSrvRestartRet{}
+	data, err := proto.Marshal(&pb.S2S_SvcRestartReq{
 		Type:     req.Typ,
 		Services: req.Services,
 	})
@@ -1667,8 +1667,8 @@ func (s *IDIPServer) SrvRestart(req *cmd.GMTSrvRestartReq) []byte {
 		ret.Code = 1
 		return s.GenJsonRet(ret)
 	}
-	bytes := s.CenterSrvInvoke(int32(cmd.Protocols_PS2S_SvcRestartReq), data)
-	res := &cmd.S2S_SvcRestartRes{}
+	bytes := s.CenterSrvInvoke(int32(pb.Protocols_PS2S_SvcRestartReq), data)
+	res := &pb.S2S_SvcRestartRes{}
 	if err = proto.Unmarshal(bytes, res); err != nil {
 		logger.Warn("proto unmarshal err:", err)
 		ret.Code = 1
@@ -1678,8 +1678,8 @@ func (s *IDIPServer) SrvRestart(req *cmd.GMTSrvRestartReq) []byte {
 	return s.GenJsonRet(ret)
 }
 
-func (s *IDIPServer) NotifyDownloadPkg(req *cmd.GMTNotifyDownloadPkgReq) []byte {
-	ret := &cmd.GMTNotifyDownloadPkgRet{}
+func (s *IDIPServer) NotifyDownloadPkg(req *pb.GMTNotifyDownloadPkgReq) []byte {
+	ret := &pb.GMTNotifyDownloadPkgRet{}
 	// 按包名称下载
 	err := OssGetObjectToLocalFile(conf.GConf().OSS.VersionBucket, req.PkgName, conf.GConf().OSS.DownPath+req.PkgName)
 	if err != nil {

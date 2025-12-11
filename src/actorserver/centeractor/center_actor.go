@@ -3,7 +3,7 @@ package centeractor
 import (
 	"github.com/dapr/go-sdk/actor"
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/actorserver/frame"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/global"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/service"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/state"
@@ -13,17 +13,17 @@ import (
 )
 
 type CenterData struct {
-	Data           *cmd.Room
+	Data           *pb.Room
 	HotReloadMap   *sync.Map
 	SvcRestartMap  *sync.Map
 	ActorStatusMap *sync.Map
 	SvcMaps        map[string]*sync.Map
 	UploadTapTs    int64 // 上报tap时间戳
 
-	TotalPlayerCount int32 //在线player数量
-	UserActorCount   int32 //在线UserActor数量
-	RoomActorCount   int32 //在线RoomActor数量
-	RestartEventTime int64 //服务重启触发时间
+	TotalPlayerCount int32 // 在线player数量
+	UserActorCount   int32 // 在线UserActor数量
+	RoomActorCount   int32 // 在线RoomActor数量
+	RestartEventTime int64 // 服务重启触发时间
 }
 
 type CenterActor struct {
@@ -42,7 +42,7 @@ func New() actor.Server {
 	s.ActorType = global.CenterActorType
 	s.SetActor(s)
 	s.Srv = frame.GSrv
-	//s.MsgFunc = make(map[int32]base.FProtoMsgHandler)
+	// s.MsgFunc = make(map[int32]base.FProtoMsgHandler)
 	s.SvcStatusHandler = NewSvcStatusHandler(s)
 	s.HotReloadHandler = NewHotReloadHandler(s)
 	s.SvcRestartHandler = NewSvcRestartHandler(s)
@@ -69,7 +69,7 @@ func (c *CenterActor) SetID(id string) {
 
 func (c *CenterActor) Activate(invokeName string) error {
 	// implement me
-	//panic("implement me")
+	// panic("implement me")
 	c.ReloadActorFromRedis(global.CenterActorType)
 
 	return nil

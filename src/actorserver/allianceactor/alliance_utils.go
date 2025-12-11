@@ -9,7 +9,7 @@ import (
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/db"
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/utils"
 	excel "gitlab.musadisca-games.com/wangxw/aniwar/src/excel/data"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/service"
@@ -17,7 +17,7 @@ import (
 	"time"
 )
 
-func (h *AllianceHandler) GetAllianceData() *cmd.PServerAllianceInfo {
+func (h *AllianceHandler) GetAllianceData() *pb.PServerAllianceInfo {
 	data := h.actor.Data
 	if data.Examines == nil {
 		data.Examines = make(map[uint64]int64)
@@ -50,16 +50,16 @@ func (h *AllianceHandler) GetAllianceData() *cmd.PServerAllianceInfo {
 }
 
 // 加入联盟处理
-func (h *AllianceHandler) joinAlliance(targetId uint64, positionId int32, in *base.ProtoMsg) *cmd.PAllianceMember {
+func (h *AllianceHandler) joinAlliance(targetId uint64, positionId int32, in *base.ProtoMsg) *pb.PAllianceMember {
 	data := h.GetAllianceData()
-	member := &cmd.PAllianceMember{
+	member := &pb.PAllianceMember{
 		RoleId:     targetId,
 		Position:   positionId,
 		Contribute: 0,
 	}
 	data.Member[targetId] = member
 	data.Base.MemberNum = int32(len(data.Member))
-	h.addAllianceLog(targetId, cmd.AllianceLogType_LogType_Join)
+	h.addAllianceLog(targetId, pb.AllianceLogType_LogType_Join)
 	// 在线自动签到
 	base, err := h.actor.getRoleBaseDataByRoleId(targetId)
 	if err == nil && base.Common.OfflineTime == -1 {
@@ -75,7 +75,7 @@ func (h *AllianceHandler) joinAlliance(targetId uint64, positionId int32, in *ba
 		}, true)
 		h.handleAddContribute(1, add, targetId)
 	}
-	//绑定Topic
+	// 绑定Topic
 	h.actor.AddGateTopic(in.GetTopic(), in.GetUserId())
 	h.Debugf("alliance addGateTopic[%s],user[%s]", in.GetTopic(), in.GetUserId())
 	h.Infof("新成员加入联盟了 id: %v, position: %v", targetId, positionId)
@@ -97,8 +97,8 @@ func (h *AllianceHandler) exitAlliance(targetId uint64, typ int32, operator uint
 
 	// 通知被踢人
 	if typ == 2 {
-		reqMsg := &cmd.S2S_ExitAllianceNtf{}
-		if err, code := h.actor.Srv.CallUserActor(true, targetId, int32(cmd.Protocols_PS2S_ExitAllianceNtf), reqMsg, nil); err != nil {
+		reqMsg := &pb.S2S_ExitAllianceNtf{}
+		if err, code := h.actor.Srv.CallUserActor(true, targetId, int32(pb.Protocols_PS2S_ExitAllianceNtf), reqMsg, nil); err != nil {
 			h.Errorf("exit alliance got error: %s, code: %v", err, code)
 			return
 		}
@@ -106,11 +106,11 @@ func (h *AllianceHandler) exitAlliance(targetId uint64, typ int32, operator uint
 
 	// 日志记录
 	if typ == 1 { // 退出
-		h.addAllianceLog(targetId, cmd.AllianceLogType_LogType_Exit)
+		h.addAllianceLog(targetId, pb.AllianceLogType_LogType_Exit)
 	} else { // 踢出
 		info, _ := h.actor.getRoleBaseDataByRoleId(operator)
 		if info != nil {
-			h.addAllianceLog(targetId, cmd.AllianceLogType_LogType_Kickout, info.Common.RoleName)
+			h.addAllianceLog(targetId, pb.AllianceLogType_LogType_Kickout, info.Common.RoleName)
 		}
 	}
 	// 盟主特殊处理
@@ -118,7 +118,7 @@ func (h *AllianceHandler) exitAlliance(targetId uint64, typ int32, operator uint
 	if !f {
 		h.tryUploadToES()
 	}
-	//解绑topic
+	// 解绑topic
 	h.actor.DelGateTopic(uid)
 	h.Debugf("alliance delGateTopic[%s]", uid)
 	h.Infof("成员退出联盟了 id: %v, type: %v", targetId, typ)
@@ -136,7 +136,7 @@ func (h *AllianceHandler) handleLeaderExit(targetId uint64) bool {
 	if len(data.Member) > 0 {
 		// 职位最高并且贡献度最高的成员，如果都相同则随机
 		var max int32
-		var newLeaders = make([]*cmd.PAllianceMember, 0)
+		var newLeaders = make([]*pb.PAllianceMember, 0)
 		for _, member := range data.Member {
 			// 初始化
 			if len(newLeaders) == 0 {
@@ -150,7 +150,7 @@ func (h *AllianceHandler) handleLeaderExit(targetId uint64) bool {
 			} else if temp == max {
 				newLeaders = append(newLeaders, member)
 			} else {
-				newLeaders = []*cmd.PAllianceMember{member}
+				newLeaders = []*pb.PAllianceMember{member}
 				max = temp
 			}
 		}
@@ -174,27 +174,27 @@ func (h *AllianceHandler) handleLeaderExit(targetId uint64) bool {
 }
 
 // 更换盟主
-func changeLeader(data *cmd.PServerAllianceInfo, newLeader, oldLeader uint64) {
+func changeLeader(data *pb.PServerAllianceInfo, newLeader, oldLeader uint64) {
 	data.Base.LeaderId = newLeader
 	leader := data.Member[newLeader]
-	leader.Position = int32(cmd.MemberPositionType_Leader)
+	leader.Position = int32(pb.MemberPositionType_Leader)
 	// 老盟主是否还在
 	old := data.Member[oldLeader]
 	if old != nil {
-		old.Position = int32(cmd.MemberPositionType_Member)
+		old.Position = int32(pb.MemberPositionType_Member)
 	}
 	logger.Infof("更换盟主成功...")
 }
 
 // 增加联盟日志
-func (h *AllianceHandler) addAllianceLog(targetId uint64, typ cmd.AllianceLogType, params ...string) {
+func (h *AllianceHandler) addAllianceLog(targetId uint64, typ pb.AllianceLogType, params ...string) {
 	data := h.GetAllianceData()
 	info, _ := h.actor.getRoleBaseDataByRoleId(targetId)
 	if info == nil {
 		return
 	}
 
-	log := &cmd.PCommonAllianceLog{
+	log := &pb.PCommonAllianceLog{
 		Name:   info.Common.RoleName,
 		Ts:     time.Now().Unix(),
 		Typ:    typ,
@@ -244,13 +244,13 @@ func (h *AllianceHandler) tryUploadToES() {
 }
 
 // 获取指定玩家的base数据块
-func (a *AllianceActor) getRoleBaseDataByRoleId(roleId uint64) (*cmd.PServerRoleBaseInfo, error) {
+func (a *AllianceActor) getRoleBaseDataByRoleId(roleId uint64) (*pb.PServerRoleBaseInfo, error) {
 	uaid, err := a.Srv.GetUAIDByRoleId(roleId)
 	if err != nil {
 		return nil, fmt.Errorf("roleId not found %v", roleId)
 	}
 
-	data := &cmd.PServerRoleBaseInfo{}
+	data := &pb.PServerRoleBaseInfo{}
 	_, err = a.GetCache(service.MongoDbType_MongoGame, db.KeyUserBaseInfo(uaid), data)
 	if err != nil {
 		return nil, err
@@ -258,9 +258,9 @@ func (a *AllianceActor) getRoleBaseDataByRoleId(roleId uint64) (*cmd.PServerRole
 	return data, nil
 }
 
-func (h *AllianceHandler) toAllianceBaseInfo(base *cmd.PServerAllianceBaseInfo) *cmd.PCommonAllianceBaseInfo {
+func (h *AllianceHandler) toAllianceBaseInfo(base *pb.PServerAllianceBaseInfo) *pb.PCommonAllianceBaseInfo {
 	info, _ := h.actor.getRoleBaseDataByRoleId(base.LeaderId)
-	return &cmd.PCommonAllianceBaseInfo{
+	return &pb.PCommonAllianceBaseInfo{
 		Id:             base.Id,
 		Name:           base.Name,
 		Profile:        base.Profile,
@@ -274,8 +274,8 @@ func (h *AllianceHandler) toAllianceBaseInfo(base *cmd.PServerAllianceBaseInfo) 
 	}
 }
 
-func (h *AllianceHandler) toCommonAllianceMembers(members map[uint64]*cmd.PAllianceMember) []*cmd.PCommonAllianceMember {
-	ret := make([]*cmd.PCommonAllianceMember, 0)
+func (h *AllianceHandler) toCommonAllianceMembers(members map[uint64]*pb.PAllianceMember) []*pb.PCommonAllianceMember {
+	ret := make([]*pb.PCommonAllianceMember, 0)
 	for _, member := range members {
 		ret = append(ret, h.toCommonAllianceMember(member))
 	}
@@ -283,12 +283,12 @@ func (h *AllianceHandler) toCommonAllianceMembers(members map[uint64]*cmd.PAllia
 }
 
 // 成员数据填充
-func (h *AllianceHandler) toCommonAllianceMember(member *cmd.PAllianceMember) *cmd.PCommonAllianceMember {
+func (h *AllianceHandler) toCommonAllianceMember(member *pb.PAllianceMember) *pb.PCommonAllianceMember {
 	info, _ := h.actor.getRoleBaseDataByRoleId(member.RoleId)
 	if info == nil {
 		return nil
 	}
-	return &cmd.PCommonAllianceMember{
+	return &pb.PCommonAllianceMember{
 		Role:       info.Common,
 		Position:   member.Position,
 		Contribute: member.Contribute,
@@ -296,22 +296,22 @@ func (h *AllianceHandler) toCommonAllianceMember(member *cmd.PAllianceMember) *c
 }
 
 // 联盟信息填充
-func (h *AllianceHandler) toCommonAllianceInfo(data *cmd.PServerAllianceInfo) *cmd.PCommonAllianceInfo {
+func (h *AllianceHandler) toCommonAllianceInfo(data *pb.PServerAllianceInfo) *pb.PCommonAllianceInfo {
 	// 成员数据
-	members := make([]*cmd.PCommonAllianceMember, 0)
+	members := make([]*pb.PCommonAllianceMember, 0)
 	for _, member := range data.Member {
 		members = append(members, h.toCommonAllianceMember(member))
 	}
 
 	// 审核数据
-	examines := make([]*cmd.PCommonRoleBaseInfo, 0)
+	examines := make([]*pb.PCommonRoleBaseInfo, 0)
 	for id := range data.Examines {
 		info, _ := h.actor.getRoleBaseDataByRoleId(id)
 		if info != nil {
 			examines = append(examines, info.Common)
 		}
 	}
-	return &cmd.PCommonAllianceInfo{
+	return &pb.PCommonAllianceInfo{
 		Base:     h.toAllianceBaseInfo(data.Base),
 		Members:  members,
 		Examines: examines,
@@ -328,11 +328,11 @@ func (h *AllianceHandler) checkPositionNum(positionId int32) bool {
 		return false
 	}
 	switch positionId {
-	case int32(cmd.MemberPositionType_Member):
+	case int32(pb.MemberPositionType_Member):
 		max = cfg.MemberNum
-	case int32(cmd.MemberPositionType_Admin):
+	case int32(pb.MemberPositionType_Admin):
 		max = cfg.AdminNum
-	case int32(cmd.MemberPositionType_Leader):
+	case int32(pb.MemberPositionType_Leader):
 		max = 1
 	}
 
@@ -360,7 +360,7 @@ func (h *AllianceHandler) GetAllianceMessageKey(allianceId int64) string {
 }
 
 // SaveAllianceChatMessage 存储联盟聊天消息到es
-func (h *AllianceHandler) SaveAllianceChatMessage(allianceId int64, message *cmd.BroadMessage) error {
+func (h *AllianceHandler) SaveAllianceChatMessage(allianceId int64, message *pb.BroadMessage) error {
 	esIndex := h.GetAllianceMessageKey(allianceId)
 	if esIndex == "" {
 		return errors.New("获取索引失败")
@@ -373,9 +373,9 @@ func (h *AllianceHandler) SaveAllianceChatMessage(allianceId int64, message *cmd
 }
 
 // GetAllianceChatMessage 获取联盟消息
-func (h *AllianceHandler) GetAllianceChatMessage(allianceId int64, endTime int64, form, size int32) []*cmd.BroadMessage {
+func (h *AllianceHandler) GetAllianceChatMessage(allianceId int64, endTime int64, form, size int32) []*pb.BroadMessage {
 	esIndex := h.GetAllianceMessageKey(allianceId)
-	infos := make([]*cmd.BroadMessage, 0)
+	infos := make([]*pb.BroadMessage, 0)
 	rangeMap := map[string]service.RangeItem{
 		"timeStamp": {
 			Min: float64(0),
@@ -389,7 +389,7 @@ func (h *AllianceHandler) GetAllianceChatMessage(allianceId int64, endTime int64
 		return infos
 	}
 	for _, hit := range hitData.Hits {
-		temp := &cmd.BroadMessage{}
+		temp := &pb.BroadMessage{}
 		if err = json.Unmarshal(hit.Source_, temp); err != nil {
 			continue
 		}

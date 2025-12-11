@@ -20,13 +20,13 @@ func Test_checkLogin(t *testing.T) {
 	defer rsp.Body.Close()
 	if err != nil {
 		logger.Errorf(err.Error())
-		//return cmd.ErrorCode_URL_GOT_ERROR
+		// return pb.ErrorCode_URL_GOT_ERROR
 	}
 
 	body, err := ioutil.ReadAll(rsp.Body)
 	if err != nil {
 		logger.Errorf(err.Error())
-		//return cmd.ErrorCode_URL_GOT_ERROR
+		// return pb.ErrorCode_URL_GOT_ERROR
 	}
 
 	logger.Warnf("莉莉丝 校验登陆返回值:%s", string(body))

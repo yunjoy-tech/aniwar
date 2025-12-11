@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/conf"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/dlog"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/threading"
@@ -20,7 +20,7 @@ const (
 	SDK_VERSION      = "3.16.0"
 )
 
-func WriteDataLog(eventName, uid string, tapUser *cmd.TaptapUserInfo, event any) {
+func WriteDataLog(eventName, uid string, tapUser *pb.TaptapUserInfo, event any) {
 	var (
 		startT = time.Now()
 	)
@@ -36,7 +36,7 @@ func WriteDataLog(eventName, uid string, tapUser *cmd.TaptapUserInfo, event any)
 	logger.WarnDelayf(time.Since(startT).Milliseconds(), "")
 }
 
-func BuildPropertyFieldInfo(device *cmd.CliDeviceInfo) *PropertyFieldInfo {
+func BuildPropertyFieldInfo(device *pb.CliDeviceInfo) *PropertyFieldInfo {
 	properties := &PropertyFieldInfo{
 		OS:          device.GetOs(),
 		Width:       device.GetWidth(),
@@ -61,11 +61,11 @@ func BuildPropertyFieldInfo(device *cmd.CliDeviceInfo) *PropertyFieldInfo {
 	} else if properties.OS == OS_TYPE_IOS {
 		properties.DeviceId1 = device.GetIdfa() // 传IDFA
 	}
-	//logger.Debugf("埋点日志公共数据：%+v", properties)
+	// logger.Debugf("埋点日志公共数据：%+v", properties)
 	return properties
 }
 
-func BuildSystemFieldInfo(logName, uid string, tapUser *cmd.TaptapUserInfo, event interface{}) *SystemFieldInfo {
+func BuildSystemFieldInfo(logName, uid string, tapUser *pb.TaptapUserInfo, event interface{}) *SystemFieldInfo {
 	systemFields := &SystemFieldInfo{
 		ClientId:   TAPTAP_CLIENT_ID,
 		Type:       "track",
@@ -74,7 +74,7 @@ func BuildSystemFieldInfo(logName, uid string, tapUser *cmd.TaptapUserInfo, even
 		Name:       logName,
 		Properties: event,
 	}
-	//logger.Debugf("埋点自定义日志公共数据: %+v", systemFields)
+	// logger.Debugf("埋点自定义日志公共数据: %+v", systemFields)
 	return systemFields
 }
 
@@ -109,7 +109,7 @@ func GlobalMailDel(appId, appVersion, clientVersion, rollingVersion, serverName 
 }
 
 // 玩家领取到系统邮件
-func AddGlobalMail(appId, appVersion, clientVersion, rollingVersion, serverName string, addMails []*cmd.PSysMailInfo) {
+func AddGlobalMail(appId, appVersion, clientVersion, rollingVersion, serverName string, addMails []*pb.PSysMailInfo) {
 	mailIds := make([]int64, 0)
 	for _, mail := range addMails {
 		mailIds = append(mailIds, mail.Id)
@@ -237,7 +237,7 @@ func DbFailComm(key, db, typeC, serverName string) {
 }
 
 // login网络延迟
-func LoginDelayComm(uid string, tapUser *cmd.TaptapUserInfo, device *cmd.CliDeviceInfo, msgId int32, delay int64) {
+func LoginDelayComm(uid string, tapUser *pb.TaptapUserInfo, device *pb.CliDeviceInfo, msgId int32, delay int64) {
 	if delay < conf.GConf().Base.DelayLogLimit {
 		return
 	}
@@ -252,7 +252,7 @@ func LoginDelayComm(uid string, tapUser *cmd.TaptapUserInfo, device *cmd.CliDevi
 }
 
 // gate网络延迟
-func GateDelayComm(uid string, tapUser *cmd.TaptapUserInfo, device *cmd.CliDeviceInfo, msgId int32, delay int64) {
+func GateDelayComm(uid string, tapUser *pb.TaptapUserInfo, device *pb.CliDeviceInfo, msgId int32, delay int64) {
 	if delay < conf.GConf().Base.DelayLogLimit {
 		return
 	}
@@ -267,7 +267,7 @@ func GateDelayComm(uid string, tapUser *cmd.TaptapUserInfo, device *cmd.CliDevic
 }
 
 // 版本获取
-func GetVersionComm(uid string, tapUser *cmd.TaptapUserInfo, device *cmd.CliDeviceInfo, version string, platform string) {
+func GetVersionComm(uid string, tapUser *pb.TaptapUserInfo, device *pb.CliDeviceInfo, version string, platform string) {
 	threading.RunSafe(func() {
 		e := &GetVersion{
 			PropertyFieldInfo: BuildPropertyFieldInfo(device),
@@ -279,7 +279,7 @@ func GetVersionComm(uid string, tapUser *cmd.TaptapUserInfo, device *cmd.CliDevi
 }
 
 // loginserver登录
-func AccountLoginComm(uid string, tapUser *cmd.TaptapUserInfo, device *cmd.CliDeviceInfo, channel int32, extra string) {
+func AccountLoginComm(uid string, tapUser *pb.TaptapUserInfo, device *pb.CliDeviceInfo, channel int32, extra string) {
 	threading.RunSafe(func() {
 		e := &AccountLogin{
 			PropertyFieldInfo: BuildPropertyFieldInfo(device),
@@ -291,7 +291,7 @@ func AccountLoginComm(uid string, tapUser *cmd.TaptapUserInfo, device *cmd.CliDe
 }
 
 // 长链进入
-func TcpEnterComm(uid string, tapUser *cmd.TaptapUserInfo, device *cmd.CliDeviceInfo) {
+func TcpEnterComm(uid string, tapUser *pb.TaptapUserInfo, device *pb.CliDeviceInfo) {
 	threading.RunSafe(func() {
 		e := &TcpEnter{
 			PropertyFieldInfo: BuildPropertyFieldInfo(device),
@@ -301,7 +301,7 @@ func TcpEnterComm(uid string, tapUser *cmd.TaptapUserInfo, device *cmd.CliDevice
 }
 
 // 断线重连
-func ReconnectComm(uid string, tapUser *cmd.TaptapUserInfo, device *cmd.CliDeviceInfo) {
+func ReconnectComm(uid string, tapUser *pb.TaptapUserInfo, device *pb.CliDeviceInfo) {
 	threading.RunSafe(func() {
 		e := &Reconnect{
 			PropertyFieldInfo: BuildPropertyFieldInfo(device),
@@ -311,7 +311,7 @@ func ReconnectComm(uid string, tapUser *cmd.TaptapUserInfo, device *cmd.CliDevic
 }
 
 // 重复登录
-func RepeatedLoginComm(uid string, tapUser *cmd.TaptapUserInfo, device *cmd.CliDeviceInfo) {
+func RepeatedLoginComm(uid string, tapUser *pb.TaptapUserInfo, device *pb.CliDeviceInfo) {
 	threading.RunSafe(func() {
 		e := &RepeatedLogin{
 			PropertyFieldInfo: BuildPropertyFieldInfo(device),

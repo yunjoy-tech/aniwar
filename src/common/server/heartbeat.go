@@ -11,14 +11,14 @@ import (
 
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/conf"
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/db"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
 )
 
 func (s *Server) SaveHeartBeat(uid string, gateTopic string) {
 	key := db.KeyHeartBeat(uid)
 
-	rsp := &cmd.C2LS_HeartBeatRes{
+	rsp := &pb.C2LS_HeartBeatRes{
 		GateTopic: gateTopic,
 	}
 
@@ -46,7 +46,7 @@ func (s *Server) UpdateHeartBeatExpire(uid string) {
 }
 
 // GetHeartBeat 获取心跳数据
-func (s *Server) GetHeartBeat(uid string) *cmd.C2LS_HeartBeatRes {
+func (s *Server) GetHeartBeat(uid string) *pb.C2LS_HeartBeatRes {
 	kvTable, err := s.GetRedis(service.RedisGlobal, db.KeyHeartBeat(uid), nil)
 	if err != nil {
 		if errors.Is(err, service.DB_ERROR_NOT_EXIST) {
@@ -61,7 +61,7 @@ func (s *Server) GetHeartBeat(uid string) *cmd.C2LS_HeartBeatRes {
 		return nil
 	}
 
-	heartBeat := &cmd.C2LS_HeartBeatRes{}
+	heartBeat := &pb.C2LS_HeartBeatRes{}
 	err = proto.Unmarshal(kvTable.Data, heartBeat)
 	if err != nil {
 		logger.Errorf(err.Error())

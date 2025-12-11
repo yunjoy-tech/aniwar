@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/db"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"google.golang.org/protobuf/proto"
 	"time"
 
@@ -117,7 +117,7 @@ func (s *Server) GetMongoGmt(key string, meta map[string]string) (*state.KvTable
 	return kvTable, err
 }
 
-//func (s *Server) saveMongo(db MongoDbType, key string, table *state.KvTable, meta map[string]string, so ...dapr.StateOption) error {
+// func (s *Server) saveMongo(db MongoDbType, key string, table *state.KvTable, meta map[string]string, so ...dapr.StateOption) error {
 //	data, err := json.Marshal(table)
 //	if err != nil {
 //		logger.Error("saveMongo Marshal err: ", table, err)
@@ -138,9 +138,9 @@ func (s *Server) GetMongoGmt(key string, meta map[string]string) (*state.KvTable
 //	metrics.GaugeAdd(metrics.MongoWSize, int64(dataLen))
 //	logger.Debugf("SaveMongo db:[%v], key:[%v], kvTable: %v", db, key, table.Str())
 //	return nil
-//}
+// }
 //
-//func (s *Server) getMongo(db MongoDbType, key string, meta map[string]string) (*state.KvTable, error) {
+// func (s *Server) getMongo(db MongoDbType, key string, meta map[string]string) (*state.KvTable, error) {
 //
 //	ctx := context.Background()
 //	now := time.Now()
@@ -168,7 +168,7 @@ func (s *Server) GetMongoGmt(key string, meta map[string]string) (*state.KvTable
 //	}
 //	logger.Debugf("getMongo db:%v, key:%v, dataLen:%v", db, key, len(table.Data))
 //	return table, nil
-//}
+// }
 
 // UpsertMongoTableTransaction update or insert to mongo by transaction
 func (s *Server) UpsertMongoTableTransaction(db service.MongoDbType, meta map[string]string, kvTableMap map[string]*state.KvTable) error {
@@ -225,7 +225,7 @@ func (s *Server) SaveMongoTransaction(db service.MongoDbType, meta map[string]st
 	ctx, _ := context.WithTimeout(context.Background(), global.DB_INVOKE_TIMEOUT*time.Second)
 	now := time.Now()
 	logger.Debugf("SaveMongoTransaction === db:%v, meta:%v, opts:%v", db, meta, opts)
-	//err = s.Daprc.ExecuteStateTransaction(ctx, string(db), meta, opts)
+	// err = s.Daprc.ExecuteStateTransaction(ctx, string(db), meta, opts)
 	_, err = utils.RetryDoSyncInterval(
 		baseconf.GetBaseConf().AniwarDbSetRetryCount,
 		baseconf.GetBaseConf().AniwarDbRetryInterval,
@@ -265,9 +265,9 @@ func (s *Server) SaveSystemMail(value proto.Message) error {
 	return nil
 }
 
-func (s *Server) GetSystemMail(systemMail *cmd.PSystemMailInfo) error {
+func (s *Server) GetSystemMail(systemMail *pb.PSystemMailInfo) error {
 	if systemMail.SystemMail == nil {
-		systemMail.SystemMail = make(map[int64]*cmd.PSysMailInfo)
+		systemMail.SystemMail = make(map[int64]*pb.PSysMailInfo)
 	}
 	if kvTable, err := s.GetMongoGame(db.KeySystemMail(), nil); err != nil {
 		if errors.Is(err, service.DB_ERROR_NOT_EXIST) {
@@ -282,7 +282,7 @@ func (s *Server) GetSystemMail(systemMail *cmd.PSystemMailInfo) error {
 		}
 		// nil容错
 		if systemMail.SystemMail == nil {
-			systemMail.SystemMail = make(map[int64]*cmd.PSysMailInfo)
+			systemMail.SystemMail = make(map[int64]*pb.PSysMailInfo)
 		}
 	}
 	logger.Infof("加载系统邮件数据 data: %+v", systemMail)

@@ -1,8 +1,8 @@
 package logic
 
-import "gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+import "gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 
-func (s *LoginServer) handleAuthPC(req *cmd.C2LS_LoginReq) cmd.ErrorCode {
+func (s *LoginServer) handleAuthPC(req *pb.C2LS_LoginReq) pb.ErrorCode {
 
-	return cmd.ErrorCode_Success
+	return pb.ErrorCode_Success
 }

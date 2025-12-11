@@ -12,7 +12,7 @@ import (
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/clidto"
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/db"
 	excel "gitlab.musadisca-games.com/wangxw/aniwar/src/excel/data"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/service"
 	"google.golang.org/protobuf/proto"
@@ -34,8 +34,8 @@ func NewSignHandler(actor *UserActor) *SignHandler {
 	h.ChildHandler = h
 
 	// 协议注册
-	h.actor.RegisterProtoHandler(int32(cmd.Protocols_PC2LS_InitSignReq), h.InitSignReq)
-	h.actor.RegisterProtoHandler(int32(cmd.Protocols_PC2LS_DaySignReq), h.DaySignReq) // 签到
+	h.actor.RegisterProtoHandler(int32(pb.Protocols_PC2LS_InitSignReq), h.InitSignReq)
+	h.actor.RegisterProtoHandler(int32(pb.Protocols_PC2LS_DaySignReq), h.DaySignReq) // 签到
 
 	return h
 }
@@ -43,9 +43,9 @@ func NewSignHandler(actor *UserActor) *SignHandler {
 // Init 初始化模块数据
 func (h *SignHandler) Init() error {
 	// 初始化
-	h.actor.Data.Sign = &cmd.PSignData{
+	h.actor.Data.Sign = &pb.PSignData{
 		Createtime: time.Now().Unix(),
-		Sign:       make(map[int32]*cmd.PCommonSignInfo),
+		Sign:       make(map[int32]*pb.PCommonSignInfo),
 	}
 
 	// 保存
@@ -72,7 +72,7 @@ func (h *SignHandler) DailyRefresh() error {
 }
 
 func (h *SignHandler) SetDBData(dbData proto.Message) error {
-	if dbVal, ok := dbData.(*cmd.PSignData); ok {
+	if dbVal, ok := dbData.(*pb.PSignData); ok {
 		h.actor.Data.Sign = dbVal
 	} else {
 		return fmt.Errorf("SetDBData, 数据类型错误! %v", dbData)
@@ -85,7 +85,7 @@ func (h *SignHandler) DBTable() (service.MongoDbType, string, proto.Message) {
 	return service.MongoDbType_MongoGame, db.KeyUserSign(h.actor.ID()), h.actor.Data.Sign
 }
 
-func (h *SignHandler) buildSignInfo() []*cmd.PCommonSignInfo {
+func (h *SignHandler) buildSignInfo() []*pb.PCommonSignInfo {
 
 	signData := h.actor.GetSignData()
 	err := h.tryRefreshSign(signData.Sign)
@@ -93,7 +93,7 @@ func (h *SignHandler) buildSignInfo() []*cmd.PCommonSignInfo {
 		return nil
 	}
 
-	signs := make([]*cmd.PCommonSignInfo, 0)
+	signs := make([]*pb.PCommonSignInfo, 0)
 	for _, sign := range signData.Sign {
 		signs = append(signs, sign)
 	}
@@ -103,52 +103,52 @@ func (h *SignHandler) buildSignInfo() []*cmd.PCommonSignInfo {
 
 func (h *SignHandler) InitSignReq(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
 
-	commonData := &cmd.CliComData{
+	commonData := &pb.CliComData{
 		SignGroups: h.buildSignInfo(),
 	}
 
-	return &cmd.LS2C_InitSignRes{CommonData: commonData}, nil, 0
+	return &pb.LS2C_InitSignRes{CommonData: commonData}, nil, 0
 }
 
 func (h *SignHandler) DaySignReq(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
 
-	var req cmd.C2LS_DaySignReq
+	var req pb.C2LS_DaySignReq
 	err := in.UnmarshalData(&req)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_DeSerializeError)
+		return nil, err, int32(pb.ErrorCode_DeSerializeError)
 	}
 
 	cfg := excel.GetCalendarsMgr().GetById(req.GroupId)
 	if cfg == nil {
-		return nil, fmt.Errorf("CalendarsCfg not found %d", req.GroupId), int32(cmd.ErrorCode_NotFoundConfig)
+		return nil, fmt.Errorf("CalendarsCfg not found %d", req.GroupId), int32(pb.ErrorCode_NotFoundConfig)
 	}
 
 	// 参数校验
 	if cfg.Category == SIGN_TYPE_DAILY && (req.Params <= 0 || req.Params > 3) {
-		return nil, fmt.Errorf("invalid param %d", req.Params), int32(cmd.ErrorCode_InvalidParam)
+		return nil, fmt.Errorf("invalid param %d", req.Params), int32(pb.ErrorCode_InvalidParam)
 	}
 
 	signData := h.actor.GetSignData()
 	err = h.tryRefreshSign(signData.Sign)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
 	// 签到组不存在
 	info := signData.Sign[req.GroupId]
 	if info == nil {
-		return nil, fmt.Errorf("invalid groupId %d", req.GroupId), int32(cmd.ErrorCode_InvalidParam)
+		return nil, fmt.Errorf("invalid groupId %d", req.GroupId), int32(pb.ErrorCode_InvalidParam)
 	}
 
 	// 是否过期
 	now := time.Now().Unix()
 	if now > info.End {
-		return nil, fmt.Errorf("sign group is end %d", req.GroupId), int32(cmd.ErrorCode_SignGroupIsEnd)
+		return nil, fmt.Errorf("sign group is end %d", req.GroupId), int32(pb.ErrorCode_SignGroupIsEnd)
 	}
 
 	// 今日是否签到过
 	if now < info.NextSign {
-		return nil, fmt.Errorf("today had sign %d", req.GroupId), int32(cmd.ErrorCode_DutyHadSign)
+		return nil, fmt.Errorf("today had sign %d", req.GroupId), int32(pb.ErrorCode_DutyHadSign)
 	}
 
 	// 处理逻辑
@@ -156,13 +156,13 @@ func (h *SignHandler) DaySignReq(ctx context.Context, in *base.ProtoMsg) (proto.
 	info.Signed++
 	if cfg.Category == SIGN_TYPE_DAILY {
 		cardId := h.actor.DutyHandler.GetCurDutyCard()
-		history := &cmd.PSignDayInfo{Params: []int32{cardId, req.Params}}
+		history := &pb.PSignDayInfo{Params: []int32{cardId, req.Params}}
 		info.Sign = append(info.Sign, history)
 	}
 
 	err = h.SaveDB()
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
 	// 签到奖励
@@ -182,12 +182,12 @@ func (h *SignHandler) DaySignReq(ctx context.Context, in *base.ProtoMsg) (proto.
 	if len(reward) > 0 {
 		_, err = GetDropMgr(h.actor).DropList2(reward, true, nil, h.actor.comData, common.CR_Daily_Sign)
 		if err != nil {
-			return nil, err, int32(cmd.ErrorCode_InternalError)
+			return nil, err, int32(pb.ErrorCode_InternalError)
 		}
 	}
 
 	// 埋点
-	//threading.RunSafe(func() {
+	// threading.RunSafe(func() {
 	//	lilith.WriteDataLog(&lilith.DaySign{
 	//		CustomHeadInfo: lilith.BuildCustomHeadInfo(lilith.LogType_DaySign, h.actor.uid, h.actor.Account.CliDeviceInfo),
 	//		GroupId:        req.GroupId,                   // 签到组id
@@ -196,7 +196,7 @@ func (h *SignHandler) DaySignReq(ctx context.Context, in *base.ProtoMsg) (proto.
 	//		Counter:        info.Signed,                   // 当前签到次数
 	//		Reward:         lilith.ConvertMap2Str(reward), // 签到奖励
 	//	})
-	//})
+	// })
 	threading.RunSafe(func() {
 		e := &taptap.DaySign{
 			PropertyFieldInfo: taptap.BuildPropertyFieldInfo(h.actor.Account.CliDeviceInfo),
@@ -209,7 +209,7 @@ func (h *SignHandler) DaySignReq(ctx context.Context, in *base.ProtoMsg) (proto.
 		taptap.WriteDataLog(taptap.LogType_DaySign, h.actor.uid, h.actor.Account.TapUserInfo, e)
 	})
 
-	return &cmd.LS2C_DaySignRes{SignInfo: info, CommonData: h.actor.comData.FixDownComData()}, nil, 0
+	return &pb.LS2C_DaySignRes{SignInfo: info, CommonData: h.actor.comData.FixDownComData()}, nil, 0
 }
 
 func (h *SignHandler) DaySignByGM(groupId, param int32, commonData *clidto.Comdata) error {
@@ -241,7 +241,7 @@ func (h *SignHandler) DaySignByGM(groupId, param int32, commonData *clidto.Comda
 	info.Signed++
 	if cfg.Category == SIGN_TYPE_DAILY {
 		cardId := h.actor.DutyHandler.GetCurDutyCard()
-		history := &cmd.PSignDayInfo{Params: []int32{cardId, param}}
+		history := &pb.PSignDayInfo{Params: []int32{cardId, param}}
 		info.Sign = append(info.Sign, history)
 	}
 
@@ -274,7 +274,7 @@ func (h *SignHandler) DaySignByGM(groupId, param int32, commonData *clidto.Comda
 }
 
 // 刷新签到组数据
-func (h *SignHandler) tryRefreshSign(signs map[int32]*cmd.PCommonSignInfo) error {
+func (h *SignHandler) tryRefreshSign(signs map[int32]*pb.PCommonSignInfo) error {
 	b := false
 	now := time.Now()
 	// 尝试去除过期的签到数据
@@ -309,7 +309,7 @@ func (h *SignHandler) tryRefreshSign(signs map[int32]*cmd.PCommonSignInfo) error
 	return nil
 }
 
-func (h *SignHandler) tryCreateSignInfo(cfg *excel.CalendarsCfg, now time.Time) *cmd.PCommonSignInfo {
+func (h *SignHandler) tryCreateSignInfo(cfg *excel.CalendarsCfg, now time.Time) *pb.PCommonSignInfo {
 
 	// 按类型处理
 	if cfg.Category == SIGN_TYPE_DAILY || cfg.Category == SIGN_TYPE_ACTIVITY {
@@ -328,7 +328,7 @@ func (h *SignHandler) tryCreateSignInfo(cfg *excel.CalendarsCfg, now time.Time) 
 			return nil
 		}
 
-		return &cmd.PCommonSignInfo{
+		return &pb.PCommonSignInfo{
 			GroupId:  cfg.Id,
 			NextSign: common.GetNextDailyRefreshTime(),
 			Begin:    start.Unix(),
@@ -345,11 +345,11 @@ func (h *SignHandler) tryCreateSignInfo(cfg *excel.CalendarsCfg, now time.Time) 
 	return nil
 }
 
-//func (h *SignHandler) dailyRefresh() error {
+// func (h *SignHandler) dailyRefresh() error {
 //	signData := h.actor.GetSignData()
 //	err := h.tryRefreshSign(signData.Sign)
 //	if err != nil {
 //		return err
 //	}
 //	return nil
-//}
+// }

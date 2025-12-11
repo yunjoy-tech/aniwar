@@ -1,26 +1,26 @@
 package allianceactor
 
-//type CacheMgr struct {
+// type CacheMgr struct {
 //	Actor *AllianceActor
 //
 //	Members  sync.Map // 成员角色基础信息
 //	ExpireTS int64    // 失效时间戳
-//}
+// }
 //
-//func NewCacheMgr(actor *AllianceActor) *CacheMgr {
+// func NewCacheMgr(actor *AllianceActor) *CacheMgr {
 //	return &CacheMgr{
 //		Actor:    actor,
 //		Members:  sync.Map{},
 //		ExpireTS: time.Now().Unix() + 60,
 //	}
-//}
+// }
 //
-//func (m *CacheMgr) GetMemberDataById(roleId uint64) *cmd.PServerRoleBaseInfo {
+// func (m *CacheMgr) GetMemberDataById(roleId uint64) *pb.PServerRoleBaseInfo {
 //	m.tryRefreshData()
-//	var baseInfo *cmd.PServerRoleBaseInfo
+//	var baseInfo *pb.PServerRoleBaseInfo
 //	// 获取缓存数据
 //	if value, ok := m.Members.Load(roleId); ok {
-//		baseInfo = value.(*cmd.PServerRoleBaseInfo)
+//		baseInfo = value.(*pb.PServerRoleBaseInfo)
 //	} else {
 //		// 新数据加载
 //		info, err := m.Actor.getRoleBaseDataByRoleId(roleId)
@@ -32,16 +32,16 @@ package allianceactor
 //		baseInfo = info
 //	}
 //	return baseInfo
-//}
+// }
 //
-//// 获取一批成员缓存数据
-//func (m *CacheMgr) GetMemberDataByIds(roleIds []uint64) []*cmd.PServerRoleBaseInfo {
+// // 获取一批成员缓存数据
+// func (m *CacheMgr) GetMemberDataByIds(roleIds []uint64) []*pb.PServerRoleBaseInfo {
 //	m.tryRefreshData()
-//	ret := make([]*cmd.PServerRoleBaseInfo, 0)
+//	ret := make([]*pb.PServerRoleBaseInfo, 0)
 //	for _, roleId := range roleIds {
 //		// 获取缓存数据
 //		if value, ok := m.Members.Load(roleId); ok {
-//			baseInfo := value.(*cmd.PServerRoleBaseInfo)
+//			baseInfo := value.(*pb.PServerRoleBaseInfo)
 //			ret = append(ret, baseInfo)
 //		} else {
 //			// 新数据加载
@@ -56,14 +56,14 @@ package allianceactor
 //		}
 //	}
 //	return ret
-//}
+// }
 //
-//func (m *CacheMgr) GetMemberData(member *cmd.PAllianceMember) *cmd.PCommonAllianceMember {
+// func (m *CacheMgr) GetMemberData(member *pb.PAllianceMember) *pb.PCommonAllianceMember {
 //	m.tryRefreshData()
-//	var ret *cmd.PCommonAllianceMember
+//	var ret *pb.PCommonAllianceMember
 //	// 获取缓存数据
 //	if value, ok := m.Members.Load(member.RoleId); ok {
-//		baseInfo := value.(*cmd.PServerRoleBaseInfo)
+//		baseInfo := value.(*pb.PServerRoleBaseInfo)
 //		ret = toCommonMember(member, baseInfo)
 //	} else {
 //		// 新数据加载
@@ -77,16 +77,16 @@ package allianceactor
 //	}
 //
 //	return ret
-//}
+// }
 //
-////获取一批成员缓存数据
-//func (m *CacheMgr) GetMemberDataByMap(members map[uint64]*cmd.PAllianceMember) []*cmd.PCommonAllianceMember {
+// //获取一批成员缓存数据
+// func (m *CacheMgr) GetMemberDataByMap(members map[uint64]*pb.PAllianceMember) []*pb.PCommonAllianceMember {
 //	m.tryRefreshData()
-//	ret := make([]*cmd.PCommonAllianceMember, 0)
+//	ret := make([]*pb.PCommonAllianceMember, 0)
 //	for roleId, member := range members {
 //		// 获取缓存数据
 //		if value, ok := m.Members.Load(roleId); ok {
-//			baseInfo := value.(*cmd.PServerRoleBaseInfo)
+//			baseInfo := value.(*pb.PServerRoleBaseInfo)
 //			ret = append(ret, toCommonMember(member, baseInfo))
 //		} else {
 //			// 新数据加载
@@ -101,17 +101,17 @@ package allianceactor
 //		}
 //	}
 //	return ret
-//}
+// }
 //
-//// 删除一批成员缓存数据
-//func (m *CacheMgr) DelMemberData(members []uint64) {
+// // 删除一批成员缓存数据
+// func (m *CacheMgr) DelMemberData(members []uint64) {
 //	for _, id := range members {
 //		m.Members.Delete(id)
 //	}
-//}
+// }
 //
-//// 尝试刷新过期数据
-//func (m *CacheMgr) tryRefreshData() {
+// // 尝试刷新过期数据
+// func (m *CacheMgr) tryRefreshData() {
 //	now := time.Now().Unix()
 //	if now < m.ExpireTS {
 //		return
@@ -130,4 +130,4 @@ package allianceactor
 //		return true
 //	})
 //	logger.Debugf("刷新联盟缓存的成员数据了...")
-//}
+// }

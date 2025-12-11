@@ -24,7 +24,7 @@ import (
 
 	"github.com/dapr/go-sdk/actor/runtime"
 	"github.com/dapr/go-sdk/service/common"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/metrics"
@@ -59,7 +59,7 @@ func NewActorServer() base.IServer {
 	srv.AppId = "actor"
 	srv.InAddr = ":24001"
 	srv.GRPCPort = "50001"
-	srv.HasPriTopic = true //开启私有频道订阅
+	srv.HasPriTopic = true // 开启私有频道订阅
 	srv.OnPreInit = srv.PreInit
 	srv.OnServerInit = srv.ServerInit
 	srv.OnEventHandler = srv.EventHandler
@@ -263,13 +263,13 @@ func (s *ActorServer) InvokeHandler(ctx context.Context, in *common.InvocationEv
 	metrics.GaugeInc(metrics.InvokeSubCount)
 	messageID, uid, data := msg.MsgId, msg.UserId, msg.Data
 	logger.Debugf("ContentType:%s Verb:%s QueryString:%s msgId:%v msgId:%v uid:%s dataLen:%v",
-		in.ContentType, in.Verb, in.QueryString, cmd.Protocols(messageID), messageID, uid, len(data))
-	if messageID == int32(cmd.Protocols_PS2AS_GetGmListReq) {
+		in.ContentType, in.Verb, in.QueryString, pb.Protocols(messageID), messageID, uid, len(data))
+	if messageID == int32(pb.Protocols_PS2AS_GetGmListReq) {
 		out, err = s.GetUserGMList(msg)
-	} else if messageID == int32(cmd.Protocols_PS2S_SendGMAddMailReq) {
+	} else if messageID == int32(pb.Protocols_PS2S_SendGMAddMailReq) {
 		out, err = s.SysMailMgr.AddSystemMailReq(msg)
-	} else if messageID == int32(cmd.Protocols_PS2S_GetExcelConfigReq) {
-		req := &cmd.S2S_GetExcelConfigReq{}
+	} else if messageID == int32(pb.Protocols_PS2S_GetExcelConfigReq) {
+		req := &pb.S2S_GetExcelConfigReq{}
 		if err = msg.UnmarshalData(req); err != nil {
 			return nil, err
 		}
@@ -279,7 +279,7 @@ func (s *ActorServer) InvokeHandler(ctx context.Context, in *common.InvocationEv
 			ContentType: "text/plain",
 			DataTypeURL: "",
 		}
-	} else if messageID == int32(cmd.Protocols_PS2S_SvcStatusReq) || messageID == int32(cmd.Protocols_PS2S_HotReloadNotifyReq) {
+	} else if messageID == int32(pb.Protocols_PS2S_SvcStatusReq) || messageID == int32(pb.Protocols_PS2S_HotReloadNotifyReq) {
 		ret, err := s.ActorInvoke(global.CenterActorType, global.CenterActorID, msg)
 		if err != nil {
 			logger.Warn("ActorInvoke err:", err)
@@ -296,7 +296,7 @@ func (s *ActorServer) InvokeHandler(ctx context.Context, in *common.InvocationEv
 }
 
 func (s *ActorServer) GetUserGMList(msg *base.ProtoMsg) (*common.Content, error) {
-	req := &cmd.S2AS_GetGmListReq{}
+	req := &pb.S2AS_GetGmListReq{}
 	if err := msg.UnmarshalData(req); err != nil {
 		return nil, err
 	}

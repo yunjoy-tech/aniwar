@@ -18,13 +18,11 @@ import (
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common"
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/utils"
 	excel "gitlab.musadisca-games.com/wangxw/aniwar/src/excel/data"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/cmd"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
 	"google.golang.org/protobuf/proto"
 )
 
-// @author yitie
-// @module 卡牌系统
 type CardHandler struct {
 	*UABaseHandler
 }
@@ -33,13 +31,13 @@ func NewCardHandler(actor *UserActor) *CardHandler {
 	h := &CardHandler{UABaseHandler: NewUABaseHandler(actor, "CardHandler")}
 	h.ChildHandler = h
 
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PC2LS_CardBreakthroughReq), h.CardBreakthroughReq)       // 突破 (觉醒)
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PC2LS_CardSkillUpgradeReq), h.CardSkillUpgradeReq)       // 技能升级
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PC2LS_CardCompoundReq), h.CardCompoundReq)               // 潜力升级
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PC2LS_CardCharacterBreakReq), h.CardCharacterBreakReq)   // 性格突破
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PC2LS_CardCharacterUnlockReq), h.CardCharacterUnlockReq) // 性格解锁
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PC2LS_CardCharacterChangeReq), h.CardCharacterChangeReq) // 性格切换
-	actor.RegisterProtoHandler(int32(cmd.Protocols_PC2LS_CardLevelUpReq), h.CardLevelUpReq)                 // 使用经验道具升级
+	actor.RegisterProtoHandler(int32(pb.Protocols_PC2LS_CardBreakthroughReq), h.CardBreakthroughReq)       // 突破 (觉醒)
+	actor.RegisterProtoHandler(int32(pb.Protocols_PC2LS_CardSkillUpgradeReq), h.CardSkillUpgradeReq)       // 技能升级
+	actor.RegisterProtoHandler(int32(pb.Protocols_PC2LS_CardCompoundReq), h.CardCompoundReq)               // 潜力升级
+	actor.RegisterProtoHandler(int32(pb.Protocols_PC2LS_CardCharacterBreakReq), h.CardCharacterBreakReq)   // 性格突破
+	actor.RegisterProtoHandler(int32(pb.Protocols_PC2LS_CardCharacterUnlockReq), h.CardCharacterUnlockReq) // 性格解锁
+	actor.RegisterProtoHandler(int32(pb.Protocols_PC2LS_CardCharacterChangeReq), h.CardCharacterChangeReq) // 性格切换
+	actor.RegisterProtoHandler(int32(pb.Protocols_PC2LS_CardLevelUpReq), h.CardLevelUpReq)                 // 使用经验道具升级
 
 	return h
 }
@@ -47,9 +45,9 @@ func NewCardHandler(actor *UserActor) *CardHandler {
 // Init 初始化模块数据
 func (h *CardHandler) Init() error {
 	// 初始化
-	h.actor.Data.Cards = &cmd.PCardData{
+	h.actor.Data.Cards = &pb.PCardData{
 		Createtime: time.Now().Unix(),
-		Card:       make(map[uint32]*cmd.CardData),
+		Card:       make(map[uint32]*pb.CardData),
 	}
 
 	if err := h.SaveDB(); err != nil {
@@ -68,7 +66,7 @@ func (h *CardHandler) DailyRefresh() error {
 }
 
 func (h *CardHandler) SetDBData(dbData proto.Message) error {
-	if dbVal, ok := dbData.(*cmd.PCardData); ok {
+	if dbVal, ok := dbData.(*pb.PCardData); ok {
 		h.actor.Data.Cards = dbVal
 	} else {
 		return fmt.Errorf("SetDBData, 数据类型错误! %v", dbData)
@@ -81,7 +79,7 @@ func (h *CardHandler) DBTable() (service.MongoDbType, string, proto.Message) {
 	return service.MongoDbType_MongoGame, db.KeyUserCard(h.actor.ID()), h.actor.Data.Cards
 }
 
-func NewCard(cardCfg *excel.BeastarCfg) *cmd.CardData {
+func NewCard(cardCfg *excel.BeastarCfg) *pb.CardData {
 	baseId := uint32(cardCfg.GetId())
 
 	skill := make(map[uint32]uint32)
@@ -94,7 +92,7 @@ func NewCard(cardCfg *excel.BeastarCfg) *cmd.CardData {
 	equip[2] = 0
 	equip[3] = 0
 
-	card := &cmd.CardData{
+	card := &pb.CardData{
 		BaseId:            baseId,
 		CardLevel:         1,
 		Hp:                uint32(cardCfg.GetHp()),
@@ -110,8 +108,8 @@ func NewCard(cardCfg *excel.BeastarCfg) *cmd.CardData {
 		FavoriteLevel:     0,
 		FavoriteExp:       0,
 		IsNew:             true,
-		Character:         []int32{int32(cmd.CharacterType_CharacterType_Human)},
-		CurCharacter:      int32(cmd.CharacterType_CharacterType_Human),
+		Character:         []int32{int32(pb.CharacterType_CharacterType_Human)},
+		CurCharacter:      int32(pb.CharacterType_CharacterType_Human),
 		AddNum:            1,
 	}
 
@@ -138,23 +136,23 @@ func (h *CardHandler) CardLevelUpReq(ctx context.Context, in *base.ProtoMsg) (pr
 	if err != nil {
 		return nil, err, int32(code)
 	}
-	req := &cmd.C2LS_CardLevelUpReq{}
+	req := &pb.C2LS_CardLevelUpReq{}
 	if err = in.UnmarshalData(req); err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
 	// 取对应卡牌数据
 	card, err := h.GetCard(uint32(req.CardId))
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_CardNotExist)
+		return nil, err, int32(pb.ErrorCode_CardNotExist)
 	}
 	// 满级了？
 	maxLevel, err := h.CheckCardLevelUp(card)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 	if card.CardLevel >= maxLevel {
-		return nil, fmt.Errorf("card level is max"), int32(cmd.ErrorCode_CardLevelIsMax)
+		return nil, fmt.Errorf("card level is max"), int32(pb.ErrorCode_CardLevelIsMax)
 	}
 
 	// 道具check
@@ -163,35 +161,35 @@ func (h *CardHandler) CardLevelUpReq(ctx context.Context, in *base.ProtoMsg) (pr
 	var sumExp int32
 	for k, v := range costs {
 		if v <= 0 {
-			return nil, fmt.Errorf("param error"), int32(cmd.ErrorCode_ParamError)
+			return nil, fmt.Errorf("param error"), int32(pb.ErrorCode_ParamError)
 		}
 		cfg := excel.GetItemMgr().GetById(k)
 		if cfg == nil {
-			return nil, fmt.Errorf("config not found"), int32(cmd.ErrorCode_NotFoundConfig)
+			return nil, fmt.Errorf("config not found"), int32(pb.ErrorCode_NotFoundConfig)
 		}
-		if !(cfg.Type == int32(cmd.ItemType_Material) && cfg.SubType == int32(cmd.ItemMaterialType_ItemMaterialType_Card_Exp)) { // 8
-			return nil, fmt.Errorf("param error"), int32(cmd.ErrorCode_ParamError)
+		if !(cfg.Type == int32(pb.ItemType_Material) && cfg.SubType == int32(pb.ItemMaterialType_ItemMaterialType_Card_Exp)) { // 8
+			return nil, fmt.Errorf("param error"), int32(pb.ErrorCode_ParamError)
 		}
 		sumExp += cfg.UseEffectShow * v
 	}
 	costs[common.CURRENCY_ITEM_ID_2001] += sumExp * excel.GetConfigMgr().GetCfg().ROLE_UPGRADE_ELE_COST
 	if !GetConsumeMgr(h.actor).CheckMapEnough(costs) {
-		return nil, fmt.Errorf("item not enough"), int32(cmd.ErrorCode_NotEnoughItem)
+		return nil, fmt.Errorf("item not enough"), int32(pb.ErrorCode_NotEnoughItem)
 	}
 
 	err = GetConsumeMgr(h.actor).ConsumeList(costs, h.actor.comData, common.CR_Card_Level_Up)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
 	// 升级前等级
 	beforeCardLevel := card.CardLevel
 	// 处理卡牌升级
 	if _, err = h.AddExp(card, sumExp, true); err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 	if err = h.SaveDB(); err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 	// 升级后等级
 	afterCardLevel := card.CardLevel
@@ -210,8 +208,8 @@ func (h *CardHandler) CardLevelUpReq(ctx context.Context, in *base.ProtoMsg) (pr
 	})
 
 	h.actor.comData.Data.Card = append(h.actor.comData.Data.Card, h.ToClientData(card))
-	rsp := &cmd.LS2C_CardLevelUpRes{CommonData: h.actor.comData.FixDownComData()}
-	return rsp, nil, int32(cmd.ErrorCode_Success)
+	rsp := &pb.LS2C_CardLevelUpRes{CommonData: h.actor.comData.FixDownComData()}
+	return rsp, nil, int32(pb.ErrorCode_Success)
 }
 
 // 卡牌突破
@@ -220,23 +218,23 @@ func (h *CardHandler) CardBreakthroughReq(ctx context.Context, in *base.ProtoMsg
 	if err != nil {
 		return nil, err, int32(code)
 	}
-	req := &cmd.C2LS_CardBreakthroughReq{}
+	req := &pb.C2LS_CardBreakthroughReq{}
 	if err = in.UnmarshalData(req); err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
 	// 取对应卡牌数据
 	card, err := h.GetCard(req.CardId)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_CardNotExist)
+		return nil, err, int32(pb.ErrorCode_CardNotExist)
 	}
 
 	// 返回数据
-	rsp := &cmd.LS2C_CardBreakthroughRes{}
+	rsp := &pb.LS2C_CardBreakthroughRes{}
 
 	// 处理卡牌突破
 	errorCode, isAwaken := h.handleCardBreakthrough(card, rsp)
-	if errorCode != cmd.ErrorCode_Success {
+	if errorCode != pb.ErrorCode_Success {
 		return nil, err, int32(errorCode)
 	}
 
@@ -257,10 +255,10 @@ func (h *CardHandler) CardBreakthroughReq(ctx context.Context, in *base.ProtoMsg
 	e.Set("level", int32(card.BreakthroughLevel))
 	e.Set("is_awaken", isAwaken)
 	if err = h.actor.eventManager.SyncPublish(e); err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 	rsp.CommonData = h.actor.comData.FixDownComData()
-	return rsp, nil, int32(cmd.ErrorCode_Success)
+	return rsp, nil, int32(pb.ErrorCode_Success)
 }
 
 // 技能升级
@@ -269,28 +267,28 @@ func (h *CardHandler) CardSkillUpgradeReq(ctx context.Context, in *base.ProtoMsg
 	if err != nil {
 		return nil, err, int32(code)
 	}
-	req := &cmd.C2LS_CardSkillUpgradeReq{}
+	req := &pb.C2LS_CardSkillUpgradeReq{}
 	err = in.UnmarshalData(req)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
 	// 取对应卡牌数据
 	card, err := h.GetCard(req.CardId)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_CardNotExist)
+		return nil, err, int32(pb.ErrorCode_CardNotExist)
 	}
 
 	// 处理升级逻辑
 	index := req.GetIndex()
 	errorCode, beforeSkillLv, nextSkillLv := h.handleSkillUpgrade(card, index, h.actor.comData)
-	if errorCode != cmd.ErrorCode_Success {
+	if errorCode != pb.ErrorCode_Success {
 		return nil, err, int32(errorCode)
 	}
 
 	// 返回数据
 	h.actor.comData.Data.Card = append(h.actor.comData.Data.Card, h.ToClientData(card))
-	rsp := &cmd.LS2C_CardSkillUpgradeRes{CommonData: h.actor.comData.FixDownComData()}
+	rsp := &pb.LS2C_CardSkillUpgradeRes{CommonData: h.actor.comData.FixDownComData()}
 
 	// 埋点
 	threading.RunSafe(func() {
@@ -308,7 +306,7 @@ func (h *CardHandler) CardSkillUpgradeReq(ctx context.Context, in *base.ProtoMsg
 	e := event.NewBasicEvent(TASK_EVENT_SKILL_UPGRADE, []int32{TASK_TYPE_101, TASK_TYPE_105}, nil)
 	e.Set("card_id", req.CardId)
 	if err = h.actor.eventManager.SyncPublish(e); err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 	rsp.CommonData = h.actor.comData.FixDownComData()
 	return rsp, nil, 0
@@ -320,27 +318,27 @@ func (h *CardHandler) CardCompoundReq(ctx context.Context, in *base.ProtoMsg) (p
 	if err != nil {
 		return nil, err, int32(code)
 	}
-	req := &cmd.C2LS_CardCompoundReq{}
+	req := &pb.C2LS_CardCompoundReq{}
 	err = in.UnmarshalData(req)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
 	// 取卡牌
 	card, err := h.GetCard(req.CardId)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_CardNotExist)
+		return nil, err, int32(pb.ErrorCode_CardNotExist)
 	}
 
 	// 逻辑处理
 	errorCode := h.handleCardCompound(card, h.actor.comData)
-	if errorCode != cmd.ErrorCode_Success {
+	if errorCode != pb.ErrorCode_Success {
 		return nil, err, int32(errorCode)
 	}
 
 	// 消息返回
 	h.actor.comData.Data.Card = append(h.actor.comData.Data.Card, h.ToClientData(card))
-	rsp := &cmd.LS2C_CardCompoundRes{CommonData: h.actor.comData.FixDownComData()}
+	rsp := &pb.LS2C_CardCompoundRes{CommonData: h.actor.comData.FixDownComData()}
 
 	// 埋点
 	threading.RunSafe(func() {
@@ -358,7 +356,7 @@ func (h *CardHandler) CardCompoundReq(ctx context.Context, in *base.ProtoMsg) (p
 	e.Set("card_id", req.CardId)
 	e.Set("level", card.AwakenLevel)
 	if err = h.actor.eventManager.SyncPublish(e); err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 	rsp.CommonData = h.actor.comData.FixDownComData()
 	return rsp, nil, 0
@@ -370,51 +368,51 @@ func (h *CardHandler) CardCharacterBreakReq(ctx context.Context, in *base.ProtoM
 	if err != nil {
 		return nil, err, int32(code)
 	}
-	req := &cmd.C2LS_CardCharacterBreakReq{}
+	req := &pb.C2LS_CardCharacterBreakReq{}
 	err = in.UnmarshalData(req)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
 	// 取卡牌
 	card, err := h.GetCard(req.CardId)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_CardNotExist)
+		return nil, err, int32(pb.ErrorCode_CardNotExist)
 	}
 	cardCfg := excel.GetBeastarMgr().GetById(int32(req.CardId))
 	if cardCfg == nil {
-		return nil, fmt.Errorf("not found card: %d config", req.CardId), int32(cmd.ErrorCode_NotFoundConfig)
+		return nil, fmt.Errorf("not found card: %d config", req.CardId), int32(pb.ErrorCode_NotFoundConfig)
 	}
 
 	// 等级检查
 	limit := GetCharacterBreakLimit(card)
 	if card.CardLevel < uint32(limit) {
-		return nil, fmt.Errorf("card level not enough"), int32(cmd.ErrorCode_CardLevelNotEnough)
+		return nil, fmt.Errorf("card level not enough"), int32(pb.ErrorCode_CardLevelNotEnough)
 	}
 
 	// 道具扣除
 	cfg := excel.GetCharacterMgr().GetById(int32(card.BaseId*100 + card.CharacterLevel + 1))
 	if !GetConsumeMgr(h.actor).CheckMapEnough(cfg.CharacterCost) {
-		return nil, fmt.Errorf("item not enough"), int32(cmd.ErrorCode_NotEnoughItem)
+		return nil, fmt.Errorf("item not enough"), int32(pb.ErrorCode_NotEnoughItem)
 	}
 
 	if err = GetConsumeMgr(h.actor).ConsumeList(cfg.CharacterCost, h.actor.comData, common.CR_Card_Character_Break); err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
 	// 突破
 	card.CharacterLevel += 1
 
 	if _, err = h.TrySupplementMaxHp(card); err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 	if err = h.SaveDB(); err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
 	// 消息返回
 	h.actor.comData.Data.Card = append(h.actor.comData.Data.Card, h.ToClientData(card))
-	rsp := &cmd.LS2C_CardCharacterBreakRes{CommonData: h.actor.comData.FixDownComData()}
+	rsp := &pb.LS2C_CardCharacterBreakRes{CommonData: h.actor.comData.FixDownComData()}
 
 	// 埋点
 	threading.RunSafe(func() {
@@ -432,7 +430,7 @@ func (h *CardHandler) CardCharacterBreakReq(ctx context.Context, in *base.ProtoM
 	e.Set("card_id", req.CardId)
 	e.Set("level", card.CharacterLevel)
 	if err = h.actor.eventManager.SyncPublish(e); err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 	rsp.CommonData = h.actor.comData.FixDownComData()
 	h.Debug("CardCharacterBreakReq handle:", in.UserId)
@@ -444,47 +442,47 @@ func (h *CardHandler) CardCharacterUnlockReq(ctx context.Context, in *base.Proto
 	if err != nil {
 		return nil, err, int32(code)
 	}
-	req := &cmd.C2LS_CardCharacterUnlockReq{}
+	req := &pb.C2LS_CardCharacterUnlockReq{}
 	err = in.UnmarshalData(req)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
 	// 参数校验
-	if req.CharacterId <= cmd.CharacterType_CharacterType_None || req.CharacterId >= cmd.CharacterType_CharacterType_Max {
-		return nil, fmt.Errorf("param error %d", req.CharacterId), int32(cmd.ErrorCode_ParamError)
+	if req.CharacterId <= pb.CharacterType_CharacterType_None || req.CharacterId >= pb.CharacterType_CharacterType_Max {
+		return nil, fmt.Errorf("param error %d", req.CharacterId), int32(pb.ErrorCode_ParamError)
 	}
 
 	// 取卡牌
 	card, err := h.GetCard(uint32(req.CardId))
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_CardNotExist)
+		return nil, err, int32(pb.ErrorCode_CardNotExist)
 	}
 
 	// 已经解锁了
 	for _, v := range card.Character {
 		if v == int32(req.CharacterId) {
-			return nil, fmt.Errorf("character has unlock %d", req.CharacterId), int32(cmd.ErrorCode_ParamError)
+			return nil, fmt.Errorf("character has unlock %d", req.CharacterId), int32(pb.ErrorCode_ParamError)
 		}
 	}
 
 	// 品质校验
 	rarity, err := GetCardRarityById(req.CardId)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_ParamError)
+		return nil, err, int32(pb.ErrorCode_ParamError)
 	}
 	if rarity <= common.POTENTIAL_SR {
-		return nil, fmt.Errorf("card rarity limit %d", rarity), int32(cmd.ErrorCode_ParamError)
+		return nil, fmt.Errorf("card rarity limit %d", rarity), int32(pb.ErrorCode_ParamError)
 	}
 
 	// 解锁消耗
 	cost := getCharacterUnlockCost(rarity)
 	if cost != nil {
 		if !GetConsumeMgr(h.actor).CheckEnough(cost.Key, cost.Val) {
-			return nil, fmt.Errorf("item not enough"), int32(cmd.ErrorCode_NotEnoughItem)
+			return nil, fmt.Errorf("item not enough"), int32(pb.ErrorCode_NotEnoughItem)
 		}
 		if err = GetConsumeMgr(h.actor).ConsumeList(map[int32]int32{cost.Key: cost.Val}, h.actor.comData, common.CR_CHARACTER_UNLOCK); err != nil {
-			return nil, err, int32(cmd.ErrorCode_InternalError)
+			return nil, err, int32(pb.ErrorCode_InternalError)
 		}
 	}
 
@@ -493,15 +491,15 @@ func (h *CardHandler) CardCharacterUnlockReq(ctx context.Context, in *base.Proto
 	card.CurCharacter = int32(req.CharacterId)
 
 	if _, err = h.TrySupplementMaxHp(card); err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 	if err = h.SaveDB(); err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
 	// 消息返回
 	h.actor.comData.Data.Card = append(h.actor.comData.Data.Card, h.ToClientData(card))
-	return &cmd.LS2C_CardCharacterUnlockRes{CommonData: h.actor.comData.FixDownComData()}, nil, 0
+	return &pb.LS2C_CardCharacterUnlockRes{CommonData: h.actor.comData.FixDownComData()}, nil, 0
 }
 
 func getCharacterUnlockCost(rarity int32) *excel.KeyVal {
@@ -521,26 +519,26 @@ func (h *CardHandler) CardCharacterChangeReq(ctx context.Context, in *base.Proto
 	if err != nil {
 		return nil, err, int32(code)
 	}
-	req := &cmd.C2LS_CardCharacterChangeReq{}
+	req := &pb.C2LS_CardCharacterChangeReq{}
 	err = in.UnmarshalData(req)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
 	// 参数校验
-	if req.CharacterId <= cmd.CharacterType_CharacterType_None || req.CharacterId >= cmd.CharacterType_CharacterType_Max {
-		return nil, fmt.Errorf("param error %d", req.CharacterId), int32(cmd.ErrorCode_ParamError)
+	if req.CharacterId <= pb.CharacterType_CharacterType_None || req.CharacterId >= pb.CharacterType_CharacterType_Max {
+		return nil, fmt.Errorf("param error %d", req.CharacterId), int32(pb.ErrorCode_ParamError)
 	}
 
 	// 是否在副本中
 	// if h.actor.ChapterHandler.IsInSubLevel() {
-	// 	return nil, fmt.Errorf("illegal operation"), int32(cmd.ErrorCode_IllegalOperationError)
+	// 	return nil, fmt.Errorf("illegal operation"), int32(pb.ErrorCode_IllegalOperationError)
 	// }
 
 	// 取卡牌
 	card, err := h.GetCard(uint32(req.CardId))
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_CardNotExist)
+		return nil, err, int32(pb.ErrorCode_CardNotExist)
 	}
 
 	// 是否解锁
@@ -552,35 +550,35 @@ func (h *CardHandler) CardCharacterChangeReq(ctx context.Context, in *base.Proto
 		}
 	}
 	if !b {
-		return nil, fmt.Errorf("character not unlock %d", req.CharacterId), int32(cmd.ErrorCode_ParamError)
+		return nil, fmt.Errorf("character not unlock %d", req.CharacterId), int32(pb.ErrorCode_ParamError)
 	}
 
 	// 品质校验
 	rarity, err := GetCardRarityById(req.CardId)
 	if err != nil {
-		return nil, err, int32(cmd.ErrorCode_ParamError)
+		return nil, err, int32(pb.ErrorCode_ParamError)
 	}
 	if rarity <= common.POTENTIAL_SR {
-		return nil, fmt.Errorf("card rarity limit %d", rarity), int32(cmd.ErrorCode_ParamError)
+		return nil, fmt.Errorf("card rarity limit %d", rarity), int32(pb.ErrorCode_ParamError)
 	}
 
 	// 切换
 	card.CurCharacter = int32(req.CharacterId)
 
 	if _, err = h.TrySupplementMaxHp(card); err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 	if err = h.SaveDB(); err != nil {
-		return nil, err, int32(cmd.ErrorCode_InternalError)
+		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
 	// 消息返回
 	h.actor.comData.Data.Card = append(h.actor.comData.Data.Card, h.ToClientData(card))
-	return &cmd.LS2C_CardCharacterChangeRes{CommonData: h.actor.comData.FixDownComData()}, nil, 0
+	return &pb.LS2C_CardCharacterChangeRes{CommonData: h.actor.comData.FixDownComData()}, nil, 0
 }
 
 // 卡牌突破处理逻辑
-func (h *CardHandler) handleCardBreakthrough(c *cmd.CardData, rsp *cmd.LS2C_CardBreakthroughRes) (cmd.ErrorCode, bool) {
+func (h *CardHandler) handleCardBreakthrough(c *pb.CardData, rsp *pb.LS2C_CardBreakthroughRes) (pb.ErrorCode, bool) {
 	var isAwaken bool
 	cardId := c.BaseId
 	oldBreakthroughLevel := c.BreakthroughLevel
@@ -590,34 +588,34 @@ func (h *CardHandler) handleCardBreakthrough(c *cmd.CardData, rsp *cmd.LS2C_Card
 
 	if cfg == nil {
 		h.Warnf("card: %d not found breakthrough level: %d, %d config", cardId, newBreakthroughLevel, newBreakthroughLevelId)
-		return cmd.ErrorCode_NotFoundConfig, isAwaken
+		return pb.ErrorCode_NotFoundConfig, isAwaken
 	}
 
 	if len(cfg.NextRequire) == 0 {
 		h.Warnf("card: %d breakthrough level: %d consumable materials empty", cardId, newBreakthroughLevelId)
-		return cmd.ErrorCode_ConfigError, isAwaken
+		return pb.ErrorCode_ConfigError, isAwaken
 	}
 	if cfg.Evolution != int32(c.CardLevel) {
-		return cmd.ErrorCode_CardLevelNotEnough, isAwaken
+		return pb.ErrorCode_CardLevelNotEnough, isAwaken
 	}
 
 	// 道具消耗check
 	if !GetConsumeMgr(h.actor).CheckMapEnough(cfg.NextRequire) {
-		return cmd.ErrorCode_NotEnoughItem, isAwaken
+		return pb.ErrorCode_NotEnoughItem, isAwaken
 	}
 
 	// 扣除道具
 	err := GetConsumeMgr(h.actor).ConsumeList(cfg.NextRequire, h.actor.comData, common.CR_Card_Breakthrough_Upgrade)
 	if err != nil {
 		h.Error("ConsumeList err:", err)
-		return cmd.ErrorCode_InternalError, isAwaken
+		return pb.ErrorCode_InternalError, isAwaken
 	}
 
 	// 突破奖励
 	if len(cfg.Reward) > 0 {
 		rsp.DropChange, err = GetDropMgr(h.actor).DropList2(cfg.Reward, true, nil, h.actor.comData, common.CR_Card_Breakthrough_Upgrade)
 		if err != nil {
-			return cmd.ErrorCode_InternalError, isAwaken
+			return pb.ErrorCode_InternalError, isAwaken
 		}
 		// 尝试穿戴皮肤（无皮肤跳过）
 		for id := range cfg.Reward {
@@ -625,7 +623,7 @@ func (h *CardHandler) handleCardBreakthrough(c *cmd.CardData, rsp *cmd.LS2C_Card
 			if itemCfg == nil {
 				continue
 			}
-			if itemCfg.Type == int32(cmd.ItemType_CardSkin) {
+			if itemCfg.Type == int32(pb.ItemType_CardSkin) {
 				c.SkinId = uint32(itemCfg.SystemId)
 				break
 			}
@@ -635,17 +633,17 @@ func (h *CardHandler) handleCardBreakthrough(c *cmd.CardData, rsp *cmd.LS2C_Card
 
 	_, err = h.AddExp(c, 0, false)
 	if err != nil {
-		return cmd.ErrorCode_InternalError, isAwaken
+		return pb.ErrorCode_InternalError, isAwaken
 	}
 
 	if err = h.SaveDB(); err != nil {
 		h.Error("handleCardBreakthrough save err:", err)
-		return cmd.ErrorCode_InternalError, isAwaken
+		return pb.ErrorCode_InternalError, isAwaken
 	}
 
 	_, err = h.TrySupplementMaxHp(c)
 	if err != nil {
-		return cmd.ErrorCode_InternalError, isAwaken
+		return pb.ErrorCode_InternalError, isAwaken
 	}
 
 	h.actor.comData.Data.Card = append(h.actor.comData.Data.Card, h.ToClientData(c))
@@ -653,37 +651,37 @@ func (h *CardHandler) handleCardBreakthrough(c *cmd.CardData, rsp *cmd.LS2C_Card
 	if c.BreakthroughLevel == uint32(excel.GetConfigMgr().GetCfg().AWAKEN_PROFILE_GET) {
 		isAwaken = true
 	}
-	return cmd.ErrorCode_Success, isAwaken
+	return pb.ErrorCode_Success, isAwaken
 }
 
 // 技能升级逻辑处理
-func (h *CardHandler) handleSkillUpgrade(c *cmd.CardData, index uint32, commonData *clidto.Comdata) (cmd.ErrorCode, int32, int32) {
+func (h *CardHandler) handleSkillUpgrade(c *pb.CardData, index uint32, commonData *clidto.Comdata) (pb.ErrorCode, int32, int32) {
 	// if _, ok := c.SkillCfgId[index]; !ok {
-	// 	return cmd.ErrorCode_InvalidParam, 0, 0
+	// 	return pb.ErrorCode_InvalidParam, 0, 0
 	// }
 	//
 	// skillCfgId := c.SkillCfgId[index]
 	// skillCfg := excel.GetSkillMgr().GetById(int32(skillCfgId))
 	// if skillCfg == nil {
 	// 	h.Errorf("skill config not found: %d", skillCfgId)
-	// 	return cmd.ErrorCode_NotFoundConfig, 0, 0
+	// 	return pb.ErrorCode_NotFoundConfig, 0, 0
 	// }
 	//
 	// // 等级限制
 	// unlockLimit := excel.GetConfigMgr().GetCfg().SKILL_UNLOCK_LIMIT
 	// if skillCfg.Lv > int32(len(unlockLimit)) {
-	// 	return cmd.ErrorCode_ConfigError, 0, 0
+	// 	return pb.ErrorCode_ConfigError, 0, 0
 	// }
 	//
 	// lv := skillCfg.Lv - 1
 	// if lv >= 0 && lv < int32(len(unlockLimit)) && c.CardLevel < uint32(unlockLimit[skillCfg.Lv-1]) {
-	// 	return cmd.ErrorCode_CardLevelNotEnough, 0, 0
+	// 	return pb.ErrorCode_CardLevelNotEnough, 0, 0
 	// }
 	//
 	// // 满级了
 	// if 0 >= skillCfg.GetNextLevelId() {
 	// 	h.Errorf("skill: %d has invalid next level id: %d", skillCfgId, skillCfg.GetNextLevelId())
-	// 	return cmd.ErrorCode_ConfigError, 0, 0
+	// 	return pb.ErrorCode_ConfigError, 0, 0
 	// }
 	//
 	// // 升级前的技能等级
@@ -691,12 +689,12 @@ func (h *CardHandler) handleSkillUpgrade(c *cmd.CardData, index uint32, commonDa
 	//
 	// // 道具消耗check
 	// if !GetConsumeMgr(h.actor).CheckMapEnough(skillCfg.UpgradeCost) {
-	// 	return cmd.ErrorCode_NotEnoughItem, 0, 0
+	// 	return pb.ErrorCode_NotEnoughItem, 0, 0
 	// }
 	//
 	// err := GetConsumeMgr(h.actor).ConsumeList(skillCfg.UpgradeCost, commonData, common.CR_Card_Skill_Upgrade)
 	// if err != nil {
-	// 	return cmd.ErrorCode_InternalError, 0, 0
+	// 	return pb.ErrorCode_InternalError, 0, 0
 	// }
 	//
 	// // 下一技能等级索引
@@ -704,23 +702,23 @@ func (h *CardHandler) handleSkillUpgrade(c *cmd.CardData, index uint32, commonDa
 	// c.SkillCfgId[index] = nextSkillIndex
 	// err = h.SaveDB()
 	// if err != nil {
-	// 	return cmd.ErrorCode_InternalError, 0, 0
+	// 	return pb.ErrorCode_InternalError, 0, 0
 	// }
 	//
 	// // 返回下一技能等级
 	// nextSkillCfgId := c.SkillCfgId[index]
 	// nextSkillCfg := excel.GetSkillMgr().GetById(int32(nextSkillCfgId))
 	//
-	// return cmd.ErrorCode_Success, beforeSkillLv, nextSkillCfg.Lv // 返回升级后的技能等级
-	return cmd.ErrorCode_Success, 0, 0
+	// return pb.ErrorCode_Success, beforeSkillLv, nextSkillCfg.Lv // 返回升级后的技能等级
+	return pb.ErrorCode_Success, 0, 0
 }
 
 // 卡牌觉醒处理逻辑
-func (h *CardHandler) handleCardCompound(c *cmd.CardData, commonData *clidto.Comdata) cmd.ErrorCode {
+func (h *CardHandler) handleCardCompound(c *pb.CardData, commonData *clidto.Comdata) pb.ErrorCode {
 	cardCfg := excel.GetBeastarMgr().GetById(int32(c.BaseId))
 	if cardCfg == nil {
 		h.Errorf("not found card: %d config", c.BaseId)
-		return cmd.ErrorCode_NotFoundConfig
+		return pb.ErrorCode_NotFoundConfig
 	}
 
 	newAwakenLevel := c.AwakenLevel + 1
@@ -729,40 +727,40 @@ func (h *CardHandler) handleCardCompound(c *cmd.CardData, commonData *clidto.Com
 	// 觉醒上限
 	if cardAwakenCfg == nil {
 		h.Warnf("not found card: %d compoud: %d config", c.BaseId, cardAwakenId)
-		return cmd.ErrorCode_NotFoundConfig
+		return pb.ErrorCode_NotFoundConfig
 	}
 
 	// 碎片消耗check
 	costValue, err := GetAwakenCostValue(cardCfg.GetRarity(), c.AwakenLevel)
 	if err != nil {
 		h.Warnf("handleCardCompound err: ", err)
-		return cmd.ErrorCode_ConfigError
+		return pb.ErrorCode_ConfigError
 	}
 	if !GetConsumeMgr(h.actor).CheckEnough(cardCfg.GetPotentialCost(), int32(costValue)) {
-		return cmd.ErrorCode_NotEnoughItem
+		return pb.ErrorCode_NotEnoughItem
 	}
 
 	// 消耗扣除
 	err = GetConsumeMgr(h.actor).ConsumeList(map[int32]int32{cardCfg.GetPotentialCost(): int32(costValue)}, commonData, common.CR_Card_Awaken_Upgrade)
 	if err != nil {
-		return cmd.ErrorCode_InternalError
+		return pb.ErrorCode_InternalError
 	}
 
 	c.AwakenLevel = newAwakenLevel
 	err = h.SaveDB()
 	if err != nil {
-		return cmd.ErrorCode_InternalError
+		return pb.ErrorCode_InternalError
 	}
 
 	_, err = h.TrySupplementMaxHp(c)
 	if err != nil {
-		return cmd.ErrorCode_InternalError
+		return pb.ErrorCode_InternalError
 	}
-	return cmd.ErrorCode_Success
+	return pb.ErrorCode_Success
 }
 
-func (h *CardHandler) buildCardList() []*cmd.PClientCardInfo {
-	cards := make([]*cmd.PClientCardInfo, 0)
+func (h *CardHandler) buildCardList() []*pb.PClientCardInfo {
+	cards := make([]*pb.PClientCardInfo, 0)
 	for _, card := range h.actor.GetUserCardData().Card {
 		cards = append(cards, h.ToClientData(card))
 	}
@@ -771,7 +769,7 @@ func (h *CardHandler) buildCardList() []*cmd.PClientCardInfo {
 }
 
 // GetCard 根据id取卡牌数据
-func (h *CardHandler) GetCard(cardId uint32) (*cmd.CardData, error) {
+func (h *CardHandler) GetCard(cardId uint32) (*pb.CardData, error) {
 	if !h.IsExistCard(cardId) {
 		return nil, fmt.Errorf("not found card: %d", cardId)
 	}
@@ -804,7 +802,7 @@ func (h *CardHandler) IsExistCard(cardId uint32) bool {
 	return ok
 }
 
-func (h *CardHandler) AddCard(itemCfg *excel.ItemCfg, addNum uint32, commonData *clidto.Comdata) (*cmd.DropChange, error) {
+func (h *CardHandler) AddCard(itemCfg *excel.ItemCfg, addNum uint32, commonData *clidto.Comdata) (*pb.DropChange, error) {
 	if addNum <= 0 {
 		return nil, fmt.Errorf("param err: %d", addNum)
 	}
@@ -815,7 +813,7 @@ func (h *CardHandler) AddCard(itemCfg *excel.ItemCfg, addNum uint32, commonData 
 	}
 
 	var (
-		dropChange = &cmd.DropChange{}
+		dropChange = &pb.DropChange{}
 	)
 
 	exist := h.IsExistCard(uint32(cardId))
@@ -824,14 +822,14 @@ func (h *CardHandler) AddCard(itemCfg *excel.ItemCfg, addNum uint32, commonData 
 	if !exist {
 		card := NewCard(cardCfg)
 		// 初始化血量标记
-		maxHp, err := h.CalcMaxHp(card)
-		if err != nil {
-			return nil, err
-		}
-		card.Hp = maxHp
-		card.OldMaxHp = maxHp
+		// maxHp, err := h.CalcMaxHp(card)
+		// if err != nil {
+		// 	return nil, err
+		// }
+		card.Hp = 0       /*maxHp*/
+		card.OldMaxHp = 0 /*maxHp*/
 		// 初始化皮肤
-		_, err = h.actor.SkinHandler.tryInitSkin(cardId)
+		_, err := h.actor.SkinHandler.tryInitSkin(cardId)
 		if err != nil {
 			return nil, err
 		}
@@ -854,7 +852,7 @@ func (h *CardHandler) AddCard(itemCfg *excel.ItemCfg, addNum uint32, commonData 
 			h.Error(errx)
 		}
 
-		dropChange.Items = append(dropChange.Items, &cmd.ItemReward{
+		dropChange.Items = append(dropChange.Items, &pb.ItemReward{
 			ItemId: uint32(itemCfg.ItemId),
 			Num:    1,
 		})
@@ -914,7 +912,7 @@ func (h *CardHandler) AddCard(itemCfg *excel.ItemCfg, addNum uint32, commonData 
 	return dropChange, nil
 }
 
-func (h *CardHandler) SetCardHp(cardId int32, curHp int32) (error, *cmd.PClientCardInfo) {
+func (h *CardHandler) SetCardHp(cardId int32, curHp int32) (error, *pb.PClientCardInfo) {
 	// 获取卡牌
 	card, err := h.GetCard(uint32(cardId))
 	if err != nil {
@@ -971,9 +969,9 @@ func getDuplicateCardMoney(rarity int32) uint32 {
 }
 
 // GetCards 获取卡牌列表
-func (h *CardHandler) GetCards(cardIds []int32) []*cmd.CardData {
+func (h *CardHandler) GetCards(cardIds []int32) []*pb.CardData {
 	var (
-		cards = make([]*cmd.CardData, 0)
+		cards = make([]*pb.CardData, 0)
 	)
 
 	for _, each := range cardIds {
@@ -995,13 +993,13 @@ func (h *CardHandler) GetCards(cardIds []int32) []*cmd.CardData {
 //	@receiver h
 //	@param card
 //	@return error
-func (h *CardHandler) TrySupplementMaxHp(card *cmd.CardData) (bool, error) {
+func (h *CardHandler) TrySupplementMaxHp(card *pb.CardData) (bool, error) {
 	var change bool
-	newMaxHp, err := h.CalcMaxHp(card)
-	if err != nil {
-		return change, err
-	}
-
+	// newMaxHp, err := h.CalcMaxHp(card)
+	// if err != nil {
+	// 	return change, err
+	// }
+	var newMaxHp uint32
 	oldMaxHp := card.GetOldMaxHp()
 	if newMaxHp != oldMaxHp {
 		change = true
@@ -1010,7 +1008,7 @@ func (h *CardHandler) TrySupplementMaxHp(card *cmd.CardData) (bool, error) {
 
 	// 血量上限提高,血量补齐
 	if newMaxHp > oldMaxHp {
-		err, _ = h.SetCardHp(int32(card.BaseId), int32(card.Hp+newMaxHp-oldMaxHp))
+		err, _ := h.SetCardHp(int32(card.BaseId), int32(card.Hp+newMaxHp-oldMaxHp))
 		if err != nil {
 			return change, err
 		}
@@ -1019,7 +1017,7 @@ func (h *CardHandler) TrySupplementMaxHp(card *cmd.CardData) (bool, error) {
 		//	如果当前血量高于新的最大血量，血量降低到最大血量。
 		//	如果本身就低于新的最大血量，不处理
 		if card.Hp > newMaxHp {
-			err, _ = h.SetCardHp(int32(card.BaseId), int32(newMaxHp))
+			err, _ := h.SetCardHp(int32(card.BaseId), int32(newMaxHp))
 			if err != nil {
 				return change, err
 			}
@@ -1053,29 +1051,29 @@ func GetMaxFavoriteLevel() uint32 {
 	return uint32(maxLevel)
 }
 
-func (h *CardHandler) AddFavoriteExpById(cardId int32, addExp uint32) (*cmd.PClientCardInfo, cmd.ErrorCode) {
+func (h *CardHandler) AddFavoriteExpById(cardId int32, addExp uint32) (*pb.PClientCardInfo, pb.ErrorCode) {
 	card, err := h.GetCard(uint32(cardId))
 	if err != nil {
 		h.Debugf("AddFavoriteExpById, err %v", err)
-		return nil, cmd.ErrorCode_InternalError
+		return nil, pb.ErrorCode_InternalError
 	}
 
 	errCode := h.AddFavoriteExp(card, addExp)
-	if errCode != cmd.ErrorCode_Success {
+	if errCode != pb.ErrorCode_Success {
 		h.Warnf("AddFavoriteExpById : AddFavoriteExp err currlevel : %v, addExp :%v, maxLevel:%v", card.GetFavoriteLevel(), addExp)
 		return nil, errCode
 	}
 
 	if err = h.SaveDB(); err != nil {
 		h.Debugf("AddFavoriteExpById, err %v", err)
-		return nil, cmd.ErrorCode_SaveDBError
+		return nil, pb.ErrorCode_SaveDBError
 	}
 
-	return h.ToClientData(card), cmd.ErrorCode_Success
+	return h.ToClientData(card), pb.ErrorCode_Success
 }
 
 // AddFavoriteExp 计算增加好感度值
-func (h *CardHandler) AddFavoriteExp(card *cmd.CardData, addExp uint32) cmd.ErrorCode {
+func (h *CardHandler) AddFavoriteExp(card *pb.CardData, addExp uint32) pb.ErrorCode {
 	maxLevel := GetMaxFavoriteLevel() // 配置最大等级
 	totalFavorExp := card.FavoriteExp + addExp
 	var targetLevel uint32
@@ -1087,7 +1085,7 @@ func (h *CardHandler) AddFavoriteExp(card *cmd.CardData, addExp uint32) cmd.Erro
 		needExp := excel.GetHeroLevelMgr().GetById(int32(targetLevel + 1))
 		if needExp == nil {
 			h.Errorf("AddFavoriteExp: GetHeroLevelCfg err level :%v,get exp :%v", targetLevel, addExp)
-			return cmd.ErrorCode_InternalError
+			return pb.ErrorCode_InternalError
 		}
 		if int32(totalFavorExp) < needExp.GetFavor() {
 			break
@@ -1114,7 +1112,7 @@ func (h *CardHandler) AddFavoriteExp(card *cmd.CardData, addExp uint32) cmd.Erro
 	}
 
 	if err := h.SaveDB(); err != nil {
-		return cmd.ErrorCode_SaveDBError
+		return pb.ErrorCode_SaveDBError
 	}
 
 	h.Debugf("AddFavoriteExp Id:%d level:%d Exp:%d", card.BaseId, card.FavoriteLevel, card.FavoriteExp)
@@ -1124,11 +1122,11 @@ func (h *CardHandler) AddFavoriteExp(card *cmd.CardData, addExp uint32) cmd.Erro
 			h.Error()
 		}
 	}
-	return cmd.ErrorCode_Success
+	return pb.ErrorCode_Success
 }
 
 // 是否可以增加经验
-func (h *CardHandler) CheckCardLevelUp(c *cmd.CardData) (uint32, error) {
+func (h *CardHandler) CheckCardLevelUp(c *pb.CardData) (uint32, error) {
 	i := int32(c.GetBaseId()*100 + c.GetBreakthroughLevel() + 1)
 	cfg := excel.GetEvolutionMgr().GetById(i)
 	if cfg == nil {
@@ -1145,7 +1143,7 @@ func (h *CardHandler) CheckCardLevelUp(c *cmd.CardData) (uint32, error) {
 
 // AddExp 计算增加经验值
 // 返回值：真实加成的经验值,error
-func (h *CardHandler) AddExp(c *cmd.CardData, value int32, triggerTask bool) (int32, error) {
+func (h *CardHandler) AddExp(c *pb.CardData, value int32, triggerTask bool) (int32, error) {
 	if value < 0 {
 		h.Errorf("AddExp:err add exp <= 0")
 		return 0, fmt.Errorf("AddExp:err add exp <= 0")
@@ -1211,9 +1209,9 @@ func (h *CardHandler) AddExp(c *cmd.CardData, value int32, triggerTask bool) (in
 }
 
 // 增加卡牌经验值
-func (h *CardHandler) AddExpByTroop(troopType cmd.CardTroopType, troopId int32, addExp uint64) []*cmd.PCardBattleSettlement {
+func (h *CardHandler) AddExpByTroop(troopType pb.CardTroopType, troopId int32, addExp uint64) []*pb.PCardBattleSettlement {
 	var (
-		changeCards = make([]*cmd.PCardBattleSettlement, 0)
+		changeCards = make([]*pb.PCardBattleSettlement, 0)
 	)
 	if addExp <= 0 {
 		return changeCards
@@ -1221,7 +1219,7 @@ func (h *CardHandler) AddExpByTroop(troopType cmd.CardTroopType, troopId int32, 
 
 	cardIds := h.actor.TroopHandler.GetTroopCardIds(int32(troopType), troopId)
 	if len(cardIds) <= 0 {
-		h.Errorf("未找到队伍信息, troopType=%d, troopId=%d", cmd.ErrorCode_Chapter_empty_troop, troopId)
+		h.Errorf("未找到队伍信息, troopType=%d, troopId=%d", pb.ErrorCode_Chapter_empty_troop, troopId)
 		return changeCards
 	}
 
@@ -1230,10 +1228,10 @@ func (h *CardHandler) AddExpByTroop(troopType cmd.CardTroopType, troopId int32, 
 		realAddExp, err := h.AddExp(card, int32(addExp), false)
 		if err != nil {
 			h.Errorf("cardHandler.addExp got error, troopType=%d, troopId=%d, cardId=%d, err:%+v",
-				cmd.ErrorCode_Chapter_empty_troop, troopId, card.BaseId, err)
+				pb.ErrorCode_Chapter_empty_troop, troopId, card.BaseId, err)
 		}
 
-		eachChangeCard := &cmd.PCardBattleSettlement{
+		eachChangeCard := &pb.PCardBattleSettlement{
 			CardId:    card.BaseId,
 			CardLevel: card.CardLevel,
 			CardExp:   uint32(realAddExp),
@@ -1247,16 +1245,16 @@ func (h *CardHandler) AddExpByTroop(troopType cmd.CardTroopType, troopId int32, 
 }
 
 // 卡牌增加经验
-func (h *CardHandler) AddCardExpByIdList(cardList []int32, exp int32) ([]*cmd.CommonCardExpReward, []*cmd.CardData) {
-	expRewards := make([]*cmd.CommonCardExpReward, 0)
-	cards := make([]*cmd.CardData, 0)
+func (h *CardHandler) AddCardExpByIdList(cardList []int32, exp int32) ([]*pb.CommonCardExpReward, []*pb.CardData) {
+	expRewards := make([]*pb.CommonCardExpReward, 0)
+	cards := make([]*pb.CardData, 0)
 	for _, roleId := range cardList {
 		if card, err := h.actor.CardHandler.GetCard(uint32(roleId)); err == nil {
 			addExp, err := h.actor.CardHandler.AddExp(card, exp, false) // 掉落奖励加经验不触发任务
 			if err != nil {
 				h.Warnf("AddCardExpByIdList failed, err: %v", err)
 			}
-			expRewards = append(expRewards, &cmd.CommonCardExpReward{
+			expRewards = append(expRewards, &pb.CommonCardExpReward{
 				RoleId: roleId,
 				Exp:    addExp,
 			})
@@ -1327,8 +1325,8 @@ func (h *CardHandler) GetCardCountByLevel(level int32) int32 {
 	return sum
 }
 
-func (h *CardHandler) buildCards(cards []int32) []*cmd.PClientCardInfo {
-	ret := make([]*cmd.PClientCardInfo, 0)
+func (h *CardHandler) buildCards(cards []int32) []*pb.PClientCardInfo {
+	ret := make([]*pb.PClientCardInfo, 0)
 	cardsList := h.GetCards(cards)
 	for _, card := range cardsList {
 		ret = append(ret, h.ToClientData(card))
@@ -1442,7 +1440,7 @@ func (h *CardHandler) SetSuperCardByGM(id int, typ int, commonData *clidto.Comda
 	return nil
 }
 
-func fixCard2(card *cmd.CardData) {
+func fixCard2(card *pb.CardData) {
 	m := make(map[uint32]uint32)
 	// for k, skillCfgId := range card.SkillCfgId {
 	// 	var max = skillCfgId
@@ -1463,7 +1461,7 @@ func fixCard2(card *cmd.CardData) {
 	card.SkillCfgId = m
 }
 
-func fixCard3(card *cmd.CardData) {
+func fixCard3(card *pb.CardData) {
 	for i := 0; i < 200; i++ {
 		newBreakthroughLevel := card.BreakthroughLevel + 1
 		newBreakthroughLevelId := card.BaseId*100 + newBreakthroughLevel
@@ -1475,7 +1473,7 @@ func fixCard3(card *cmd.CardData) {
 	}
 }
 
-func fixCard4(card *cmd.CardData) {
+func fixCard4(card *pb.CardData) {
 	cardCfg := excel.GetBeastarMgr().GetById(int32(card.BaseId))
 	if cardCfg == nil {
 		return
@@ -1530,7 +1528,7 @@ func (h *CardHandler) GetCardCfg(cardId int32) *excel.BeastarCfg {
 }
 
 // 获取性格突破次数的等级限制
-func GetCharacterBreakLimit(c *cmd.CardData) int32 {
+func GetCharacterBreakLimit(c *pb.CardData) int32 {
 	limit := excel.GetConfigMgr().GetCfg().CHARACTER_UNLOCK_LIMIT
 	level := int32(0)
 	for _, each := range limit {
@@ -1565,14 +1563,14 @@ func GetAwakenCostCfg(rarity int32) []int32 {
 }
 
 // 转换成客户端卡牌数据
-func (h *CardHandler) ToClientData(c *cmd.CardData) *cmd.PClientCardInfo {
+func (h *CardHandler) ToClientData(c *pb.CardData) *pb.PClientCardInfo {
 	cardId := c.BaseId
 	cardCfg := excel.GetBeastarMgr().GetById(int32(cardId))
 	if cardCfg == nil {
 		return nil
 	}
 
-	temp := &cmd.PCommonCardInfo{}
+	temp := &pb.PCommonCardInfo{}
 
 	temp.CardId = cardId
 	temp.CardLevel = c.GetCardLevel()
@@ -1605,5 +1603,5 @@ func (h *CardHandler) ToClientData(c *cmd.CardData) *cmd.PClientCardInfo {
 	temp.Character = c.GetCharacter()
 	temp.CurCharacter = c.GetCurCharacter()
 
-	return &cmd.PClientCardInfo{Common: temp}
+	return &pb.PClientCardInfo{Common: temp}
 }
