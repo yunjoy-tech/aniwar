@@ -64,7 +64,7 @@ type UserActor struct {
 	// handlersMap map[svc.MongoDbType][]baseactor.IBaseHandler
 
 	AccountHandler      *AccountHandler
-	HeartBeatHandler    *HeartBeatHandler
+	UserHandler         *UserHandler
 	OrderHandler        *OrderHandler
 	BattleHandler       *BattleHandler
 	LoginHandler        *LoginHandler
@@ -524,8 +524,8 @@ func (u *UserActor) initHandlers() {
 	u.KeepHandler(u.AccountHandler)
 	u.Type()
 
-	u.HeartBeatHandler = NewHeartBeatHandler(u)
-	u.KeepHandler(u.HeartBeatHandler)
+	u.UserHandler = NewUserHandler(u)
+	u.KeepHandler(u.UserHandler)
 
 	u.OrderHandler = NewOrderHandler(u)
 	u.KeepHandler(u.OrderHandler)
