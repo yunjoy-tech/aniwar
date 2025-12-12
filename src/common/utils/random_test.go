@@ -26,11 +26,11 @@ func init() {
 		panic(err)
 	}
 
-	DataDir := "E:\\ss-projects\\go-projects\\aniwar\\output\\res\\data\\"
-	err = excel.LoadAllExcelData(DataDir)
-	if err != nil {
-		fmt.Println(err.Error())
-	}
+	// DataDir := "E:\\ss-projects\\go-projects\\aniwar\\output\\res\\data\\"
+	// err = excel.LoadAllExcelData(DataDir)
+	// if err != nil {
+	// 	fmt.Println(err.Error())
+	// }
 }
 
 func getContentCfg(poolId int32) []*excel.PoolContentCfg {
@@ -85,15 +85,15 @@ func randCard(source []*excel.PoolContentCfg) *excel.PoolContentCfg {
 func randCard2(source []*excel.PoolContentCfg) *excel.PoolContentCfg {
 	weightMap := make(map[int32]int32)
 	for _, cfg := range source {
-		//weightMap[cfg] = cfg.GetWeight()
+		// weightMap[cfg] = cfg.GetWeight()
 		weightMap[cfg.Id] = cfg.Weight
 	}
 	targetCfg := Temp_RandomMap2(weightMap, true)
 
-	//if _, ok := targetCfg.(*excel.PoolContentCfg); !ok {
+	// if _, ok := targetCfg.(*excel.PoolContentCfg); !ok {
 	//	fmt.Println(fmt.Sprintf("randCard type assert failed. target:%v, weightMap:%+v", targetCfg, weightMap))
 	//	return nil
-	//}
+	// }
 	return excel.GetPoolContentMgr().GetById(targetCfg)
 }
 
@@ -101,15 +101,15 @@ func randCard2(source []*excel.PoolContentCfg) *excel.PoolContentCfg {
 func randCard3(source []*excel.PoolContentCfg) *excel.PoolContentCfg {
 	weightMap := make(map[int32]int32)
 	for _, cfg := range source {
-		//weightMap[cfg] = cfg.GetWeight()
+		// weightMap[cfg] = cfg.GetWeight()
 		weightMap[cfg.Id] = cfg.Weight
 	}
 	targetCfg := Temp_RandomMap2(weightMap, false)
 
-	//if _, ok := targetCfg.(*excel.PoolContentCfg); !ok {
+	// if _, ok := targetCfg.(*excel.PoolContentCfg); !ok {
 	//	fmt.Println(fmt.Sprintf("randCard type assert failed. target:%v, weightMap:%+v", targetCfg, weightMap))
 	//	return nil
-	//}
+	// }
 	return excel.GetPoolContentMgr().GetById(targetCfg)
 }
 
@@ -117,15 +117,15 @@ func randCard3(source []*excel.PoolContentCfg) *excel.PoolContentCfg {
 func randCard4(source []*excel.PoolContentCfg) *excel.PoolContentCfg {
 	weightMap := make(map[int32]int32)
 	for _, cfg := range source {
-		//weightMap[cfg] = cfg.GetWeight()
+		// weightMap[cfg] = cfg.GetWeight()
 		weightMap[cfg.Id] = cfg.Weight
 	}
 	targetCfg := Temp_RandomMap4(weightMap, true)
 
-	//if _, ok := targetCfg.(*excel.PoolContentCfg); !ok {
+	// if _, ok := targetCfg.(*excel.PoolContentCfg); !ok {
 	//	fmt.Println(fmt.Sprintf("randCard type assert failed. target:%v, weightMap:%+v", targetCfg, weightMap))
 	//	return nil
-	//}
+	// }
 	return excel.GetPoolContentMgr().GetById(targetCfg)
 }
 
@@ -376,11 +376,11 @@ func TestRandomMap(t *testing.T) {
 				var eachIdStr string
 				for i := 0; i < 10; i++ {
 					randKey := Temp_RandomMap2(m, true)
-					//fmt.Println(randKey)
-					//logger.Debugf("%v", randKey)
-					//if randKey == nil {
+					// fmt.Println(randKey)
+					// logger.Debugf("%v", randKey)
+					// if randKey == nil {
 					//	t.Fail()
-					//}
+					// }
 					if eachIdStr != "" {
 						eachIdStr += ", "
 					}
@@ -402,16 +402,16 @@ func TestRandomMap(t *testing.T) {
 				}
 
 				logger.Infof("each --- ：%v", eachIdStr)
-				//fmt.Println(fmt.Sprintf("连续重复次数：%v", ret))
+				// fmt.Println(fmt.Sprintf("连续重复次数：%v", ret))
 
-				//each := int32(0)
-				//for _, each := range ret {
+				// each := int32(0)
+				// for _, each := range ret {
 				//	each += each
-				//}
-				//logger.Infof("总的连续重复次数：%d", each)
+				// }
+				// logger.Infof("总的连续重复次数：%d", each)
 				for _, each := range ret {
-					//if each == 5 || each == 6 || each == 7 {
-					//}
+					// if each == 5 || each == 6 || each == 7 {
+					// }
 
 					split := strings.Split(each, "-")
 					total, _ := strconv.Atoi(split[1])
@@ -427,8 +427,8 @@ func TestRandomMap(t *testing.T) {
 	wg.Wait()
 
 	logger.Infof("累计连续重复次数：%d", repeates)
-	//1000*10000次，累计连续重复次数：map[2:7790342 3:854616 4:91961 5:9487 6:1014 7:103 8:8]
-	//1000*10000次，累计连续重复次数：map[2:7794526 3:853875 4:91980 5:9619 6:930 7:88 8:8]
+	// 1000*10000次，累计连续重复次数：map[2:7790342 3:854616 4:91961 5:9487 6:1014 7:103 8:8]
+	// 1000*10000次，累计连续重复次数：map[2:7794526 3:853875 4:91980 5:9619 6:930 7:88 8:8]
 }
 
 func Test22(t *testing.T) {
@@ -448,7 +448,7 @@ func Test22(t *testing.T) {
 			var last int32
 			var eachIdStr string
 			for i := 0; i < 10; i++ {
-				//randKey := Temp_RandomMap2(m, true)
+				// randKey := Temp_RandomMap2(m, true)
 				card := randCard4(cfgs)
 				if card == nil {
 					fmt.Println("====空")
@@ -479,8 +479,8 @@ func Test22(t *testing.T) {
 			logger.Infof("each --- ：%v", eachIdStr)
 
 			for _, each := range ret {
-				//if each == 5 || each == 6 || each == 7 {
-				//}
+				// if each == 5 || each == 6 || each == 7 {
+				// }
 
 				split := strings.Split(each, "-")
 				total, _ := strconv.Atoi(split[1])
@@ -492,7 +492,7 @@ func Test22(t *testing.T) {
 	}
 
 	logger.Infof("10连抽卡:%d, 累计连续重复次数：%d", totalCount, repeates)
-	//10连抽卡:100000, 累计连续重复次数：map[2:77578 3:8564 4:955 5:109 6:11 7:2]
+	// 10连抽卡:100000, 累计连续重复次数：map[2:77578 3:8564 4:955 5:109 6:11 7:2]
 }
 
 func TestRandomList(t *testing.T) {

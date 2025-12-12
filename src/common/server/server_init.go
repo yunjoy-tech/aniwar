@@ -479,6 +479,10 @@ func (s *Server) LoadExcel() error {
 
 	logger.Infof("===>>> 加载模式为: %d, (1:读取压缩文件, 0:读取json源文件)", baseconf.GetBaseConf().ExcelDataZip)
 
+	// err := gmeta.GetMetaMgr().LoadAllMeta()
+	// if err != nil {
+	// 	return err
+	// }
 	if err := data.LoadAllExcelData(s.DataDir); err != nil {
 		return err
 	}
