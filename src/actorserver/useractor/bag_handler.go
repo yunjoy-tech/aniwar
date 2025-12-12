@@ -90,9 +90,9 @@ func (h *BagHandler) tryInitMap() {
 		return
 	}
 	// 注册使用道具方法
-	h.UseHandlerMap[int32(pb.ItemType_Consumable)*100+int32(pb.ItemConsumableType_StaminaWater)] = h.actor.PlayerLevelHandler.useStaminaItem
+	// h.UseHandlerMap[int32(pb.ItemType_Consumable)*100+int32(pb.ItemConsumableType_StaminaWater)] = h.actor.PlayerLevelHandler.useStaminaItem
 	// 注册前置校验方法
-	h.CheckHandlerMap[int32(pb.ItemType_Consumable)*100+int32(pb.ItemConsumableType_StaminaWater)] = h.actor.PlayerLevelHandler.useStaminaItemCheck
+	// h.CheckHandlerMap[int32(pb.ItemType_Consumable)*100+int32(pb.ItemConsumableType_StaminaWater)] = h.actor.PlayerLevelHandler.useStaminaItemCheck
 	h.Debugf("tryInitMap init==== %s", h.actor.ID())
 }
 

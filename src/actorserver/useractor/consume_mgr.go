@@ -164,7 +164,7 @@ func (m *ConsumeMgr) doConsume(itemCfg *excel.ItemCfg, costNum uint32, commonDat
 			m.ExchangeRewards = append(m.ExchangeRewards, exchangeRewards...)
 		}
 	case pb.ItemType_Stamina:
-		err = m.actor.PlayerLevelHandler.SubStamina(int32(costNum), commonData, reason)
+		// err = m.actor.PlayerLevelHandler.SubStamina(int32(costNum), commonData, reason)
 
 	default:
 		m.actor.Warnf("doConsume ===>>> 未支持的itemType=%d\n", itemCfg.Type)
@@ -285,8 +285,8 @@ func (m *ConsumeMgr) CheckEnough(costId, costNum int32) bool {
 		}
 
 	case int32(pb.ItemType_Stamina):
-		return m.actor.PlayerLevelHandler.CheckStaminaEnough(costNum)
-
+		// return m.actor.PlayerLevelHandler.CheckStaminaEnough(costNum)
+		return false
 	default:
 		m.actor.Warnf("CheckEnough ===>>> 未支持的itemType=%d\n", cfg.Type)
 	}

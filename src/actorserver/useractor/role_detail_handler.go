@@ -94,11 +94,11 @@ func (h *RoleDetailHandler) ChangeShowCardsReq(ctx context.Context, in *base.Pro
 	}
 
 	// 卡牌判定
-	for _, card := range req.Cards {
-		if card > 0 && !h.actor.CardHandler.IsExistCard(uint32(card)) {
-			return nil, fmt.Errorf("card not exist %d", card), int32(pb.ErrorCode_ParamError)
-		}
-	}
+	// for _, card := range req.Cards {
+	// 	if card > 0 && !h.actor.CardHandler.IsExistCard(uint32(card)) {
+	// 		return nil, fmt.Errorf("card not exist %d", card), int32(pb.ErrorCode_ParamError)
+	// 	}
+	// }
 
 	// 保存
 	detailData := h.actor.GetRoleDetailData()
@@ -111,21 +111,21 @@ func (h *RoleDetailHandler) ChangeShowCardsReq(ctx context.Context, in *base.Pro
 	}
 	// 返回
 	cards := make([]*pb.PClientCardInfo, 0)
-	for _, id := range req.Cards {
-		card, _ := h.actor.CardHandler.GetCard(uint32(id))
-		if card != nil {
-			clientData := h.actor.CardHandler.ToClientData(card)
-			cards = append(cards, clientData)
-		} else {
-			cards = append(cards, &pb.PClientCardInfo{}) // 占位用
-		}
-	}
+	// for _, id := range req.Cards {
+	// 	card, _ := h.actor.CardHandler.GetCard(uint32(id))
+	// 	if card != nil {
+	// 		clientData := h.actor.CardHandler.ToClientData(card)
+	// 		cards = append(cards, clientData)
+	// 	} else {
+	// 		cards = append(cards, &pb.PClientCardInfo{}) // 占位用
+	// 	}
+	// }
 	return &pb.LS2C_ChangeShowCardsRes{Cards: cards}, nil, 0
 }
 
 func (h *RoleDetailHandler) tryRefreshRoleDetail() error {
 	data := h.actor.GetRoleDetailData()
-	data.Lifex[0] = int32(h.actor.CardHandler.GetCardCount())
+	// data.Lifex[0] = int32(h.actor.CardHandler.GetCardCount())
 	data.Lifex[1] = 0 /*h.actor.AchieveHandler.GetCompleteCount()*/
 	data.Lifex[2] = h.actor.LoginHandler.getLoginDay()
 	if err := h.SaveDB(); err != nil {

@@ -242,8 +242,8 @@ func (h *DutyHandler) InitDutyInfoReq(ctx context.Context, in *base.ProtoMsg) (p
 		return nil, err, int32(code)
 	}
 	commonData := &pb.CliComData{
-		Duty:       h.buildDutyInfo(true),
-		SignGroups: h.actor.SignHandler.buildSignInfo(),
+		Duty: h.buildDutyInfo(true),
+		// SignGroups: h.actor.SignHandler.buildSignInfo(),
 	}
 
 	return &pb.LS2C_InitDutyInfoRes{CommonData: commonData}, nil, 0
@@ -261,9 +261,9 @@ func (h *DutyHandler) ChangeDutyCardReq(ctx context.Context, in *base.ProtoMsg) 
 	}
 
 	// 是否拥有
-	if !h.actor.CardHandler.IsExistCard(uint32(req.CardId)) {
-		return nil, fmt.Errorf("card not exist %d", req.CardId), int32(pb.ErrorCode_CardNotExist)
-	}
+	// if !h.actor.CardHandler.IsExistCard(uint32(req.CardId)) {
+	// 	return nil, fmt.Errorf("card not exist %d", req.CardId), int32(pb.ErrorCode_CardNotExist)
+	// }
 
 	// 同一个？
 	dutyData := h.actor.GetDutyData()

@@ -194,14 +194,14 @@ func (u *UserActor) getClientCardInfo(roleId uint64) []*pb.PClientCardInfo {
 		return cardInfos
 	}
 
-	for cardId, card := range cardData.Card {
+	for _, card := range cardData.Card {
 		if card == nil {
 			continue
 		}
 
-		clientData := u.CardHandler.ToClientData(card)
-		clientData.Common.Skins = skinData.Skins[int32(cardId)].GetSkins()
-		cardInfos = append(cardInfos, clientData)
+		// clientData := u.CardHandler.ToClientData(card)
+		// clientData.Common.Skins = skinData.Skins[int32(cardId)].GetSkins()
+		// cardInfos = append(cardInfos, clientData)
 	}
 
 	return cardInfos

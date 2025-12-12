@@ -196,29 +196,29 @@ func (m *DropMgr) doDrop(itemCfg *excel.ItemCfg, itemNum uint32, params []int32,
 		}
 
 	case pb.ItemType_Card:
-		drop, errx := m.actor.CardHandler.AddCard(itemCfg, itemNum, commonData)
-		err = errx
-		if drop != nil {
-			dropChange.Items = append(dropChange.Items, drop.Items...)
-		}
+		// drop, errx := m.actor.CardHandler.AddCard(itemCfg, itemNum, commonData)
+		// err = errx
+		// if drop != nil {
+		// 	dropChange.Items = append(dropChange.Items, drop.Items...)
+		// }
 
 	case pb.ItemType_CardSkin:
-		drop, errx := m.actor.SkinHandler.AddCardSkin(itemCfg, itemNum, commonData)
-		err = errx
-		if drop != nil {
-			dropChange.Items = append(dropChange.Items, drop.Items...)
-		}
+		// drop, errx := m.actor.SkinHandler.AddCardSkin(itemCfg, itemNum, commonData)
+		// err = errx
+		// if drop != nil {
+		// 	dropChange.Items = append(dropChange.Items, drop.Items...)
+		// }
 
 	case pb.ItemType_Equip:
-		err = m.actor.EquipHandler.CreateAndAddEquip(itemCfg.ItemId, int32(itemNum), commonData)
-		if err == nil {
-			dropChange.Items = append(dropChange.Items, &pb.ItemReward{ItemId: uint32(itemCfg.ItemId), Num: itemNum})
-		}
+		// err = m.actor.EquipHandler.CreateAndAddEquip(itemCfg.ItemId, int32(itemNum), commonData)
+		// if err == nil {
+		// 	dropChange.Items = append(dropChange.Items, &pb.ItemReward{ItemId: uint32(itemCfg.ItemId), Num: itemNum})
+		// }
 	case pb.ItemType_Stamina: // 更新玩家体力
-		err = m.actor.PlayerLevelHandler.AddStamina(int32(itemNum), commonData, reason)
-		if err == nil {
-			dropChange.Items = append(dropChange.Items, &pb.ItemReward{ItemId: uint32(itemCfg.ItemId), Num: itemNum})
-		}
+		// err = m.actor.PlayerLevelHandler.AddStamina(int32(itemNum), commonData, reason)
+		// if err == nil {
+		// 	dropChange.Items = append(dropChange.Items, &pb.ItemReward{ItemId: uint32(itemCfg.ItemId), Num: itemNum})
+		// }
 
 	default:
 		m.actor.Warnf("doDrop ===>>> 未支持的itemType=%d \n", itemCfg.Type)
@@ -243,20 +243,20 @@ func (m *DropMgr) handleItemTypeAbility(itemCfg *excel.ItemCfg, itemNum uint32, 
 		return nil, err
 
 	case int32(pb.ItemSubType_1_Ability_CardExp):
-		expRewards, cards := m.actor.CardHandler.AddCardExpByIdList(params, int32(itemNum))
-		dropChange.CardExpInfos = append(dropChange.CardExpInfos, expRewards...)
-		for _, v := range cards {
-			commonData.Data.Card = append(commonData.Data.Card, m.actor.CardHandler.ToClientData(v))
-		}
-		return expRewards, nil
+		// expRewards, cards := m.actor.CardHandler.AddCardExpByIdList(params, int32(itemNum))
+		// dropChange.CardExpInfos = append(dropChange.CardExpInfos, expRewards...)
+		// for _, v := range cards {
+		// 	commonData.Data.Card = append(commonData.Data.Card, m.actor.CardHandler.ToClientData(v))
+		// }
+		// return expRewards, nil
 
 	case int32(pb.ItemSubType_1_Ability_CardFavoriteExp):
-		cardId := m.actor.DutyHandler.GetCurDutyCard()
-		card, errCode := m.actor.CardHandler.AddFavoriteExpById(cardId, itemNum)
-		if card == nil || errCode != pb.ErrorCode_Success {
-			break
-		}
-		commonData.Data.Card = append(commonData.Data.Card, card)
+		// cardId := m.actor.DutyHandler.GetCurDutyCard()
+		// card, errCode := m.actor.CardHandler.AddFavoriteExpById(cardId, itemNum)
+		// if card == nil || errCode != pb.ErrorCode_Success {
+		// 	break
+		// }
+		// commonData.Data.Card = append(commonData.Data.Card, card)
 
 	default:
 		m.actor.Debugf("unrealized item type ability %d", itemCfg.SubType)
@@ -358,10 +358,10 @@ func (m *DropMgr) CheckLimit(itemId, itemNum int32) bool {
 		return false
 
 	case pb.ItemType_Equip:
-		return m.actor.EquipHandler.CheckLimit(itemNum)
+		// return m.actor.EquipHandler.CheckLimit(itemNum)
 
 	case pb.ItemType_Stamina:
-		return m.actor.PlayerLevelHandler.CheckLimit(itemNum)
+		// return m.actor.PlayerLevelHandler.CheckLimit(itemNum)
 
 	default:
 		m.actor.Warnf("CheckLimit ===>>> 未支持的itemType=%d \n", itemCfg.Type)

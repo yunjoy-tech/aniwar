@@ -551,14 +551,10 @@ func (h *LoginHandler) LoginEnterGame(ctx context.Context, in *base.ProtoMsg) (p
 		NewMails:            h.actor.MailHandler.getNewMailsCount(),
 		Base:                h.buildRoleBaseInfo(),
 		Items:               h.actor.BagHandler.buildItemList(),
-		Equip:               h.actor.EquipHandler.buildEquipList(),
-		Card:                h.actor.CardHandler.buildCardList(),
 		Currency:            h.actor.CurrencyHandler.buildCurrencyList(),
 		Troop:               builder.BuildTroopList(h.actor.GetTroopData()),
 		Duty:                h.actor.DutyHandler.buildDutyInfo(false),
-		SignGroups:          h.actor.SignHandler.buildSignInfo(),
 		Flags:               h.getStoryFlags(),
-		Stamina:             h.actor.PlayerLevelHandler.buildPlayerStaminaInfo(),
 		Friends:             h.actor.FriendHandler.buildFriendData(true),
 		Alliance:            h.actor.UserAllianceHandler.buildAllianceData(true),
 		GuideTask:           h.actor.GuideTaskHandler.buildGuideTask(),
@@ -684,11 +680,11 @@ func (h *LoginHandler) DoEnterGame(bNewPlayer bool) (proto.Message, error, int32
 		}
 
 		// 初始化默认阵容
-		if err, errCode := h.actor.TroopHandler.CardTroopOperate(
-			pb.CardTroopType_CardTroopType_Normal, 1, // 固定默认值
-			pb.CardTroopSubType_Map_Out, excel.GetConfigMgr().GetCfg().DEFAULT_LEVEL_LINEUP); err != nil {
-			return nil, err, int32(errCode)
-		}
+		// if err, errCode := h.actor.TroopHandler.CardTroopOperate(
+		// 	pb.CardTroopType_CardTroopType_Normal, 1, // 固定默认值
+		// 	pb.CardTroopSubType_Map_Out, excel.GetConfigMgr().GetCfg().DEFAULT_LEVEL_LINEUP); err != nil {
+		// 	return nil, err, int32(errCode)
+		// }
 
 		if err := h.SaveDB(); err != nil {
 			return nil, err, int32(pb.ErrorCode_InternalError)
@@ -732,16 +728,9 @@ func (h *LoginHandler) getRoleLevel() uint32 {
 }
 
 // 更新角色基础属性
-func (h *LoginHandler) updateRoleBase(newLevel uint32, newExp uint64, reward *LevelUpReward, commonData *clidto.Comdata) error {
+func (h *LoginHandler) updateRoleBase(newLevel uint32, newExp uint64, commonData *clidto.Comdata) error {
 	h.actor.GetUserData().Common.RoleExp = newExp
 	h.actor.GetUserData().Common.RoleLevel = newLevel
-
-	if reward != nil && reward.stamina > 0 {
-		_, err := GetDropMgr(h.actor).DropList2(map[int32]int32{common.ITEM_ID_STAMINA_1004: reward.stamina}, true, nil, commonData, common.CR_STAMINA_PLAY_LEVEL)
-		if err != nil {
-			return err
-		}
-	}
 
 	if err := h.SaveDB(); err != nil {
 		return err
@@ -777,7 +766,6 @@ func (h *LoginHandler) AddRoleExp(expValue uint64, commonData *clidto.Comdata) (
 	var addExp uint64
 	var lvUpTimes uint32
 
-	reward := &LevelUpReward{}
 	// 获取当前等级配置
 	curLevelConfig := excel.GetPlayerLevelMgr().GetById(int32(oldLevel))
 	// 配置不存在，返回错误
@@ -806,7 +794,7 @@ func (h *LoginHandler) AddRoleExp(expValue uint64, commonData *clidto.Comdata) (
 		} else {
 			addExp += expLimit
 		}
-		reward.stamina += nextLevelConfig.StaminaGainUpgrade
+
 		curLevelConfig = nextLevelConfig
 	}
 	if newLevel != oldLevel || remainExp != oldExp {
@@ -838,7 +826,7 @@ func (h *LoginHandler) AddRoleExp(expValue uint64, commonData *clidto.Comdata) (
 			})
 		}
 
-		return addExp, h.updateRoleBase(newLevel, remainExp, reward, commonData)
+		return addExp, h.updateRoleBase(newLevel, remainExp, commonData)
 	}
 	return 0, nil
 }
@@ -866,21 +854,18 @@ func (h *LoginHandler) DirectLevelUpByGM(level uint32, commonData *clidto.Comdat
 		return fmt.Errorf("player level param is invliad,maybe greater than maxlevel(%d) or less than curlevel %d", maxLevel, oldLevel)
 	}
 
-	reward := &LevelUpReward{}
-
 	for i := oldLevel + 1; i <= targetLevel; i++ {
 		levelConfig := excel.GetPlayerLevelMgr().GetById(int32(i))
 		if levelConfig == nil {
 			return fmt.Errorf("player level config not found: %d", i)
 		}
-		reward.stamina += levelConfig.StaminaGainUpgrade
 	}
-	return h.updateRoleBase(targetLevel, oldExp, reward, commonData)
+	return h.updateRoleBase(targetLevel, oldExp, commonData)
 }
 
 // 重置玩家等级GM
 func (h *LoginHandler) ResetLevelByGM(commonData *clidto.Comdata) error {
-	return h.updateRoleBase(1, 0, nil, commonData)
+	return h.updateRoleBase(1, 0, commonData)
 }
 
 // 更新离线时间戳

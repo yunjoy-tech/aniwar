@@ -264,7 +264,7 @@ func (m *TaskTypeMgr) createType101(id, typ, target int32, params []int32, canCr
 	}
 	// 特殊处理: 获取当前卡牌技能总等级
 	if len(params) > 0 {
-		task.CurValue = m.actor.CardHandler.GetCardSkillLvSum(uint32(params[0]))
+		// task.CurValue = m.actor.CardHandler.GetCardSkillLvSum(uint32(params[0]))
 	}
 	return task
 }
@@ -284,10 +284,10 @@ func (m *TaskTypeMgr) createType102(id, typ, target int32, params []int32, canCr
 	}
 	// 特殊处理: 获取当前卡牌潜力等级
 	if len(params) > 0 {
-		card, _ := m.actor.CardHandler.GetCard(uint32(params[0]))
-		if card != nil {
-			task.CurValue = int32(card.AwakenLevel)
-		}
+		// card, _ := m.actor.CardHandler.GetCard(uint32(params[0]))
+		// if card != nil {
+		// 	task.CurValue = int32(card.AwakenLevel)
+		// }
 	}
 	return task
 }
@@ -307,10 +307,10 @@ func (m *TaskTypeMgr) createType103(id, typ, target int32, params []int32, canCr
 	}
 	// 特殊处理: 获取当前卡牌性格等级
 	if len(params) > 0 {
-		card, _ := m.actor.CardHandler.GetCard(uint32(params[0]))
-		if card != nil {
-			task.CurValue = int32(card.CharacterLevel)
-		}
+		// card, _ := m.actor.CardHandler.GetCard(uint32(params[0]))
+		// if card != nil {
+		// 	task.CurValue = int32(card.CharacterLevel)
+		// }
 	}
 	return task
 }
@@ -330,10 +330,10 @@ func (m *TaskTypeMgr) createType121(id, typ, target int32, params []int32, canCr
 	}
 	// 特殊处理: 获取当前卡牌等级
 	if len(params) > 0 {
-		card, _ := m.actor.CardHandler.GetCard(uint32(params[0]))
-		if card != nil {
-			task.CurValue = int32(card.CardLevel)
-		}
+		// card, _ := m.actor.CardHandler.GetCard(uint32(params[0]))
+		// if card != nil {
+		// 	task.CurValue = int32(card.CardLevel)
+		// }
 	}
 	return task
 }
@@ -345,9 +345,9 @@ func (m *TaskTypeMgr) createType505(id, typ, target int32, params []int32, canCr
 	}
 
 	task := &pb.TaskInfoItem{
-		Id:          id,
-		CondId:      typ,
-		CurValue:    m.actor.CardHandler.GetCardCountByLevel(params[0]),
+		Id:     id,
+		CondId: typ,
+		// CurValue:    m.actor.CardHandler.GetCardCountByLevel(params[0]),
 		TargetValue: target,
 		Status:      TASK_STATUS_DOING,
 		Create:      time.Now().Unix(),
@@ -367,9 +367,9 @@ func (m *TaskTypeMgr) createType401(id, typ, target int32, params []int32, canCr
 	}
 
 	var cur int32
-	if m.actor.CardHandler.IsExistCard(uint32(params[0])) {
-		cur = 1
-	}
+	// if m.actor.CardHandler.IsExistCard(uint32(params[0])) {
+	// 	cur = 1
+	// }
 
 	task := &pb.TaskInfoItem{
 		Id:          id,
@@ -390,9 +390,9 @@ func (m *TaskTypeMgr) createType401(id, typ, target int32, params []int32, canCr
 func (m *TaskTypeMgr) createType402(id int32, typ int32, target int32, params []int32, canCreate bool, times ...int32) *pb.TaskInfoItem {
 
 	task := &pb.TaskInfoItem{
-		Id:          id,
-		CondId:      typ,
-		CurValue:    int32(m.actor.CardHandler.GetCardCount()),
+		Id:     id,
+		CondId: typ,
+		// CurValue:    int32(m.actor.CardHandler.GetCardCount()),
 		TargetValue: target,
 		Status:      TASK_STATUS_DOING,
 		Create:      time.Now().Unix(),
@@ -412,9 +412,9 @@ func (m *TaskTypeMgr) createType403(id int32, typ int32, target int32, params []
 	}
 
 	task := &pb.TaskInfoItem{
-		Id:          id,
-		CondId:      typ,
-		CurValue:    m.actor.CardHandler.GetCardCountByQuality(params[0]),
+		Id:     id,
+		CondId: typ,
+		// CurValue:    m.actor.CardHandler.GetCardCountByQuality(params[0]),
 		TargetValue: target,
 		Status:      TASK_STATUS_DOING,
 		Create:      time.Now().Unix(),
@@ -433,9 +433,9 @@ func (m *TaskTypeMgr) createType404(id int32, typ int32, target int32, params []
 		return nil
 	}
 	cur := int32(0)
-	if len(params) > 0 && m.actor.SkinHandler.IsExistSkinId(params[0]) {
-		cur = 1
-	}
+	// if len(params) > 0 && m.actor.SkinHandler.IsExistSkinId(params[0]) {
+	// 	cur = 1
+	// }
 
 	task := &pb.TaskInfoItem{
 		Id:          id,
@@ -456,9 +456,9 @@ func (m *TaskTypeMgr) createType404(id int32, typ int32, target int32, params []
 func (m *TaskTypeMgr) createType406(id int32, typ int32, target int32, params []int32, canCreate bool, times ...int32) *pb.TaskInfoItem {
 
 	task := &pb.TaskInfoItem{
-		Id:          id,
-		CondId:      typ,
-		CurValue:    m.actor.SkinHandler.getSkinCount(),
+		Id:     id,
+		CondId: typ,
+		// CurValue:    m.actor.SkinHandler.getSkinCount(),
 		TargetValue: target,
 		Status:      TASK_STATUS_DOING,
 		Create:      time.Now().Unix(),
@@ -848,7 +848,7 @@ func (m *TaskTypeMgr) checkType505(task *pb.TaskInfoItem, e event.IEvent) {
 	if len(task.Params) == 0 {
 		return
 	}
-	task.CurValue = m.actor.CardHandler.GetCardCountByLevel(task.Params[0])
+	// task.CurValue = m.actor.CardHandler.GetCardCountByLevel(task.Params[0])
 }
 
 func (m *TaskTypeMgr) checkType507(task *pb.TaskInfoItem, e event.IEvent) {

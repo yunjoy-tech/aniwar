@@ -11,7 +11,6 @@ import (
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/clidto"
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/conf"
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/datahelper"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/db"
 	myUtils "gitlab.musadisca-games.com/wangxw/aniwar/src/common/utils"
 	excel "gitlab.musadisca-games.com/wangxw/aniwar/src/excel/data"
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/idipserver/logic"
@@ -22,7 +21,6 @@ import (
 	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/service"
 	svc "gitlab.musadisca-games.com/wangxw/musae/framework/service"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/state"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/threading"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/utils"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/wordfilter"
@@ -66,21 +64,14 @@ func NewGmHandler(actor *UserActor) *GmHandler {
 	h.RegisterCmdHandler(common.GM_ADD_ITEM_ALL, h.GMAddItemAll)
 	h.RegisterCmdHandler(common.GM_ADD_ITEM_BY_TYPE, h.GMAddItemByType)
 	h.RegisterCmdHandler(common.GM_DEL_ITEM_BY_ID, h.GMDelItemById)
-	h.RegisterCmdHandler(common.GM_ADD_CARD_EXP, h.GmAddCardExp)
-	h.RegisterCmdHandler(common.GM_ADD_FAVORITE_EXP, h.GmAddFavoriteExp)
 	h.RegisterCmdHandler(common.GM_KICKOUT, h.GmKickout)
 	h.RegisterCmdHandler(common.GM_BANNED, h.GmBanned)
-	h.RegisterCmdHandler(common.GM_SET_CARD_STRENGTH, h.GmSetCardStrength)
 	h.RegisterCmdHandler(common.GM_TEST_MAIL, h.GmTestMail)
 	h.RegisterCmdHandler(common.GM_DEL_MONEY, h.GmDelMoney)
-	h.RegisterCmdHandler(common.GM_DEL_STAMINA, h.GmDelStamina)
 	h.RegisterCmdHandler(common.GM_DIRECT_LEVEL_UP, h.GMDirectLevelUp)
 	h.RegisterCmdHandler(common.GM_RESET_LEVEL, h.GmResetLevel)
-	h.RegisterCmdHandler(common.GM_WEAR_EQUIP, h.GmWearEquip)
 	h.RegisterCmdHandler(common.GM_ADD_PLAYER_EXP, h.GmAddPlayerExp)
-	h.RegisterCmdHandler(common.GM_TEST_SIGN, h.GmTestSign)
 	h.RegisterCmdHandler(common.GM_TEST_PROTO, h.GmTestCmd)
-	h.RegisterCmdHandler(common.GM_SET_SUPER_CARD, h.GmSetSuperCard)
 	h.RegisterCmdHandler(common.GM_TEST_UGC, h.GmTestUgc)
 	h.RegisterCmdHandler(common.GM_TEST_SENSITIVE, h.GmTestSensitive)
 	h.RegisterCmdHandler(common.GM_TEST_Battle_chapter, h.GmTestBattleChapter)
@@ -314,63 +305,6 @@ func (h *GmHandler) UseGameCommandReq(ctx context.Context, in *base.ProtoMsg) (p
 	return rsp, nil, 0
 }
 
-func (h *GmHandler) GmAddCardExp(param []string, commonData *clidto.Comdata) error {
-	cardId, err := strconv.Atoi(param[0])
-	if err != nil {
-		return err
-	}
-	exp, err := strconv.Atoi(param[1])
-	if err != nil {
-		return err
-	}
-	card, err := h.actor.CardHandler.GetCard(uint32(cardId))
-	if err != nil {
-		return err
-	}
-	_, err = h.actor.CardHandler.AddExp(card, int32(exp), false)
-	err = h.actor.CardHandler.SaveDB()
-	if err != nil {
-		return err
-	}
-
-	commonData.Data.Card = append(commonData.Data.Card, h.actor.CardHandler.ToClientData(card))
-	return nil
-}
-
-func (h *GmHandler) GmAddFavoriteExp(param []string, commonData *clidto.Comdata) error {
-	cardId, err := strconv.Atoi(param[0])
-	if err != nil {
-		return err
-	}
-	exp, err := strconv.Atoi(param[1])
-	if err != nil {
-		return err
-	}
-	card, errCode := h.actor.CardHandler.AddFavoriteExpById(int32(cardId), uint32(exp))
-	if errCode != pb.ErrorCode_Success {
-		return fmt.Errorf("add favorite exp failed, code: %d", int32(errCode))
-	}
-	commonData.Data.Card = append(commonData.Data.Card, card)
-	return nil
-}
-
-func (h *GmHandler) GmSetCardStrength(param []string, commonData *clidto.Comdata) error {
-	cardId, err := strconv.Atoi(param[0])
-	if err != nil {
-		return err
-	}
-	curValue, err := strconv.Atoi(param[1])
-	if err != nil {
-		return err
-	}
-	err, card := h.actor.CardHandler.SetCardHp(int32(cardId), int32(curValue))
-	if err != nil {
-		return err
-	}
-	commonData.Data.Card = append(commonData.Data.Card, card)
-	return nil
-}
-
 func (h *GmHandler) GmTestMail(param []string, commonData *clidto.Comdata) error {
 	mailId, err := strconv.Atoi(param[0])
 	if err != nil {
@@ -399,21 +333,6 @@ func (h *GmHandler) GmDelMoney(param []string, commonData *clidto.Comdata) error
 		return err
 	}
 	return h.actor.CurrencyHandler.SubCurrency(int32(typ), int64(value), commonData, common.CR_GM)
-}
-
-func (h *GmHandler) GmDelStamina(param []string, commonData *clidto.Comdata) error {
-	value, err := strconv.Atoi(param[0])
-	if err != nil {
-		return err
-	}
-	costVal := int32(value)
-
-	stamina := h.actor.PlayerLevelHandler.GetPlayerStamina()
-	if stamina.Value < costVal { // 输入扣除的值超过当前体力, 则全部扣完
-		costVal = stamina.Value
-	}
-
-	return h.actor.PlayerLevelHandler.SubStamina(costVal, commonData, common.CR_GM)
 }
 
 func (h *GmHandler) GmResetLevel(param []string, commonData *clidto.Comdata) error {
@@ -448,18 +367,6 @@ func (h *GmHandler) GmBanned(param []string, commonData *clidto.Comdata) error {
 	return h.actor.AccountHandler.Banned(param[1], value)
 }
 
-func (h *GmHandler) GmWearEquip(param []string, commonData *clidto.Comdata) error {
-	cardId, err := strconv.Atoi(param[0])
-	if err != nil {
-		return err
-	}
-	equipConfigId, err := strconv.Atoi(param[1])
-	if err != nil {
-		return err
-	}
-	return h.actor.EquipHandler.wearEquipByGM(int32(cardId), int32(equipConfigId), commonData)
-}
-
 func (h *GmHandler) GmAddPlayerExp(param []string, commonData *clidto.Comdata) error {
 	value, err := strconv.Atoi(param[0])
 	if err != nil {
@@ -467,33 +374,6 @@ func (h *GmHandler) GmAddPlayerExp(param []string, commonData *clidto.Comdata) e
 	}
 	_, err = h.actor.LoginHandler.AddRoleExp(uint64(value), commonData)
 	return err
-}
-
-func (h *GmHandler) GmSetSuperCard(param []string, commonData *clidto.Comdata) error {
-	cardId, err := strconv.Atoi(param[0])
-	if err != nil {
-		return err
-	}
-	var typ int
-	if len(param) > 1 {
-		typ, err = strconv.Atoi(param[1])
-		if err != nil {
-			return err
-		}
-	}
-	return h.actor.CardHandler.SetSuperCardByGM(cardId, typ, commonData)
-}
-
-func (h *GmHandler) GmTestSign(param []string, commonData *clidto.Comdata) error {
-	groupId, err := strconv.Atoi(param[0])
-	if err != nil {
-		return err
-	}
-	p, err := strconv.Atoi(param[1])
-	if err != nil {
-		return err
-	}
-	return h.actor.SignHandler.DaySignByGM(int32(groupId), int32(p), commonData)
 }
 
 // 调试协议GM
@@ -944,41 +824,42 @@ func (h *GmHandler) GmTestDB(param []string, commonData *clidto.Comdata) error {
 }
 
 func (h *GmHandler) operateDB(isRedis, isRead bool) (int64, error) {
-	var (
-		delay int64
-		err   error
-	)
-	begin := time.Now()
-
-	// 测试redis
-	mongoDbType, dbKey, dbMsg := h.actor.CardHandler.DBTable()
-	if isRedis {
-		if isRead {
-			_, err := h.actor.Srv.GetCacheOnlyFromRedis(dbKey, nil, dbMsg)
-			if err != nil {
-				return delay, err
-			}
-		} else {
-			err = h.actor.Cache2Redis(mongoDbType, h.actor.ID(), dbKey, dbMsg)
-			if err != nil {
-				return delay, err
-			}
-		}
-	} else {
-		// 测试mongo
-		if isRead {
-			_, err = h.actor.Srv.GetMongo(mongoDbType, dbKey, nil)
-		} else {
-			kvTable, err := db.BuildKvTable(dbMsg, dbKey)
-			if err != nil {
-				return delay, err
-			}
-			m := map[string]*state.KvTable{dbKey: kvTable}
-			err = h.actor.Srv.UpsertMongoTableTransaction(service.MongoDbType_MongoGame, nil, m)
-		}
-	}
-	delay = time.Since(begin).Milliseconds()
-	return delay, err
+	// var (
+	// 	delay int64
+	// 	err   error
+	// )
+	// begin := time.Now()
+	//
+	// // 测试redis
+	// mongoDbType, dbKey, dbMsg := h.actor.CardHandler.DBTable()
+	// if isRedis {
+	// 	if isRead {
+	// 		_, err := h.actor.Srv.GetCacheOnlyFromRedis(dbKey, nil, dbMsg)
+	// 		if err != nil {
+	// 			return delay, err
+	// 		}
+	// 	} else {
+	// 		err = h.actor.Cache2Redis(mongoDbType, h.actor.ID(), dbKey, dbMsg)
+	// 		if err != nil {
+	// 			return delay, err
+	// 		}
+	// 	}
+	// } else {
+	// 	// 测试mongo
+	// 	if isRead {
+	// 		_, err = h.actor.Srv.GetMongo(mongoDbType, dbKey, nil)
+	// 	} else {
+	// 		kvTable, err := db.BuildKvTable(dbMsg, dbKey)
+	// 		if err != nil {
+	// 			return delay, err
+	// 		}
+	// 		m := map[string]*state.KvTable{dbKey: kvTable}
+	// 		err = h.actor.Srv.UpsertMongoTableTransaction(service.MongoDbType_MongoGame, nil, m)
+	// 	}
+	// }
+	// delay = time.Since(begin).Milliseconds()
+	// return delay, err
+	return 0, nil
 }
 
 func (h *GmHandler) GmTestGUID(param []string, commonData *clidto.Comdata) error {

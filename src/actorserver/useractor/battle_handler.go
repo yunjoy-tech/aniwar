@@ -164,16 +164,17 @@ func (h *BattleHandler) buildSelfBattleCards(troopType pb.CardTroopType, troopId
 		// foodItems   = make([]*pb.KeyValueItem, 0)
 	)
 
-	troopInfo, err := h.actor.TroopHandler.getTroopInfo(int32(troopType), troopId)
-	if err != nil || len(troopInfo.Card) <= 0 {
-		logger.Debugf("获取组队信息异常, err:%v, %v", err, troopInfo)
-		return battleTeam
-	}
+	// troopInfo, err := h.actor.TroopHandler.getTroopInfo(int32(troopType), troopId)
+	// if err != nil || len(troopInfo.Card) <= 0 {
+	// 	logger.Debugf("获取组队信息异常, err:%v, %v", err, troopInfo)
+	// 	return battleTeam
+	// }
 
-	cardIds := make([]int32, len(troopInfo.Card), len(troopInfo.Card))
-	for pos, cardId := range troopInfo.Card {
-		cardIds[pos] = cardId
-	}
+	var cardIds []int32
+	// cardIds := make([]int32, len(troopInfo.Card), len(troopInfo.Card))
+	// for pos, cardId := range troopInfo.Card {
+	// 	cardIds[pos] = cardId
+	// }
 
 	cardList := h.buildBattleCards(cardIds, playerLevelData)
 	battleTeam.CardList = cardList
@@ -227,17 +228,17 @@ func (h *BattleHandler) buildBattleCards(cardIds []int32, playerLevelData *pb.Pl
 			continue
 		}
 
-		card, err := h.actor.CardHandler.GetCard(uint32(cardId))
-		if err != nil {
-			logger.Debugf("获取卡牌信息异常, err:%v, %v", err, card)
-			return cardList
-		}
+		// card, err := h.actor.CardHandler.GetCard(uint32(cardId))
+		// if err != nil {
+		// 	logger.Debugf("获取卡牌信息异常, err:%v, %v", err, card)
+		// 	return cardList
+		// }
 
 		var cardHp uint32 = 0
 		var cardEner uint32 = 0
 		if playerLevelData == nil {
 			// 满血进入
-			cardHp = card.OldMaxHp
+			// cardHp = card.OldMaxHp
 		} else {
 			// 继承血量
 			for _, each := range playerLevelData.BattleCards {
@@ -250,22 +251,22 @@ func (h *BattleHandler) buildBattleCards(cardIds []int32, playerLevelData *pb.Pl
 		}
 
 		if cardHp <= 0 {
-			logger.Debugf("角色死亡, 不传到校验服, %v", card)
+			logger.Debugf("角色死亡, 不传到校验服")
 			continue
 		}
 
-		equips, err := h.actor.EquipHandler.GetEquipList(cardId)
-		if err != nil {
-			logger.Debugf("获取装备信息异常, err:%v, %v", err, card)
-			return cardList
-		}
+		// equips, err := h.actor.EquipHandler.GetEquipList(cardId)
+		// if err != nil {
+		// 	logger.Debugf("获取装备信息异常, err:%v, %v", err, card)
+		// 	return cardList
+		// }
 
 		bCard := &pb.BattleCard{
 			Pos:      int32(pos),
-			CardInfo: h.actor.CardHandler.ToClientData(card),
+			CardInfo: nil, /*h.actor.CardHandler.ToClientData(card)*/
 			CardHp:   cardHp,
 			CardEner: cardEner,
-			Equips:   equips,
+			Equips:   nil,
 		}
 		cardList = append(cardList, bCard)
 	}
@@ -279,7 +280,8 @@ func (h *BattleHandler) buildBattleFoods(troopType pb.CardTroopType, playerLevel
 	)
 
 	// 食物列表
-	foodIds := h.actor.TroopHandler.GetTroopFoodLog(int32(troopType))
+	var foodIds []int32
+	// foodIds := h.actor.TroopHandler.GetTroopFoodLog(int32(troopType))
 
 	for _, foodId := range foodIds {
 		// 背包中的数量
