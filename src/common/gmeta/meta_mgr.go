@@ -1,7 +1,7 @@
 package gmeta
 
 import (
-	cfg "gitlab.musadisca-games.com/wangxw/aniwar/src/meta"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/meta"
 )
 
 var (
@@ -9,7 +9,7 @@ var (
 )
 
 type MetaMgr struct {
-	*cfg.Tables
+	*meta.Tables
 }
 
 func GetMetaMgr() *MetaMgr {
@@ -18,7 +18,7 @@ func GetMetaMgr() *MetaMgr {
 
 // 加载所有的策划配表数据
 func (m *MetaMgr) LoadAllMeta() error {
-	tables, err := cfg.NewTables(loader)
+	tables, err := meta.NewTables(jsonLoader)
 	if err != nil {
 		return err
 	}

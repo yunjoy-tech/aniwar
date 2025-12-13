@@ -6,9 +6,13 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-package cfg
+package meta
+
+import "errors"
 
 type AlliancePkgHeadMeta struct {
+	Id     int32
+	Screen string
 }
 
 const TypeId_AlliancePkgHeadMeta = 1887176702
@@ -19,5 +23,42 @@ func (*AlliancePkgHeadMeta) GetTypeId() int32 {
 
 func NewAlliancePkgHeadMeta(_buf map[string]interface{}) (_v *AlliancePkgHeadMeta, err error) {
 	_v = &AlliancePkgHeadMeta{}
+	{
+		var _ok_ bool
+		var __json_id__ interface{}
+		if __json_id__, _ok_ = _buf["id"]; !_ok_ || __json_id__ == nil {
+			err = errors.New("id error")
+			return
+		} else {
+			var __x__ int32
+			{
+				var _ok_ bool
+				var _x_ float64
+				if _x_, _ok_ = __json_id__.(float64); !_ok_ {
+					err = errors.New("__x__ error")
+					return
+				}
+				__x__ = int32(_x_)
+			}
+			_v.Id = __x__
+		}
+	}
+	{
+		var _ok_ bool
+		var __json_screen__ interface{}
+		if __json_screen__, _ok_ = _buf["screen"]; !_ok_ || __json_screen__ == nil {
+			err = errors.New("screen error")
+			return
+		} else {
+			var __x__ string
+			{
+				if __x__, _ok_ = __json_screen__.(string); !_ok_ {
+					err = errors.New("__x__ error")
+					return
+				}
+			}
+			_v.Screen = __x__
+		}
+	}
 	return
 }

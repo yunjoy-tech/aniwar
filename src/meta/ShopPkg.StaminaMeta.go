@@ -6,9 +6,14 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-package cfg
+package meta
+
+import "errors"
 
 type ShopPkgStaminaMeta struct {
+	Id    int32
+	Price int32
+	Cost  *KeyVal
 }
 
 const TypeId_ShopPkgStaminaMeta = -608442916
@@ -19,5 +24,67 @@ func (*ShopPkgStaminaMeta) GetTypeId() int32 {
 
 func NewShopPkgStaminaMeta(_buf map[string]interface{}) (_v *ShopPkgStaminaMeta, err error) {
 	_v = &ShopPkgStaminaMeta{}
+	{
+		var _ok_ bool
+		var __json_id__ interface{}
+		if __json_id__, _ok_ = _buf["id"]; !_ok_ || __json_id__ == nil {
+			err = errors.New("id error")
+			return
+		} else {
+			var __x__ int32
+			{
+				var _ok_ bool
+				var _x_ float64
+				if _x_, _ok_ = __json_id__.(float64); !_ok_ {
+					err = errors.New("__x__ error")
+					return
+				}
+				__x__ = int32(_x_)
+			}
+			_v.Id = __x__
+		}
+	}
+	{
+		var _ok_ bool
+		var __json_price__ interface{}
+		if __json_price__, _ok_ = _buf["price"]; !_ok_ || __json_price__ == nil {
+			err = errors.New("price error")
+			return
+		} else {
+			var __x__ int32
+			{
+				var _ok_ bool
+				var _x_ float64
+				if _x_, _ok_ = __json_price__.(float64); !_ok_ {
+					err = errors.New("__x__ error")
+					return
+				}
+				__x__ = int32(_x_)
+			}
+			_v.Price = __x__
+		}
+	}
+	{
+		var _ok_ bool
+		var __json_cost__ interface{}
+		if __json_cost__, _ok_ = _buf["cost"]; !_ok_ || __json_cost__ == nil {
+			err = errors.New("cost error")
+			return
+		} else {
+			var __x__ *KeyVal
+			{
+				var _ok_ bool
+				var _x_ map[string]interface{}
+				if _x_, _ok_ = __json_cost__.(map[string]interface{}); !_ok_ {
+					err = errors.New("__x__ error")
+					return
+				}
+				if __x__, err = NewKeyVal(_x_); err != nil {
+					return
+				}
+			}
+			_v.Cost = __x__
+		}
+	}
 	return
 }

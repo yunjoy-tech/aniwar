@@ -5,8 +5,9 @@ import (
 	"io/ioutil"
 )
 
-func loader(file string) ([]map[string]interface{}, error) {
-	if bytes, err := ioutil.ReadFile("../GenerateDatas/json/" + file + ".json"); err != nil {
+func jsonLoader(file string) ([]map[string]interface{}, error) {
+	// TODO 从配置文件中读取
+	if bytes, err := ioutil.ReadFile("E:\\aniwar2\\aniwar\\output\\res\\meta\\" + file + ".json"); err != nil {
 		return nil, err
 	} else {
 		jsonData := make([]map[string]interface{}, 0)

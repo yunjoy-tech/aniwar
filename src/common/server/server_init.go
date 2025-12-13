@@ -8,6 +8,7 @@ import (
 	"github.com/pkg/errors"
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/conf"
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/datalog/taptap"
+	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/gmeta"
 	"gitlab.musadisca-games.com/wangxw/aniwar/src/excel/data"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
 	"gitlab.musadisca-games.com/wangxw/musae/framework/baseconf"
@@ -479,11 +480,8 @@ func (s *Server) LoadExcel() error {
 
 	logger.Infof("===>>> 加载模式为: %d, (1:读取压缩文件, 0:读取json源文件)", baseconf.GetBaseConf().ExcelDataZip)
 
-	// err := gmeta.GetMetaMgr().LoadAllMeta()
-	// if err != nil {
-	// 	return err
-	// }
-	if err := data.LoadAllExcelData(s.DataDir); err != nil {
+	err := gmeta.GetMetaMgr().LoadAllMeta()
+	if err != nil {
 		return err
 	}
 

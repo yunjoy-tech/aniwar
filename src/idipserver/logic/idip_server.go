@@ -70,11 +70,11 @@ func (s *IDIPServer) PreInit() error {
 func (s *IDIPServer) ServerInit() error {
 	s.LiveTime = time.Now().Unix() // 创建server时间戳
 	s.NeedExcel = map[string]int{  // 需要加载的策划表 TODO 后台导入字典元数据
-		excel.GetPackageMgr().GetDataFileName():   0,
-		excel.GetItemMgr().GetDataFileName():      0,
-		excel.GetBeastarMgr().GetDataFileName():   0,
+		excel.GetPackageMgr().GetDataFileName(): 0,
+		excel.GetItemMgr().GetDataFileName():    0,
+		// excel.GetBeastarMgr().GetDataFileName():   0,
 		excel.GetEquipmentMgr().GetDataFileName(): 0,
-		excel.GetSkinMgr().GetDataFileName():      0,
+		// excel.GetSkinMgr().GetDataFileName():      0,
 	}
 
 	// 服务启动埋点

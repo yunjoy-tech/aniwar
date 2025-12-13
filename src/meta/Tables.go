@@ -6,7 +6,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-package cfg
+package meta
 
 type JsonLoader func(string) ([]map[string]interface{}, error)
 

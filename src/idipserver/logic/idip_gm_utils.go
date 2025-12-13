@@ -438,24 +438,24 @@ type SkinInfo struct {
 }
 
 func (s *IDIPServer) NewSkin(skinId int32) *SkinInfo {
-	cfg := excel.GetSkinMgr().GetById(skinId)
-	if cfg == nil {
-		return nil
-	}
-	return &SkinInfo{
-		SkinId: skinId,
-		Name:   s.GetLocalizedStr(cfg.SkinName),
-	}
-
+	// cfg := excel.GetSkinMgr().GetById(skinId)
+	// if cfg == nil {
+	// 	return nil
+	// }
+	// return &SkinInfo{
+	// 	SkinId: skinId,
+	// 	Name:   s.GetLocalizedStr(cfg.SkinName),
+	// }
+	return nil
 }
 
 func (s *IDIPServer) ConvertCard(cards map[uint32]*pb.CardData, equip *pb.PEquipData) []*TempCard {
 	ret := make([]*TempCard, 0, len(cards))
 	for _, v := range cards {
-		cfg := excel.GetBeastarMgr().GetById(int32(v.GetBaseId()))
-		if cfg == nil {
-			continue
-		}
+		// cfg := excel.GetBeastarMgr().GetById(int32(v.GetBaseId()))
+		// if cfg == nil {
+		// 	continue
+		// }
 		timestamp := ""
 		if v.GetCreateTimestamp() > 0 {
 			timestamp = time.Unix(v.GetCreateTimestamp(), 0).Format("2006-01-02 15:04:05")
@@ -476,7 +476,7 @@ func (s *IDIPServer) ConvertCard(cards map[uint32]*pb.CardData, equip *pb.PEquip
 		}
 		ret = append(ret, &TempCard{
 			BaseId:          int32(v.GetBaseId()),
-			Name:            s.GetLocalizedStr(cfg.Name),
+			Name:            s.GetLocalizedStr(""),
 			CardLevel:       int32(v.GetCardLevel()),
 			CardExp:         int32(v.GetCardExp()),
 			Hp:              int32(v.GetHp()),

@@ -6,7 +6,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-package cfg
+package meta
 
 type ActivityPkgActivityTable struct {
 	_dataMap  map[int32]*ActivityPkgActivityMeta
