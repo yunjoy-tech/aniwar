@@ -1,7 +1,7 @@
 package useractor
 
 import (
-	"gitlab.musadisca-games.com/wangxw/musae/framework/state"
+	"gitee.com/bychannel/musae/framework/state"
 )
 
 func (u *UserActor) GetStateManager() *UserActor {
@@ -22,13 +22,13 @@ func (u *UserActor) Set(stateName string, value *state.KvTable) error {
 
 func (u *UserActor) SetID(id string) {
 	u.ServerImplBase.SetID(id)
-	//u.id = id
+	// u.id = id
 	u.uid, u.roleId = u.Srv.ConvUAID(id)
 }
 
-//func (u *UserActor) ID() string {
+// func (u *UserActor) ID() string {
 //	return u.ID()
-//}
+// }
 
 // SetAccountId account id for svc invoke
 func (u *UserActor) SetUID(uid string) {
@@ -50,9 +50,9 @@ func (u *UserActor) GetRID() uint64 {
 
 func (u *UserActor) Contains(stateName string) (bool, error) {
 	_, err := u.Get(stateName)
-	//if err != nil || reply == nil || reply.Data == nil || len(reply.Data) == 0 {
+	// if err != nil || reply == nil || reply.Data == nil || len(reply.Data) == 0 {
 	//	return false, err
-	//}
+	// }
 	if err != nil {
 		return false, err
 	}

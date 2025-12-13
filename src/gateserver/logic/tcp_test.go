@@ -3,9 +3,9 @@ package logic
 import (
 	"encoding/binary"
 	"fmt"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/errorx"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/tcpx"
+	"gitee.com/bychannel/musae/framework/errorx"
+	"gitee.com/bychannel/musae/framework/logger"
+	"gitee.com/bychannel/musae/framework/tcpx"
 	"net"
 	"testing"
 	"time"
@@ -23,10 +23,10 @@ func PackWithMarshaller(message tcpx.Message, marshaller tcpx.Marshaller) ([]byt
 	var bodyLengthBuf = make([]byte, 4)
 	var headerBuf []byte
 	var bodyBuf []byte
-	//headerBuf, e = json.Marshal(message.Header)
-	//if e != nil {
+	// headerBuf, e = json.Marshal(message.Header)
+	// if e != nil {
 	//	return nil, e
-	//}
+	// }
 	binary.BigEndian.PutUint32(headerLengthBuf, uint32(len(headerBuf)))
 	if message.Body != nil {
 		bodyBuf, e = marshaller.Marshal(message.Body)
@@ -76,7 +76,7 @@ func TestHeartbeat(t *testing.T) {
 		var heartBeat []byte
 		heartBeat, e = PackWithMarshaller(tcpx.Message{
 			MessageID: tcpx.DEFAULT_HEARTBEAT_MESSAGEID,
-			//Header:    nil,
+			// Header:    nil,
 			Body: nil,
 		}, nil)
 		if e != nil {
@@ -107,10 +107,10 @@ func TestHeartbeat(t *testing.T) {
 
 		srv.HeartBeatModeDetail(true, 5*time.Second, false, tcpx.DEFAULT_HEARTBEAT_MESSAGEID)
 
-		//srv.RewriteHeartBeatHandler(1300, func(c *tcpx.Context) {
+		// srv.RewriteHeartBeatHandler(1300, func(c *tcpx.Context) {
 		//	fmt.Println("rewrite heartbeat handler")
 		//	c.RecvHeartBeat()
-		//})
+		// })
 
 		srv.OnClose = OnClose
 		srv.OnConnect = OnConnect
@@ -151,7 +151,7 @@ func RunClient(srvAddr string, testResult chan error) {
 		var heartBeat []byte
 		heartBeat, e = PackWithMarshaller(tcpx.Message{
 			MessageID: tcpx.DEFAULT_HEARTBEAT_MESSAGEID,
-			//Header:    nil,
+			// Header:    nil,
 			Body: nil,
 		}, nil)
 		if e != nil {
@@ -181,7 +181,7 @@ func TestGate(t *testing.T) {
 
 	for i := 0; i <= 1; i++ {
 		RunClient("localhost:13001", testResult)
-		//RunClient("localhost:12002", testResult)
+		// RunClient("localhost:12002", testResult)
 	}
 
 	e := <-testResult

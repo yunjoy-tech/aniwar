@@ -5,10 +5,10 @@ import (
 	"sync/atomic"
 	"time"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/conf"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
+	"gitee.com/bychannel/aniwar/src/common"
+	"gitee.com/bychannel/aniwar/src/common/conf"
+	"gitee.com/bychannel/aniwar/src/proto/pb"
+	"gitee.com/bychannel/musae/framework/logger"
 )
 
 var DS = &DebugStatistics{

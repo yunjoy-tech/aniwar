@@ -8,12 +8,12 @@ import (
 	"strconv"
 	"time"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/conf"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/utils"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/service"
+	"gitee.com/bychannel/aniwar/src/common/conf"
+	"gitee.com/bychannel/aniwar/src/common/utils"
+	"gitee.com/bychannel/musae/framework/logger"
+	"gitee.com/bychannel/musae/framework/service"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
+	"gitee.com/bychannel/aniwar/src/proto/pb"
 )
 
 // TaptapLoginResp taptap登陆请求结果

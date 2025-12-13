@@ -2,15 +2,15 @@ package frame
 
 import (
 	"fmt"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/global"
+	"gitee.com/bychannel/musae/framework/global"
 	"strings"
 	"time"
 
+	"gitee.com/bychannel/aniwar/src/common/datalog/taptap"
+	"gitee.com/bychannel/aniwar/src/proto/pb"
+	"gitee.com/bychannel/musae/framework/base"
+	"gitee.com/bychannel/musae/framework/logger"
 	"github.com/dapr/go-sdk/service/common"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/datalog/taptap"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
 )
 
 type SysMailMgr struct {

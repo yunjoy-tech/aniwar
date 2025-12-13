@@ -1,13 +1,13 @@
 package centeractor
 
 import (
+	"gitee.com/bychannel/aniwar/src/actorserver/frame"
+	"gitee.com/bychannel/aniwar/src/proto/pb"
+	"gitee.com/bychannel/musae/framework/global"
+	"gitee.com/bychannel/musae/framework/service"
+	"gitee.com/bychannel/musae/framework/state"
+	"gitee.com/bychannel/musae/framework/threading"
 	"github.com/dapr/go-sdk/actor"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/actorserver/frame"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/global"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/service"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/state"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/threading"
 	"google.golang.org/protobuf/proto"
 	"sync"
 )

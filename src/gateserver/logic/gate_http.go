@@ -3,21 +3,21 @@ package logic
 import (
 	"context"
 	"fmt"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/datalog/taptap"
+	"gitee.com/bychannel/aniwar/src/common/datalog/taptap"
 	"strings"
 	"time"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/conf"
+	"gitee.com/bychannel/aniwar/src/common/conf"
 
+	"gitee.com/bychannel/aniwar/src/common/auth"
+	"gitee.com/bychannel/aniwar/src/proto/pb"
+	"gitee.com/bychannel/musae/framework/base"
+	"gitee.com/bychannel/musae/framework/baseconf"
+	"gitee.com/bychannel/musae/framework/errorx"
+	"gitee.com/bychannel/musae/framework/logger"
+	"gitee.com/bychannel/musae/framework/metrics"
+	"gitee.com/bychannel/musae/framework/tcpx"
 	"github.com/dapr/go-sdk/service/common"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/auth"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/baseconf"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/errorx"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/metrics"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/tcpx"
 )
 
 func (s *GateServer) OnHttp(ctx context.Context, in *common.InvocationEvent) (out *common.Content, err error) {

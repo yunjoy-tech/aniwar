@@ -1,7 +1,7 @@
 package gmeta
 
 import (
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/meta"
+	"gitee.com/bychannel/aniwar/src/meta"
 )
 
 var (

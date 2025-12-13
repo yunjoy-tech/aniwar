@@ -3,9 +3,9 @@ package logic
 import (
 	"encoding/json"
 	"fmt"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/conf"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/db"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
+	"gitee.com/bychannel/aniwar/src/common/conf"
+	"gitee.com/bychannel/aniwar/src/common/db"
+	"gitee.com/bychannel/musae/framework/logger"
 )
 
 const (

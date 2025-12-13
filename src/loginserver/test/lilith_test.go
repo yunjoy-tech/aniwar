@@ -2,16 +2,16 @@ package test
 
 import (
 	"fmt"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/conf"
+	"gitee.com/bychannel/aniwar/src/common/conf"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strings"
 	"testing"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/sdkconstant"
+	"gitee.com/bychannel/aniwar/src/common/sdkconstant"
 
-	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
+	"gitee.com/bychannel/musae/framework/logger"
 )
 
 func Test_checkLogin(t *testing.T) {

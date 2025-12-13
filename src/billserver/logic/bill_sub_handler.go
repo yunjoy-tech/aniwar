@@ -1,8 +1,8 @@
 package logic
 
 import (
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
+	"gitee.com/bychannel/aniwar/src/proto/pb"
+	"gitee.com/bychannel/musae/framework/base"
 )
 
 func (s *BillServer) HandlerSubEvent(msg *base.ProtoMsg) (err error) {

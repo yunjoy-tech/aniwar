@@ -2,7 +2,7 @@ package sdkconstant
 
 import (
 	"fmt"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/conf"
+	"gitee.com/bychannel/aniwar/src/common/conf"
 )
 
 const (

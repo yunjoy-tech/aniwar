@@ -3,8 +3,8 @@ package utils
 import (
 	"bufio"
 	"fmt"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
+	"gitee.com/bychannel/aniwar/src/proto/pb"
+	"gitee.com/bychannel/musae/framework/logger"
 	"os"
 	"reflect"
 	"strconv"

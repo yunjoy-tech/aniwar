@@ -4,13 +4,13 @@ import (
 	"fmt"
 	"time"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/conf"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/global"
+	"gitee.com/bychannel/aniwar/src/common/conf"
+	"gitee.com/bychannel/musae/framework/global"
 )
 
-//var KeyCacheRedisKeyIdx = func(mongoDbName service.MongoDbType, account string) string {
+// var KeyCacheRedisKeyIdx = func(mongoDbName service.MongoDbType, account string) string {
 //	return fmt.Sprintf("%v:cache-key:%s", mongoDbName, account)
-//}
+// }
 
 // 玩家账号登陆锁
 var KeyAccountLoginLock = func(account string) string {
@@ -42,13 +42,13 @@ var KeyUserSession = func(uid string) string {
 	return fmt.Sprintf("%v:session", uid)
 }
 
-//// RoomSession数据块
-//var KeyRoomSession = func(uid string) string {
+// // RoomSession数据块
+// var KeyRoomSession = func(uid string) string {
 //  if conf.Base().IsDBPrefix {
 //  	return fmt.Sprintf("%s:%s:%v:roomsession", global.RdsCfgNameSpace, global.RdsCfgGroup, uid)
 //  }
 //	return fmt.Sprintf("%v:roomsession", uid)
-//}
+// }
 
 // 绑定玩家角色id和roomId
 var KeyPlayerUidAndRoomId = func(uid string) string {

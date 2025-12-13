@@ -6,19 +6,19 @@ import (
 
 	"github.com/pkg/errors"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common"
+	"gitee.com/bychannel/aniwar/src/common"
 
-	"gitlab.musadisca-games.com/wangxw/musae/framework/global"
+	"gitee.com/bychannel/musae/framework/global"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/conf"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/db"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/baseconf"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/errorx"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/metrics"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/tcpx"
+	"gitee.com/bychannel/aniwar/src/common/conf"
+	"gitee.com/bychannel/aniwar/src/common/db"
+	"gitee.com/bychannel/aniwar/src/proto/pb"
+	"gitee.com/bychannel/musae/framework/base"
+	"gitee.com/bychannel/musae/framework/baseconf"
+	"gitee.com/bychannel/musae/framework/errorx"
+	"gitee.com/bychannel/musae/framework/logger"
+	"gitee.com/bychannel/musae/framework/metrics"
+	"gitee.com/bychannel/musae/framework/tcpx"
 	"google.golang.org/protobuf/proto"
 )
 

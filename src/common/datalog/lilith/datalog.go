@@ -5,13 +5,13 @@ package lilith
 //	"fmt"
 //	"time"
 //
-//	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/conf"
-//	myUtils "gitlab.musadisca-games.com/wangxw/aniwar/src/common/utils"
-//	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
-//	"gitlab.musadisca-games.com/wangxw/musae/framework/dlog"
-//	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
-//	"gitlab.musadisca-games.com/wangxw/musae/framework/threading"
-//	"gitlab.musadisca-games.com/wangxw/musae/framework/utils"
+//	"gitee.com/bychannel/aniwar/src/common/conf"
+//	myUtils "gitee.com/bychannel/aniwar/src/common/utils"
+//	"gitee.com/bychannel/aniwar/src/proto/pb"
+//	"gitee.com/bychannel/musae/framework/dlog"
+//	"gitee.com/bychannel/musae/framework/logger"
+//	"gitee.com/bychannel/musae/framework/threading"
+//	"gitee.com/bychannel/musae/framework/utils"
 // )
 //
 // const (

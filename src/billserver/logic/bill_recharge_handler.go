@@ -8,24 +8,24 @@ import (
 	"net/url"
 	"strconv"
 
-	"gitlab.musadisca-games.com/wangxw/musae/framework/utils"
+	"gitee.com/bychannel/musae/framework/utils"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/com_order"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
+	"gitee.com/bychannel/aniwar/src/common/com_order"
+	"gitee.com/bychannel/aniwar/src/proto/pb"
+	"gitee.com/bychannel/musae/framework/base"
 	"google.golang.org/protobuf/proto"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/sdkconstant/sdksign"
+	"gitee.com/bychannel/aniwar/src/common/sdkconstant/sdksign"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/conf"
-	gameUtils "gitlab.musadisca-games.com/wangxw/aniwar/src/common/utils"
+	"gitee.com/bychannel/aniwar/src/common/conf"
+	gameUtils "gitee.com/bychannel/aniwar/src/common/utils"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/idipserver/logic"
+	"gitee.com/bychannel/aniwar/src/idipserver/logic"
 
 	"github.com/dapr/go-sdk/service/common"
 	"github.com/pkg/errors"
 
-	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
+	"gitee.com/bychannel/musae/framework/logger"
 )
 
 func (s *BillServer) PayHandler(ctx context.Context, in *common.InvocationEvent) (out *common.Content, err error) {

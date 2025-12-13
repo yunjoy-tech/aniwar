@@ -1,9 +1,9 @@
 package useractor
 
 import (
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/actorserver/useractor/event"
-	excel "gitlab.musadisca-games.com/wangxw/aniwar/src/excel/data"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
+	"gitee.com/bychannel/aniwar/src/actorserver/useractor/event"
+	excel "gitee.com/bychannel/aniwar/src/excel/data"
+	"gitee.com/bychannel/aniwar/src/proto/pb"
 	"time"
 )
 

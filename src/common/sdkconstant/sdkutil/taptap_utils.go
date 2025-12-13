@@ -4,15 +4,15 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
+	"gitee.com/bychannel/aniwar/src/proto/pb"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/conf"
+	"gitee.com/bychannel/aniwar/src/common/conf"
 
 	"github.com/pkg/errors"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/sdkconstant"
-	myHttp "gitlab.musadisca-games.com/wangxw/musae/framework/http"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
+	"gitee.com/bychannel/aniwar/src/common/sdkconstant"
+	myHttp "gitee.com/bychannel/musae/framework/http"
+	"gitee.com/bychannel/musae/framework/logger"
 )
 
 type TapUrlResp struct {

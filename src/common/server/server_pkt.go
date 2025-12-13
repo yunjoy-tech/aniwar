@@ -1,10 +1,10 @@
 package server
 
 import (
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/errorx"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/tcpx"
+	"gitee.com/bychannel/aniwar/src/proto/pb"
+	"gitee.com/bychannel/musae/framework/errorx"
+	"gitee.com/bychannel/musae/framework/logger"
+	"gitee.com/bychannel/musae/framework/tcpx"
 	"google.golang.org/protobuf/proto"
 )
 

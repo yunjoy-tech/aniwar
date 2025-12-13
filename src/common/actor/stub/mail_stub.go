@@ -3,8 +3,8 @@ package stub
 import (
 	"context"
 
-	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/global"
+	"gitee.com/bychannel/musae/framework/base"
+	"gitee.com/bychannel/musae/framework/global"
 )
 
 type MailStub struct {

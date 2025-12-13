@@ -3,31 +3,31 @@ package logic
 import (
 	"context"
 	"fmt"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/datalog/taptap"
+	"gitee.com/bychannel/aniwar/src/common/datalog/taptap"
 	"os"
 	"sync"
 	"time"
 
-	"gitlab.musadisca-games.com/wangxw/musae/framework/utils"
+	"gitee.com/bychannel/musae/framework/utils"
 	"google.golang.org/protobuf/proto"
 
 	"github.com/pkg/errors"
 
-	myCommon "gitlab.musadisca-games.com/wangxw/aniwar/src/common"
+	myCommon "gitee.com/bychannel/aniwar/src/common"
 
-	comn "gitlab.musadisca-games.com/wangxw/aniwar/src/common/server"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/global"
+	comn "gitee.com/bychannel/aniwar/src/common/server"
+	"gitee.com/bychannel/musae/framework/global"
 
+	"gitee.com/bychannel/aniwar/src/common/conf"
+	"gitee.com/bychannel/aniwar/src/proto/pb"
+	"gitee.com/bychannel/musae/framework/base"
+	"gitee.com/bychannel/musae/framework/baseconf"
+	"gitee.com/bychannel/musae/framework/logger"
+	"gitee.com/bychannel/musae/framework/metrics"
+	svc "gitee.com/bychannel/musae/framework/service"
+	"gitee.com/bychannel/musae/framework/tcpx"
+	"gitee.com/bychannel/musae/framework/threading"
 	"github.com/dapr/go-sdk/service/common"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/conf"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/baseconf"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/metrics"
-	svc "gitlab.musadisca-games.com/wangxw/musae/framework/service"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/tcpx"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/threading"
 )
 
 type GateServer struct {

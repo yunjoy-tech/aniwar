@@ -3,7 +3,7 @@ package common
 import (
 	"fmt"
 	"time"
-	//"gitlab.musadisca-games.com/wangxw/aniwar/src/common"
+	// "gitee.com/bychannel/aniwar/src/common"
 )
 
 const (
@@ -28,7 +28,7 @@ func ParseDate(dateStr string) (time.Time, error) {
 // ParseDate2 字符串转时间
 func ParseDate2(year, month, day, hour, minute, second int) (time.Time, error) {
 	dateStr := fmt.Sprintf("%04d/%02d/%02d %02d:%02d:%02d", year, month, day, hour, minute, second)
-	//fmt.Println(dateStr)
+	// fmt.Println(dateStr)
 	return ParseDate(dateStr)
 }
 

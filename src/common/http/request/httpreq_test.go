@@ -2,10 +2,10 @@ package request_test
 
 import (
 	"fmt"
+	"gitee.com/bychannel/aniwar/src/common/http/ctype"
+	"gitee.com/bychannel/aniwar/src/common/http/request"
+	"gitee.com/bychannel/aniwar/src/common/utils"
 	"github.com/stretchr/testify/assert"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/http/ctype"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/http/request"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/utils"
 	"testing"
 )
 

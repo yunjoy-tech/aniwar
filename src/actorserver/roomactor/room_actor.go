@@ -1,19 +1,19 @@
 package roomactor
 
 import (
-	"gitlab.musadisca-games.com/wangxw/musae/framework/baseconf"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/threading"
+	"gitee.com/bychannel/musae/framework/baseconf"
+	"gitee.com/bychannel/musae/framework/threading"
 	"strconv"
 	"time"
 
+	"gitee.com/bychannel/aniwar/src/actorserver/frame"
+	"gitee.com/bychannel/aniwar/src/proto/pb"
+	"gitee.com/bychannel/musae/framework/baseactor"
+	"gitee.com/bychannel/musae/framework/global"
+	"gitee.com/bychannel/musae/framework/service"
+	svc "gitee.com/bychannel/musae/framework/service"
 	"github.com/dapr/go-sdk/actor"
 	_ "github.com/dapr/go-sdk/actor"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/actorserver/frame"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/baseactor"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/global"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/service"
-	svc "gitlab.musadisca-games.com/wangxw/musae/framework/service"
 )
 
 type RoomData struct {

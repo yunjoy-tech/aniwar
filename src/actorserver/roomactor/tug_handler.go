@@ -5,20 +5,20 @@ import (
 	"fmt"
 	"time"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/datahelper"
+	"gitee.com/bychannel/aniwar/src/common/datahelper"
 
-	myUtils "gitlab.musadisca-games.com/wangxw/aniwar/src/common/utils"
+	myUtils "gitee.com/bychannel/aniwar/src/common/utils"
 
-	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
+	"gitee.com/bychannel/musae/framework/base"
 
-	"gitlab.musadisca-games.com/wangxw/musae/framework/utils"
+	"gitee.com/bychannel/musae/framework/utils"
 
-	"gitlab.musadisca-games.com/wangxw/musae/framework/threading"
+	"gitee.com/bychannel/musae/framework/threading"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/db"
+	"gitee.com/bychannel/aniwar/src/common/db"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/service"
+	"gitee.com/bychannel/aniwar/src/proto/pb"
+	"gitee.com/bychannel/musae/framework/service"
 	"google.golang.org/protobuf/proto"
 )
 

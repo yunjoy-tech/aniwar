@@ -3,31 +3,31 @@ package useractor
 import (
 	"context"
 	"fmt"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/datalog/taptap"
+	"gitee.com/bychannel/aniwar/src/common/datalog/taptap"
 	"strconv"
 
+	"gitee.com/bychannel/aniwar/src/actorserver/frame"
 	"github.com/dapr/go-sdk/actor"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/actorserver/frame"
 
+	"gitee.com/bychannel/aniwar/src/common/clidto"
 	"github.com/pkg/errors"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/clidto"
 
-	"gitlab.musadisca-games.com/wangxw/musae/framework/service"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/state"
+	"gitee.com/bychannel/musae/framework/service"
+	"gitee.com/bychannel/musae/framework/state"
 
-	"gitlab.musadisca-games.com/wangxw/musae/framework/baseconf"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/global"
+	"gitee.com/bychannel/musae/framework/baseconf"
+	"gitee.com/bychannel/musae/framework/global"
 
 	"time"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/actorserver/useractor/event"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/db"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/baseactor"
-	svc "gitlab.musadisca-games.com/wangxw/musae/framework/service"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/threading"
+	"gitee.com/bychannel/aniwar/src/actorserver/useractor/event"
+	"gitee.com/bychannel/aniwar/src/common"
+	"gitee.com/bychannel/aniwar/src/common/db"
+	"gitee.com/bychannel/aniwar/src/proto/pb"
+	"gitee.com/bychannel/musae/framework/base"
+	"gitee.com/bychannel/musae/framework/baseactor"
+	svc "gitee.com/bychannel/musae/framework/service"
+	"gitee.com/bychannel/musae/framework/threading"
 	"google.golang.org/protobuf/proto"
 )
 

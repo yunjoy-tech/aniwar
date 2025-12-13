@@ -1,8 +1,9 @@
-module gitlab.musadisca-games.com/wangxw/aniwar
+module gitee.com/bychannel/aniwar
 
 go 1.22
 
 require (
+	gitee.com/bychannel/musae v0.1.1-0.20220906131011-54e969989540
 	github.com/aliyun/aliyun-oss-go-sdk v2.2.7+incompatible
 	github.com/dapr/go-sdk v1.6.0
 	github.com/elastic/go-elasticsearch/v8 v8.7.1
@@ -14,9 +15,7 @@ require (
 	github.com/speps/go-hashids v2.0.0+incompatible
 	github.com/stretchr/testify v1.8.2
 	github.com/xuri/excelize/v2 v2.7.0
-	gitlab.musadisca-games.com/wangxw/musae v0.1.1-0.20220906131011-54e969989540
 	go.uber.org/zap v1.21.0
-	google.golang.org/genproto v0.0.0-20220622171453-ea41d75dfa0f
 	google.golang.org/grpc v1.48.0
 	google.golang.org/protobuf v1.28.0
 )
@@ -69,12 +68,13 @@ require (
 	golang.org/x/sys v0.7.0 // indirect
 	golang.org/x/text v0.6.0 // indirect
 	golang.org/x/time v0.0.0-20191024005414-555d28b269f0 // indirect
+	google.golang.org/genproto v0.0.0-20220622171453-ea41d75dfa0f // indirect
 	gopkg.in/natefinch/lumberjack.v2 v2.0.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
-replace gitlab.musadisca-games.com/wangxw/musae => ../musae/
+replace gitee.com/bychannel/musae => ../musae/
 
 replace github.com/dapr/go-sdk v1.6.0 => github.com/wXwcoder/go-sdk v1.6.9 // indirect
 

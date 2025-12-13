@@ -6,7 +6,7 @@ import (
 
 	"fmt"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/excel/data"
+	"gitee.com/bychannel/aniwar/src/excel/data"
 )
 
 // RandomByWeightVo 根据WeightVo随机权重

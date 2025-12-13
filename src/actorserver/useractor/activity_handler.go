@@ -6,24 +6,24 @@ import (
 	"strconv"
 	"time"
 
-	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
+	"gitee.com/bychannel/musae/framework/logger"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/actorserver/useractor/event"
+	"gitee.com/bychannel/aniwar/src/actorserver/useractor/event"
 
 	"github.com/pkg/errors"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/datahelper"
+	"gitee.com/bychannel/aniwar/src/common/datahelper"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/utils"
+	"gitee.com/bychannel/aniwar/src/common/utils"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common"
+	"gitee.com/bychannel/aniwar/src/common"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/excel/data"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
+	"gitee.com/bychannel/aniwar/src/excel/data"
+	"gitee.com/bychannel/musae/framework/base"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/db"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/service"
+	"gitee.com/bychannel/aniwar/src/common/db"
+	"gitee.com/bychannel/aniwar/src/proto/pb"
+	"gitee.com/bychannel/musae/framework/service"
 	"google.golang.org/protobuf/proto"
 )
 

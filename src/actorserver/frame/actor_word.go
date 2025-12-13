@@ -7,9 +7,9 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/db"
-	excel "gitlab.musadisca-games.com/wangxw/aniwar/src/excel/data"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/wordfilter"
+	"gitee.com/bychannel/aniwar/src/common/db"
+	excel "gitee.com/bychannel/aniwar/src/excel/data"
+	"gitee.com/bychannel/musae/framework/wordfilter"
 	"math/rand"
 	"net/http"
 	"net/url"
@@ -19,11 +19,11 @@ import (
 	"time"
 	"unicode"
 
-	myCommon "gitlab.musadisca-games.com/wangxw/aniwar/src/common"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/conf"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/http/request"
-	myUtils "gitlab.musadisca-games.com/wangxw/aniwar/src/common/utils"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
+	myCommon "gitee.com/bychannel/aniwar/src/common"
+	"gitee.com/bychannel/aniwar/src/common/conf"
+	"gitee.com/bychannel/aniwar/src/common/http/request"
+	myUtils "gitee.com/bychannel/aniwar/src/common/utils"
+	"gitee.com/bychannel/musae/framework/logger"
 )
 
 const (
@@ -60,21 +60,21 @@ type UGCResult struct {
 }
 
 type Data struct {
-	Replaced   string      `json:"replaced"`   //文字内容，发现敏感词替换内容
-	Suggestion string      `json:"suggestion"` //pass,review,block，通过，建议审核，拦截
-	Label      string      `json:"label"`      //内容安全标签
-	Score      int         `json:"score"`      //置信度 范围：[0,100]
-	Details    []WordMatch `json:"details"`    //命中敏感词是有输出
-	TaskId     string      `json:"task_Id"`    //任务ID
-	Manual     bool        `json:"manual"`     //是否有人工审核的流程，如果为true，那么就等待着回调吧
-	Async      bool        `json:"async"`      //2021-03-24 新增，如果是异步审核，比如视频，那么就为true,那就等待回调吧
+	Replaced   string      `json:"replaced"`   // 文字内容，发现敏感词替换内容
+	Suggestion string      `json:"suggestion"` // pass,review,block，通过，建议审核，拦截
+	Label      string      `json:"label"`      // 内容安全标签
+	Score      int         `json:"score"`      // 置信度 范围：[0,100]
+	Details    []WordMatch `json:"details"`    // 命中敏感词是有输出
+	TaskId     string      `json:"task_Id"`    // 任务ID
+	Manual     bool        `json:"manual"`     // 是否有人工审核的流程，如果为true，那么就等待着回调吧
+	Async      bool        `json:"async"`      // 2021-03-24 新增，如果是异步审核，比如视频，那么就为true,那就等待回调吧
 }
 
 // WordMatch 敏感词
 type WordMatch struct {
-	Word  string `json:"word"`  //命中敏感词
-	Start int    `json:"start"` //开始位置
-	End   int    `json:"end"`   //结束位置
+	Word  string `json:"word"`  // 命中敏感词
+	Start int    `json:"start"` // 开始位置
+	End   int    `json:"end"`   // 结束位置
 }
 
 // CheckSpecialLetters

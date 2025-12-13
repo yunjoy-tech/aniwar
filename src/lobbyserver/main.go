@@ -1,8 +1,8 @@
 package main
 
 import (
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/lobbyserver/logic"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/process"
+	"gitee.com/bychannel/aniwar/src/lobbyserver/logic"
+	"gitee.com/bychannel/musae/framework/process"
 )
 
 func main() {

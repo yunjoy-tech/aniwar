@@ -1,9 +1,9 @@
 package main
 
 import (
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/gateserver/logic"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/elog"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/process"
+	"gitee.com/bychannel/aniwar/src/gateserver/logic"
+	"gitee.com/bychannel/musae/framework/elog"
+	"gitee.com/bychannel/musae/framework/process"
 )
 
 func main() {

@@ -1,26 +1,26 @@
 package useractor
 
 //
-//import (
+// import (
 //	"context"
 //	"time"
 //
-//	"gitlab.musadisca-games.com/wangxw/musae/framework/threading"
+//	"gitee.com/bychannel/musae/framework/threading"
 //
-//	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/datalog"
-//	"gitlab.musadisca-games.com/wangxw/musae/framework/global"
+//	"gitee.com/bychannel/aniwar/src/common/datalog"
+//	"gitee.com/bychannel/musae/framework/global"
 //
 //	"github.com/dapr/go-sdk/actor"
-//	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
-//	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
-//)
+//	"gitee.com/bychannel/musae/framework/base"
+//	"gitee.com/bychannel/musae/framework/logger"
+// )
 //
-//type UserActorMode struct {
+// type UserActorMode struct {
 //	actor.ServerImplBase
 //	Player *UserActor
-//}
+// }
 //
-//func NewUserActorMode() actor.Server {
+// func NewUserActorMode() actor.Server {
 //	var (
 //		startT = time.Now()
 //	)
@@ -31,9 +31,9 @@ package useractor
 //	logger.WarnDelayf(time.Since(startT).Milliseconds(), "")
 //
 //	return _actor
-//}
+// }
 //
-//func (s *UserActorMode) Activate() error {
+// func (s *UserActorMode) Activate() error {
 //	var (
 //		err       error
 //		startTime = time.Now()
@@ -43,9 +43,9 @@ package useractor
 //	s.Player.WarnDelayf(time.Since(startTime).Milliseconds(), "")
 //
 //	return err
-//}
+// }
 //
-//func (s *UserActorMode) Deactivate() error {
+// func (s *UserActorMode) Deactivate() error {
 //	var (
 //		err    error
 //		startT = time.Now()
@@ -56,41 +56,41 @@ package useractor
 //	s.Player.WarnDelayf(time.Since(startT).Milliseconds(), "")
 //
 //	return err
-//}
+// }
 //
-//func (s *UserActorMode) Type() string {
+// func (s *UserActorMode) Type() string {
 //	return global.UserActorType
-//}
+// }
 //
-//func (s *UserActorMode) SetID(id string) {
+// func (s *UserActorMode) SetID(id string) {
 //	s.ServerImplBase.SetID(id)
 //	s.Player.SetID(id)
-//}
+// }
 //
-//func (s *UserActorMode) Reload() (err error) {
+// func (s *UserActorMode) Reload() (err error) {
 //	return nil
-//}
+// }
 //
-///*func (s *UserActorMode) GetPlayer() *UserActor {
+// /*func (s *UserActorMode) GetPlayer() *UserActor {
 //	if s.Player == nil {
 //		s.Player = NewUserActor()
 //	}
 //	return s.Player
-//}*/
+// }*/
 //
-//func (s *UserActorMode) SaveState() error {
+// func (s *UserActorMode) SaveState() error {
 //	logger.Debugf("UserActorMode SaveState UserActor, %s.", s.ID())
 //
 //	//s.Player.SetID(s.ID())
 //	return s.Player.SaveState()
-//}
+// }
 //
-//func (s *UserActorMode) Invoke(ctx context.Context, req string) (string, error) {
+// func (s *UserActorMode) Invoke(ctx context.Context, req string) (string, error) {
 //	logger.Debug("get req = ", req)
 //	return req, nil
-//}
+// }
 //
-//func (s *UserActorMode) UserInvoke(ctx context.Context, req *base.ProtoMsg) (*base.ProtoMsg, error) {
+// func (s *UserActorMode) UserInvoke(ctx context.Context, req *base.ProtoMsg) (*base.ProtoMsg, error) {
 //	var (
 //		err    error
 //		msg    *base.ProtoMsg
@@ -105,9 +105,9 @@ package useractor
 //	s.Player.WarnDelayf(time.Since(startT).Milliseconds(), "")
 //
 //	return msg, err
-//}
+// }
 //
-//func (s *UserActorMode) Hour0Handler(ctx context.Context, params []byte) error {
+// func (s *UserActorMode) Hour0Handler(ctx context.Context, params []byte) error {
 //	logger.Debugf("====>>> Hour0Handler")
 //
 //	//判断玩家是否在线跨0点, 跨天日志埋点
@@ -122,9 +122,9 @@ package useractor
 //	})
 //
 //	return nil
-//}
+// }
 //
-//func (s *UserActorMode) Hour5Handler(ctx context.Context, params []byte) error {
+// func (s *UserActorMode) Hour5Handler(ctx context.Context, params []byte) error {
 //	logger.Debugf("====>>> Hour5Handler")
 //	if s.Player.GetState() == State_None || s.Player.GetState() == State_DeActive {
 //		return nil
@@ -150,4 +150,4 @@ package useractor
 //	//}
 //
 //	return nil
-//}
+// }

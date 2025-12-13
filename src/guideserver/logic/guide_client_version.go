@@ -4,17 +4,17 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/datalog/taptap"
+	"gitee.com/bychannel/aniwar/src/common/datalog/taptap"
 	"time"
 
-	"gitlab.musadisca-games.com/wangxw/musae/framework/global"
+	"gitee.com/bychannel/musae/framework/global"
 
+	"gitee.com/bychannel/aniwar/src/common/conf"
+	"gitee.com/bychannel/aniwar/src/common/db"
+	"gitee.com/bychannel/aniwar/src/common/server"
+	"gitee.com/bychannel/musae/framework/logger"
+	"gitee.com/bychannel/musae/framework/metrics"
 	"github.com/dapr/go-sdk/service/common"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/conf"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/db"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/server"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/metrics"
 )
 
 func (s *GuideServer) Version(ctx context.Context, in *common.InvocationEvent) (out *common.Content, err error) {
@@ -49,10 +49,10 @@ func (s *GuideServer) getVersionInfo(in *common.InvocationEvent) ([]byte, string
 	if in == nil || len(in.Data) > conf.Base().GateMsgMaxSize {
 		return nil, "", 0, fmt.Errorf("invocation parameter error")
 	}
-	//logger.Debugf("[guide] [LoginStep] /api/version - ContentType:%s, Verb:%s, QueryString:%s, data:%v", in.ContentType, in.Verb, in.QueryString, string(in.Data))
+	// logger.Debugf("[guide] [LoginStep] /api/version - ContentType:%s, Verb:%s, QueryString:%s, data:%v", in.ContentType, in.Verb, in.QueryString, string(in.Data))
 
-	//account check
-	//account := in.Request.Header.Get("account")
+	// account check
+	// account := in.Request.Header.Get("account")
 
 	req := &server.VerReq{}
 	if err := json.Unmarshal(in.Data, req); err != nil {
@@ -60,7 +60,7 @@ func (s *GuideServer) getVersionInfo(in *common.InvocationEvent) ([]byte, string
 		return nil, req.AccountId, req.Platform, err
 	}
 	version := &server.Version{}
-	//获取当前版本号
+	// 获取当前版本号
 	platform := s.GetPlatform(req.Platform)
 	updateVersion, err := s.GetUpdateVersionByChannel(platform)
 	if err != nil {
@@ -69,7 +69,7 @@ func (s *GuideServer) getVersionInfo(in *common.InvocationEvent) ([]byte, string
 	}
 	version.UpdateVersion = updateVersion
 
-	//获取当前版本号对应的jenkins流水号
+	// 获取当前版本号对应的jenkins流水号
 	updateVersionJenkins, err := s.GetJenkinsVersionByOnlineVersion(version.UpdateVersion)
 	if err != nil {
 		logger.Warnf("[guide] /api/version, minVersion err: %v,data: %s", err, string(in.Data))
@@ -77,7 +77,7 @@ func (s *GuideServer) getVersionInfo(in *common.InvocationEvent) ([]byte, string
 	}
 	version.DownloadPath = updateVersionJenkins
 
-	//channel := strings.ToLower(req.Platform)
+	// channel := strings.ToLower(req.Platform)
 	switch platform {
 	case "android":
 		version.UpdateAddr = conf.GConf().SrvAddr.UpdateAddrARD

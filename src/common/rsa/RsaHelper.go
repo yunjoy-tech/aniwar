@@ -2,14 +2,14 @@ package rsa
 
 import (
 	"encoding/base64"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/tls"
+	"gitee.com/bychannel/aniwar/src/common/tls"
 
-	"gitlab.musadisca-games.com/wangxw/musae/framework/tcpx"
+	"gitee.com/bychannel/musae/framework/tcpx"
 
+	myUtils "gitee.com/bychannel/aniwar/src/common/utils"
+	"gitee.com/bychannel/musae/framework/errorx"
+	"gitee.com/bychannel/musae/framework/logger"
 	"github.com/forgoer/openssl"
-	myUtils "gitlab.musadisca-games.com/wangxw/aniwar/src/common/utils"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/errorx"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
 )
 
 func CreateSrvRsaKey(c *tcpx.Context, base64CliRsaKey string) (string, string, string) {
@@ -38,7 +38,7 @@ func CreateSrvRsaKey(c *tcpx.Context, base64CliRsaKey string) (string, string, s
 
 	// 服务器随机码 AES(cbc)加密
 	srvKeyEncrypt, err := openssl.AesCBCEncrypt([]byte(srvKey), []byte(cliKey), make([]byte, 16), openssl.PKCS7_PADDING)
-	//fmt.Printf(base64.StdEncoding.EncodeToString(srvKeyEncrypt))
+	// fmt.Printf(base64.StdEncoding.EncodeToString(srvKeyEncrypt))
 	if err != nil {
 		logger.Debugf(err.Error())
 		return "", "", ""

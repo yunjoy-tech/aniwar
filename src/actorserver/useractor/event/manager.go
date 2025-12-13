@@ -1,7 +1,7 @@
 package event
 
 import (
-	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
+	"gitee.com/bychannel/musae/framework/logger"
 	"strings"
 	"sync"
 )
@@ -44,7 +44,7 @@ func NewManager(name string) *Manager {
 	}
 
 	// 废弃，改成同步
-	//threading.GoSafe(func() {
+	// threading.GoSafe(func() {
 	//	func(em *Manager) {
 	//		for {
 	//			select {
@@ -58,7 +58,7 @@ func NewManager(name string) *Manager {
 	//			}
 	//		}
 	//	}(em)
-	//})
+	// })
 
 	return em
 }
@@ -160,9 +160,9 @@ func (em *Manager) MustPublish(name string, params M) IEvent {
 
 // AsyncPublish async publish event by 'go' keywords
 func (em *Manager) AsyncPublish(e IEvent) {
-	//go func(e IEvent) {
+	// go func(e IEvent) {
 	//	_ = em.publish(e)
-	//}(e)
+	// }(e)
 
 	// 优化: 启动channel进行事件发布，启动单独的goroutine进行处理
 	em.eventCh <- e

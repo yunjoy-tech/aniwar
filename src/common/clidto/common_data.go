@@ -3,9 +3,9 @@ package clidto
 import (
 	"time"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common"
+	"gitee.com/bychannel/aniwar/src/common"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
+	"gitee.com/bychannel/aniwar/src/proto/pb"
 )
 
 type Comdata struct {

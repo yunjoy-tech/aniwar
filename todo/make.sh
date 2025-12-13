@@ -42,7 +42,7 @@ fi
 #go env -w GOPROXY=https://goproxy.cn,https://gitlab.musadisca-games.com/wangxw,direct
 #go env -w GOPRIVATE="*.musadisca-games.com"
 #go env -w GONOSUMDB=gitlab.musadisca-games.com
-#GIT_TERMINAL_PROMPT=1 go get -u  gitlab.musadisca-games.com/wangxw/musae@main
+#GIT_TERMINAL_PROMPT=1 go get -u  gitee.com/bychannel/musae@main
 
 #RACE="-race"
 RACE=""
@@ -58,9 +58,9 @@ else
 fi
 
 echo ${GoVersion}
-LDFLAGS=-ldflags="-X gitlab.musadisca-games.com/wangxw/musae/framework/global.APP_VERSION=${VERSION}|${DOCKER_TAG}|${BuildVersion}|${BuildTime} -X gitlab.musadisca-games.com/wangxw/musae/framework/global.VERSION=${VERSION}"
+LDFLAGS=-ldflags="-X gitee.com/bychannel/musae/framework/global.APP_VERSION=${VERSION}|${DOCKER_TAG}|${BuildVersion}|${BuildTime} -X gitee.com/bychannel/musae/framework/global.VERSION=${VERSION}"
 if [[ $2 == "release" ]]; then
-  LDFLAGS=-ldflags="-X gitlab.musadisca-games.com/wangxw/musae/framework/global.APP_VERSION=${VERSION}|${DOCKER_TAG}|${BuildVersion}|${BuildTime} -X gitlab.musadisca-games.com/wangxw/musae/framework/global.VERSION=${VERSION} -w"
+  LDFLAGS=-ldflags="-X gitee.com/bychannel/musae/framework/global.APP_VERSION=${VERSION}|${DOCKER_TAG}|${BuildVersion}|${BuildTime} -X gitee.com/bychannel/musae/framework/global.VERSION=${VERSION} -w"
 fi
 
 echo ${LDFLAGS}

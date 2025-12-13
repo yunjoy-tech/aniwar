@@ -1,7 +1,7 @@
 package utils
 
 import (
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
+	"gitee.com/bychannel/aniwar/src/proto/pb"
 	"sort"
 )
 

@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"strings"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/http/ctype"
+	"gitee.com/bychannel/aniwar/src/common/http/ctype"
 )
 
 // Req an simple http requester.

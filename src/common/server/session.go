@@ -7,18 +7,18 @@ import (
 	"strconv"
 	"time"
 
-	"gitlab.musadisca-games.com/wangxw/musae/framework/utils"
+	"gitee.com/bychannel/musae/framework/utils"
 
-	"gitlab.musadisca-games.com/wangxw/musae/framework/global"
+	"gitee.com/bychannel/musae/framework/global"
 
+	"gitee.com/bychannel/musae/framework/logger"
 	dapr "github.com/dapr/go-sdk/client"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
 
+	"gitee.com/bychannel/aniwar/src/common/conf"
+	"gitee.com/bychannel/aniwar/src/common/db"
+	"gitee.com/bychannel/aniwar/src/proto/pb"
+	"gitee.com/bychannel/musae/framework/service"
 	"github.com/pkg/errors"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/conf"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/db"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/service"
 )
 
 func (s *Server) GetUserSession(uid string) (*pb.UserSession, error, pb.ErrorCode) {

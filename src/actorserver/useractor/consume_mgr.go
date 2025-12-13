@@ -3,17 +3,17 @@ package useractor
 import (
 	"errors"
 	"fmt"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/datahelper"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/utils"
+	"gitee.com/bychannel/aniwar/src/common/datahelper"
+	"gitee.com/bychannel/aniwar/src/common/utils"
 	"time"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/actorserver/useractor/event"
+	"gitee.com/bychannel/aniwar/src/actorserver/useractor/event"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/clidto"
+	"gitee.com/bychannel/aniwar/src/common/clidto"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common"
-	excel "gitlab.musadisca-games.com/wangxw/aniwar/src/excel/data"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
+	"gitee.com/bychannel/aniwar/src/common"
+	excel "gitee.com/bychannel/aniwar/src/excel/data"
+	"gitee.com/bychannel/aniwar/src/proto/pb"
 )
 
 type ConsumeMgr struct {

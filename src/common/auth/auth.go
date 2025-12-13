@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 	"time"
 
+	"gitee.com/bychannel/musae/framework/global"
+	"gitee.com/bychannel/musae/framework/utils"
 	"github.com/forgoer/openssl"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/global"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/utils"
 )
 
 type Token struct {
@@ -46,41 +46,41 @@ func EncodeAuthToken(uid, channel, uuid string, lifeTime int64) (string, error) 
 		CreatedTime: createdTime,
 		ExpiredTime: expiredTime,
 	}
-	//logger.Debugf("session: %+v\n", session)
+	// logger.Debugf("session: %+v\n", session)
 	data, err := json.Marshal(session)
 	if err != nil || len(data) == 0 {
 		return "", err
 	}
-	//logger.Debug("src:", len(data), data)
+	// logger.Debug("src:", len(data), data)
 	data, err = openssl.AesECBEncrypt(data, []byte(AuthTokenSecret), openssl.PKCS7_PADDING)
 	if err != nil || len(data) == 0 {
 		return "", err
 	}
-	//logger.Debug("aes:", len(data), data)
+	// logger.Debug("aes:", len(data), data)
 	code := base64.StdEncoding.EncodeToString(data)
-	//logger.Debug("code:", len(code), []byte(code))
+	// logger.Debug("code:", len(code), []byte(code))
 	return code, nil
 }
 
 func DecodeAuthToken(token []byte) (*Token, error) {
-	//logger.Debug("code:", len(token), token)
+	// logger.Debug("code:", len(token), token)
 	code, err := base64.StdEncoding.DecodeString(string(token))
 	if err != nil || len(code) == 0 {
 		return nil, err
 	}
-	//logger.Debug("aes:", len(code), code)
+	// logger.Debug("aes:", len(code), code)
 	data, err := openssl.AesECBDecrypt(code, []byte(AuthTokenSecret), openssl.PKCS7_PADDING)
 	if err != nil || len(data) == 0 {
 		return nil, err
 	}
-	//logger.Debug("src:", len(data), data)
+	// logger.Debug("src:", len(data), data)
 	session := &Token{}
 	err = json.Unmarshal(data, session)
 	if err != nil {
 		return nil, err
 	}
 
-	//logger.Debugf("session: %+v\n", session)
+	// logger.Debugf("session: %+v\n", session)
 	return session, nil
 
 }

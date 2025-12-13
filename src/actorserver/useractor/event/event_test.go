@@ -3,7 +3,7 @@ package event_test
 import (
 	"bytes"
 	"fmt"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/actorserver/useractor/event"
+	"gitee.com/bychannel/aniwar/src/actorserver/useractor/event"
 	"sync"
 	"testing"
 	"time"

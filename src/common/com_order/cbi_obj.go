@@ -4,11 +4,11 @@ import (
 	"encoding/base64"
 	"encoding/json"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/aes"
+	"gitee.com/bychannel/aniwar/src/common/aes"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/db"
+	"gitee.com/bychannel/aniwar/src/common/db"
 
-	"gitlab.musadisca-games.com/wangxw/musae/framework/service"
+	"gitee.com/bychannel/musae/framework/service"
 )
 
 // CBI_AES_KEY AES加解密的key

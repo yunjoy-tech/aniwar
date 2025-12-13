@@ -7,12 +7,12 @@ import (
 	"sync"
 	"testing"
 
-	"gitlab.musadisca-games.com/wangxw/musae/framework/threading"
+	"gitee.com/bychannel/musae/framework/threading"
 
-	baseconf "gitlab.musadisca-games.com/wangxw/aniwar/src/common/conf"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
+	baseconf "gitee.com/bychannel/aniwar/src/common/conf"
+	"gitee.com/bychannel/musae/framework/logger"
 
-	excel "gitlab.musadisca-games.com/wangxw/aniwar/src/excel/data"
+	excel "gitee.com/bychannel/aniwar/src/excel/data"
 )
 
 func init() {

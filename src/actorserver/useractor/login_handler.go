@@ -3,33 +3,33 @@ package useractor
 import (
 	"context"
 	"fmt"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/builder"
+	"gitee.com/bychannel/aniwar/src/common/builder"
 	"strconv"
 	"time"
 	"unicode/utf8"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/datalog/taptap"
+	"gitee.com/bychannel/aniwar/src/common/datalog/taptap"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/server"
+	"gitee.com/bychannel/aniwar/src/common/server"
 
-	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
+	"gitee.com/bychannel/musae/framework/logger"
 
 	"github.com/pkg/errors"
 
-	"gitlab.musadisca-games.com/wangxw/musae/framework/threading"
+	"gitee.com/bychannel/musae/framework/threading"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/clidto"
-	myUtils "gitlab.musadisca-games.com/wangxw/aniwar/src/common/utils"
+	"gitee.com/bychannel/aniwar/src/common/clidto"
+	myUtils "gitee.com/bychannel/aniwar/src/common/utils"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/conf"
+	"gitee.com/bychannel/aniwar/src/common/conf"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/actorserver/useractor/event"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/db"
-	excel "gitlab.musadisca-games.com/wangxw/aniwar/src/excel/data"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/service"
+	"gitee.com/bychannel/aniwar/src/actorserver/useractor/event"
+	"gitee.com/bychannel/aniwar/src/common"
+	"gitee.com/bychannel/aniwar/src/common/db"
+	excel "gitee.com/bychannel/aniwar/src/excel/data"
+	"gitee.com/bychannel/aniwar/src/proto/pb"
+	"gitee.com/bychannel/musae/framework/base"
+	"gitee.com/bychannel/musae/framework/service"
 	"google.golang.org/protobuf/proto"
 )
 

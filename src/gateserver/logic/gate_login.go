@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"time"
 
-	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
+	"gitee.com/bychannel/musae/framework/base"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/tcpx"
+	"gitee.com/bychannel/aniwar/src/proto/pb"
+	"gitee.com/bychannel/musae/framework/logger"
+	"gitee.com/bychannel/musae/framework/tcpx"
 )
 
 func (s *GateServer) HandleLoginGame(c *tcpx.Context, session *pb.UserSession, messageID int32, data []byte, reqIdx uint32) ([]byte, *base.RpcError) {

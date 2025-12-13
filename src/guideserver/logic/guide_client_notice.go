@@ -3,10 +3,10 @@ package logic
 import (
 	"context"
 	"fmt"
+	"gitee.com/bychannel/aniwar/src/common/conf"
+	"gitee.com/bychannel/aniwar/src/common/db"
+	"gitee.com/bychannel/musae/framework/logger"
 	"github.com/dapr/go-sdk/service/common"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/conf"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/db"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
 	"time"
 )
 
@@ -35,8 +35,8 @@ func (s *GuideServer) getNoticeInfo(in *common.InvocationEvent) ([]byte, error) 
 		return nil, fmt.Errorf("invocation parameter error")
 	}
 
-	//noticeList := make([]*comn.Notice, 0)
-	//获取当前公告
+	// noticeList := make([]*comn.Notice, 0)
+	// 获取当前公告
 
 	notice, err := s.GetConfigKeyForStr(db.KeyCfgServerNotice)
 	/*data, err := json.Marshal(noticeList)

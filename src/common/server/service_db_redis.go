@@ -5,17 +5,17 @@ import (
 	"encoding/json"
 	"time"
 
+	"gitee.com/bychannel/musae/framework/baseconf"
+	"gitee.com/bychannel/musae/framework/utils"
 	"github.com/pkg/errors"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/baseconf"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/utils"
 
-	"gitlab.musadisca-games.com/wangxw/musae/framework/service"
+	"gitee.com/bychannel/musae/framework/service"
 
+	"gitee.com/bychannel/musae/framework/global"
+	"gitee.com/bychannel/musae/framework/logger"
+	"gitee.com/bychannel/musae/framework/metrics"
+	"gitee.com/bychannel/musae/framework/state"
 	dapr "github.com/dapr/go-sdk/client"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/global"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/metrics"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/state"
 )
 
 func (s *Server) SaveGlobalRedis(key string, table *state.KvTable, meta map[string]string, so ...dapr.StateOption) error {
@@ -92,7 +92,7 @@ func (s *Server) SaveRedisTransaction(db service.RedisDbType, meta map[string]st
 
 	ctx, _ := context.WithTimeout(context.Background(), global.DB_INVOKE_TIMEOUT*time.Second)
 	now := time.Now()
-	//err := s.Daprc.ExecuteStateTransaction(ctx, string(db), meta, opts)
+	// err := s.Daprc.ExecuteStateTransaction(ctx, string(db), meta, opts)
 	_, err = utils.RetryDoSyncInterval(
 		baseconf.GetBaseConf().AniwarDbSetRetryCount,
 		baseconf.GetBaseConf().AniwarDbRetryInterval,

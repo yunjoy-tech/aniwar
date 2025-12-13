@@ -3,10 +3,10 @@ package useractor
 import (
 	"fmt"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/db"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/service"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/state"
+	"gitee.com/bychannel/aniwar/src/common/db"
+	"gitee.com/bychannel/aniwar/src/proto/pb"
+	"gitee.com/bychannel/musae/framework/service"
+	"gitee.com/bychannel/musae/framework/state"
 	"google.golang.org/protobuf/proto"
 )
 

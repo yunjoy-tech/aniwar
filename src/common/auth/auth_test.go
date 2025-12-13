@@ -3,7 +3,7 @@ package auth
 import (
 	"testing"
 
-	"gitlab.musadisca-games.com/wangxw/musae/framework/utils"
+	"gitee.com/bychannel/musae/framework/utils"
 )
 
 func Test_AuthToken(t *testing.T) {

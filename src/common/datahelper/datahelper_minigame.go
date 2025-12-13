@@ -1,7 +1,7 @@
 package datahelper
 
 import (
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
+	"gitee.com/bychannel/aniwar/src/proto/pb"
 )
 
 // MiniGameWinType 小游戏胜利类型

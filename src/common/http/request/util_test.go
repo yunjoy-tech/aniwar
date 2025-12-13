@@ -2,8 +2,8 @@ package request_test
 
 import (
 	"fmt"
+	"gitee.com/bychannel/aniwar/src/common/http/request"
 	"github.com/stretchr/testify/assert"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/http/request"
 	"io"
 	"net/http"
 	"strings"

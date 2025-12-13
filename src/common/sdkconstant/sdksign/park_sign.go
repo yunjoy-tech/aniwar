@@ -8,18 +8,18 @@ import (
 	"sort"
 	"strings"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/sdkconstant/sdkrsa"
+	"gitee.com/bychannel/aniwar/src/common/sdkconstant/sdkrsa"
 
 	"github.com/samber/lo"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/utils"
+	"gitee.com/bychannel/aniwar/src/common/utils"
 
-	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
+	"gitee.com/bychannel/musae/framework/logger"
 )
 
 // ParkSignVerify 验证签名
 func ParkSignVerify(argsMap map[string]interface{}, excludeSignKeys []string) bool {
-	//argsMap := ParseUrlArgs(params)
+	// argsMap := ParseUrlArgs(params)
 
 	signStr := buildSignArgsStr(argsMap, excludeSignKeys)
 

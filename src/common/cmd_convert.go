@@ -3,10 +3,10 @@ package common
 import (
 	"fmt"
 
+	"gitee.com/bychannel/aniwar/src/common/utils"
 	"github.com/pkg/errors"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/utils"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
+	"gitee.com/bychannel/aniwar/src/proto/pb"
 )
 
 var (

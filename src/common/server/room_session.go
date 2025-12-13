@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"strconv"
 
+	"gitee.com/bychannel/aniwar/src/common/conf"
 	"github.com/pkg/errors"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/conf"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/db"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/service"
+	"gitee.com/bychannel/aniwar/src/common/db"
+	"gitee.com/bychannel/aniwar/src/proto/pb"
+	"gitee.com/bychannel/musae/framework/service"
 )
 
 func (s *Server) SaveRoomBindingData(uid string, roomId string) error {

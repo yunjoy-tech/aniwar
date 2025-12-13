@@ -4,10 +4,10 @@ import (
 	"fmt"
 	"time"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common"
+	"gitee.com/bychannel/aniwar/src/common"
 
+	"gitee.com/bychannel/aniwar/src/excel/data"
 	"github.com/pkg/errors"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/excel/data"
 )
 
 func GetActivityCfgTime(activityId int32) (time.Time, time.Time, time.Time, time.Time, error) {

@@ -2,12 +2,12 @@ package logic
 
 import (
 	"errors"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/baseconf"
+	"gitee.com/bychannel/musae/framework/baseconf"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/db"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/service"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/utils"
+	"gitee.com/bychannel/aniwar/src/common/db"
+	"gitee.com/bychannel/musae/framework/logger"
+	"gitee.com/bychannel/musae/framework/service"
+	"gitee.com/bychannel/musae/framework/utils"
 	"google.golang.org/protobuf/proto"
 )
 

@@ -2,17 +2,17 @@ package main
 
 import (
 	"errors"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/actorserver/allianceactor"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/actorserver/mailactor"
+	"gitee.com/bychannel/aniwar/src/actorserver/allianceactor"
+	"gitee.com/bychannel/aniwar/src/actorserver/mailactor"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/actorserver/centeractor"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/actorserver/frame"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/actorserver/roomactor"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/actorserver/useractor"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/global"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/process"
+	"gitee.com/bychannel/aniwar/src/actorserver/centeractor"
+	"gitee.com/bychannel/aniwar/src/actorserver/frame"
+	"gitee.com/bychannel/aniwar/src/actorserver/roomactor"
+	"gitee.com/bychannel/aniwar/src/actorserver/useractor"
+	"gitee.com/bychannel/musae/framework/base"
+	"gitee.com/bychannel/musae/framework/global"
+	"gitee.com/bychannel/musae/framework/logger"
+	"gitee.com/bychannel/musae/framework/process"
 )
 
 func InitActorFactory(srv base.IServer) error {

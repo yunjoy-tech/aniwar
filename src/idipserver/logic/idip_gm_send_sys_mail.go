@@ -7,12 +7,12 @@ import (
 	"strings"
 	"time"
 
+	myCommon "gitee.com/bychannel/aniwar/src/common"
+	"gitee.com/bychannel/aniwar/src/proto/pb"
+	"gitee.com/bychannel/musae/framework/global"
+	"gitee.com/bychannel/musae/framework/guid"
+	"gitee.com/bychannel/musae/framework/logger"
 	"github.com/dapr/go-sdk/service/common"
-	myCommon "gitlab.musadisca-games.com/wangxw/aniwar/src/common"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/global"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/guid"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
 )
 
 // 请求参数结构

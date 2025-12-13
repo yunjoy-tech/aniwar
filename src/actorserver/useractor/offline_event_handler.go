@@ -3,17 +3,17 @@ package useractor
 import (
 	"context"
 	"fmt"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/threading"
+	"gitee.com/bychannel/musae/framework/base"
+	"gitee.com/bychannel/musae/framework/threading"
 	"time"
 
 	"google.golang.org/protobuf/proto"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/db"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/service"
+	"gitee.com/bychannel/aniwar/src/common/db"
+	"gitee.com/bychannel/musae/framework/service"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
+	"gitee.com/bychannel/aniwar/src/common"
+	"gitee.com/bychannel/aniwar/src/proto/pb"
 )
 
 type OfflineEventHandler struct {

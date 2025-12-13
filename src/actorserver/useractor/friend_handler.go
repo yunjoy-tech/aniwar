@@ -7,15 +7,15 @@ import (
 	"strconv"
 	"time"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common"
-	myUtils "gitlab.musadisca-games.com/wangxw/aniwar/src/common/utils"
-	excel "gitlab.musadisca-games.com/wangxw/aniwar/src/excel/data"
+	"gitee.com/bychannel/aniwar/src/common"
+	myUtils "gitee.com/bychannel/aniwar/src/common/utils"
+	excel "gitee.com/bychannel/aniwar/src/excel/data"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/db"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/service"
+	"gitee.com/bychannel/aniwar/src/common/db"
+	"gitee.com/bychannel/musae/framework/service"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
+	"gitee.com/bychannel/aniwar/src/proto/pb"
+	"gitee.com/bychannel/musae/framework/base"
 	"google.golang.org/protobuf/proto"
 )
 

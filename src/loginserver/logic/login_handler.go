@@ -9,25 +9,25 @@ import (
 	"time"
 	"unicode"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/datalog/taptap"
+	"gitee.com/bychannel/aniwar/src/common/datalog/taptap"
 
-	"gitlab.musadisca-games.com/wangxw/musae/framework/global"
+	"gitee.com/bychannel/musae/framework/global"
 
-	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
+	"gitee.com/bychannel/musae/framework/base"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/auth"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/rsa"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/sdkconstant"
+	"gitee.com/bychannel/aniwar/src/common/auth"
+	"gitee.com/bychannel/aniwar/src/common/rsa"
+	"gitee.com/bychannel/aniwar/src/common/sdkconstant"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/conf"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/db"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/baseconf"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/metrics"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/service"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/threading"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/utils"
+	"gitee.com/bychannel/aniwar/src/common/conf"
+	"gitee.com/bychannel/aniwar/src/common/db"
+	"gitee.com/bychannel/aniwar/src/proto/pb"
+	"gitee.com/bychannel/musae/framework/baseconf"
+	"gitee.com/bychannel/musae/framework/logger"
+	"gitee.com/bychannel/musae/framework/metrics"
+	"gitee.com/bychannel/musae/framework/service"
+	"gitee.com/bychannel/musae/framework/threading"
+	"gitee.com/bychannel/musae/framework/utils"
 	"google.golang.org/protobuf/proto"
 )
 

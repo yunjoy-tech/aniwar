@@ -1,6 +1,6 @@
 package useractor
 
-import "gitlab.musadisca-games.com/wangxw/musae/framework/baseactor"
+import "gitee.com/bychannel/musae/framework/baseactor"
 
 type UABaseHandler struct {
 	*baseactor.BaseHandler

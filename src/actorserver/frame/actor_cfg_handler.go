@@ -1,11 +1,11 @@
 package frame
 
 import (
+	"gitee.com/bychannel/aniwar/src/common/datalog/taptap"
+	"gitee.com/bychannel/aniwar/src/common/db"
+	"gitee.com/bychannel/musae/framework/global"
+	"gitee.com/bychannel/musae/framework/logger"
 	"github.com/dapr/go-sdk/client"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/datalog/taptap"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/db"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/global"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
 	"strings"
 )
 
@@ -30,13 +30,13 @@ func (s *ActorServer) HandlerConfEvent(id string, items map[string]*client.Confi
 		logger.Infof("===>>>ConfigUpdate id = %s, key = %s, value = %s", id, k, v.Value)
 
 		switch k {
-		//case db.KeyCfgReloadConf: // server.conf热更
+		// case db.KeyCfgReloadConf: // server.conf热更
 		//	err := s.LoadConf(v.Value)
 		//	if err != nil {
 		//		logger.Errorf("reload --> LoadConf got err:%+v", err)
 		//	}
 
-		//case db.KeyCfgReloadExcel: // excel配置热更
+		// case db.KeyCfgReloadExcel: // excel配置热更
 		//	var err error
 		//	if strings.Compare(v.Value, "all") == 0 {
 		//		err = s.LoadExcelData()

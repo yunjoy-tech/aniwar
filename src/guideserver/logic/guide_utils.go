@@ -2,7 +2,7 @@ package logic
 
 import (
 	"fmt"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/db"
+	"gitee.com/bychannel/aniwar/src/common/db"
 	"strings"
 )
 
@@ -24,11 +24,11 @@ func (s *GuideServer) GetMinVersionByChannel(channel string) (string, error) {
 	return s.GetFromConfigCenter(key)
 }
 
-//GetJenkinsVersionByOnlineVersion 获取线上版本号对应的Jenkins 流水号
+// GetJenkinsVersionByOnlineVersion 获取线上版本号对应的Jenkins 流水号
 func (s *GuideServer) GetJenkinsVersionByOnlineVersion(version string) (string, error) {
 	key := fmt.Sprintf("%s:%s", db.KeyCfgCVersionOnline, version)
-	//value := s.Redis.Get(context.Background(), key)
-	//return value.Result()
+	// value := s.Redis.Get(context.Background(), key)
+	// return value.Result()
 	return s.Server.GetFromConfigCenter(key)
 }
 

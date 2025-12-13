@@ -1,8 +1,8 @@
 package main
 
 import (
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/guideserver/logic"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/process"
+	"gitee.com/bychannel/aniwar/src/guideserver/logic"
+	"gitee.com/bychannel/musae/framework/process"
 )
 
 func main() {

@@ -8,18 +8,18 @@ import (
 	"strconv"
 	"strings"
 
-	"gitlab.musadisca-games.com/wangxw/musae/framework/utils"
+	"gitee.com/bychannel/musae/framework/utils"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/sdkconstant"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/sdkconstant/sdksign"
+	"gitee.com/bychannel/aniwar/src/common/sdkconstant"
+	"gitee.com/bychannel/aniwar/src/common/sdkconstant/sdksign"
 
+	myCommon "gitee.com/bychannel/aniwar/src/common"
+	"gitee.com/bychannel/aniwar/src/common/conf"
+	myUtils "gitee.com/bychannel/aniwar/src/common/utils"
+	"gitee.com/bychannel/aniwar/src/proto/pb"
+	"gitee.com/bychannel/musae/framework/base"
+	"gitee.com/bychannel/musae/framework/logger"
 	"github.com/dapr/go-sdk/service/common"
-	myCommon "gitlab.musadisca-games.com/wangxw/aniwar/src/common"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/conf"
-	myUtils "gitlab.musadisca-games.com/wangxw/aniwar/src/common/utils"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/base"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
 	"google.golang.org/protobuf/proto"
 )
 

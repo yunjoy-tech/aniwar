@@ -1,17 +1,17 @@
 package useractor
 
 import (
+	"gitee.com/bychannel/aniwar/src/common/datalog/taptap"
+	"gitee.com/bychannel/musae/framework/threading"
 	"github.com/pkg/errors"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/datalog/taptap"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/threading"
 	"strconv"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/utils"
-	excel "gitlab.musadisca-games.com/wangxw/aniwar/src/excel/data"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/safe"
+	"gitee.com/bychannel/aniwar/src/common"
+	"gitee.com/bychannel/aniwar/src/common/utils"
+	excel "gitee.com/bychannel/aniwar/src/excel/data"
+	"gitee.com/bychannel/aniwar/src/proto/pb"
+	"gitee.com/bychannel/musae/framework/logger"
+	"gitee.com/bychannel/musae/framework/safe"
 )
 
 func (x *UserData) GetUserItems() *pb.PCommonItemInfos {

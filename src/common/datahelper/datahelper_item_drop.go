@@ -3,8 +3,8 @@ package datahelper
 import (
 	"math/rand"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/excel/data"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
+	"gitee.com/bychannel/aniwar/src/excel/data"
+	"gitee.com/bychannel/musae/framework/logger"
 )
 
 // 根据掉落id掉落奖励
@@ -17,7 +17,7 @@ func GetRewardsByDropId(dropId int32) []*data.ItemReward {
 		return ret
 	}
 
-	//resourceCfg := data.GetResourceMgr().GetById(resourceId)
+	// resourceCfg := data.GetResourceMgr().GetById(resourceId)
 	dropConfig := data.GetDropMgr().GetById(dropId)
 	if dropConfig == nil {
 		logger.Warnf("无效的掉落id, dropId=%d", dropId)
@@ -29,10 +29,10 @@ func GetRewardsByDropId(dropId int32) []*data.ItemReward {
 		// 遍历次数
 		for i := int32(0); i < eachGroup.Times; i++ {
 			rate := rand.Int31n(100) + 1 // 概率为百分比
-			//if eachGroup.Type < rate {
+			// if eachGroup.Type < rate {
 			//	// 未命中
 			//	continue
-			//}
+			// }
 			if eachGroup.Type >= rate {
 				weightRewards := GroupRandomByWeight(eachGroup)
 				ret = append(ret, weightRewards...)
@@ -46,8 +46,8 @@ func GetRewardsByDropId(dropId int32) []*data.ItemReward {
 	return ret
 }
 
-//// 根据概率随机奖励
-//func GroupRandomByRate(dropInfo *data.DropInfo) []*data.ItemReward {
+// // 根据概率随机奖励
+// func GroupRandomByRate(dropInfo *data.DropInfo) []*data.ItemReward {
 //	itemRewards := make([]*data.ItemReward, 0)
 //
 //	/*	weightVos := make([]*data.WeightVo, 0)
@@ -68,7 +68,7 @@ func GetRewardsByDropId(dropId int32) []*data.ItemReward {
 //		}*/
 //
 //	return itemRewards
-//}
+// }
 
 // 根据groupId, 权重随机出道具
 func GroupRandomByWeight(dropInfo *data.DropInfo) []*data.ItemReward {
@@ -83,8 +83,8 @@ func GroupRandomByWeight(dropInfo *data.DropInfo) []*data.ItemReward {
 		})
 	}
 
-	//// 多次掉落
-	//for i := int32(0); i < dropInfo.Times; i++ {
+	// // 多次掉落
+	// for i := int32(0); i < dropInfo.Times; i++ {
 	// 根据权重随机
 	randomVo, err := RandomByWeightVo(weightVos)
 	if err != nil {
@@ -96,7 +96,7 @@ func GroupRandomByWeight(dropInfo *data.DropInfo) []*data.ItemReward {
 		ItemId: randomGroupCfg.ItemId,
 		Num:    randomGroupCfg.ItemNum,
 	})
-	//}
+	// }
 
 	return itemRewards
 }
@@ -109,10 +109,10 @@ func GetGroupCfgsByGroupId(groupId int32) []*data.GroupCfg {
 			return false
 		}
 
-		//weightVos = append(weightVos, &data.WeightVo{
+		// weightVos = append(weightVos, &data.WeightVo{
 		//	Weight: cfg.ItemWeight,
 		//	VoId:   cfg.Id,
-		//})
+		// })
 		groupCfgs = append(groupCfgs, cfg)
 
 		return true
@@ -122,8 +122,8 @@ func GetGroupCfgsByGroupId(groupId int32) []*data.GroupCfg {
 	return groupCfgs
 }
 
-//// 根据权重随机奖励
-//func doGetDropRewardsByWeight(dropId int32, dropInfo *data.DropInfo, roleLv uint32, levelLv int32) []*data.ItemReward {
+// // 根据权重随机奖励
+// func doGetDropRewardsByWeight(dropId int32, dropInfo *data.DropInfo, roleLv uint32, levelLv int32) []*data.ItemReward {
 //	var (
 //		ret = make([]*data.ItemReward, 0)
 //	)
@@ -154,10 +154,10 @@ func GetGroupCfgsByGroupId(groupId int32) []*data.GroupCfg {
 //	}
 //
 //	return ret
-//}
+// }
 
-//// group表判断掉落奖励条件
-//func checkGroupCfgCondition(dropGroupCfg *data.GroupCfg, dropId int32, roleLv uint32, levelLv int32) bool {
+// // group表判断掉落奖励条件
+// func checkGroupCfgCondition(dropGroupCfg *data.GroupCfg, dropId int32, roleLv uint32, levelLv int32) bool {
 //	if dropGroupCfg == nil {
 //		return false
 //	}
@@ -183,4 +183,4 @@ func GetGroupCfgsByGroupId(groupId int32) []*data.GroupCfg {
 //	}
 //
 //	return true
-//}
+// }

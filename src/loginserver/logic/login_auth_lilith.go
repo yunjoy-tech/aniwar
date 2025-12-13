@@ -9,13 +9,13 @@ import (
 
 	"github.com/pkg/errors"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/conf"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/idipserver/logic"
+	"gitee.com/bychannel/aniwar/src/common/conf"
+	"gitee.com/bychannel/aniwar/src/idipserver/logic"
 
-	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
+	"gitee.com/bychannel/musae/framework/logger"
 
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/sdkconstant"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
+	"gitee.com/bychannel/aniwar/src/common/sdkconstant"
+	"gitee.com/bychannel/aniwar/src/proto/pb"
 )
 
 // LilithLoginResp 莉莉丝登陆验证结果

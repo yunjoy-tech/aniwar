@@ -2,26 +2,26 @@ package server
 
 import (
 	"fmt"
+	"gitee.com/bychannel/aniwar/src/common/db"
+	"gitee.com/bychannel/musae/framework/global"
 	"github.com/pkg/errors"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/db"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/global"
 	"strconv"
 	"strings"
 
-	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
+	"gitee.com/bychannel/musae/framework/logger"
 )
 
 // VerReq 请求json数据结构
 type VerReq struct {
 	AccountId string `json:"accountId"`
-	Platform  int32  `json:"platform"` //渠道， android,ios
+	Platform  int32  `json:"platform"` // 渠道， android,ios
 	IsHttp    bool   `json:"isHttp"`
 }
 
 type VersionSupport struct {
 	Channel     uint64 `json:"-"` // 渠道
 	GameVersion uint64 `json:"-"` // 大版本号
-	//Tag         uint32 `json:"-"` // 小版本号
+	// Tag         uint32 `json:"-"` // 小版本号
 	Latest uint32 `json:"-"` // 热更版本号
 }
 
@@ -31,8 +31,8 @@ type VersionSupport struct {
 // Version 返回json数据结构
 type Version struct {
 	UpdateVersion string   `json:"updateVersion"` // 当前版本号
-	DownloadPath  string   `json:"downloadPath"`  //jenkins 对应的版本号
-	ServerAddr    []string `json:"serverAddr"`    //tcp 192.168.xxx.xxx http: [http/https]://aniwar-govtest.lilithgame.com
+	DownloadPath  string   `json:"downloadPath"`  // jenkins 对应的版本号
+	ServerAddr    []string `json:"serverAddr"`    // tcp 192.168.xxx.xxx http: [http/https]://aniwar-govtest.lilithgame.com
 	TcpAddr       []string `json:"tcpAddr"`
 	UpdateAddr    []string `json:"updateAddr"`
 }
@@ -57,17 +57,17 @@ func ParseVersion(version string) *VersionSupport {
 		return nil
 	}
 
-	//tag, err := strconv.ParseUint(forceStr[2], 10, 32)
-	//if err != nil {
+	// tag, err := strconv.ParseUint(forceStr[2], 10, 32)
+	// if err != nil {
 	//	logger.Errorf("parse tag err tag :%v", forceStr[2])
 	//	return nil
-	//}
+	// }
 	//
-	//latest, err := strconv.ParseUint(forceStr[3], 10, 32)
-	//if err != nil {
+	// latest, err := strconv.ParseUint(forceStr[3], 10, 32)
+	// if err != nil {
 	//	logger.Errorf("parse latest err latest :%v", forceStr[3])
 	//	return nil
-	//}
+	// }
 
 	latest, err := strconv.ParseUint(forceStr[2], 10, 32)
 	if err != nil {
@@ -78,7 +78,7 @@ func ParseVersion(version string) *VersionSupport {
 	return &VersionSupport{
 		Channel:     ch,
 		GameVersion: gameVersion,
-		//Tag:         uint32(tag),
+		// Tag:         uint32(tag),
 		Latest: uint32(latest),
 	}
 }
@@ -95,10 +95,10 @@ func (v *VersionSupport) Verify(des *VersionSupport) bool {
 		return true
 	}
 
-	//if v.Channel != des.Channel || v.GameVersion != des.GameVersion || v.Latest > des.Latest { // 90 < 89
+	// if v.Channel != des.Channel || v.GameVersion != des.GameVersion || v.Latest > des.Latest { // 90 < 89
 	//	return false
-	//}
-	//return true
+	// }
+	// return true
 	return false // 不需要更新
 }
 

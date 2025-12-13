@@ -2,7 +2,7 @@ package lilith
 
 // import (
 //	"fmt"
-//	"gitlab.musadisca-games.com/wangxw/aniwar/src/proto/pb"
+//	"gitee.com/bychannel/aniwar/src/proto/pb"
 //	"testing"
 // )
 //

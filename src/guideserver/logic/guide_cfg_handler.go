@@ -1,11 +1,11 @@
 package logic
 
 import (
+	"gitee.com/bychannel/aniwar/src/common/datalog/taptap"
+	"gitee.com/bychannel/aniwar/src/common/db"
+	"gitee.com/bychannel/musae/framework/global"
+	"gitee.com/bychannel/musae/framework/logger"
 	"github.com/dapr/go-sdk/client"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/datalog/taptap"
-	"gitlab.musadisca-games.com/wangxw/aniwar/src/common/db"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/global"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
 	"strings"
 )
 
@@ -16,7 +16,7 @@ func (s *GuideServer) HandlerConfEvent(id string, items map[string]*client.Confi
 		configTemp[k] = v.Value // 埋点日志用
 		logger.Debugf("===>>>ConfigUpdate id = [%s], key = [%s], value = [%s]", id, k, v.Value)
 		switch {
-		//case strings.Compare(k, db.KeyCfgReloadConf) == 0: // server.conf热更
+		// case strings.Compare(k, db.KeyCfgReloadConf) == 0: // server.conf热更
 		//	err := s.LoadConf(v.Value)
 		//	if err != nil {
 		//		logger.Error("ServerConfReload, key = [%s], value = [%s], err:[%v]", k, v.Value, err)

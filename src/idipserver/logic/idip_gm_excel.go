@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"gitlab.musadisca-games.com/wangxw/musae/framework/logger"
+	"gitee.com/bychannel/musae/framework/logger"
 	"strings"
 )
 
@@ -20,7 +20,7 @@ func (s *IDIPServer) GetExcelList(apiData []byte) []byte {
 		res.FileNames = s.GetAniwarExcel(req)
 	}
 
-	if req.OptType == 2 { //获取battleServer的配置文件
+	if req.OptType == 2 { // 获取battleServer的配置文件
 		res.FileNames = s.GetBattleServerExcel(req.Version)
 	}
 	data, err := json.Marshal(res)
