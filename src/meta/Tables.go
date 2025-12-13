@@ -11,20 +11,36 @@ package cfg
 type JsonLoader func(string) ([]map[string]interface{}, error)
 
 type Tables struct {
-	ItemTable          *ItemPkgItemTable
-	ItemDropTable      *ItemPkgItemDropTable
-	ItemGroupTable     *ItemPkgItemGroupTable
-	ItemFoodTable      *ItemPkgItemFoodTable
-	PlayerLevelTable   *PlayerPkgPlayerLevelTable
-	PlayerInfoTable    *PlayerPkgPlayerInfoTable
-	MailTable          *MailPkgMailTable
-	EquipTable         *EquipPkgEquipTable
-	MainAttributeTable *EquipPkgMainAttributeTable
-	SubAttributeTable  *EquipPkgSubAttributeTable
-	AtrLinkTable       *EquipPkgAtrLinkTable
-	UpgradeTable       *EquipPkgUpgradeTable
-	PoolTable          *EquipPkgPoolTable
-	BluePrintTable     *EquipPkgBluePrintTable
+	ItemTable           *ItemPkgItemTable
+	DropTable           *ItemPkgDropTable
+	GroupTable          *ItemPkgGroupTable
+	FoodTable           *ItemPkgFoodTable
+	ConfigTable         *ConfigPkgConfigTable
+	FuncTable           *FuncPkgFuncTable
+	ActivityTable       *ActivityPkgActivityTable
+	ActivityTaskTable   *ActivityPkgActivityTaskTable
+	ActivitySigninTable *ActivityPkgActivitySigninTable
+	AllianceTable       *AlliancePkgAllianceTable
+	PostTable           *AlliancePkgPostTable
+	ParamTable          *AlliancePkgParamTable
+	ExpTable            *AlliancePkgExpTable
+	HeadTable           *AlliancePkgHeadTable
+	DutyTaskTable       *DutyPkgDutyTaskTable
+	ActiveTable         *DutyPkgActiveTable
+	SigninTable         *DutyPkgSigninTable
+	CalendarsTable      *DutyPkgCalendarsTable
+	DailyTagTable       *DutyPkgDailyTagTable
+	TaskTable           *TaskPkgTaskTable
+	TaskGroupTable      *TaskPkgTaskGroupTable
+	TriggerTable        *TaskPkgTriggerTable
+	StaminaTable        *ShopPkgStaminaTable
+	DirectPurchaseTable *ShopPkgDirectPurchaseTable
+	GoodsTable          *GameShopPkgGoodsTable
+	GiftTable           *GameShopPkgGiftTable
+	RecommendTable      *GameShopPkgRecommendTable
+	ShopTable           *GameShopPkgShopTable
+	MonthCardTable      *GameShopPkgMonthCardTable
+	MailTable           *MailPkgMailTable
 }
 
 func NewTables(loader JsonLoader) (*Tables, error) {
@@ -38,82 +54,178 @@ func NewTables(loader JsonLoader) (*Tables, error) {
 	if tables.ItemTable, err = NewItemPkgItemTable(buf); err != nil {
 		return nil, err
 	}
-	if buf, err = loader("itempkg_itemdroptable"); err != nil {
+	if buf, err = loader("itempkg_droptable"); err != nil {
 		return nil, err
 	}
-	if tables.ItemDropTable, err = NewItemPkgItemDropTable(buf); err != nil {
+	if tables.DropTable, err = NewItemPkgDropTable(buf); err != nil {
 		return nil, err
 	}
-	if buf, err = loader("itempkg_itemgrouptable"); err != nil {
+	if buf, err = loader("itempkg_grouptable"); err != nil {
 		return nil, err
 	}
-	if tables.ItemGroupTable, err = NewItemPkgItemGroupTable(buf); err != nil {
+	if tables.GroupTable, err = NewItemPkgGroupTable(buf); err != nil {
 		return nil, err
 	}
-	if buf, err = loader("itempkg_itemfoodtable"); err != nil {
+	if buf, err = loader("itempkg_foodtable"); err != nil {
 		return nil, err
 	}
-	if tables.ItemFoodTable, err = NewItemPkgItemFoodTable(buf); err != nil {
+	if tables.FoodTable, err = NewItemPkgFoodTable(buf); err != nil {
 		return nil, err
 	}
-	if buf, err = loader("playerpkg_playerleveltable"); err != nil {
+	if buf, err = loader("configpkg_configtable"); err != nil {
 		return nil, err
 	}
-	if tables.PlayerLevelTable, err = NewPlayerPkgPlayerLevelTable(buf); err != nil {
+	if tables.ConfigTable, err = NewConfigPkgConfigTable(buf); err != nil {
 		return nil, err
 	}
-	if buf, err = loader("playerpkg_playerinfotable"); err != nil {
+	if buf, err = loader("funcpkg_functable"); err != nil {
 		return nil, err
 	}
-	if tables.PlayerInfoTable, err = NewPlayerPkgPlayerInfoTable(buf); err != nil {
+	if tables.FuncTable, err = NewFuncPkgFuncTable(buf); err != nil {
+		return nil, err
+	}
+	if buf, err = loader("activitypkg_activitytable"); err != nil {
+		return nil, err
+	}
+	if tables.ActivityTable, err = NewActivityPkgActivityTable(buf); err != nil {
+		return nil, err
+	}
+	if buf, err = loader("activitypkg_activitytasktable"); err != nil {
+		return nil, err
+	}
+	if tables.ActivityTaskTable, err = NewActivityPkgActivityTaskTable(buf); err != nil {
+		return nil, err
+	}
+	if buf, err = loader("activitypkg_activitysignintable"); err != nil {
+		return nil, err
+	}
+	if tables.ActivitySigninTable, err = NewActivityPkgActivitySigninTable(buf); err != nil {
+		return nil, err
+	}
+	if buf, err = loader("alliancepkg_alliancetable"); err != nil {
+		return nil, err
+	}
+	if tables.AllianceTable, err = NewAlliancePkgAllianceTable(buf); err != nil {
+		return nil, err
+	}
+	if buf, err = loader("alliancepkg_posttable"); err != nil {
+		return nil, err
+	}
+	if tables.PostTable, err = NewAlliancePkgPostTable(buf); err != nil {
+		return nil, err
+	}
+	if buf, err = loader("alliancepkg_paramtable"); err != nil {
+		return nil, err
+	}
+	if tables.ParamTable, err = NewAlliancePkgParamTable(buf); err != nil {
+		return nil, err
+	}
+	if buf, err = loader("alliancepkg_exptable"); err != nil {
+		return nil, err
+	}
+	if tables.ExpTable, err = NewAlliancePkgExpTable(buf); err != nil {
+		return nil, err
+	}
+	if buf, err = loader("alliancepkg_headtable"); err != nil {
+		return nil, err
+	}
+	if tables.HeadTable, err = NewAlliancePkgHeadTable(buf); err != nil {
+		return nil, err
+	}
+	if buf, err = loader("dutypkg_dutytasktable"); err != nil {
+		return nil, err
+	}
+	if tables.DutyTaskTable, err = NewDutyPkgDutyTaskTable(buf); err != nil {
+		return nil, err
+	}
+	if buf, err = loader("dutypkg_activetable"); err != nil {
+		return nil, err
+	}
+	if tables.ActiveTable, err = NewDutyPkgActiveTable(buf); err != nil {
+		return nil, err
+	}
+	if buf, err = loader("dutypkg_signintable"); err != nil {
+		return nil, err
+	}
+	if tables.SigninTable, err = NewDutyPkgSigninTable(buf); err != nil {
+		return nil, err
+	}
+	if buf, err = loader("dutypkg_calendarstable"); err != nil {
+		return nil, err
+	}
+	if tables.CalendarsTable, err = NewDutyPkgCalendarsTable(buf); err != nil {
+		return nil, err
+	}
+	if buf, err = loader("dutypkg_dailytagtable"); err != nil {
+		return nil, err
+	}
+	if tables.DailyTagTable, err = NewDutyPkgDailyTagTable(buf); err != nil {
+		return nil, err
+	}
+	if buf, err = loader("taskpkg_tasktable"); err != nil {
+		return nil, err
+	}
+	if tables.TaskTable, err = NewTaskPkgTaskTable(buf); err != nil {
+		return nil, err
+	}
+	if buf, err = loader("taskpkg_taskgrouptable"); err != nil {
+		return nil, err
+	}
+	if tables.TaskGroupTable, err = NewTaskPkgTaskGroupTable(buf); err != nil {
+		return nil, err
+	}
+	if buf, err = loader("taskpkg_triggertable"); err != nil {
+		return nil, err
+	}
+	if tables.TriggerTable, err = NewTaskPkgTriggerTable(buf); err != nil {
+		return nil, err
+	}
+	if buf, err = loader("shoppkg_staminatable"); err != nil {
+		return nil, err
+	}
+	if tables.StaminaTable, err = NewShopPkgStaminaTable(buf); err != nil {
+		return nil, err
+	}
+	if buf, err = loader("shoppkg_directpurchasetable"); err != nil {
+		return nil, err
+	}
+	if tables.DirectPurchaseTable, err = NewShopPkgDirectPurchaseTable(buf); err != nil {
+		return nil, err
+	}
+	if buf, err = loader("gameshoppkg_goodstable"); err != nil {
+		return nil, err
+	}
+	if tables.GoodsTable, err = NewGameShopPkgGoodsTable(buf); err != nil {
+		return nil, err
+	}
+	if buf, err = loader("gameshoppkg_gifttable"); err != nil {
+		return nil, err
+	}
+	if tables.GiftTable, err = NewGameShopPkgGiftTable(buf); err != nil {
+		return nil, err
+	}
+	if buf, err = loader("gameshoppkg_recommendtable"); err != nil {
+		return nil, err
+	}
+	if tables.RecommendTable, err = NewGameShopPkgRecommendTable(buf); err != nil {
+		return nil, err
+	}
+	if buf, err = loader("gameshoppkg_shoptable"); err != nil {
+		return nil, err
+	}
+	if tables.ShopTable, err = NewGameShopPkgShopTable(buf); err != nil {
+		return nil, err
+	}
+	if buf, err = loader("gameshoppkg_monthcardtable"); err != nil {
+		return nil, err
+	}
+	if tables.MonthCardTable, err = NewGameShopPkgMonthCardTable(buf); err != nil {
 		return nil, err
 	}
 	if buf, err = loader("mailpkg_mailtable"); err != nil {
 		return nil, err
 	}
 	if tables.MailTable, err = NewMailPkgMailTable(buf); err != nil {
-		return nil, err
-	}
-	if buf, err = loader("equippkg_equiptable"); err != nil {
-		return nil, err
-	}
-	if tables.EquipTable, err = NewEquipPkgEquipTable(buf); err != nil {
-		return nil, err
-	}
-	if buf, err = loader("equippkg_mainattributetable"); err != nil {
-		return nil, err
-	}
-	if tables.MainAttributeTable, err = NewEquipPkgMainAttributeTable(buf); err != nil {
-		return nil, err
-	}
-	if buf, err = loader("equippkg_subattributetable"); err != nil {
-		return nil, err
-	}
-	if tables.SubAttributeTable, err = NewEquipPkgSubAttributeTable(buf); err != nil {
-		return nil, err
-	}
-	if buf, err = loader("equippkg_atrlinktable"); err != nil {
-		return nil, err
-	}
-	if tables.AtrLinkTable, err = NewEquipPkgAtrLinkTable(buf); err != nil {
-		return nil, err
-	}
-	if buf, err = loader("equippkg_upgradetable"); err != nil {
-		return nil, err
-	}
-	if tables.UpgradeTable, err = NewEquipPkgUpgradeTable(buf); err != nil {
-		return nil, err
-	}
-	if buf, err = loader("equippkg_pooltable"); err != nil {
-		return nil, err
-	}
-	if tables.PoolTable, err = NewEquipPkgPoolTable(buf); err != nil {
-		return nil, err
-	}
-	if buf, err = loader("equippkg_blueprinttable"); err != nil {
-		return nil, err
-	}
-	if tables.BluePrintTable, err = NewEquipPkgBluePrintTable(buf); err != nil {
 		return nil, err
 	}
 	return tables, nil
