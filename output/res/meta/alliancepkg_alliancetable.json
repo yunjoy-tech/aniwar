@@ -1,0 +1,44 @@
+[
+  {
+    "id": 1,
+    "upgrade_cost": 20000,
+    "member_num": 8,
+    "admin_num": 3,
+    "level_icon": "Alliance_level_1"
+  },
+  {
+    "id": 2,
+    "upgrade_cost": 30000,
+    "member_num": 10,
+    "admin_num": 3,
+    "level_icon": "Alliance_level_2"
+  },
+  {
+    "id": 3,
+    "upgrade_cost": 40000,
+    "member_num": 12,
+    "admin_num": 3,
+    "level_icon": "Alliance_level_3"
+  },
+  {
+    "id": 4,
+    "upgrade_cost": 60000,
+    "member_num": 16,
+    "admin_num": 4,
+    "level_icon": "Alliance_level_4"
+  },
+  {
+    "id": 5,
+    "upgrade_cost": 80000,
+    "member_num": 20,
+    "admin_num": 5,
+    "level_icon": "Alliance_level_5"
+  },
+  {
+    "id": 6,
+    "upgrade_cost": 9999999,
+    "member_num": 24,
+    "admin_num": 6,
+    "level_icon": "Alliance_level_6"
+  }
+]

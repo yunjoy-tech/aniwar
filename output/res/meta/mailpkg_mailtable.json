@@ -1,0 +1,82 @@
+[
+  {
+    "id": 1,
+    "mail_type": 2,
+    "title": "mail_2022midaut_topic",
+    "addresser": "mail_name_ibot",
+    "content": "mail_2022_midaut_content",
+    "send_type": 2,
+    "expire_time": 30,
+    "gifts_type": 1,
+    "gifts_contents": [
+      {
+        "item_id": 2005,
+        "num": 10
+      },
+      {
+        "item_id": 3001,
+        "num": 1
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "mail_type": 3,
+    "title": "mail_package_limit_topic",
+    "addresser": "mail_name_ibot",
+    "content": "mail_package_limit_content",
+    "send_type": 1,
+    "expire_time": 30,
+    "gifts_type": 2,
+    "gifts_contents": []
+  },
+  {
+    "id": 3,
+    "mail_type": 4,
+    "title": "mail_dailytask_reward_topic",
+    "addresser": "mail_name_ibot",
+    "content": "mail_dailytask_reward_content",
+    "send_type": 1,
+    "expire_time": 30,
+    "gifts_type": 2,
+    "gifts_contents": []
+  },
+  {
+    "id": 4,
+    "mail_type": 3,
+    "title": "mail_stamina_hardlimit_topic",
+    "addresser": "mail_name_ibot",
+    "content": "mail_stamina_hardlimit_content",
+    "send_type": 1,
+    "expire_time": 1,
+    "gifts_type": 2,
+    "gifts_contents": []
+  },
+  {
+    "id": 5,
+    "mail_type": 6,
+    "title": "mail_questionnaire_reward_topic",
+    "addresser": "mail_name_ibot",
+    "content": "mail_questionnaire_reward_content",
+    "send_type": 1,
+    "expire_time": 30,
+    "gifts_type": 2,
+    "gifts_contents": [
+      {
+        "item_id": 2001,
+        "num": 1000
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "mail_type": 7,
+    "title": "mail_monthcard_reward_topic",
+    "addresser": "mail_name_ibot",
+    "content": "mail_monthcard_reward_content",
+    "send_type": 1,
+    "expire_time": 360,
+    "gifts_type": 1,
+    "gifts_contents": []
+  }
+]

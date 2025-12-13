@@ -1,0 +1,568 @@
+[
+  {
+    "ACCOUNT_CREATE_STATE": [
+      {
+        "item_id": 2001,
+        "num": 2000
+      },
+      {
+        "item_id": 5101,
+        "num": 5
+      },
+      {
+        "item_id": 60002,
+        "num": 1
+      },
+      {
+        "item_id": 3003,
+        "num": 10
+      },
+      {
+        "item_id": 90189,
+        "num": 1
+      },
+      {
+        "item_id": 90190,
+        "num": 1
+      },
+      {
+        "item_id": 4401,
+        "num": 10
+      },
+      {
+        "item_id": 4402,
+        "num": 10
+      }
+    ],
+    "DAILY_REFRESH_TIME": "5",
+    "PARTY_CAPACITY_LIMIT": 4,
+    "PARTY_DEFAULT_NAME": "队伍",
+    "SIMULATION_TEAM": [
+      "hero1",
+      "hero2"
+    ],
+    "PARTY_GAMEPLAY_LIMIT": 4,
+    "DEFAULT_SECTION": 1,
+    "MAP_SEGMENT": [
+      27,
+      32
+    ],
+    "PARTY_NAME_LIMIT": 28,
+    "COMBO_CLICK_LIMIT": 5,
+    "PLAYER_EXP_ITEM_ID": 1001,
+    "HERO_EXP_ITEM_ID": 1002,
+    "ITEM_PACKAGE_LIMIT": 999,
+    "PLAYER_CAMP_INIT_SCHEME_NUM": 1,
+    "ITEM_PACKAGE_PAGE": "51,4|52,5|53,6",
+    "MATERIAL_PACKAGE_LIMIT": 999,
+    "OTHERS_PACKAGE_LIMIT": 999,
+    "PACKAGE_EXPIRE_TIME": 3,
+    "BANNER_SWAP_TIME": 15,
+    "FOOD_UP_LIMIT": 2000,
+    "LEVELS_AFTER_CONQUER": 3,
+    "COLLECT_BASE_1": "Common_resource_baseplate_1",
+    "COLLECT_BASE_2": "Common_resource_baseplate_2",
+    "COLLECT_BASE_3": "Common_resource_baseplate_3",
+    "COLLECT_INS_1": "Formation_inspiration_1",
+    "COLLECT_INS_2": "Formation_inspiration_2",
+    "COLLECT_INS_3": "Formation_inspiration_3",
+    "CAR_CAMERA_MOVE": 45,
+    "POTENTIAL_COST_R": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "POTENTIAL_COST_SR": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "POTENTIAL_COST_SSR": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "POTENTIAL_COST_SP": [
+      1,
+      1,
+      1,
+      1,
+      1,
+      1
+    ],
+    "POTENTIAL_MAX": 6,
+    "BATTLE_PARAM_A": 0,
+    "BATTLE_PARAM_B": 87,
+    "BATTLE_PARAM_C": 2000,
+    "BATTLE_PARAM_D": 200,
+    "BATTLE_PARAM_E": 0,
+    "BATTLE_PARAM_F": 87,
+    "BATTLE_PARAM_G": 2000,
+    "BATTLE_PARAM_H": 0,
+    "BATTLE_PARAM_I": 0,
+    "BATTLE_PARAM_J": 10,
+    "RECRUIT_SAME_HERO": [
+      1,
+      1,
+      5,
+      20
+    ],
+    "RECRUIT_SCRIPT_EXCHANGE": [
+      1,
+      5,
+      20,
+      100
+    ],
+    "BATTLE_FOOD_LIMIT": 3,
+    "RECRUIT_GENE_COST": 3,
+    "CHARACTER_COST_R": [
+      5,
+      15,
+      30,
+      50
+    ],
+    "CHARACTER_COST_SR": [
+      5,
+      15,
+      30,
+      50
+    ],
+    "CHARACTER_COST_SSR": [
+      5,
+      15,
+      30,
+      50
+    ],
+    "CHARACTER_COST_SP": [
+      5,
+      15,
+      30,
+      50
+    ],
+    "CHARACTER_INTERVAL": [
+      {
+        "intervalType": 2,
+        "leftInt": 0,
+        "rightInt": 30
+      },
+      {
+        "intervalType": 2,
+        "leftInt": 30,
+        "rightInt": 45
+      },
+      {
+        "intervalType": 1,
+        "leftInt": 45,
+        "rightInt": 55
+      },
+      {
+        "intervalType": 3,
+        "leftInt": 55,
+        "rightInt": 70
+      },
+      {
+        "intervalType": 3,
+        "leftInt": 70,
+        "rightInt": 100
+      }
+    ],
+    "CHARACTER_COST_EXP": [
+      40028,
+      40029,
+      40030
+    ],
+    "CHARACTER_REWARD": [
+      {
+        "rewardType": 1,
+        "proportion": 30
+      },
+      {
+        "rewardType": 2,
+        "proportion": 30
+      },
+      {
+        "rewardType": 3,
+        "proportion": 30
+      },
+      {
+        "rewardType": 1,
+        "proportion": 30
+      },
+      {
+        "rewardType": 2,
+        "proportion": 30
+      },
+      {
+        "rewardType": 3,
+        "proportion": 30
+      },
+      {
+        "rewardType": 1,
+        "proportion": 40
+      },
+      {
+        "rewardType": 2,
+        "proportion": 20
+      },
+      {
+        "rewardType": 3,
+        "proportion": 40
+      },
+      {
+        "rewardType": 2,
+        "proportion": 20
+      }
+    ],
+    "CHARACTER_LEVEL_LIMIT": [
+      1,
+      3,
+      5,
+      7
+    ],
+    "ENV_GENE": "6001,gacha_gene_1|6002,gacha_gene_2|6003,gacha_gene_3|6004,gacha_gene_4|6005,gacha_gene_5|6006,gacha_gene_6",
+    "ENV_FRONTEXT": "gacha_gene_",
+    "RECRUIT_SAME_HERO_SCRIPT": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "HANDBOOK_EACH_HERO": "2005,5",
+    "CHARACTER_LONGCLICK": 20,
+    "VITALITY_GAIN_FREQUNCY": 360,
+    "ANIMA_GAIN_FREQUNCY": 360,
+    "VITALITY_LIMIT_HARD": 9999,
+    "ANIMA_LIMIT_HARD": 9999,
+    "CURRENCY_ELECTRIC_LIMIT": 99999999,
+    "VITALITY_HP_RATE": 50,
+    "ATTRIBUTE_PARAM_A": 150,
+    "EQUIP_MAX_LEVEL": [
+      5,
+      10,
+      15,
+      20
+    ],
+    "EQUIP_EXP_ELE": [
+      100,
+      100
+    ],
+    "PLAYER_MAX_LEVEL": 60,
+    "BATTLE_PARAM_K": 10,
+    "EQUIPMENT_PACKAGE_LIMIT": 1600,
+    "DUTY_DEFAULT_HERO": 2,
+    "CURRENCY_DEFAULT_DISPLAY": [
+      1004,
+      2001,
+      2005
+    ],
+    "QUEST_FIRST": 101,
+    "EXPLOREDAILYLIMIT": 9999,
+    "DAILYTICKETLIMIT": 99,
+    "DAILYTICKETICON": "Item_Ma_Linshi",
+    "DUTY_LINES_GAP": 16,
+    "DUTY_LINES_INSURE": 50,
+    "MAIL_NUM_LIMIT": 200,
+    "FAVOR_MAX_LEVEL": 11,
+    "DUTY_SIGNIN_FAVOR": {
+      "key": 1003,
+      "val": 10
+    },
+    "DRIVE_ACCELARATION": 20,
+    "DRIVE_SPEEDLIMIT": 100,
+    "DRIVE_BUFF_UPTIME": 5000,
+    "MAIN_ACTION_CHANCE": 50,
+    "EQUIP_UNLOCK_LIMIT": [
+      1,
+      2,
+      3
+    ],
+    "CHARACTER_UNLOCK_LIMIT": [
+      {
+        "key": 2,
+        "val": 20
+      },
+      {
+        "key": 4,
+        "val": 30
+      },
+      {
+        "key": 6,
+        "val": 40
+      },
+      {
+        "key": 8,
+        "val": 50
+      }
+    ],
+    "SKILL_UNLOCK_LIMIT": [
+      5,
+      15,
+      25,
+      30,
+      35,
+      40,
+      45,
+      50,
+      55
+    ],
+    "RECRUIT_NEW_SHOW": [
+      {
+        "key": -1,
+        "val": 2
+      },
+      {
+        "key": -1,
+        "val": 2
+      },
+      {
+        "key": -1,
+        "val": 2
+      },
+      {
+        "key": -1,
+        "val": 2
+      }
+    ],
+    "RECRUIT_SCRIPT_SHOW": [
+      {
+        "key": 1,
+        "val": -1
+      },
+      {
+        "key": 1,
+        "val": -1
+      },
+      {
+        "key": 1,
+        "val": -1
+      },
+      {
+        "key": 1,
+        "val": -1
+      }
+    ],
+    "DECK_ACTION_TIME": 5000,
+    "DECK_ACTION_LIST": [
+      "angry",
+      "sit",
+      "happy",
+      "tired",
+      "play",
+      "sleeping"
+    ],
+    "RECRUIT_SCALE_SHOW": [
+      1,
+      1,
+      1,
+      1
+    ],
+    "RECRUIT_ANGLE_SHOW": [
+      {
+        "key": 0,
+        "val": 0
+      },
+      {
+        "key": 0,
+        "val": 0
+      },
+      {
+        "key": 0,
+        "val": 0
+      },
+      {
+        "key": 0,
+        "val": 0
+      }
+    ],
+    "STAMINA_RECOVERY_RATE": 1,
+    "STAMINA_RECOVERY_INTERVAL": 300,
+    "STAMINA_PURCHASE_VALUE": 120,
+    "STAMINA_PURCHASE_LIMIT": 20,
+    "STAMINA_HARD_LIMIT": 999,
+    "DRIVE_AFTERACC": 33,
+    "DEPRECATED_MSG_ID": [
+      0
+    ],
+    "RECRUIT_PRICE": 5,
+    "DEFAULT_LEVEL_LINEUP": [
+      2,
+      0,
+      0,
+      0
+    ],
+    "DEFAULT_WEATHER_IDX": 1,
+    "DAILY2TICKETLIMIT": 3,
+    "NEWACCOUNTSTAMINA": 180,
+    "GACHA_BGM": "bgm/bgm_M08",
+    "LEVEL_TICKET_BOSS_LIMIT": [
+      [
+        1000010,
+        5
+      ],
+      [
+        1001010,
+        7
+      ]
+    ],
+    "LEVEL_TICKET_MONSTER_LIMIT": [
+      [
+        1000010,
+        5
+      ],
+      [
+        1001010,
+        7
+      ]
+    ],
+    "LEVEL_TICKET_BOSS_DEFAULT": 3,
+    "LEVEL_TICKET_MONSTER_DEFAULT": 3,
+    "CHARACTER_UNLOCK_COST": [
+      {
+        "key": 3004,
+        "val": 1
+      },
+      {
+        "key": 3004,
+        "val": 2
+      }
+    ],
+    "HERO_LIKEITEM_PRO": [
+      10,
+      10
+    ],
+    "RECRUIT_NUM_EXCHANGE": 7,
+    "HANDBOOK_HERO_ANIME": [
+      "idle",
+      "eating",
+      "drinking",
+      "tired",
+      "walk",
+      "sleeping"
+    ],
+    "DUTY_MAINPANEL_REACT_TIME": [
+      [
+        5,
+        12
+      ],
+      [
+        12,
+        20
+      ],
+      [
+        20,
+        5
+      ]
+    ],
+    "RECRUIT_RARITY_PROB": [
+      625,
+      225,
+      125,
+      25
+    ],
+    "RECRUIT_GUARANTEE_NUM": 1,
+    "FOOD_BATTLEUSE_LIMIT": 10,
+    "ROAD_EVENT_LIMIT": 4,
+    "ROAD_EVENT_COST": 50,
+    "ROAD_EVENT_TIME": 7200,
+    "ROAD_EVENT_CD": 60,
+    "FRIEND_RECOMMENDATION_NUM": 20,
+    "FRIEND_ADD_CD": 21600,
+    "FRIEND_REQUEST_MAX_NUM": 30,
+    "FRIEND_BLACKLIST_MAX_NUM": 30,
+    "FRIEND_MAX_NUM": 50,
+    "FRIEND_GIVE_RECEIVE_MAX_NUM": 20,
+    "FRIEND_GIFT_NUM": 5,
+    "CAMP_LAYOUT_DEFAULT": "{\"layout_id\":1,\"atmosphere_value\":267,\"building\":{\"1335565\":{\"building\":{\"building_id\":1335565,\"item_id\":90081,\"building_level\":1,\"camp_id\":9001,\"func_type\":1},\"x\":18,\"y\":22,\"parent_grid_id\":201},\"1335568\":{\"building\":{\"building_id\":1335568,\"item_id\":90083,\"building_level\":1,\"camp_id\":9001,\"func_type\":1},\"x\":33,\"y\":22,\"parent_grid_id\":201},\"1335569\":{\"building\":{\"building_id\":1335569,\"item_id\":90055,\"building_level\":1,\"camp_id\":9001,\"func_type\":1},\"x\":22,\"y\":22,\"parent_grid_id\":201},\"1335571\":{\"building\":{\"building_id\":1335571,\"item_id\":90071,\"building_level\":1,\"camp_id\":9001,\"func_type\":1},\"x\":35,\"y\":35,\"parent_grid_id\":201},\"1335574\":{\"building\":{\"building_id\":1335574,\"item_id\":90082,\"building_level\":1,\"camp_id\":9001,\"func_type\":1},\"x\":33,\"y\":26,\"parent_grid_id\":201},\"1335578\":{\"building\":{\"building_id\":1335578,\"item_id\":90056,\"building_level\":1,\"camp_id\":9001,\"func_type\":1},\"x\":27,\"y\":28,\"parent_grid_id\":201,\"flip\":true},\"1335580\":{\"building\":{\"building_id\":1335580,\"item_id\":90066,\"building_level\":1,\"camp_id\":9001,\"func_type\":1},\"x\":15,\"y\":38,\"parent_grid_id\":201},\"1335584\":{\"building\":{\"building_id\":1335584,\"item_id\":90101,\"building_level\":1,\"camp_id\":9001,\"func_type\":1},\"x\":25,\"y\":5,\"parent_grid_id\":401},\"1335586\":{\"building\":{\"building_id\":1335586,\"item_id\":90076,\"building_level\":1,\"camp_id\":9001,\"func_type\":1},\"x\":21,\"y\":27,\"parent_grid_id\":201},\"1335589\":{\"building\":{\"building_id\":1335589,\"item_id\":90054,\"building_level\":1,\"camp_id\":9001,\"func_type\":1},\"x\":25,\"y\":22,\"parent_grid_id\":201},\"1335590\":{\"building\":{\"building_id\":1335590,\"item_id\":90068,\"building_level\":1,\"camp_id\":9001,\"func_type\":1},\"x\":15,\"y\":40,\"parent_grid_id\":201},\"1457920\":{\"building\":{\"building_id\":1457920,\"item_id\":90061,\"building_level\":1,\"camp_id\":9001,\"func_type\":1},\"x\":12,\"y\":39,\"parent_grid_id\":201},\"1458415\":{\"building\":{\"building_id\":1458415,\"item_id\":90067,\"building_level\":1,\"camp_id\":9001,\"func_type\":1},\"x\":12,\"y\":37,\"parent_grid_id\":201},\"1458416\":{\"building\":{\"building_id\":1458416,\"item_id\":90067,\"building_level\":1,\"camp_id\":9001,\"func_type\":1},\"x\":14,\"y\":36,\"parent_grid_id\":201},\"1463464\":{\"building\":{\"building_id\":1463464,\"item_id\":90177,\"building_level\":1,\"camp_id\":9001,\"func_type\":1},\"x\":17,\"y\":2,\"parent_grid_id\":402,\"flip\":true},\"1463563\":{\"building\":{\"building_id\":1463563,\"item_id\":90178,\"building_level\":1,\"camp_id\":9001,\"func_type\":1},\"x\":33,\"y\":4,\"parent_grid_id\":401},\"1463662\":{\"building\":{\"building_id\":1463662,\"item_id\":90179,\"building_level\":1,\"camp_id\":9001,\"func_type\":1},\"x\":29,\"y\":4,\"parent_grid_id\":402,\"flip\":true}},\"thumb\":\"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\",\"theme_id\":90189}",
+    "CHAT_CD": 3,
+    "CAMP_LOTTERY_COST": {
+      "key": 2012,
+      "val": 200
+    },
+    "GACHA_LIMIT_DAILY": 99999,
+    "GACHA_LIMIT_DAILY_CAMP": 10000,
+    "CAMP_EXPAND_LIMIT": [
+      2,
+      12
+    ],
+    "CAMP_EXPAND_COST": [
+      200,
+      400,
+      600,
+      800,
+      1000,
+      1200,
+      1400,
+      1600,
+      1800,
+      2000
+    ],
+    "CHAT_SHOW_TIME": 180,
+    "ROLE_UPGRADE_ELE_COST": 1,
+    "RECRUIT_RARITY_PROB_CAMP": [
+      810,
+      160,
+      30
+    ],
+    "AWAKEN_PROFILE_GET": 4,
+    "GAME_ROOM_INVITE_CD": 5,
+    "NAME_SHIELD": "@,#,￥,%,…,……,&,*",
+    "ALLIANCE_CREATE_COST": [
+      2005,
+      200
+    ],
+    "FRIENDSHIP_BASE": 10,
+    "FRIENDSHIP_LIFE": 1,
+    "FRIENDSHIP_LIFE_LIMIT": 1200,
+    "GACHA_LINES_REFRESH_TIME": 3,
+    "PLAYER_RENAME_COST": {
+      "key": 2005,
+      "val": 200
+    },
+    "CALL_SPECIAL_LIMIT": 3,
+    "CALL_COMMON_LIMIT": 5,
+    "CALL_SPECIAL_REWARD": 100,
+    "CALL_FRESH_LIMIT": 120,
+    "GUIDETASK_MAX_NUM": 3,
+    "GACHA_NEWPLAYER_TIMES": 10,
+    "GACHA_NEWPLAYER_RARITY_LIMIT": 4,
+    "GACHA_CAMP_EXCHANGE": [
+      {
+        "key": 2012,
+        "val": 20
+      },
+      {
+        "key": 2012,
+        "val": 30
+      },
+      {
+        "key": 2012,
+        "val": 50
+      },
+      {
+        "key": 2012,
+        "val": 200
+      },
+      {
+        "key": 2012,
+        "val": 800
+      },
+      {
+        "key": 2012,
+        "val": 2400
+      }
+    ],
+    "GACHA_FRIEND_CURRENCY": [
+      2009,
+      2013
+    ]
+  }
+]

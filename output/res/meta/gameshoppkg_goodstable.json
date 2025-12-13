@@ -1,0 +1,1872 @@
+[
+  {
+    "id": 1,
+    "shop_id": 101,
+    "pos_idx": 1,
+    "item_id": {
+      "key": 5001,
+      "val": 1
+    },
+    "price": {
+      "key": 2001,
+      "val": 100
+    },
+    "limit": 1,
+    "refresh_weight": 1,
+    "layer": 1,
+    "ordination": 1001
+  },
+  {
+    "id": 2,
+    "shop_id": 101,
+    "pos_idx": 2,
+    "item_id": {
+      "key": 40028,
+      "val": 1
+    },
+    "price": {
+      "key": 2001,
+      "val": 10
+    },
+    "limit": 100,
+    "refresh_weight": 1,
+    "layer": 1,
+    "ordination": 1002
+  },
+  {
+    "id": 3,
+    "shop_id": 101,
+    "pos_idx": 3,
+    "item_id": {
+      "key": 40029,
+      "val": 1
+    },
+    "price": {
+      "key": 2001,
+      "val": 10
+    },
+    "limit": 100,
+    "refresh_weight": 1,
+    "layer": 1,
+    "ordination": 4003
+  },
+  {
+    "id": 4,
+    "shop_id": 101,
+    "pos_idx": 4,
+    "item_id": {
+      "key": 40030,
+      "val": 1
+    },
+    "price": {
+      "key": 2001,
+      "val": 10
+    },
+    "limit": 100,
+    "refresh_weight": 1,
+    "layer": 1,
+    "ordination": 4004
+  },
+  {
+    "id": 5,
+    "shop_id": 101,
+    "pos_idx": 5,
+    "item_id": {
+      "key": 40022,
+      "val": 1
+    },
+    "price": {
+      "key": 2001,
+      "val": 50
+    },
+    "limit": 3,
+    "refresh_weight": 1,
+    "layer": 1,
+    "ordination": 4005
+  },
+  {
+    "id": 6,
+    "shop_id": 101,
+    "pos_idx": 6,
+    "item_id": {
+      "key": 40023,
+      "val": 1
+    },
+    "price": {
+      "key": 2001,
+      "val": 20
+    },
+    "limit": 5,
+    "refresh_weight": 1,
+    "layer": 1,
+    "ordination": 4006
+  },
+  {
+    "id": 7,
+    "shop_id": 101,
+    "pos_idx": 7,
+    "item_id": {
+      "key": 40024,
+      "val": 1
+    },
+    "price": {
+      "key": 2001,
+      "val": 10
+    },
+    "limit": 15,
+    "refresh_weight": 1,
+    "layer": 1,
+    "ordination": 4007
+  },
+  {
+    "id": 8,
+    "shop_id": 101,
+    "pos_idx": 8,
+    "item_id": {
+      "key": 40025,
+      "val": 1
+    },
+    "price": {
+      "key": 2001,
+      "val": 50
+    },
+    "limit": 3,
+    "refresh_weight": 1,
+    "layer": 1,
+    "ordination": 4008
+  },
+  {
+    "id": 9,
+    "shop_id": 101,
+    "pos_idx": 9,
+    "item_id": {
+      "key": 40026,
+      "val": 1
+    },
+    "price": {
+      "key": 2001,
+      "val": 20
+    },
+    "limit": 5,
+    "refresh_weight": 1,
+    "layer": 1,
+    "ordination": 4009
+  },
+  {
+    "id": 10,
+    "shop_id": 101,
+    "pos_idx": 10,
+    "item_id": {
+      "key": 40027,
+      "val": 1
+    },
+    "price": {
+      "key": 2001,
+      "val": 10
+    },
+    "limit": 15,
+    "refresh_weight": 1,
+    "layer": 1,
+    "ordination": 4010
+  },
+  {
+    "id": 11,
+    "shop_id": 101,
+    "pos_idx": 1,
+    "item_id": {
+      "key": 40001,
+      "val": 1
+    },
+    "price": {
+      "key": 2001,
+      "val": 150
+    },
+    "limit": 1,
+    "refresh_weight": 1,
+    "layer": 2,
+    "ordination": 1001
+  },
+  {
+    "id": 12,
+    "shop_id": 101,
+    "pos_idx": 2,
+    "item_id": {
+      "key": 40002,
+      "val": 1
+    },
+    "price": {
+      "key": 2001,
+      "val": 150
+    },
+    "limit": 1,
+    "refresh_weight": 1,
+    "layer": 2,
+    "ordination": 1002
+  },
+  {
+    "id": 13,
+    "shop_id": 101,
+    "pos_idx": 3,
+    "item_id": {
+      "key": 40003,
+      "val": 1
+    },
+    "price": {
+      "key": 2001,
+      "val": 50
+    },
+    "limit": 5,
+    "refresh_weight": 1,
+    "layer": 2,
+    "ordination": 4003
+  },
+  {
+    "id": 14,
+    "shop_id": 101,
+    "pos_idx": 4,
+    "item_id": {
+      "key": 40004,
+      "val": 1
+    },
+    "price": {
+      "key": 2001,
+      "val": 50
+    },
+    "limit": 5,
+    "refresh_weight": 1,
+    "layer": 2,
+    "ordination": 4004
+  },
+  {
+    "id": 15,
+    "shop_id": 101,
+    "pos_idx": 5,
+    "item_id": {
+      "key": 40022,
+      "val": 1
+    },
+    "price": {
+      "key": 2001,
+      "val": 50
+    },
+    "limit": 3,
+    "refresh_weight": 1,
+    "layer": 2,
+    "ordination": 4005
+  },
+  {
+    "id": 16,
+    "shop_id": 101,
+    "pos_idx": 6,
+    "item_id": {
+      "key": 40023,
+      "val": 1
+    },
+    "price": {
+      "key": 2001,
+      "val": 20
+    },
+    "limit": 5,
+    "refresh_weight": 1,
+    "layer": 2,
+    "ordination": 4006
+  },
+  {
+    "id": 17,
+    "shop_id": 101,
+    "pos_idx": 7,
+    "item_id": {
+      "key": 40024,
+      "val": 1
+    },
+    "price": {
+      "key": 2001,
+      "val": 10
+    },
+    "limit": 15,
+    "refresh_weight": 1,
+    "layer": 2,
+    "ordination": 4007
+  },
+  {
+    "id": 18,
+    "shop_id": 101,
+    "pos_idx": 8,
+    "item_id": {
+      "key": 40025,
+      "val": 1
+    },
+    "price": {
+      "key": 2001,
+      "val": 50
+    },
+    "limit": 3,
+    "refresh_weight": 1,
+    "layer": 2,
+    "ordination": 4008
+  },
+  {
+    "id": 19,
+    "shop_id": 101,
+    "pos_idx": 9,
+    "item_id": {
+      "key": 40026,
+      "val": 1
+    },
+    "price": {
+      "key": 2001,
+      "val": 20
+    },
+    "limit": 5,
+    "refresh_weight": 1,
+    "layer": 2,
+    "ordination": 4009
+  },
+  {
+    "id": 20,
+    "shop_id": 101,
+    "pos_idx": 10,
+    "item_id": {
+      "key": 40027,
+      "val": 1
+    },
+    "price": {
+      "key": 2001,
+      "val": 10
+    },
+    "limit": 15,
+    "refresh_weight": 1,
+    "layer": 2,
+    "ordination": 4010
+  },
+  {
+    "id": 21,
+    "shop_id": 101,
+    "pos_idx": 1,
+    "item_id": {
+      "key": 40001,
+      "val": 1
+    },
+    "price": {
+      "key": 2001,
+      "val": 150
+    },
+    "limit": 1,
+    "refresh_weight": 1,
+    "layer": 3,
+    "ordination": 1001
+  },
+  {
+    "id": 22,
+    "shop_id": 101,
+    "pos_idx": 2,
+    "item_id": {
+      "key": 40002,
+      "val": 1
+    },
+    "price": {
+      "key": 2001,
+      "val": 150
+    },
+    "limit": 1,
+    "refresh_weight": 1,
+    "layer": 3,
+    "ordination": 1002
+  },
+  {
+    "id": 23,
+    "shop_id": 101,
+    "pos_idx": 3,
+    "item_id": {
+      "key": 40003,
+      "val": 1
+    },
+    "price": {
+      "key": 2001,
+      "val": 50
+    },
+    "limit": 5,
+    "refresh_weight": 1,
+    "layer": 3,
+    "ordination": 4003
+  },
+  {
+    "id": 24,
+    "shop_id": 101,
+    "pos_idx": 4,
+    "item_id": {
+      "key": 40004,
+      "val": 1
+    },
+    "price": {
+      "key": 2001,
+      "val": 50
+    },
+    "limit": 5,
+    "refresh_weight": 1,
+    "layer": 3,
+    "ordination": 4004
+  },
+  {
+    "id": 25,
+    "shop_id": 101,
+    "pos_idx": 5,
+    "item_id": {
+      "key": 40022,
+      "val": 1
+    },
+    "price": {
+      "key": 2001,
+      "val": 50
+    },
+    "limit": 3,
+    "refresh_weight": 1,
+    "layer": 3,
+    "ordination": 4005
+  },
+  {
+    "id": 26,
+    "shop_id": 101,
+    "pos_idx": 6,
+    "item_id": {
+      "key": 40023,
+      "val": 1
+    },
+    "price": {
+      "key": 2001,
+      "val": 20
+    },
+    "limit": 5,
+    "refresh_weight": 1,
+    "layer": 3,
+    "ordination": 4006
+  },
+  {
+    "id": 27,
+    "shop_id": 101,
+    "pos_idx": 7,
+    "item_id": {
+      "key": 40024,
+      "val": 1
+    },
+    "price": {
+      "key": 2001,
+      "val": 10
+    },
+    "limit": 15,
+    "refresh_weight": 1,
+    "layer": 3,
+    "ordination": 4007
+  },
+  {
+    "id": 28,
+    "shop_id": 101,
+    "pos_idx": 8,
+    "item_id": {
+      "key": 40025,
+      "val": 1
+    },
+    "price": {
+      "key": 2001,
+      "val": 50
+    },
+    "limit": 3,
+    "refresh_weight": 1,
+    "layer": 3,
+    "ordination": 4008
+  },
+  {
+    "id": 29,
+    "shop_id": 101,
+    "pos_idx": 9,
+    "item_id": {
+      "key": 40026,
+      "val": 1
+    },
+    "price": {
+      "key": 2001,
+      "val": 20
+    },
+    "limit": 5,
+    "refresh_weight": 1,
+    "layer": 3,
+    "ordination": 4009
+  },
+  {
+    "id": 30,
+    "shop_id": 101,
+    "pos_idx": 10,
+    "item_id": {
+      "key": 40027,
+      "val": 1
+    },
+    "price": {
+      "key": 2001,
+      "val": 10
+    },
+    "limit": 15,
+    "refresh_weight": 1,
+    "layer": 3,
+    "ordination": 4010
+  },
+  {
+    "id": 31,
+    "shop_id": 101,
+    "pos_idx": 11,
+    "item_id": {
+      "key": 40016,
+      "val": 1
+    },
+    "price": {
+      "key": 2001,
+      "val": 20
+    },
+    "limit": 20,
+    "refresh_weight": 1,
+    "layer": 3,
+    "ordination": 4011
+  },
+  {
+    "id": 32,
+    "shop_id": 102,
+    "pos_idx": 1,
+    "item_id": {
+      "key": 40001,
+      "val": 1
+    },
+    "price": {
+      "key": 2001,
+      "val": 150
+    },
+    "limit": 1,
+    "refresh_weight": 1,
+    "layer": 1,
+    "ordination": 1001
+  },
+  {
+    "id": 33,
+    "shop_id": 102,
+    "pos_idx": 2,
+    "item_id": {
+      "key": 40002,
+      "val": 1
+    },
+    "price": {
+      "key": 2001,
+      "val": 150
+    },
+    "limit": 1,
+    "refresh_weight": 1,
+    "layer": 1,
+    "ordination": 1002
+  },
+  {
+    "id": 34,
+    "shop_id": 102,
+    "pos_idx": 3,
+    "item_id": {
+      "key": 40003,
+      "val": 1
+    },
+    "price": {
+      "key": 2001,
+      "val": 50
+    },
+    "limit": 5,
+    "refresh_weight": 1,
+    "layer": 1,
+    "ordination": 4003
+  },
+  {
+    "id": 35,
+    "shop_id": 102,
+    "pos_idx": 4,
+    "item_id": {
+      "key": 40004,
+      "val": 1
+    },
+    "price": {
+      "key": 2001,
+      "val": 50
+    },
+    "limit": 5,
+    "refresh_weight": 1,
+    "layer": 1,
+    "ordination": 4004
+  },
+  {
+    "id": 36,
+    "shop_id": 102,
+    "pos_idx": 5,
+    "item_id": {
+      "key": 40022,
+      "val": 1
+    },
+    "price": {
+      "key": 2001,
+      "val": 50
+    },
+    "limit": 3,
+    "refresh_weight": 1,
+    "layer": 1,
+    "ordination": 4005
+  },
+  {
+    "id": 37,
+    "shop_id": 102,
+    "pos_idx": 6,
+    "item_id": {
+      "key": 40023,
+      "val": 1
+    },
+    "price": {
+      "key": 2001,
+      "val": 20
+    },
+    "limit": 5,
+    "refresh_weight": 1,
+    "layer": 1,
+    "ordination": 4006
+  },
+  {
+    "id": 38,
+    "shop_id": 102,
+    "pos_idx": 7,
+    "item_id": {
+      "key": 40024,
+      "val": 1
+    },
+    "price": {
+      "key": 2001,
+      "val": 10
+    },
+    "limit": 15,
+    "refresh_weight": 1,
+    "layer": 1,
+    "ordination": 4007
+  },
+  {
+    "id": 39,
+    "shop_id": 102,
+    "pos_idx": 8,
+    "item_id": {
+      "key": 40025,
+      "val": 1
+    },
+    "price": {
+      "key": 2001,
+      "val": 50
+    },
+    "limit": 3,
+    "refresh_weight": 1,
+    "layer": 1,
+    "ordination": 4008
+  },
+  {
+    "id": 40,
+    "shop_id": 102,
+    "pos_idx": 9,
+    "item_id": {
+      "key": 40026,
+      "val": 1
+    },
+    "price": {
+      "key": 2001,
+      "val": 20
+    },
+    "limit": 5,
+    "refresh_weight": 1,
+    "layer": 1,
+    "ordination": 4009
+  },
+  {
+    "id": 41,
+    "shop_id": 102,
+    "pos_idx": 10,
+    "item_id": {
+      "key": 40027,
+      "val": 1
+    },
+    "price": {
+      "key": 2001,
+      "val": 10
+    },
+    "limit": 15,
+    "refresh_weight": 1,
+    "layer": 1,
+    "ordination": 4010
+  },
+  {
+    "id": 42,
+    "shop_id": 103,
+    "pos_idx": 1,
+    "item_id": {
+      "key": 3001,
+      "val": 1
+    },
+    "price": {
+      "key": 2009,
+      "val": 90
+    },
+    "limit": 1,
+    "refresh_weight": 100,
+    "layer": 1,
+    "ordination": 1001
+  },
+  {
+    "id": 43,
+    "shop_id": 103,
+    "pos_idx": 2,
+    "item_id": {
+      "key": 3003,
+      "val": 1
+    },
+    "price": {
+      "key": 2009,
+      "val": 90
+    },
+    "limit": 1,
+    "refresh_weight": 100,
+    "layer": 1,
+    "ordination": 1002
+  },
+  {
+    "id": 44,
+    "shop_id": 103,
+    "pos_idx": 3,
+    "item_id": {
+      "key": 3004,
+      "val": 1
+    },
+    "price": {
+      "key": 2009,
+      "val": 60
+    },
+    "limit": 1,
+    "refresh_weight": 100,
+    "layer": 1,
+    "ordination": 2003
+  },
+  {
+    "id": 45,
+    "shop_id": 103,
+    "pos_idx": 4,
+    "item_id": {
+      "key": 4901,
+      "val": 1
+    },
+    "price": {
+      "key": 2009,
+      "val": 30
+    },
+    "limit": 1,
+    "refresh_weight": 100,
+    "layer": 1,
+    "ordination": 2004
+  },
+  {
+    "id": 46,
+    "shop_id": 103,
+    "pos_idx": 5,
+    "item_id": {
+      "key": 4902,
+      "val": 1
+    },
+    "price": {
+      "key": 2009,
+      "val": 40
+    },
+    "limit": 1,
+    "refresh_weight": 100,
+    "layer": 1,
+    "ordination": 2005
+  },
+  {
+    "id": 47,
+    "shop_id": 103,
+    "pos_idx": 6,
+    "item_id": {
+      "key": 4903,
+      "val": 1
+    },
+    "price": {
+      "key": 2009,
+      "val": 50
+    },
+    "limit": 1,
+    "refresh_weight": 100,
+    "layer": 1,
+    "ordination": 2006
+  },
+  {
+    "id": 48,
+    "shop_id": 103,
+    "pos_idx": 7,
+    "item_id": {
+      "key": 4904,
+      "val": 1
+    },
+    "price": {
+      "key": 2009,
+      "val": 60
+    },
+    "limit": 1,
+    "refresh_weight": 100,
+    "layer": 1,
+    "ordination": 2007
+  },
+  {
+    "id": 49,
+    "shop_id": 103,
+    "pos_idx": 8,
+    "item_id": {
+      "key": 4802,
+      "val": 2
+    },
+    "price": {
+      "key": 2009,
+      "val": 10
+    },
+    "limit": 20,
+    "refresh_weight": 100,
+    "layer": 1,
+    "ordination": 2001
+  },
+  {
+    "id": 50,
+    "shop_id": 103,
+    "pos_idx": 9,
+    "item_id": {
+      "key": 2001,
+      "val": 2000
+    },
+    "price": {
+      "key": 2009,
+      "val": 8
+    },
+    "limit": -1,
+    "refresh_weight": 100,
+    "layer": 1,
+    "ordination": 2002
+  },
+  {
+    "id": 51,
+    "shop_id": 103,
+    "pos_idx": 10,
+    "item_id": {
+      "key": 4101,
+      "val": 2
+    },
+    "price": {
+      "key": 2009,
+      "val": 12
+    },
+    "limit": 10,
+    "refresh_weight": 100,
+    "layer": 1,
+    "ordination": 2008
+  },
+  {
+    "id": 52,
+    "shop_id": 103,
+    "pos_idx": 11,
+    "item_id": {
+      "key": 4106,
+      "val": 2
+    },
+    "price": {
+      "key": 2009,
+      "val": 12
+    },
+    "limit": 10,
+    "refresh_weight": 100,
+    "layer": 1,
+    "ordination": 2009
+  },
+  {
+    "id": 53,
+    "shop_id": 103,
+    "pos_idx": 12,
+    "item_id": {
+      "key": 4111,
+      "val": 2
+    },
+    "price": {
+      "key": 2009,
+      "val": 12
+    },
+    "limit": 10,
+    "refresh_weight": 100,
+    "layer": 1,
+    "ordination": 2010
+  },
+  {
+    "id": 54,
+    "shop_id": 103,
+    "pos_idx": 13,
+    "item_id": {
+      "key": 4116,
+      "val": 2
+    },
+    "price": {
+      "key": 2009,
+      "val": 12
+    },
+    "limit": 10,
+    "refresh_weight": 100,
+    "layer": 1,
+    "ordination": 2011
+  },
+  {
+    "id": 55,
+    "shop_id": 103,
+    "pos_idx": 14,
+    "item_id": {
+      "key": 4121,
+      "val": 2
+    },
+    "price": {
+      "key": 2009,
+      "val": 12
+    },
+    "limit": 10,
+    "refresh_weight": 100,
+    "layer": 1,
+    "ordination": 2012
+  },
+  {
+    "id": 56,
+    "shop_id": 104,
+    "pos_idx": 1,
+    "item_id": {
+      "key": 3001,
+      "val": 1
+    },
+    "price": {
+      "key": 2005,
+      "val": 100
+    },
+    "limit": 10,
+    "refresh_weight": 100,
+    "layer": 1,
+    "ordination": 1001
+  },
+  {
+    "id": 57,
+    "shop_id": 104,
+    "pos_idx": 2,
+    "item_id": {
+      "key": 3003,
+      "val": 1
+    },
+    "price": {
+      "key": 2005,
+      "val": 120
+    },
+    "limit": 10,
+    "refresh_weight": 100,
+    "layer": 1,
+    "ordination": 1002
+  },
+  {
+    "id": 58,
+    "shop_id": 104,
+    "pos_idx": 3,
+    "item_id": {
+      "key": 5101,
+      "val": 1
+    },
+    "price": {
+      "key": 2005,
+      "val": 20
+    },
+    "limit": 10,
+    "refresh_weight": 100,
+    "layer": 1,
+    "ordination": 4001
+  },
+  {
+    "id": 59,
+    "shop_id": 104,
+    "pos_idx": 4,
+    "item_id": {
+      "key": 5102,
+      "val": 1
+    },
+    "price": {
+      "key": 2005,
+      "val": 10
+    },
+    "limit": 10,
+    "refresh_weight": 100,
+    "layer": 1,
+    "ordination": 2001
+  },
+  {
+    "id": 60,
+    "shop_id": 104,
+    "pos_idx": 5,
+    "item_id": {
+      "key": 4803,
+      "val": 2
+    },
+    "price": {
+      "key": 2005,
+      "val": 80
+    },
+    "limit": 10,
+    "refresh_weight": 100,
+    "layer": 1,
+    "ordination": 2003
+  },
+  {
+    "id": 61,
+    "shop_id": 104,
+    "pos_idx": 6,
+    "item_id": {
+      "key": 4902,
+      "val": 2
+    },
+    "price": {
+      "key": 2005,
+      "val": 100
+    },
+    "limit": 3,
+    "refresh_weight": 100,
+    "layer": 1,
+    "ordination": 2004
+  },
+  {
+    "id": 62,
+    "shop_id": 104,
+    "pos_idx": 7,
+    "item_id": {
+      "key": 4201,
+      "val": 1
+    },
+    "price": {
+      "key": 2005,
+      "val": 10
+    },
+    "limit": 5,
+    "refresh_weight": 100,
+    "layer": 1,
+    "ordination": 2005
+  },
+  {
+    "id": 63,
+    "shop_id": 104,
+    "pos_idx": 8,
+    "item_id": {
+      "key": 4206,
+      "val": 1
+    },
+    "price": {
+      "key": 2005,
+      "val": 10
+    },
+    "limit": 5,
+    "refresh_weight": 100,
+    "layer": 1,
+    "ordination": 2006
+  },
+  {
+    "id": 64,
+    "shop_id": 104,
+    "pos_idx": 9,
+    "item_id": {
+      "key": 4211,
+      "val": 1
+    },
+    "price": {
+      "key": 2005,
+      "val": 10
+    },
+    "limit": 5,
+    "refresh_weight": 100,
+    "layer": 1,
+    "ordination": 2007
+  },
+  {
+    "id": 65,
+    "shop_id": 104,
+    "pos_idx": 10,
+    "item_id": {
+      "key": 4216,
+      "val": 1
+    },
+    "price": {
+      "key": 2005,
+      "val": 10
+    },
+    "limit": 5,
+    "refresh_weight": 100,
+    "layer": 1,
+    "ordination": 2008
+  },
+  {
+    "id": 66,
+    "shop_id": 104,
+    "pos_idx": 11,
+    "item_id": {
+      "key": 4221,
+      "val": 1
+    },
+    "price": {
+      "key": 2005,
+      "val": 10
+    },
+    "limit": 5,
+    "refresh_weight": 100,
+    "layer": 1,
+    "ordination": 2009
+  },
+  {
+    "id": 67,
+    "shop_id": 104,
+    "pos_idx": 12,
+    "item_id": {
+      "key": 4226,
+      "val": 1
+    },
+    "price": {
+      "key": 2005,
+      "val": 10
+    },
+    "limit": 5,
+    "refresh_weight": 100,
+    "layer": 1,
+    "ordination": 2010
+  },
+  {
+    "id": 68,
+    "shop_id": 104,
+    "pos_idx": 13,
+    "item_id": {
+      "key": 4601,
+      "val": 1
+    },
+    "price": {
+      "key": 2005,
+      "val": 15
+    },
+    "limit": 5,
+    "refresh_weight": 100,
+    "layer": 1,
+    "ordination": 2014
+  },
+  {
+    "id": 69,
+    "shop_id": 104,
+    "pos_idx": 14,
+    "item_id": {
+      "key": 4604,
+      "val": 1
+    },
+    "price": {
+      "key": 2005,
+      "val": 15
+    },
+    "limit": 5,
+    "refresh_weight": 100,
+    "layer": 1,
+    "ordination": 2015
+  },
+  {
+    "id": 70,
+    "shop_id": 104,
+    "pos_idx": 15,
+    "item_id": {
+      "key": 4607,
+      "val": 1
+    },
+    "price": {
+      "key": 2005,
+      "val": 15
+    },
+    "limit": 5,
+    "refresh_weight": 100,
+    "layer": 1,
+    "ordination": 2016
+  },
+  {
+    "id": 71,
+    "shop_id": 104,
+    "pos_idx": 16,
+    "item_id": {
+      "key": 4610,
+      "val": 1
+    },
+    "price": {
+      "key": 2005,
+      "val": 15
+    },
+    "limit": 5,
+    "refresh_weight": 100,
+    "layer": 1,
+    "ordination": 2017
+  },
+  {
+    "id": 72,
+    "shop_id": 104,
+    "pos_idx": 17,
+    "item_id": {
+      "key": 4613,
+      "val": 1
+    },
+    "price": {
+      "key": 2005,
+      "val": 15
+    },
+    "limit": 5,
+    "refresh_weight": 100,
+    "layer": 1,
+    "ordination": 2018
+  },
+  {
+    "id": 73,
+    "shop_id": 104,
+    "pos_idx": 18,
+    "item_id": {
+      "key": 4616,
+      "val": 1
+    },
+    "price": {
+      "key": 2005,
+      "val": 15
+    },
+    "limit": 5,
+    "refresh_weight": 100,
+    "layer": 1,
+    "ordination": 2019
+  },
+  {
+    "id": 901,
+    "shop_id": 106,
+    "pos_idx": 1,
+    "item_id": {
+      "key": 90151,
+      "val": 1
+    },
+    "price": {
+      "key": 2012,
+      "val": 300
+    },
+    "limit": 3,
+    "refresh_weight": 1,
+    "layer": 1,
+    "ordination": 3001
+  },
+  {
+    "id": 902,
+    "shop_id": 106,
+    "pos_idx": 2,
+    "item_id": {
+      "key": 90153,
+      "val": 1
+    },
+    "price": {
+      "key": 2012,
+      "val": 100
+    },
+    "limit": 8,
+    "refresh_weight": 1,
+    "layer": 1,
+    "ordination": 3002
+  },
+  {
+    "id": 903,
+    "shop_id": 106,
+    "pos_idx": 3,
+    "item_id": {
+      "key": 90154,
+      "val": 1
+    },
+    "price": {
+      "key": 2012,
+      "val": 100
+    },
+    "limit": 8,
+    "refresh_weight": 1,
+    "layer": 1,
+    "ordination": 3003
+  },
+  {
+    "id": 904,
+    "shop_id": 106,
+    "pos_idx": 4,
+    "item_id": {
+      "key": 90155,
+      "val": 1
+    },
+    "price": {
+      "key": 2012,
+      "val": 100
+    },
+    "limit": 8,
+    "refresh_weight": 1,
+    "layer": 1,
+    "ordination": 3004
+  },
+  {
+    "id": 905,
+    "shop_id": 106,
+    "pos_idx": 5,
+    "item_id": {
+      "key": 90156,
+      "val": 1
+    },
+    "price": {
+      "key": 2012,
+      "val": 100
+    },
+    "limit": 8,
+    "refresh_weight": 1,
+    "layer": 1,
+    "ordination": 3005
+  },
+  {
+    "id": 906,
+    "shop_id": 106,
+    "pos_idx": 6,
+    "item_id": {
+      "key": 90157,
+      "val": 1
+    },
+    "price": {
+      "key": 2012,
+      "val": 100
+    },
+    "limit": 8,
+    "refresh_weight": 1,
+    "layer": 1,
+    "ordination": 3006
+  },
+  {
+    "id": 907,
+    "shop_id": 106,
+    "pos_idx": 7,
+    "item_id": {
+      "key": 90162,
+      "val": 1
+    },
+    "price": {
+      "key": 2012,
+      "val": 300
+    },
+    "limit": 2,
+    "refresh_weight": 1,
+    "layer": 1,
+    "ordination": 3007
+  },
+  {
+    "id": 908,
+    "shop_id": 106,
+    "pos_idx": 8,
+    "item_id": {
+      "key": 90163,
+      "val": 1
+    },
+    "price": {
+      "key": 2012,
+      "val": 300
+    },
+    "limit": 2,
+    "refresh_weight": 1,
+    "layer": 1,
+    "ordination": 3008
+  },
+  {
+    "id": 909,
+    "shop_id": 106,
+    "pos_idx": 9,
+    "item_id": {
+      "key": 90165,
+      "val": 1
+    },
+    "price": {
+      "key": 2012,
+      "val": 500
+    },
+    "limit": 1,
+    "refresh_weight": 1,
+    "layer": 1,
+    "ordination": 3009
+  },
+  {
+    "id": 910,
+    "shop_id": 106,
+    "pos_idx": 10,
+    "item_id": {
+      "key": 90166,
+      "val": 1
+    },
+    "price": {
+      "key": 2012,
+      "val": 400
+    },
+    "limit": 2,
+    "refresh_weight": 1,
+    "layer": 1,
+    "ordination": 3010
+  },
+  {
+    "id": 911,
+    "shop_id": 106,
+    "pos_idx": 11,
+    "item_id": {
+      "key": 90167,
+      "val": 1
+    },
+    "price": {
+      "key": 2012,
+      "val": 270
+    },
+    "limit": 2,
+    "refresh_weight": 1,
+    "layer": 1,
+    "ordination": 3011
+  },
+  {
+    "id": 912,
+    "shop_id": 106,
+    "pos_idx": 12,
+    "item_id": {
+      "key": 90168,
+      "val": 1
+    },
+    "price": {
+      "key": 2012,
+      "val": 270
+    },
+    "limit": 2,
+    "refresh_weight": 1,
+    "layer": 1,
+    "ordination": 3012
+  },
+  {
+    "id": 913,
+    "shop_id": 106,
+    "pos_idx": 13,
+    "item_id": {
+      "key": 90169,
+      "val": 1
+    },
+    "price": {
+      "key": 2012,
+      "val": 360
+    },
+    "limit": 2,
+    "refresh_weight": 1,
+    "layer": 1,
+    "ordination": 3013
+  },
+  {
+    "id": 914,
+    "shop_id": 106,
+    "pos_idx": 14,
+    "item_id": {
+      "key": 90170,
+      "val": 1
+    },
+    "price": {
+      "key": 2012,
+      "val": 270
+    },
+    "limit": 2,
+    "refresh_weight": 1,
+    "layer": 1,
+    "ordination": 3014
+  },
+  {
+    "id": 915,
+    "shop_id": 106,
+    "pos_idx": 15,
+    "item_id": {
+      "key": 90171,
+      "val": 1
+    },
+    "price": {
+      "key": 2012,
+      "val": 360
+    },
+    "limit": 2,
+    "refresh_weight": 1,
+    "layer": 1,
+    "ordination": 3015
+  },
+  {
+    "id": 916,
+    "shop_id": 106,
+    "pos_idx": 16,
+    "item_id": {
+      "key": 90172,
+      "val": 1
+    },
+    "price": {
+      "key": 2012,
+      "val": 270
+    },
+    "limit": 2,
+    "refresh_weight": 1,
+    "layer": 1,
+    "ordination": 3016
+  },
+  {
+    "id": 917,
+    "shop_id": 106,
+    "pos_idx": 17,
+    "item_id": {
+      "key": 90174,
+      "val": 1
+    },
+    "price": {
+      "key": 2012,
+      "val": 300
+    },
+    "limit": 1,
+    "refresh_weight": 1,
+    "layer": 1,
+    "ordination": 3017
+  },
+  {
+    "id": 918,
+    "shop_id": 106,
+    "pos_idx": 18,
+    "item_id": {
+      "key": 90176,
+      "val": 1
+    },
+    "price": {
+      "key": 2012,
+      "val": 270
+    },
+    "limit": 1,
+    "refresh_weight": 1,
+    "layer": 1,
+    "ordination": 3018
+  },
+  {
+    "id": 919,
+    "shop_id": 106,
+    "pos_idx": 19,
+    "item_id": {
+      "key": 90179,
+      "val": 1
+    },
+    "price": {
+      "key": 2012,
+      "val": 270
+    },
+    "limit": 1,
+    "refresh_weight": 1,
+    "layer": 1,
+    "ordination": 3019
+  },
+  {
+    "id": 920,
+    "shop_id": 106,
+    "pos_idx": 20,
+    "item_id": {
+      "key": 90184,
+      "val": 1
+    },
+    "price": {
+      "key": 2012,
+      "val": 360
+    },
+    "limit": 1,
+    "refresh_weight": 1,
+    "layer": 1,
+    "ordination": 3020
+  },
+  {
+    "id": 921,
+    "shop_id": 106,
+    "pos_idx": 21,
+    "item_id": {
+      "key": 90185,
+      "val": 1
+    },
+    "price": {
+      "key": 2012,
+      "val": 360
+    },
+    "limit": 1,
+    "refresh_weight": 1,
+    "layer": 1,
+    "ordination": 3021
+  },
+  {
+    "id": 922,
+    "shop_id": 106,
+    "pos_idx": 1,
+    "item_id": {
+      "key": 90152,
+      "val": 1
+    },
+    "price": {
+      "key": 2012,
+      "val": 720
+    },
+    "limit": 1,
+    "refresh_weight": 1,
+    "layer": 2,
+    "ordination": 3022
+  },
+  {
+    "id": 923,
+    "shop_id": 106,
+    "pos_idx": 2,
+    "item_id": {
+      "key": 90159,
+      "val": 1
+    },
+    "price": {
+      "key": 2012,
+      "val": 600
+    },
+    "limit": 2,
+    "refresh_weight": 1,
+    "layer": 2,
+    "ordination": 3023
+  },
+  {
+    "id": 924,
+    "shop_id": 106,
+    "pos_idx": 3,
+    "item_id": {
+      "key": 90160,
+      "val": 1
+    },
+    "price": {
+      "key": 2012,
+      "val": 600
+    },
+    "limit": 2,
+    "refresh_weight": 1,
+    "layer": 2,
+    "ordination": 3024
+  },
+  {
+    "id": 925,
+    "shop_id": 106,
+    "pos_idx": 4,
+    "item_id": {
+      "key": 90161,
+      "val": 1
+    },
+    "price": {
+      "key": 2012,
+      "val": 960
+    },
+    "limit": 1,
+    "refresh_weight": 1,
+    "layer": 2,
+    "ordination": 3025
+  },
+  {
+    "id": 926,
+    "shop_id": 106,
+    "pos_idx": 5,
+    "item_id": {
+      "key": 90164,
+      "val": 1
+    },
+    "price": {
+      "key": 2012,
+      "val": 1200
+    },
+    "limit": 1,
+    "refresh_weight": 1,
+    "layer": 2,
+    "ordination": 3026
+  },
+  {
+    "id": 927,
+    "shop_id": 106,
+    "pos_idx": 6,
+    "item_id": {
+      "key": 90173,
+      "val": 1
+    },
+    "price": {
+      "key": 2012,
+      "val": 600
+    },
+    "limit": 1,
+    "refresh_weight": 1,
+    "layer": 2,
+    "ordination": 3027
+  },
+  {
+    "id": 928,
+    "shop_id": 106,
+    "pos_idx": 7,
+    "item_id": {
+      "key": 90175,
+      "val": 1
+    },
+    "price": {
+      "key": 2012,
+      "val": 480
+    },
+    "limit": 2,
+    "refresh_weight": 1,
+    "layer": 2,
+    "ordination": 3028
+  },
+  {
+    "id": 929,
+    "shop_id": 106,
+    "pos_idx": 8,
+    "item_id": {
+      "key": 90177,
+      "val": 1
+    },
+    "price": {
+      "key": 2012,
+      "val": 720
+    },
+    "limit": 2,
+    "refresh_weight": 1,
+    "layer": 2,
+    "ordination": 3029
+  },
+  {
+    "id": 930,
+    "shop_id": 106,
+    "pos_idx": 9,
+    "item_id": {
+      "key": 90183,
+      "val": 1
+    },
+    "price": {
+      "key": 2012,
+      "val": 1200
+    },
+    "limit": 1,
+    "refresh_weight": 1,
+    "layer": 2,
+    "ordination": 3030
+  },
+  {
+    "id": 931,
+    "shop_id": 106,
+    "pos_idx": 10,
+    "item_id": {
+      "key": 90187,
+      "val": 1
+    },
+    "price": {
+      "key": 2012,
+      "val": 960
+    },
+    "limit": 1,
+    "refresh_weight": 1,
+    "layer": 2,
+    "ordination": 3031
+  },
+  {
+    "id": 932,
+    "shop_id": 106,
+    "pos_idx": 11,
+    "item_id": {
+      "key": 90188,
+      "val": 1
+    },
+    "price": {
+      "key": 2012,
+      "val": 1600
+    },
+    "limit": 1,
+    "refresh_weight": 1,
+    "layer": 2,
+    "ordination": 3032
+  },
+  {
+    "id": 933,
+    "shop_id": 106,
+    "pos_idx": 1,
+    "item_id": {
+      "key": 90158,
+      "val": 1
+    },
+    "price": {
+      "key": 2012,
+      "val": 4800
+    },
+    "limit": 1,
+    "refresh_weight": 1,
+    "layer": 3,
+    "ordination": 3033
+  },
+  {
+    "id": 934,
+    "shop_id": 106,
+    "pos_idx": 2,
+    "item_id": {
+      "key": 90178,
+      "val": 1
+    },
+    "price": {
+      "key": 2012,
+      "val": 3600
+    },
+    "limit": 1,
+    "refresh_weight": 1,
+    "layer": 3,
+    "ordination": 3034
+  },
+  {
+    "id": 935,
+    "shop_id": 106,
+    "pos_idx": 3,
+    "item_id": {
+      "key": 90180,
+      "val": 1
+    },
+    "price": {
+      "key": 2012,
+      "val": 6000
+    },
+    "limit": 1,
+    "refresh_weight": 1,
+    "layer": 3,
+    "ordination": 3035
+  },
+  {
+    "id": 936,
+    "shop_id": 106,
+    "pos_idx": 4,
+    "item_id": {
+      "key": 90181,
+      "val": 1
+    },
+    "price": {
+      "key": 2012,
+      "val": 4800
+    },
+    "limit": 1,
+    "refresh_weight": 1,
+    "layer": 3,
+    "ordination": 3036
+  },
+  {
+    "id": 937,
+    "shop_id": 106,
+    "pos_idx": 5,
+    "item_id": {
+      "key": 90182,
+      "val": 1
+    },
+    "price": {
+      "key": 2012,
+      "val": 6000
+    },
+    "limit": 1,
+    "refresh_weight": 1,
+    "layer": 3,
+    "ordination": 3037
+  }
+]

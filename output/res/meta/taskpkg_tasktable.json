@@ -1,0 +1,3302 @@
+[
+  {
+    "id": 6301,
+    "task_title": "营地",
+    "task_desc": "task_dec_517",
+    "task_icon": "3",
+    "type": 6,
+    "time": 0,
+    "task_type": 517,
+    "task_value": 1,
+    "task_param1": [
+      90123
+    ],
+    "pre_task_id": [],
+    "pre_condition": [
+      [
+        2,
+        1002
+      ]
+    ],
+    "jump": 201,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 4801,
+        "val": 5
+      },
+      {
+        "key": 5101,
+        "val": 5
+      }
+    ]
+  },
+  {
+    "id": 6302,
+    "task_title": "营地",
+    "task_desc": "task_dec_517",
+    "task_icon": "3",
+    "type": 6,
+    "time": 0,
+    "task_type": 517,
+    "task_value": 1,
+    "task_param1": [
+      90074
+    ],
+    "pre_task_id": [
+      6301
+    ],
+    "pre_condition": [
+      [
+        2,
+        1002
+      ]
+    ],
+    "jump": 202,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 4801,
+        "val": 5
+      },
+      {
+        "key": 5102,
+        "val": 5
+      }
+    ]
+  },
+  {
+    "id": 6303,
+    "task_title": "营地",
+    "task_desc": "task_dec_313",
+    "task_icon": "3",
+    "type": 6,
+    "time": 0,
+    "task_type": 313,
+    "task_value": 1,
+    "task_param1": [],
+    "pre_task_id": [
+      6302
+    ],
+    "pre_condition": [],
+    "jump": 202,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 4801,
+        "val": 5
+      },
+      {
+        "key": 4301,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 6304,
+    "task_title": "营地",
+    "task_desc": "task_dec_301",
+    "task_icon": "3",
+    "type": 6,
+    "time": 0,
+    "task_type": 301,
+    "task_value": 1,
+    "task_param1": [],
+    "pre_task_id": [
+      6301
+    ],
+    "pre_condition": [],
+    "jump": 201,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 80
+      },
+      {
+        "key": 4802,
+        "val": 8
+      },
+      {
+        "key": 2001,
+        "val": 20000
+      }
+    ]
+  },
+  {
+    "id": 6305,
+    "task_title": "营地",
+    "task_desc": "task_dec_518",
+    "task_icon": "3",
+    "type": 6,
+    "time": 0,
+    "task_type": 518,
+    "task_value": 1,
+    "task_param1": [
+      1,
+      90074
+    ],
+    "pre_task_id": [
+      6302
+    ],
+    "pre_condition": [],
+    "jump": 202,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 4801,
+        "val": 5
+      },
+      {
+        "key": 5101,
+        "val": 5
+      }
+    ]
+  },
+  {
+    "id": 6501,
+    "task_title": "采集",
+    "task_desc": "task_dec_527",
+    "task_icon": "5",
+    "type": 6,
+    "time": 0,
+    "task_type": 527,
+    "task_value": 3,
+    "task_param1": [
+      4,
+      3
+    ],
+    "pre_task_id": [
+      6101
+    ],
+    "pre_condition": [],
+    "jump": 301,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 4801,
+        "val": 5
+      },
+      {
+        "key": 4302,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 6502,
+    "task_title": "采集",
+    "task_desc": "task_dec_525",
+    "task_icon": "5",
+    "type": 6,
+    "time": 0,
+    "task_type": 525,
+    "task_value": 3,
+    "task_param1": [
+      4,
+      5
+    ],
+    "pre_task_id": [
+      6101
+    ],
+    "pre_condition": [
+      [
+        2,
+        1003
+      ]
+    ],
+    "jump": 301,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 4801,
+        "val": 5
+      },
+      {
+        "key": 4303,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 6503,
+    "task_title": "采集",
+    "task_desc": "task_dec_525",
+    "task_icon": "5",
+    "type": 6,
+    "time": 0,
+    "task_type": 525,
+    "task_value": 3,
+    "task_param1": [
+      4,
+      4
+    ],
+    "pre_task_id": [
+      6101
+    ],
+    "pre_condition": [],
+    "jump": 301,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 4801,
+        "val": 5
+      },
+      {
+        "key": 4304,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 6306,
+    "task_title": "营地",
+    "task_desc": "task_dec_312",
+    "task_icon": "3",
+    "type": 6,
+    "time": 0,
+    "task_type": 312,
+    "task_value": 1,
+    "task_param1": [],
+    "pre_task_id": [
+      6501
+    ],
+    "pre_condition": [],
+    "jump": 203,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 4801,
+        "val": 5
+      },
+      {
+        "key": 5102,
+        "val": 5
+      }
+    ]
+  },
+  {
+    "id": 6101,
+    "task_title": "探索",
+    "task_desc": "task_dec_521",
+    "task_icon": "1",
+    "type": 6,
+    "time": 0,
+    "task_type": 521,
+    "task_value": 1,
+    "task_param1": [
+      103
+    ],
+    "pre_task_id": [],
+    "pre_condition": [
+      [
+        1,
+        108
+      ]
+    ],
+    "jump": 301,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 80
+      },
+      {
+        "key": 4801,
+        "val": 5
+      },
+      {
+        "key": 4701,
+        "val": 6
+      }
+    ]
+  },
+  {
+    "id": 6102,
+    "task_title": "探索",
+    "task_desc": "task_dec_521",
+    "task_icon": "1",
+    "type": 6,
+    "time": 0,
+    "task_type": 521,
+    "task_value": 1,
+    "task_param1": [
+      104
+    ],
+    "pre_task_id": [
+      6101
+    ],
+    "pre_condition": [],
+    "jump": 301,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 80
+      },
+      {
+        "key": 4801,
+        "val": 5
+      },
+      {
+        "key": 4704,
+        "val": 6
+      }
+    ]
+  },
+  {
+    "id": 6103,
+    "task_title": "探索",
+    "task_desc": "task_dec_521",
+    "task_icon": "1",
+    "type": 6,
+    "time": 0,
+    "task_type": 521,
+    "task_value": 1,
+    "task_param1": [
+      105
+    ],
+    "pre_task_id": [
+      6102
+    ],
+    "pre_condition": [],
+    "jump": 301,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 80
+      },
+      {
+        "key": 4801,
+        "val": 5
+      },
+      {
+        "key": 4707,
+        "val": 6
+      }
+    ]
+  },
+  {
+    "id": 6104,
+    "task_title": "探索",
+    "task_desc": "task_dec_521",
+    "task_icon": "1",
+    "type": 6,
+    "time": 0,
+    "task_type": 521,
+    "task_value": 1,
+    "task_param1": [
+      109
+    ],
+    "pre_task_id": [
+      6103
+    ],
+    "pre_condition": [],
+    "jump": 301,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 80
+      },
+      {
+        "key": 4801,
+        "val": 5
+      },
+      {
+        "key": 4710,
+        "val": 6
+      }
+    ]
+  },
+  {
+    "id": 6201,
+    "task_title": "角色",
+    "task_desc": "task_dec_402",
+    "task_icon": "2",
+    "type": 6,
+    "time": 0,
+    "task_type": 402,
+    "task_value": 4,
+    "task_param1": [],
+    "pre_task_id": [],
+    "pre_condition": [
+      [
+        1,
+        109
+      ]
+    ],
+    "jump": 0,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 80
+      },
+      {
+        "key": 4802,
+        "val": 8
+      },
+      {
+        "key": 2001,
+        "val": 20000
+      }
+    ]
+  },
+  {
+    "id": 6202,
+    "task_title": "角色",
+    "task_desc": "task_dec_121",
+    "task_icon": "2",
+    "type": 6,
+    "time": 0,
+    "task_type": 121,
+    "task_value": 1,
+    "task_param1": [],
+    "pre_task_id": [],
+    "pre_condition": [
+      [
+        2,
+        1003
+      ]
+    ],
+    "jump": 601,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 80
+      },
+      {
+        "key": 4801,
+        "val": 10
+      },
+      {
+        "key": 4802,
+        "val": 4
+      }
+    ]
+  },
+  {
+    "id": 6203,
+    "task_title": "角色",
+    "task_desc": "task_dec_505",
+    "task_icon": "2",
+    "type": 6,
+    "time": 0,
+    "task_type": 505,
+    "task_value": 1,
+    "task_param1": [
+      10
+    ],
+    "pre_task_id": [
+      6202
+    ],
+    "pre_condition": [],
+    "jump": 601,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 80
+      },
+      {
+        "key": 4801,
+        "val": 10
+      },
+      {
+        "key": 4802,
+        "val": 4
+      }
+    ]
+  },
+  {
+    "id": 6204,
+    "task_title": "角色",
+    "task_desc": "task_dec_505",
+    "task_icon": "2",
+    "type": 6,
+    "time": 0,
+    "task_type": 505,
+    "task_value": 4,
+    "task_param1": [
+      10
+    ],
+    "pre_task_id": [
+      6203
+    ],
+    "pre_condition": [],
+    "jump": 601,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 80
+      },
+      {
+        "key": 4801,
+        "val": 10
+      },
+      {
+        "key": 4802,
+        "val": 4
+      }
+    ]
+  },
+  {
+    "id": 6001,
+    "task_title": "招募",
+    "task_desc": "task_dec_407",
+    "task_icon": "1",
+    "type": 6,
+    "time": 0,
+    "task_type": 407,
+    "task_value": 10,
+    "task_param1": [],
+    "pre_task_id": [],
+    "pre_condition": [
+      [
+        1,
+        109
+      ]
+    ],
+    "jump": 801,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 80
+      },
+      {
+        "key": 4802,
+        "val": 4
+      },
+      {
+        "key": 4901,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 6105,
+    "task_title": "探索",
+    "task_desc": "task_dec_521",
+    "task_icon": "1",
+    "type": 6,
+    "time": 0,
+    "task_type": 521,
+    "task_value": 1,
+    "task_param1": [
+      106
+    ],
+    "pre_task_id": [
+      6204
+    ],
+    "pre_condition": [],
+    "jump": 301,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 80
+      },
+      {
+        "key": 4801,
+        "val": 5
+      },
+      {
+        "key": 4713,
+        "val": 6
+      }
+    ]
+  },
+  {
+    "id": 6401,
+    "task_title": "战斗",
+    "task_desc": "task_dec_507",
+    "task_icon": "4",
+    "type": 6,
+    "time": 0,
+    "task_type": 507,
+    "task_value": 1,
+    "task_param1": [
+      99
+    ],
+    "pre_task_id": [],
+    "pre_condition": [
+      [
+        2,
+        1006
+      ]
+    ],
+    "jump": 401,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 4801,
+        "val": 5
+      },
+      {
+        "key": 4301,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 6402,
+    "task_title": "战斗",
+    "task_desc": "task_dec_507",
+    "task_icon": "4",
+    "type": 6,
+    "time": 0,
+    "task_type": 507,
+    "task_value": 1,
+    "task_param1": [
+      100
+    ],
+    "pre_task_id": [],
+    "pre_condition": [
+      [
+        2,
+        1006
+      ]
+    ],
+    "jump": 402,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 4801,
+        "val": 5
+      },
+      {
+        "key": 4302,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 6403,
+    "task_title": "战斗",
+    "task_desc": "task_dec_507",
+    "task_icon": "4",
+    "type": 6,
+    "time": 0,
+    "task_type": 507,
+    "task_value": 2,
+    "task_param1": [
+      97
+    ],
+    "pre_task_id": [],
+    "pre_condition": [
+      [
+        2,
+        1006
+      ]
+    ],
+    "jump": 403,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 4801,
+        "val": 5
+      },
+      {
+        "key": 4303,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 6404,
+    "task_title": "战斗",
+    "task_desc": "task_dec_507",
+    "task_icon": "4",
+    "type": 6,
+    "time": 0,
+    "task_type": 507,
+    "task_value": 3,
+    "task_param1": [
+      98
+    ],
+    "pre_task_id": [],
+    "pre_condition": [
+      [
+        2,
+        1006
+      ]
+    ],
+    "jump": 404,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 4801,
+        "val": 5
+      },
+      {
+        "key": 4304,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 6205,
+    "task_title": "角色",
+    "task_desc": "task_dec_505",
+    "task_icon": "2",
+    "type": 6,
+    "time": 0,
+    "task_type": 505,
+    "task_value": 1,
+    "task_param1": [
+      15
+    ],
+    "pre_task_id": [
+      6404
+    ],
+    "pre_condition": [],
+    "jump": 601,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 80
+      },
+      {
+        "key": 4801,
+        "val": 10
+      },
+      {
+        "key": 4802,
+        "val": 4
+      }
+    ]
+  },
+  {
+    "id": 6206,
+    "task_title": "角色",
+    "task_desc": "task_dec_101",
+    "task_icon": "2",
+    "type": 6,
+    "time": 0,
+    "task_type": 101,
+    "task_value": 1,
+    "task_param1": [],
+    "pre_task_id": [
+      6403
+    ],
+    "pre_condition": [],
+    "jump": 601,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 80
+      },
+      {
+        "key": 4801,
+        "val": 5
+      },
+      {
+        "key": 4701,
+        "val": 6
+      }
+    ]
+  },
+  {
+    "id": 6106,
+    "task_title": "探索",
+    "task_desc": "task_dec_521",
+    "task_icon": "1",
+    "type": 6,
+    "time": 0,
+    "task_type": 521,
+    "task_value": 1,
+    "task_param1": [
+      10014
+    ],
+    "pre_task_id": [
+      6205
+    ],
+    "pre_condition": [],
+    "jump": 301,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 80
+      },
+      {
+        "key": 4801,
+        "val": 5
+      },
+      {
+        "key": 4702,
+        "val": 6
+      }
+    ]
+  },
+  {
+    "id": 6307,
+    "task_title": "营地",
+    "task_desc": "task_dec_512",
+    "task_icon": "3",
+    "type": 6,
+    "time": 0,
+    "task_type": 512,
+    "task_value": 3,
+    "task_param1": [
+      2
+    ],
+    "pre_task_id": [
+      6106
+    ],
+    "pre_condition": [],
+    "jump": 201,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 4802,
+        "val": 4
+      },
+      {
+        "key": 5103,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 6207,
+    "task_title": "角色",
+    "task_desc": "task_dec_403",
+    "task_icon": "2",
+    "type": 6,
+    "time": 0,
+    "task_type": 403,
+    "task_value": 1,
+    "task_param1": [
+      6
+    ],
+    "pre_task_id": [
+      6106
+    ],
+    "pre_condition": [],
+    "jump": 0,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 80
+      },
+      {
+        "key": 4801,
+        "val": 5
+      },
+      {
+        "key": 4704,
+        "val": 6
+      }
+    ]
+  },
+  {
+    "id": 6405,
+    "task_title": "战斗",
+    "task_desc": "task_dec_508",
+    "task_icon": "4",
+    "type": 6,
+    "time": 0,
+    "task_type": 508,
+    "task_value": 4,
+    "task_param1": [
+      97,
+      98,
+      99,
+      100
+    ],
+    "pre_task_id": [
+      6106
+    ],
+    "pre_condition": [],
+    "jump": 400,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 80
+      },
+      {
+        "key": 4802,
+        "val": 4
+      },
+      {
+        "key": 4901,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 6107,
+    "task_title": "探索",
+    "task_desc": "task_dec_521",
+    "task_icon": "1",
+    "type": 6,
+    "time": 0,
+    "task_type": 521,
+    "task_value": 1,
+    "task_param1": [
+      201
+    ],
+    "pre_task_id": [
+      6106
+    ],
+    "pre_condition": [],
+    "jump": 302,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 80
+      },
+      {
+        "key": 4801,
+        "val": 5
+      },
+      {
+        "key": 4705,
+        "val": 6
+      }
+    ]
+  },
+  {
+    "id": 6108,
+    "task_title": "探索",
+    "task_desc": "task_dec_521",
+    "task_icon": "1",
+    "type": 6,
+    "time": 0,
+    "task_type": 521,
+    "task_value": 1,
+    "task_param1": [
+      202
+    ],
+    "pre_task_id": [
+      6107
+    ],
+    "pre_condition": [],
+    "jump": 302,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 80
+      },
+      {
+        "key": 4801,
+        "val": 5
+      },
+      {
+        "key": 4708,
+        "val": 6
+      }
+    ]
+  },
+  {
+    "id": 6109,
+    "task_title": "探索",
+    "task_desc": "task_dec_521",
+    "task_icon": "1",
+    "type": 6,
+    "time": 0,
+    "task_type": 521,
+    "task_value": 1,
+    "task_param1": [
+      203
+    ],
+    "pre_task_id": [
+      6108
+    ],
+    "pre_condition": [],
+    "jump": 302,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 80
+      },
+      {
+        "key": 4801,
+        "val": 5
+      },
+      {
+        "key": 4711,
+        "val": 6
+      }
+    ]
+  },
+  {
+    "id": 6110,
+    "task_title": "探索",
+    "task_desc": "task_dec_521",
+    "task_icon": "1",
+    "type": 6,
+    "time": 0,
+    "task_type": 521,
+    "task_value": 1,
+    "task_param1": [
+      204
+    ],
+    "pre_task_id": [
+      6109
+    ],
+    "pre_condition": [],
+    "jump": 302,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 80
+      },
+      {
+        "key": 4801,
+        "val": 5
+      },
+      {
+        "key": 4714,
+        "val": 6
+      }
+    ]
+  },
+  {
+    "id": 6111,
+    "task_title": "探索",
+    "task_desc": "task_dec_521",
+    "task_icon": "1",
+    "type": 6,
+    "time": 0,
+    "task_type": 521,
+    "task_value": 1,
+    "task_param1": [
+      205
+    ],
+    "pre_task_id": [
+      6110
+    ],
+    "pre_condition": [],
+    "jump": 302,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 80
+      },
+      {
+        "key": 4801,
+        "val": 5
+      },
+      {
+        "key": 4702,
+        "val": 6
+      }
+    ]
+  },
+  {
+    "id": 6112,
+    "task_title": "探索",
+    "task_desc": "task_dec_521",
+    "task_icon": "1",
+    "type": 6,
+    "time": 0,
+    "task_type": 521,
+    "task_value": 1,
+    "task_param1": [
+      206
+    ],
+    "pre_task_id": [
+      6111
+    ],
+    "pre_condition": [],
+    "jump": 302,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 80
+      },
+      {
+        "key": 4801,
+        "val": 5
+      },
+      {
+        "key": 4705,
+        "val": 6
+      }
+    ]
+  },
+  {
+    "id": 6113,
+    "task_title": "探索",
+    "task_desc": "task_dec_521",
+    "task_icon": "1",
+    "type": 6,
+    "time": 0,
+    "task_type": 521,
+    "task_value": 1,
+    "task_param1": [
+      207
+    ],
+    "pre_task_id": [
+      6112
+    ],
+    "pre_condition": [],
+    "jump": 302,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 80
+      },
+      {
+        "key": 4801,
+        "val": 5
+      },
+      {
+        "key": 4708,
+        "val": 6
+      }
+    ]
+  },
+  {
+    "id": 6114,
+    "task_title": "探索",
+    "task_desc": "task_dec_521",
+    "task_icon": "1",
+    "type": 6,
+    "time": 0,
+    "task_type": 521,
+    "task_value": 1,
+    "task_param1": [
+      208
+    ],
+    "pre_task_id": [
+      6113
+    ],
+    "pre_condition": [],
+    "jump": 302,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 80
+      },
+      {
+        "key": 4801,
+        "val": 5
+      },
+      {
+        "key": 4711,
+        "val": 6
+      }
+    ]
+  },
+  {
+    "id": 6115,
+    "task_title": "探索",
+    "task_desc": "task_dec_521",
+    "task_icon": "1",
+    "type": 6,
+    "time": 0,
+    "task_type": 521,
+    "task_value": 1,
+    "task_param1": [
+      209
+    ],
+    "pre_task_id": [
+      6114
+    ],
+    "pre_condition": [],
+    "jump": 302,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 80
+      },
+      {
+        "key": 4801,
+        "val": 5
+      },
+      {
+        "key": 4714,
+        "val": 6
+      }
+    ]
+  },
+  {
+    "id": 6116,
+    "task_title": "探索",
+    "task_desc": "task_dec_521",
+    "task_icon": "1",
+    "type": 6,
+    "time": 0,
+    "task_type": 521,
+    "task_value": 1,
+    "task_param1": [
+      210
+    ],
+    "pre_task_id": [
+      6115
+    ],
+    "pre_condition": [],
+    "jump": 302,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 80
+      },
+      {
+        "key": 4801,
+        "val": 5
+      },
+      {
+        "key": 4703,
+        "val": 6
+      }
+    ]
+  },
+  {
+    "id": 6117,
+    "task_title": "探索",
+    "task_desc": "task_dec_521",
+    "task_icon": "1",
+    "type": 6,
+    "time": 0,
+    "task_type": 521,
+    "task_value": 1,
+    "task_param1": [
+      211
+    ],
+    "pre_task_id": [
+      6116
+    ],
+    "pre_condition": [],
+    "jump": 302,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 80
+      },
+      {
+        "key": 4801,
+        "val": 5
+      },
+      {
+        "key": 4706,
+        "val": 6
+      }
+    ]
+  },
+  {
+    "id": 6118,
+    "task_title": "探索",
+    "task_desc": "task_dec_521",
+    "task_icon": "1",
+    "type": 6,
+    "time": 0,
+    "task_type": 521,
+    "task_value": 1,
+    "task_param1": [
+      212
+    ],
+    "pre_task_id": [
+      6117
+    ],
+    "pre_condition": [],
+    "jump": 302,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 80
+      },
+      {
+        "key": 4801,
+        "val": 5
+      },
+      {
+        "key": 4709,
+        "val": 6
+      }
+    ]
+  },
+  {
+    "id": 6119,
+    "task_title": "探索",
+    "task_desc": "task_dec_521",
+    "task_icon": "1",
+    "type": 6,
+    "time": 0,
+    "task_type": 521,
+    "task_value": 1,
+    "task_param1": [
+      213
+    ],
+    "pre_task_id": [
+      6118
+    ],
+    "pre_condition": [],
+    "jump": 302,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 80
+      },
+      {
+        "key": 4801,
+        "val": 5
+      },
+      {
+        "key": 4712,
+        "val": 6
+      }
+    ]
+  },
+  {
+    "id": 6002,
+    "task_title": "测试1",
+    "task_desc": "task_dec_113",
+    "task_icon": "5",
+    "type": 6,
+    "time": 0,
+    "task_type": 113,
+    "task_value": 10,
+    "task_param1": [
+      4101
+    ],
+    "pre_task_id": [],
+    "pre_condition": [
+      [
+        2,
+        1003
+      ]
+    ],
+    "jump": 601,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 6003,
+    "task_title": "测试2",
+    "task_desc": "task_dec_408",
+    "task_icon": "5",
+    "type": 6,
+    "time": 0,
+    "task_type": 408,
+    "task_value": 3,
+    "task_param1": [
+      102
+    ],
+    "pre_task_id": [],
+    "pre_condition": [
+      [
+        2,
+        1003
+      ]
+    ],
+    "jump": 802,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 11
+      }
+    ]
+  },
+  {
+    "id": 6004,
+    "task_title": "测试3",
+    "task_desc": "task_dec_501",
+    "task_icon": "5",
+    "type": 6,
+    "time": 0,
+    "task_type": 501,
+    "task_value": 1,
+    "task_param1": [],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 0,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 12
+      }
+    ]
+  },
+  {
+    "id": 6005,
+    "task_title": "测试4",
+    "task_desc": "task_dec_504",
+    "task_icon": "5",
+    "type": 6,
+    "time": 0,
+    "task_type": 504,
+    "task_value": 3,
+    "task_param1": [],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 0,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 13
+      }
+    ]
+  },
+  {
+    "id": 6006,
+    "task_title": "测试5",
+    "task_desc": "task_dec_505",
+    "task_icon": "5",
+    "type": 6,
+    "time": 0,
+    "task_type": 505,
+    "task_value": 4,
+    "task_param1": [
+      10
+    ],
+    "pre_task_id": [],
+    "pre_condition": [
+      [
+        2,
+        1003
+      ]
+    ],
+    "jump": 601,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 14
+      }
+    ]
+  },
+  {
+    "id": 6007,
+    "task_title": "测试6",
+    "task_desc": "task_dec_507",
+    "task_icon": "4",
+    "type": 6,
+    "time": 0,
+    "task_type": 507,
+    "task_value": 3,
+    "task_param1": [
+      98
+    ],
+    "pre_task_id": [],
+    "pre_condition": [
+      [
+        1,
+        106
+      ]
+    ],
+    "jump": 404,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 15
+      }
+    ]
+  },
+  {
+    "id": 6008,
+    "task_title": "测试7",
+    "task_desc": "task_dec_508",
+    "task_icon": "4",
+    "type": 6,
+    "time": 0,
+    "task_type": 508,
+    "task_value": 4,
+    "task_param1": [
+      97,
+      98,
+      99,
+      100
+    ],
+    "pre_task_id": [],
+    "pre_condition": [
+      [
+        1,
+        106
+      ]
+    ],
+    "jump": 0,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 16
+      }
+    ]
+  },
+  {
+    "id": 6009,
+    "task_title": "测试8",
+    "task_desc": "task_dec_510",
+    "task_icon": "3",
+    "type": 6,
+    "time": 0,
+    "task_type": 510,
+    "task_value": 2,
+    "task_param1": [
+      2001
+    ],
+    "pre_task_id": [],
+    "pre_condition": [
+      [
+        2,
+        1002
+      ]
+    ],
+    "jump": 201,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 17
+      }
+    ]
+  },
+  {
+    "id": 6010,
+    "task_title": "测试9",
+    "task_desc": "task_dec_511",
+    "task_icon": "3",
+    "type": 6,
+    "time": 0,
+    "task_type": 511,
+    "task_value": 2,
+    "task_param1": [
+      90123
+    ],
+    "pre_task_id": [],
+    "pre_condition": [
+      [
+        2,
+        1002
+      ]
+    ],
+    "jump": 201,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 18
+      }
+    ]
+  },
+  {
+    "id": 6011,
+    "task_title": "测试10",
+    "task_desc": "task_dec_512",
+    "task_icon": "3",
+    "type": 6,
+    "time": 0,
+    "task_type": 512,
+    "task_value": 3,
+    "task_param1": [
+      2
+    ],
+    "pre_task_id": [],
+    "pre_condition": [
+      [
+        2,
+        1002
+      ]
+    ],
+    "jump": 201,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 19
+      }
+    ]
+  },
+  {
+    "id": 6012,
+    "task_title": "测试11",
+    "task_desc": "task_dec_517",
+    "task_icon": "3",
+    "type": 6,
+    "time": 0,
+    "task_type": 517,
+    "task_value": 1,
+    "task_param1": [
+      90074
+    ],
+    "pre_task_id": [],
+    "pre_condition": [
+      [
+        2,
+        1002
+      ]
+    ],
+    "jump": 202,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 20
+      }
+    ]
+  },
+  {
+    "id": 6013,
+    "task_title": "测试12",
+    "task_desc": "task_dec_518",
+    "task_icon": "3",
+    "type": 6,
+    "time": 0,
+    "task_type": 518,
+    "task_value": 1,
+    "task_param1": [
+      5,
+      90074
+    ],
+    "pre_task_id": [],
+    "pre_condition": [
+      [
+        2,
+        1002
+      ]
+    ],
+    "jump": 202,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 21
+      }
+    ]
+  },
+  {
+    "id": 6014,
+    "task_title": "测试13",
+    "task_desc": "task_dec_521",
+    "task_icon": "5",
+    "type": 6,
+    "time": 0,
+    "task_type": 521,
+    "task_value": 1,
+    "task_param1": [
+      106
+    ],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 301,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 22
+      }
+    ]
+  },
+  {
+    "id": 6015,
+    "task_title": "测试14",
+    "task_desc": "task_dec_525",
+    "task_icon": "5",
+    "type": 6,
+    "time": 0,
+    "task_type": 525,
+    "task_value": 10,
+    "task_param1": [
+      4,
+      3
+    ],
+    "pre_task_id": [],
+    "pre_condition": [
+      [
+        1,
+        108
+      ]
+    ],
+    "jump": 301,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 23
+      }
+    ]
+  },
+  {
+    "id": 6016,
+    "task_title": "测试15",
+    "task_desc": "task_dec_527",
+    "task_icon": "5",
+    "type": 6,
+    "time": 0,
+    "task_type": 527,
+    "task_value": 3,
+    "task_param1": [
+      4,
+      4
+    ],
+    "pre_task_id": [],
+    "pre_condition": [
+      [
+        1,
+        108
+      ]
+    ],
+    "jump": 301,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 24
+      }
+    ]
+  },
+  {
+    "id": 7101,
+    "task_title": "新手任务day1",
+    "task_desc": "task_dec_503",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 503,
+    "task_value": 1,
+    "task_param1": [],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 0,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 200
+      },
+      {
+        "key": 3001,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 7102,
+    "task_title": "新手任务day1",
+    "task_desc": "task_dec_521",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 521,
+    "task_value": 1,
+    "task_param1": [
+      109
+    ],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 301,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 4901,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 7103,
+    "task_title": "新手任务day1",
+    "task_desc": "task_dec_11",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 11,
+    "task_value": 3,
+    "task_param1": [],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 301,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 5101,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 7104,
+    "task_title": "新手任务day1",
+    "task_desc": "task_dec_301",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 301,
+    "task_value": 1,
+    "task_param1": [],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 201,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 4701,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 7105,
+    "task_title": "新手任务day1",
+    "task_desc": "task_dec_312",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 312,
+    "task_value": 2,
+    "task_param1": [],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 201,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 5102,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 7106,
+    "task_title": "新手任务day1",
+    "task_desc": "task_dec_121",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 121,
+    "task_value": 4,
+    "task_param1": [],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 601,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 4704,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 7107,
+    "task_title": "新手任务day1",
+    "task_desc": "task_dec_505",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 505,
+    "task_value": 4,
+    "task_param1": [
+      10
+    ],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 601,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 4901,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 7108,
+    "task_title": "新手任务day1",
+    "task_desc": "task_dec_507",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 507,
+    "task_value": 1,
+    "task_param1": [
+      99
+    ],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 401,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 4801,
+        "val": 20
+      }
+    ]
+  },
+  {
+    "id": 7109,
+    "task_title": "新手任务day1",
+    "task_desc": "task_dec_507",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 507,
+    "task_value": 1,
+    "task_param1": [
+      100
+    ],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 402,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 2001,
+        "val": 40000
+      }
+    ]
+  },
+  {
+    "id": 7201,
+    "task_title": "新手任务day2",
+    "task_desc": "task_dec_503",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 503,
+    "task_value": 1,
+    "task_param1": [],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 0,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 200
+      },
+      {
+        "key": 3001,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 7202,
+    "task_title": "新手任务day2",
+    "task_desc": "task_dec_521",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 521,
+    "task_value": 1,
+    "task_param1": [
+      10014
+    ],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 301,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 4901,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 7203,
+    "task_title": "新手任务day2",
+    "task_desc": "task_dec_527",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 527,
+    "task_value": 6,
+    "task_param1": [
+      4,
+      5
+    ],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 301,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 5101,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 7204,
+    "task_title": "新手任务day2",
+    "task_desc": "task_dec_104",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 104,
+    "task_value": 1,
+    "task_param1": [],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 601,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 4710,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 7205,
+    "task_title": "新手任务day2",
+    "task_desc": "task_dec_505",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 505,
+    "task_value": 1,
+    "task_param1": [
+      15
+    ],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 601,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 5102,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 7206,
+    "task_title": "新手任务day2",
+    "task_desc": "task_dec_211",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 211,
+    "task_value": 1,
+    "task_param1": [],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 601,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 4713,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 7207,
+    "task_title": "新手任务day2",
+    "task_desc": "task_dec_507",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 507,
+    "task_value": 3,
+    "task_param1": [
+      98
+    ],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 404,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 4901,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 7208,
+    "task_title": "新手任务day2",
+    "task_desc": "task_dec_3",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 3,
+    "task_value": 5,
+    "task_param1": [],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 301,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 4801,
+        "val": 20
+      }
+    ]
+  },
+  {
+    "id": 7209,
+    "task_title": "新手任务day2",
+    "task_desc": "task_dec_313",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 313,
+    "task_value": 4,
+    "task_param1": [],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 202,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 2001,
+        "val": 40000
+      }
+    ]
+  },
+  {
+    "id": 7210,
+    "task_title": "新手任务day2",
+    "task_desc": "task_dec_301",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 301,
+    "task_value": 1,
+    "task_param1": [],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 201,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 4707,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 7301,
+    "task_title": "新手任务day3",
+    "task_desc": "task_dec_503",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 503,
+    "task_value": 1,
+    "task_param1": [],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 0,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 200
+      },
+      {
+        "key": 3001,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 7302,
+    "task_title": "新手任务day3",
+    "task_desc": "task_dec_407",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 407,
+    "task_value": 10,
+    "task_param1": [],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 802,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 4902,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 7303,
+    "task_title": "新手任务day3",
+    "task_desc": "task_dec_525",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 525,
+    "task_value": 10,
+    "task_param1": [
+      4,
+      3
+    ],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 301,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 5101,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 7304,
+    "task_title": "新手任务day3",
+    "task_desc": "task_dec_525",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 525,
+    "task_value": 10,
+    "task_param1": [
+      4,
+      4
+    ],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 301,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 4701,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 7305,
+    "task_title": "新手任务day3",
+    "task_desc": "task_dec_312",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 312,
+    "task_value": 3,
+    "task_param1": [],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 203,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 5102,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 7306,
+    "task_title": "新手任务day3",
+    "task_desc": "task_dec_313",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 313,
+    "task_value": 3,
+    "task_param1": [],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 202,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 4704,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 7307,
+    "task_title": "新手任务day3",
+    "task_desc": "task_dec_507",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 507,
+    "task_value": 5,
+    "task_param1": [
+      98
+    ],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 404,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 4901,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 7308,
+    "task_title": "新手任务day3",
+    "task_desc": "task_dec_507",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 507,
+    "task_value": 3,
+    "task_param1": [
+      99
+    ],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 401,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 4801,
+        "val": 20
+      }
+    ]
+  },
+  {
+    "id": 7309,
+    "task_title": "新手任务day3",
+    "task_desc": "task_dec_505",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 505,
+    "task_value": 2,
+    "task_param1": [
+      15
+    ],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 601,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 2001,
+        "val": 40000
+      }
+    ]
+  },
+  {
+    "id": 7401,
+    "task_title": "新手任务day4",
+    "task_desc": "task_dec_503",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 503,
+    "task_value": 1,
+    "task_param1": [],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 0,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 200
+      },
+      {
+        "key": 3001,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 7402,
+    "task_title": "新手任务day4",
+    "task_desc": "task_dec_521",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 521,
+    "task_value": 1,
+    "task_param1": [
+      203
+    ],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 302,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 4902,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 7403,
+    "task_title": "新手任务day4",
+    "task_desc": "task_dec_505",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 505,
+    "task_value": 4,
+    "task_param1": [
+      20
+    ],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 601,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 5103,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 7404,
+    "task_title": "新手任务day4",
+    "task_desc": "task_dec_101",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 101,
+    "task_value": 2,
+    "task_param1": [],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 601,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 4702,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 7405,
+    "task_title": "新手任务day4",
+    "task_desc": "task_dec_211",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 211,
+    "task_value": 1,
+    "task_param1": [],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 601,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 5104,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 7406,
+    "task_title": "新手任务day4",
+    "task_desc": "task_dec_507",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 507,
+    "task_value": 3,
+    "task_param1": [
+      97
+    ],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 403,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 4705,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 7407,
+    "task_title": "新手任务day4",
+    "task_desc": "task_dec_512",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 512,
+    "task_value": 3,
+    "task_param1": [
+      2
+    ],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 201,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 4901,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 7408,
+    "task_title": "新手任务day4",
+    "task_desc": "task_dec_507",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 507,
+    "task_value": 3,
+    "task_param1": [
+      101
+    ],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 3001,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 4802,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 7501,
+    "task_title": "新手任务day5",
+    "task_desc": "task_dec_503",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 503,
+    "task_value": 1,
+    "task_param1": [],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 0,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 200
+      },
+      {
+        "key": 3001,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 7502,
+    "task_title": "新手任务day5",
+    "task_desc": "task_dec_3",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 3,
+    "task_value": 3,
+    "task_param1": [],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 301,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 4901,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 7503,
+    "task_title": "新手任务day5",
+    "task_desc": "task_dec_121",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 121,
+    "task_value": 3,
+    "task_param1": [],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 601,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 5101,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 7504,
+    "task_title": "新手任务day5",
+    "task_desc": "task_dec_521",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 521,
+    "task_value": 1,
+    "task_param1": [
+      206
+    ],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 302,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 4711,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 7505,
+    "task_title": "新手任务day5",
+    "task_desc": "task_dec_11",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 11,
+    "task_value": 10,
+    "task_param1": [],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 302,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 5103,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 7506,
+    "task_title": "新手任务day5",
+    "task_desc": "task_dec_211",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 211,
+    "task_value": 3,
+    "task_param1": [],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 601,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 4714,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 7507,
+    "task_title": "新手任务day5",
+    "task_desc": "task_dec_507",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 507,
+    "task_value": 3,
+    "task_param1": [
+      97
+    ],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 403,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 4901,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 7508,
+    "task_title": "新手任务day5",
+    "task_desc": "task_dec_507",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 507,
+    "task_value": 3,
+    "task_param1": [
+      98
+    ],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 404,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 4802,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 7509,
+    "task_title": "新手任务day5",
+    "task_desc": "task_dec_312",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 312,
+    "task_value": 4,
+    "task_param1": [],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 203,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 4708,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 7601,
+    "task_title": "新手任务day6",
+    "task_desc": "task_dec_503",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 503,
+    "task_value": 1,
+    "task_param1": [],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 0,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 200
+      },
+      {
+        "key": 3001,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 7602,
+    "task_title": "新手任务day6",
+    "task_desc": "task_dec_408",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 408,
+    "task_value": 10,
+    "task_param1": [
+      102
+    ],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 802,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 4902,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 7603,
+    "task_title": "新手任务day6",
+    "task_desc": "task_dec_311",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 311,
+    "task_value": 3,
+    "task_param1": [],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 205,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 5102,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 7604,
+    "task_title": "新手任务day6",
+    "task_desc": "task_dec_512",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 512,
+    "task_value": 6,
+    "task_param1": [
+      2
+    ],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 201,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 4703,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 7605,
+    "task_title": "新手任务day6",
+    "task_desc": "task_dec_521",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 521,
+    "task_value": 1,
+    "task_param1": [
+      211
+    ],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 302,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 5104,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 7606,
+    "task_title": "新手任务day6",
+    "task_desc": "task_dec_507",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 507,
+    "task_value": 5,
+    "task_param1": [
+      98
+    ],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 404,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 4706,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 7607,
+    "task_title": "新手任务day6",
+    "task_desc": "task_dec_507",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 507,
+    "task_value": 3,
+    "task_param1": [
+      99
+    ],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 401,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 4903,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 7608,
+    "task_title": "新手任务day6",
+    "task_desc": "task_dec_507",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 507,
+    "task_value": 3,
+    "task_param1": [
+      101
+    ],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 3001,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 4803,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 7701,
+    "task_title": "新手任务day7",
+    "task_desc": "task_dec_503",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 503,
+    "task_value": 1,
+    "task_param1": [],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 0,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 200
+      },
+      {
+        "key": 3001,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 7702,
+    "task_title": "新手任务day7",
+    "task_desc": "task_dec_408",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 408,
+    "task_value": 10,
+    "task_param1": [
+      105
+    ],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 0,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 4902,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 7703,
+    "task_title": "新手任务day7",
+    "task_desc": "task_dec_527",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 527,
+    "task_value": 3,
+    "task_param1": [
+      4,
+      3
+    ],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 302,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 5102,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 7704,
+    "task_title": "新手任务day7",
+    "task_desc": "task_dec_527",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 527,
+    "task_value": 3,
+    "task_param1": [
+      4,
+      4
+    ],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 302,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 4712,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 7705,
+    "task_title": "新手任务day7",
+    "task_desc": "task_dec_527",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 527,
+    "task_value": 3,
+    "task_param1": [
+      4,
+      5
+    ],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 302,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 5104,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 7706,
+    "task_title": "新手任务day7",
+    "task_desc": "task_dec_3",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 3,
+    "task_value": 6,
+    "task_param1": [],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 302,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 4715,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 7707,
+    "task_title": "新手任务day7",
+    "task_desc": "task_dec_301",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 301,
+    "task_value": 1,
+    "task_param1": [],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 201,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 4709,
+        "val": 10
+      }
+    ]
+  },
+  {
+    "id": 7708,
+    "task_title": "新手任务day7",
+    "task_desc": "task_dec_505",
+    "task_icon": "",
+    "type": 7,
+    "time": 0,
+    "task_type": 505,
+    "task_value": 4,
+    "task_param1": [
+      25
+    ],
+    "pre_task_id": [],
+    "pre_condition": [],
+    "jump": 601,
+    "reward": [
+      {
+        "key": 2005,
+        "val": 50
+      },
+      {
+        "key": 4803,
+        "val": 10
+      }
+    ]
+  }
+]

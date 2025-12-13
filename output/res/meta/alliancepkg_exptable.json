@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "type": 1,
+    "type_parm": 1,
+    "contribution": 20
+  },
+  {
+    "id": 2,
+    "type": 1,
+    "type_parm": 3,
+    "contribution": 50
+  },
+  {
+    "id": 3,
+    "type": 1,
+    "type_parm": 5,
+    "contribution": 100
+  },
+  {
+    "id": 4,
+    "type": 2,
+    "type_parm": 20,
+    "contribution": 40
+  },
+  {
+    "id": 5,
+    "type": 2,
+    "type_parm": 60,
+    "contribution": 80
+  },
+  {
+    "id": 6,
+    "type": 2,
+    "type_parm": 100,
+    "contribution": 120
+  }
+]

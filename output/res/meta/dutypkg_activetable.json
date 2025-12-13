@@ -1,0 +1,77 @@
+[
+  {
+    "id": 20,
+    "daily_rewards": [
+      {
+        "key": 3011,
+        "val": 2
+      }
+    ],
+    "weekly_rewards": [
+      {
+        "key": 3012,
+        "val": 2
+      }
+    ]
+  },
+  {
+    "id": 40,
+    "daily_rewards": [
+      {
+        "key": 5101,
+        "val": 5
+      }
+    ],
+    "weekly_rewards": [
+      {
+        "key": 30053,
+        "val": 3
+      }
+    ]
+  },
+  {
+    "id": 60,
+    "daily_rewards": [
+      {
+        "key": 30052,
+        "val": 3
+      }
+    ],
+    "weekly_rewards": [
+      {
+        "key": 2001,
+        "val": 50000
+      }
+    ]
+  },
+  {
+    "id": 80,
+    "daily_rewards": [
+      {
+        "key": 2001,
+        "val": 10000
+      }
+    ],
+    "weekly_rewards": [
+      {
+        "key": 4804,
+        "val": 5
+      }
+    ]
+  },
+  {
+    "id": 100,
+    "daily_rewards": [
+      {
+        "key": 2005,
+        "val": 20
+      }
+    ],
+    "weekly_rewards": [
+      {
+        "key": 2005,
+        "val": 100
+      }
+    ]
+  }
+]

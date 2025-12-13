@@ -1,0 +1,10 @@
+[
+  {
+    "id": 1,
+    "ordination": 1,
+    "pic": "",
+    "target_shop": "shop_recharge",
+    "target_goods": 7,
+    "lines": "market_montylycard"
+  }
+]

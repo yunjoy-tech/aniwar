@@ -1,0 +1,347 @@
+[
+  {
+    "id": 1,
+    "ordination": 1,
+    "shelf_type": 105,
+    "LimitType": 0,
+    "LimitParam": 0,
+    "name": "shop_gift_diamond_6",
+    "pic": "Shop_hunjing1",
+    "reward": [
+      {
+        "item_id": 2006,
+        "num": 60
+      }
+    ],
+    "pay_type": 2,
+    "pay_count": 600,
+    "product_type": "com.lilithgame.aniwar.diamond.600",
+    "recharge_first_reward": [
+      {
+        "item_id": 2005,
+        "num": 60
+      }
+    ],
+    "period_reward": 0
+  },
+  {
+    "id": 2,
+    "ordination": 2,
+    "shelf_type": 105,
+    "LimitType": 0,
+    "LimitParam": 0,
+    "name": "shop_gift_diamond_30",
+    "pic": "Shop_hunjing2",
+    "reward": [
+      {
+        "item_id": 2006,
+        "num": 300
+      }
+    ],
+    "pay_type": 2,
+    "pay_count": 3000,
+    "product_type": "com.lilithgame.aniwar.diamond.3000",
+    "recharge_first_reward": [
+      {
+        "item_id": 2005,
+        "num": 300
+      }
+    ],
+    "period_reward": 0
+  },
+  {
+    "id": 3,
+    "ordination": 3,
+    "shelf_type": 105,
+    "LimitType": 0,
+    "LimitParam": 0,
+    "name": "shop_gift_diamond_68",
+    "pic": "Shop_hunjing2",
+    "reward": [
+      {
+        "item_id": 2006,
+        "num": 680
+      }
+    ],
+    "pay_type": 2,
+    "pay_count": 6800,
+    "product_type": "com.lilithgame.aniwar.diamond.6800",
+    "recharge_first_reward": [
+      {
+        "item_id": 2005,
+        "num": 680
+      }
+    ],
+    "period_reward": 0
+  },
+  {
+    "id": 4,
+    "ordination": 4,
+    "shelf_type": 105,
+    "LimitType": 0,
+    "LimitParam": 0,
+    "name": "shop_gift_diamond_128",
+    "pic": "Shop_hunjing2",
+    "reward": [
+      {
+        "item_id": 2006,
+        "num": 1280
+      }
+    ],
+    "pay_type": 2,
+    "pay_count": 12800,
+    "product_type": "com.lilithgame.aniwar.diamond.12800",
+    "recharge_first_reward": [
+      {
+        "item_id": 2005,
+        "num": 1280
+      }
+    ],
+    "period_reward": 0
+  },
+  {
+    "id": 5,
+    "ordination": 5,
+    "shelf_type": 105,
+    "LimitType": 0,
+    "LimitParam": 0,
+    "name": "shop_gift_diamond_328",
+    "pic": "Shop_hunjing3",
+    "reward": [
+      {
+        "item_id": 2006,
+        "num": 3280
+      }
+    ],
+    "pay_type": 2,
+    "pay_count": 32800,
+    "product_type": "com.lilithgame.aniwar.diamond.32800",
+    "recharge_first_reward": [
+      {
+        "item_id": 2005,
+        "num": 3280
+      }
+    ],
+    "period_reward": 0
+  },
+  {
+    "id": 6,
+    "ordination": 6,
+    "shelf_type": 105,
+    "LimitType": 0,
+    "LimitParam": 0,
+    "name": "shop_gift_diamond_648",
+    "pic": "Shop_hunjing4",
+    "reward": [
+      {
+        "item_id": 2006,
+        "num": 6480
+      }
+    ],
+    "pay_type": 2,
+    "pay_count": 64800,
+    "product_type": "com.lilithgame.aniwar.diamond.64800",
+    "recharge_first_reward": [
+      {
+        "item_id": 2005,
+        "num": 6480
+      }
+    ],
+    "period_reward": 0
+  },
+  {
+    "id": 7,
+    "ordination": 7,
+    "shelf_type": 107,
+    "LimitType": 0,
+    "LimitParam": 0,
+    "name": "shop_gift_monthcard_30",
+    "pic": "Shop_buy_card",
+    "reward": [],
+    "pay_type": 2,
+    "pay_count": 3000,
+    "product_type": "com.lilithgame.aniwar.monthcard.3000",
+    "recharge_first_reward": [],
+    "period_reward": 1
+  },
+  {
+    "id": 8,
+    "ordination": 8,
+    "shelf_type": 999,
+    "LimitType": 0,
+    "LimitParam": 0,
+    "name": "shop_gift_passcard_68",
+    "pic": "Shop_hunjing1",
+    "reward": [
+      {
+        "item_id": 2005,
+        "num": 60
+      }
+    ],
+    "pay_type": 2,
+    "pay_count": 6800,
+    "product_type": "com.lilithgame.aniwar.passcard.6800",
+    "recharge_first_reward": [],
+    "period_reward": 0
+  },
+  {
+    "id": 9,
+    "ordination": 9,
+    "shelf_type": 999,
+    "LimitType": 0,
+    "LimitParam": 0,
+    "name": "shop_gift_firstgift_6",
+    "pic": "Shop_hunjing1",
+    "reward": [
+      {
+        "item_id": 2005,
+        "num": 60
+      }
+    ],
+    "pay_type": 2,
+    "pay_count": 600,
+    "product_type": "com.lilithgame.aniwar.firstgift.600",
+    "recharge_first_reward": [],
+    "period_reward": 0
+  },
+  {
+    "id": 10,
+    "ordination": 10,
+    "shelf_type": 999,
+    "LimitType": 0,
+    "LimitParam": 0,
+    "name": "shop_gift_normal_6",
+    "pic": "Shop_hunjing1",
+    "reward": [
+      {
+        "item_id": 2005,
+        "num": 60
+      }
+    ],
+    "pay_type": 2,
+    "pay_count": 600,
+    "product_type": "com.lilithgame.aniwar.gift.600",
+    "recharge_first_reward": [],
+    "period_reward": 0
+  },
+  {
+    "id": 11,
+    "ordination": 11,
+    "shelf_type": 999,
+    "LimitType": 0,
+    "LimitParam": 0,
+    "name": "shop_gift_normal_30",
+    "pic": "Shop_hunjing1",
+    "reward": [
+      {
+        "item_id": 2005,
+        "num": 60
+      }
+    ],
+    "pay_type": 2,
+    "pay_count": 3000,
+    "product_type": "com.lilithgame.aniwar.gift.3000",
+    "recharge_first_reward": [],
+    "period_reward": 0
+  },
+  {
+    "id": 12,
+    "ordination": 12,
+    "shelf_type": 999,
+    "LimitType": 0,
+    "LimitParam": 0,
+    "name": "shop_gift_normal_68",
+    "pic": "Shop_hunjing1",
+    "reward": [
+      {
+        "item_id": 2005,
+        "num": 60
+      }
+    ],
+    "pay_type": 2,
+    "pay_count": 6800,
+    "product_type": "com.lilithgame.aniwar.gift.6800",
+    "recharge_first_reward": [],
+    "period_reward": 0
+  },
+  {
+    "id": 13,
+    "ordination": 13,
+    "shelf_type": 999,
+    "LimitType": 0,
+    "LimitParam": 0,
+    "name": "shop_gift_normal_128",
+    "pic": "Shop_hunjing1",
+    "reward": [
+      {
+        "item_id": 2005,
+        "num": 60
+      }
+    ],
+    "pay_type": 2,
+    "pay_count": 12800,
+    "product_type": "com.lilithgame.aniwar.gift.12800",
+    "recharge_first_reward": [],
+    "period_reward": 0
+  },
+  {
+    "id": 14,
+    "ordination": 14,
+    "shelf_type": 999,
+    "LimitType": 0,
+    "LimitParam": 0,
+    "name": "shop_gift_normal_328",
+    "pic": "Shop_hunjing1",
+    "reward": [
+      {
+        "item_id": 2005,
+        "num": 60
+      }
+    ],
+    "pay_type": 2,
+    "pay_count": 32800,
+    "product_type": "com.lilithgame.aniwar.gift.32800",
+    "recharge_first_reward": [],
+    "period_reward": 0
+  },
+  {
+    "id": 15,
+    "ordination": 15,
+    "shelf_type": 999,
+    "LimitType": 0,
+    "LimitParam": 0,
+    "name": "shop_gift_normal_648",
+    "pic": "Shop_hunjing1",
+    "reward": [
+      {
+        "item_id": 2005,
+        "num": 60
+      }
+    ],
+    "pay_type": 2,
+    "pay_count": 64800,
+    "product_type": "com.lilithgame.aniwar.gift.64800",
+    "recharge_first_reward": [],
+    "period_reward": 0
+  },
+  {
+    "id": 16,
+    "ordination": 16,
+    "shelf_type": 999,
+    "LimitType": 0,
+    "LimitParam": 0,
+    "name": "shop_gift_test_1",
+    "pic": "Shop_hunjing1",
+    "reward": [
+      {
+        "item_id": 2005,
+        "num": 60
+      }
+    ],
+    "pay_type": 2,
+    "pay_count": 1,
+    "product_type": "com.lilithgame.aniwar.test.1",
+    "recharge_first_reward": [],
+    "period_reward": 0
+  }
+]

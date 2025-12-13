@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "tag_type": 0,
+    "target": 0,
+    "tagparams": []
+  },
+  {
+    "id": 2,
+    "tag_type": 92,
+    "target": 3,
+    "tagparams": []
+  },
+  {
+    "id": 3,
+    "tag_type": 311,
+    "target": 3,
+    "tagparams": []
+  },
+  {
+    "id": 4,
+    "tag_type": 105,
+    "target": 3,
+    "tagparams": []
+  }
+]

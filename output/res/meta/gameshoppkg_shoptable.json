@@ -1,0 +1,160 @@
+[
+  {
+    "id": 101,
+    "show_type": 1,
+    "shop_type": 1,
+    "shop_name": "shop_name_101",
+    "refresh_type": 1,
+    "refresh_time": 0,
+    "isauto": 0,
+    "refresh_cost": [],
+    "refresh_limit": 0,
+    "layer_list": [
+      1,
+      2,
+      3
+    ],
+    "layer_name": [
+      "shop_gene1",
+      "shop_gene2",
+      "shop_gene3"
+    ],
+    "currency_res": []
+  },
+  {
+    "id": 102,
+    "show_type": 1,
+    "shop_type": 2,
+    "shop_name": "shop_name_102",
+    "refresh_type": 1,
+    "refresh_time": 0,
+    "isauto": 0,
+    "refresh_cost": [],
+    "refresh_limit": 0,
+    "layer_list": [
+      1
+    ],
+    "layer_name": [],
+    "currency_res": []
+  },
+  {
+    "id": 103,
+    "show_type": 2,
+    "shop_type": 5,
+    "shop_name": "shop_name_103",
+    "refresh_type": 2,
+    "refresh_time": 0,
+    "isauto": 0,
+    "refresh_cost": [],
+    "refresh_limit": 0,
+    "layer_list": [
+      1
+    ],
+    "layer_name": [],
+    "currency_res": [
+      2009
+    ]
+  },
+  {
+    "id": 104,
+    "show_type": 2,
+    "shop_type": 5,
+    "shop_name": "shop_name_104",
+    "refresh_type": 3,
+    "refresh_time": 0,
+    "isauto": 1,
+    "refresh_cost": [
+      {
+        "key": 2005,
+        "val": 10
+      }
+    ],
+    "refresh_limit": 10,
+    "layer_list": [
+      1
+    ],
+    "layer_name": [],
+    "currency_res": [
+      2001,
+      2005
+    ]
+  },
+  {
+    "id": 105,
+    "show_type": 1,
+    "shop_type": 1,
+    "shop_name": "shop_name_105",
+    "refresh_type": 0,
+    "refresh_time": 0,
+    "isauto": 0,
+    "refresh_cost": [],
+    "refresh_limit": 0,
+    "layer_list": [
+      1
+    ],
+    "layer_name": [],
+    "currency_res": [
+      2005
+    ]
+  },
+  {
+    "id": 106,
+    "show_type": 2,
+    "shop_type": 6,
+    "shop_name": "shop_name_106",
+    "refresh_type": 0,
+    "refresh_time": 0,
+    "isauto": 0,
+    "refresh_cost": [],
+    "refresh_limit": 0,
+    "layer_list": [
+      1,
+      2,
+      3
+    ],
+    "layer_name": [
+      "shop_gene1",
+      "shop_gene2",
+      "shop_gene3"
+    ],
+    "currency_res": [
+      2012
+    ]
+  },
+  {
+    "id": 107,
+    "show_type": 1,
+    "shop_type": 4,
+    "shop_name": "shop_name_107",
+    "refresh_type": 0,
+    "refresh_time": 0,
+    "isauto": 0,
+    "refresh_cost": [],
+    "refresh_limit": 0,
+    "layer_list": [
+      1
+    ],
+    "layer_name": [],
+    "currency_res": [
+      2005
+    ]
+  },
+  {
+    "id": 999,
+    "show_type": 1,
+    "shop_type": 1,
+    "shop_name": "shop_name_999",
+    "refresh_type": 0,
+    "refresh_time": 0,
+    "isauto": 0,
+    "refresh_cost": [],
+    "refresh_limit": 0,
+    "layer_list": [
+      1
+    ],
+    "layer_name": [],
+    "currency_res": [
+      2005
+    ]
+  }
+]

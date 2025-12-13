@@ -1,0 +1,288 @@
+[
+  {
+    "id": 601,
+    "taskgroup_name": "引导任务组-1阶段",
+    "taskgroup_desc": "",
+    "taskgroup_type": 6,
+    "pre_taskgroup_id": 0,
+    "task_id": [
+      6301,
+      6302,
+      6303,
+      6304,
+      6305,
+      6501,
+      6502,
+      6503,
+      6306,
+      6101,
+      6102,
+      6103,
+      6104
+    ],
+    "reward": [],
+    "group_icon": "",
+    "trigger_type": []
+  },
+  {
+    "id": 602,
+    "taskgroup_name": "引导任务组-2阶段",
+    "taskgroup_desc": "",
+    "taskgroup_type": 6,
+    "pre_taskgroup_id": 0,
+    "task_id": [
+      6201,
+      6202,
+      6203,
+      6204,
+      6001,
+      6105
+    ],
+    "reward": [],
+    "group_icon": "",
+    "trigger_type": []
+  },
+  {
+    "id": 603,
+    "taskgroup_name": "引导任务组-3阶段",
+    "taskgroup_desc": "",
+    "taskgroup_type": 6,
+    "pre_taskgroup_id": 0,
+    "task_id": [
+      6401,
+      6402,
+      6403,
+      6404,
+      6205,
+      6206,
+      6106
+    ],
+    "reward": [],
+    "group_icon": "",
+    "trigger_type": []
+  },
+  {
+    "id": 604,
+    "taskgroup_name": "引导任务组-4阶段",
+    "taskgroup_desc": "",
+    "taskgroup_type": 6,
+    "pre_taskgroup_id": 0,
+    "task_id": [
+      6307
+    ],
+    "reward": [],
+    "group_icon": "",
+    "trigger_type": []
+  },
+  {
+    "id": 605,
+    "taskgroup_name": "引导任务组-5阶段",
+    "taskgroup_desc": "",
+    "taskgroup_type": 6,
+    "pre_taskgroup_id": 0,
+    "task_id": [
+      6207
+    ],
+    "reward": [],
+    "group_icon": "",
+    "trigger_type": []
+  },
+  {
+    "id": 606,
+    "taskgroup_name": "引导任务组-6阶段",
+    "taskgroup_desc": "",
+    "taskgroup_type": 6,
+    "pre_taskgroup_id": 0,
+    "task_id": [
+      6405,
+      6107,
+      6108,
+      6109,
+      6110,
+      6111,
+      6112,
+      6113,
+      6114,
+      6115,
+      6116,
+      6117,
+      6118,
+      6119
+    ],
+    "reward": [],
+    "group_icon": "",
+    "trigger_type": []
+  },
+  {
+    "id": 999,
+    "taskgroup_name": "测试数据",
+    "taskgroup_desc": "",
+    "taskgroup_type": 0,
+    "pre_taskgroup_id": 0,
+    "task_id": [
+      6002,
+      6003,
+      6004,
+      6005,
+      6006,
+      6007,
+      6008,
+      6009,
+      6010,
+      6011,
+      6012,
+      6013,
+      6014,
+      6015,
+      6016
+    ],
+    "reward": [],
+    "group_icon": "",
+    "trigger_type": []
+  },
+  {
+    "id": 701,
+    "taskgroup_name": "七日新手任务-1",
+    "taskgroup_desc": "",
+    "taskgroup_type": 7,
+    "pre_taskgroup_id": 0,
+    "task_id": [
+      7101,
+      7102,
+      7103,
+      7104,
+      7105,
+      7106,
+      7107,
+      7108,
+      7109
+    ],
+    "reward": [],
+    "group_icon": "",
+    "trigger_type": []
+  },
+  {
+    "id": 702,
+    "taskgroup_name": "七日新手任务-2",
+    "taskgroup_desc": "",
+    "taskgroup_type": 7,
+    "pre_taskgroup_id": 0,
+    "task_id": [
+      7201,
+      7202,
+      7203,
+      7204,
+      7205,
+      7206,
+      7207,
+      7208,
+      7209,
+      7210
+    ],
+    "reward": [],
+    "group_icon": "",
+    "trigger_type": []
+  },
+  {
+    "id": 703,
+    "taskgroup_name": "七日新手任务-3",
+    "taskgroup_desc": "",
+    "taskgroup_type": 7,
+    "pre_taskgroup_id": 0,
+    "task_id": [
+      7301,
+      7302,
+      7303,
+      7304,
+      7305,
+      7306,
+      7307,
+      7308,
+      7309
+    ],
+    "reward": [],
+    "group_icon": "",
+    "trigger_type": []
+  },
+  {
+    "id": 704,
+    "taskgroup_name": "七日新手任务-4",
+    "taskgroup_desc": "",
+    "taskgroup_type": 7,
+    "pre_taskgroup_id": 0,
+    "task_id": [
+      7401,
+      7402,
+      7403,
+      7404,
+      7405,
+      7406,
+      7407,
+      7408
+    ],
+    "reward": [],
+    "group_icon": "",
+    "trigger_type": []
+  },
+  {
+    "id": 705,
+    "taskgroup_name": "七日新手任务-5",
+    "taskgroup_desc": "",
+    "taskgroup_type": 7,
+    "pre_taskgroup_id": 0,
+    "task_id": [
+      7501,
+      7502,
+      7503,
+      7504,
+      7505,
+      7506,
+      7507,
+      7508,
+      7509
+    ],
+    "reward": [],
+    "group_icon": "",
+    "trigger_type": []
+  },
+  {
+    "id": 706,
+    "taskgroup_name": "七日新手任务-6",
+    "taskgroup_desc": "",
+    "taskgroup_type": 7,
+    "pre_taskgroup_id": 0,
+    "task_id": [
+      7601,
+      7602,
+      7603,
+      7604,
+      7605,
+      7606,
+      7607,
+      7608
+    ],
+    "reward": [],
+    "group_icon": "",
+    "trigger_type": []
+  },
+  {
+    "id": 707,
+    "taskgroup_name": "七日新手任务-7",
+    "taskgroup_desc": "",
+    "taskgroup_type": 7,
+    "pre_taskgroup_id": 0,
+    "task_id": [
+      7701,
+      7702,
+      7703,
+      7704,
+      7705,
+      7706,
+      7707,
+      7708
+    ],
+    "reward": [],
+    "group_icon": "",
+    "trigger_type": []
+  }
+]

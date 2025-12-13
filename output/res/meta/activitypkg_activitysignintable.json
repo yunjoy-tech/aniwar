@@ -1,0 +1,107 @@
+[
+  {
+    "id": 1,
+    "activity_id": 10002,
+    "days": 1,
+    "signin_reward": [
+      {
+        "item_id": 3003,
+        "num": 10
+      },
+      {
+        "item_id": 2005,
+        "num": 300
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "activity_id": 10002,
+    "days": 2,
+    "signin_reward": [
+      {
+        "item_id": 3003,
+        "num": 10
+      },
+      {
+        "item_id": 2005,
+        "num": 300
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "activity_id": 10002,
+    "days": 3,
+    "signin_reward": [
+      {
+        "item_id": 3003,
+        "num": 10
+      },
+      {
+        "item_id": 2005,
+        "num": 300
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "activity_id": 10002,
+    "days": 4,
+    "signin_reward": [
+      {
+        "item_id": 3003,
+        "num": 10
+      },
+      {
+        "item_id": 2005,
+        "num": 300
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "activity_id": 10002,
+    "days": 5,
+    "signin_reward": [
+      {
+        "item_id": 3003,
+        "num": 10
+      },
+      {
+        "item_id": 2005,
+        "num": 300
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "activity_id": 10002,
+    "days": 6,
+    "signin_reward": [
+      {
+        "item_id": 3003,
+        "num": 10
+      },
+      {
+        "item_id": 2005,
+        "num": 300
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "activity_id": 10002,
+    "days": 7,
+    "signin_reward": [
+      {
+        "item_id": 3003,
+        "num": 10
+      },
+      {
+        "item_id": 2005,
+        "num": 300
+      }
+    ]
+  }
+]

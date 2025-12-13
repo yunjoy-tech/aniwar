@@ -1,0 +1,93 @@
+[
+  {
+    "id": 1001,
+    "system_name": "MapSelect",
+    "unlocklevel": 1,
+    "unlock_type": 0,
+    "unlock_param": 0
+  },
+  {
+    "id": 1002,
+    "system_name": "Camp",
+    "unlocklevel": 1,
+    "unlock_type": 1,
+    "unlock_param": 108
+  },
+  {
+    "id": 1003,
+    "system_name": "Gacha",
+    "unlocklevel": 1,
+    "unlock_type": 1,
+    "unlock_param": 109
+  },
+  {
+    "id": 1004,
+    "system_name": "Card",
+    "unlocklevel": 1,
+    "unlock_type": 1,
+    "unlock_param": 109
+  },
+  {
+    "id": 1005,
+    "system_name": "DungeonList",
+    "unlocklevel": 1,
+    "unlock_type": 1,
+    "unlock_param": 106
+  },
+  {
+    "id": 1006,
+    "system_name": "DailyCampaign",
+    "unlocklevel": 1,
+    "unlock_type": 1,
+    "unlock_param": 106
+  },
+  {
+    "id": 1007,
+    "system_name": "",
+    "unlocklevel": 1,
+    "unlock_type": 1,
+    "unlock_param": 106
+  },
+  {
+    "id": 1008,
+    "system_name": "",
+    "unlocklevel": 1,
+    "unlock_type": 1,
+    "unlock_param": 111
+  },
+  {
+    "id": 1009,
+    "system_name": "",
+    "unlocklevel": 5,
+    "unlock_type": 0,
+    "unlock_param": 0
+  },
+  {
+    "id": 1010,
+    "system_name": "BlockEvent",
+    "unlocklevel": 1,
+    "unlock_type": 1,
+    "unlock_param": 111
+  },
+  {
+    "id": 1011,
+    "system_name": "Alliance",
+    "unlocklevel": 5,
+    "unlock_type": 0,
+    "unlock_param": 0
+  },
+  {
+    "id": 1012,
+    "system_name": "",
+    "unlocklevel": 1,
+    "unlock_type": 1,
+    "unlock_param": 111
+  },
+  {
+    "id": 1013,
+    "system_name": "guidetask",
+    "unlocklevel": 1,
+    "unlock_type": 1,
+    "unlock_param": 104
+  }
+]

@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "day": 30,
+    "day_limit": 180,
+    "direct_reward": [
+      {
+        "item_id": 2006,
+        "num": 300
+      }
+    ],
+    "daily_reward": [
+      {
+        "item_id": 2005,
+        "num": 60
+      },
+      {
+        "item_id": 3011,
+        "num": 1
+      }
+    ]
+  }
+]

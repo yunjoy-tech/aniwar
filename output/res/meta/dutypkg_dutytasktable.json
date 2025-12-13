@@ -1,0 +1,454 @@
+[
+  {
+    "id": 1,
+    "cycle_type": 1,
+    "task_type": 105,
+    "target": 1,
+    "taskparams": [],
+    "duty_sp": 0,
+    "rewards": [
+      {
+        "key": 4101,
+        "val": 2
+      },
+      {
+        "key": 4106,
+        "val": 2
+      },
+      {
+        "key": 4111,
+        "val": 2
+      }
+    ],
+    "active_point": 10,
+    "jump": 601
+  },
+  {
+    "id": 2,
+    "cycle_type": 1,
+    "task_type": 211,
+    "target": 1,
+    "taskparams": [],
+    "duty_sp": 0,
+    "rewards": [
+      {
+        "key": 4116,
+        "val": 2
+      },
+      {
+        "key": 4121,
+        "val": 2
+      }
+    ],
+    "active_point": 10,
+    "jump": 601
+  },
+  {
+    "id": 3,
+    "cycle_type": 1,
+    "task_type": 92,
+    "target": 3,
+    "taskparams": [],
+    "duty_sp": 0,
+    "rewards": [
+      {
+        "key": 4201,
+        "val": 2
+      },
+      {
+        "key": 4216,
+        "val": 2
+      }
+    ],
+    "active_point": 10,
+    "jump": 301
+  },
+  {
+    "id": 4,
+    "cycle_type": 1,
+    "task_type": 508,
+    "target": 5,
+    "taskparams": [],
+    "duty_sp": 0,
+    "rewards": [
+      {
+        "key": 4206,
+        "val": 2
+      },
+      {
+        "key": 4221,
+        "val": 2
+      }
+    ],
+    "active_point": 15,
+    "jump": 400
+  },
+  {
+    "id": 5,
+    "cycle_type": 1,
+    "task_type": 507,
+    "target": 3,
+    "taskparams": [
+      101
+    ],
+    "duty_sp": 0,
+    "rewards": [
+      {
+        "key": 4211,
+        "val": 2
+      },
+      {
+        "key": 4226,
+        "val": 2
+      }
+    ],
+    "active_point": 15,
+    "jump": 3001
+  },
+  {
+    "id": 6,
+    "cycle_type": 1,
+    "task_type": 111,
+    "target": 3,
+    "taskparams": [],
+    "duty_sp": 0,
+    "rewards": [
+      {
+        "key": 4801,
+        "val": 5
+      }
+    ],
+    "active_point": 10,
+    "jump": 301
+  },
+  {
+    "id": 7,
+    "cycle_type": 1,
+    "task_type": 11,
+    "target": 5,
+    "taskparams": [],
+    "duty_sp": 0,
+    "rewards": [
+      {
+        "key": 4504,
+        "val": 3
+      },
+      {
+        "key": 4505,
+        "val": 3
+      },
+      {
+        "key": 4506,
+        "val": 3
+      }
+    ],
+    "active_point": 10,
+    "jump": 301
+  },
+  {
+    "id": 8,
+    "cycle_type": 1,
+    "task_type": 301,
+    "target": 1,
+    "taskparams": [],
+    "duty_sp": 0,
+    "rewards": [
+      {
+        "key": 4601,
+        "val": 2
+      },
+      {
+        "key": 4610,
+        "val": 2
+      }
+    ],
+    "active_point": 5,
+    "jump": 201
+  },
+  {
+    "id": 9,
+    "cycle_type": 1,
+    "task_type": 313,
+    "target": 1,
+    "taskparams": [],
+    "duty_sp": 0,
+    "rewards": [
+      {
+        "key": 4604,
+        "val": 2
+      },
+      {
+        "key": 4613,
+        "val": 2
+      }
+    ],
+    "active_point": 5,
+    "jump": 202
+  },
+  {
+    "id": 10,
+    "cycle_type": 1,
+    "task_type": 312,
+    "target": 2,
+    "taskparams": [],
+    "duty_sp": 0,
+    "rewards": [
+      {
+        "key": 4607,
+        "val": 2
+      },
+      {
+        "key": 4616,
+        "val": 2
+      }
+    ],
+    "active_point": 10,
+    "jump": 203
+  },
+  {
+    "id": 11,
+    "cycle_type": 1,
+    "task_type": 112,
+    "target": 100,
+    "taskparams": [],
+    "duty_sp": 0,
+    "rewards": [
+      {
+        "key": 30050,
+        "val": 3
+      },
+      {
+        "key": 2001,
+        "val": 5000
+      }
+    ],
+    "active_point": 20,
+    "jump": 301
+  },
+  {
+    "id": 12,
+    "cycle_type": 2,
+    "task_type": 105,
+    "target": 10,
+    "taskparams": [],
+    "duty_sp": 0,
+    "rewards": [
+      {
+        "key": 4102,
+        "val": 10
+      },
+      {
+        "key": 4107,
+        "val": 10
+      },
+      {
+        "key": 4112,
+        "val": 10
+      }
+    ],
+    "active_point": 10,
+    "jump": 601
+  },
+  {
+    "id": 13,
+    "cycle_type": 2,
+    "task_type": 211,
+    "target": 5,
+    "taskparams": [],
+    "duty_sp": 0,
+    "rewards": [
+      {
+        "key": 4117,
+        "val": 10
+      },
+      {
+        "key": 4122,
+        "val": 10
+      }
+    ],
+    "active_point": 10,
+    "jump": 601
+  },
+  {
+    "id": 14,
+    "cycle_type": 2,
+    "task_type": 92,
+    "target": 20,
+    "taskparams": [],
+    "duty_sp": 0,
+    "rewards": [
+      {
+        "key": 4202,
+        "val": 10
+      },
+      {
+        "key": 4217,
+        "val": 10
+      }
+    ],
+    "active_point": 10,
+    "jump": 301
+  },
+  {
+    "id": 15,
+    "cycle_type": 2,
+    "task_type": 508,
+    "target": 20,
+    "taskparams": [],
+    "duty_sp": 0,
+    "rewards": [
+      {
+        "key": 4207,
+        "val": 10
+      },
+      {
+        "key": 4222,
+        "val": 10
+      }
+    ],
+    "active_point": 15,
+    "jump": 400
+  },
+  {
+    "id": 16,
+    "cycle_type": 2,
+    "task_type": 507,
+    "target": 8,
+    "taskparams": [
+      101
+    ],
+    "duty_sp": 0,
+    "rewards": [
+      {
+        "key": 4212,
+        "val": 10
+      },
+      {
+        "key": 4227,
+        "val": 10
+      }
+    ],
+    "active_point": 15,
+    "jump": 3001
+  },
+  {
+    "id": 17,
+    "cycle_type": 2,
+    "task_type": 111,
+    "target": 10,
+    "taskparams": [],
+    "duty_sp": 0,
+    "rewards": [
+      {
+        "key": 4802,
+        "val": 5
+      }
+    ],
+    "active_point": 10,
+    "jump": 301
+  },
+  {
+    "id": 18,
+    "cycle_type": 2,
+    "task_type": 11,
+    "target": 20,
+    "taskparams": [],
+    "duty_sp": 0,
+    "rewards": [
+      {
+        "key": 4504,
+        "val": 10
+      },
+      {
+        "key": 4505,
+        "val": 10
+      },
+      {
+        "key": 4506,
+        "val": 10
+      }
+    ],
+    "active_point": 10,
+    "jump": 301
+  },
+  {
+    "id": 19,
+    "cycle_type": 2,
+    "task_type": 301,
+    "target": 10,
+    "taskparams": [],
+    "duty_sp": 0,
+    "rewards": [
+      {
+        "key": 4602,
+        "val": 10
+      },
+      {
+        "key": 4611,
+        "val": 10
+      }
+    ],
+    "active_point": 5,
+    "jump": 201
+  },
+  {
+    "id": 20,
+    "cycle_type": 2,
+    "task_type": 313,
+    "target": 10,
+    "taskparams": [],
+    "duty_sp": 0,
+    "rewards": [
+      {
+        "key": 4605,
+        "val": 10
+      },
+      {
+        "key": 4614,
+        "val": 10
+      }
+    ],
+    "active_point": 5,
+    "jump": 202
+  },
+  {
+    "id": 21,
+    "cycle_type": 2,
+    "task_type": 312,
+    "target": 20,
+    "taskparams": [],
+    "duty_sp": 0,
+    "rewards": [
+      {
+        "key": 4608,
+        "val": 10
+      },
+      {
+        "key": 4617,
+        "val": 10
+      }
+    ],
+    "active_point": 10,
+    "jump": 203
+  },
+  {
+    "id": 22,
+    "cycle_type": 2,
+    "task_type": 112,
+    "target": 600,
+    "taskparams": [],
+    "duty_sp": 0,
+    "rewards": [
+      {
+        "key": 30051,
+        "val": 5
+      },
+      {
+        "key": 2005,
+        "val": 20
+      }
+    ],
+    "active_point": 20,
+    "jump": 301
+  }
+]

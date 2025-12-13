@@ -1,0 +1,212 @@
+[
+  {
+    "id": 5001,
+    "item_type": 1,
+    "allow_full_hp": 1,
+    "cooldown": 10000,
+    "restoreval": 500,
+    "effecttype": 0,
+    "effectcondition": [],
+    "cost": []
+  },
+  {
+    "id": 5002,
+    "item_type": 1,
+    "allow_full_hp": 1,
+    "cooldown": 15000,
+    "restoreval": 300,
+    "effecttype": 2,
+    "effectcondition": [
+      201
+    ],
+    "cost": []
+  },
+  {
+    "id": 5003,
+    "item_type": 1,
+    "allow_full_hp": 0,
+    "cooldown": 15000,
+    "restoreval": 1000,
+    "effecttype": 0,
+    "effectcondition": [],
+    "cost": []
+  },
+  {
+    "id": 5101,
+    "item_type": 1,
+    "allow_full_hp": 1,
+    "cooldown": 5000,
+    "restoreval": 500,
+    "effecttype": 2,
+    "effectcondition": [
+      201
+    ],
+    "cost": [
+      [
+        4301,
+        3
+      ],
+      [
+        4302,
+        1
+      ]
+    ]
+  },
+  {
+    "id": 5102,
+    "item_type": 1,
+    "allow_full_hp": 1,
+    "cooldown": 5000,
+    "restoreval": 500,
+    "effecttype": 2,
+    "effectcondition": [
+      201
+    ],
+    "cost": [
+      [
+        4301,
+        1
+      ],
+      [
+        4302,
+        3
+      ]
+    ]
+  },
+  {
+    "id": 5103,
+    "item_type": 1,
+    "allow_full_hp": 1,
+    "cooldown": 3000,
+    "restoreval": 600,
+    "effecttype": 0,
+    "effectcondition": [],
+    "cost": [
+      [
+        4303,
+        3
+      ],
+      [
+        4304,
+        1
+      ]
+    ]
+  },
+  {
+    "id": 5104,
+    "item_type": 1,
+    "allow_full_hp": 1,
+    "cooldown": 5000,
+    "restoreval": 600,
+    "effecttype": 2,
+    "effectcondition": [
+      202
+    ],
+    "cost": [
+      [
+        4303,
+        1
+      ],
+      [
+        4304,
+        3
+      ]
+    ]
+  },
+  {
+    "id": 5105,
+    "item_type": 1,
+    "allow_full_hp": 1,
+    "cooldown": 5000,
+    "restoreval": 600,
+    "effecttype": 2,
+    "effectcondition": [
+      201
+    ],
+    "cost": []
+  },
+  {
+    "id": 5106,
+    "item_type": 1,
+    "allow_full_hp": 1,
+    "cooldown": 5000,
+    "restoreval": 600,
+    "effecttype": 2,
+    "effectcondition": [
+      201
+    ],
+    "cost": []
+  },
+  {
+    "id": 5107,
+    "item_type": 1,
+    "allow_full_hp": 1,
+    "cooldown": 5000,
+    "restoreval": 600,
+    "effecttype": 2,
+    "effectcondition": [
+      201
+    ],
+    "cost": []
+  },
+  {
+    "id": 5108,
+    "item_type": 1,
+    "allow_full_hp": 1,
+    "cooldown": 5000,
+    "restoreval": 600,
+    "effecttype": 2,
+    "effectcondition": [
+      201
+    ],
+    "cost": []
+  },
+  {
+    "id": 5109,
+    "item_type": 1,
+    "allow_full_hp": 1,
+    "cooldown": 5000,
+    "restoreval": 600,
+    "effecttype": 2,
+    "effectcondition": [
+      201
+    ],
+    "cost": []
+  },
+  {
+    "id": 5110,
+    "item_type": 1,
+    "allow_full_hp": 1,
+    "cooldown": 5000,
+    "restoreval": 600,
+    "effecttype": 2,
+    "effectcondition": [
+      201
+    ],
+    "cost": []
+  },
+  {
+    "id": 5111,
+    "item_type": 1,
+    "allow_full_hp": 1,
+    "cooldown": 5000,
+    "restoreval": 600,
+    "effecttype": 2,
+    "effectcondition": [
+      201
+    ],
+    "cost": []
+  },
+  {
+    "id": 5112,
+    "item_type": 1,
+    "allow_full_hp": 1,
+    "cooldown": 5000,
+    "restoreval": 600,
+    "effecttype": 1,
+    "effectcondition": [
+      201
+    ],
+    "cost": []
+  }
+]

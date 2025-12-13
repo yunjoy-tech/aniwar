@@ -1,0 +1,37 @@
+[
+  {
+    "id": 10001,
+    "unlocktype": 2,
+    "type": 1,
+    "timetype": 101,
+    "value1": "7",
+    "value2": "",
+    "value3": "",
+    "awarditem": [
+      {
+        "item_id": 60018,
+        "num": 1
+      }
+    ],
+    "is_open": 1,
+    "begintime": "",
+    "endtime": "",
+    "lasttime": "",
+    "showlasttime": ""
+  },
+  {
+    "id": 10002,
+    "unlocktype": 0,
+    "type": 2,
+    "timetype": 101,
+    "value1": "7",
+    "value2": "",
+    "value3": "",
+    "awarditem": [],
+    "is_open": 1,
+    "begintime": "",
+    "endtime": "",
+    "lasttime": "",
+    "showlasttime": ""
+  }
+]

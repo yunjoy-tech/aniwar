@@ -1,0 +1,138 @@
+[
+  {
+    "id": 1,
+    "trigger_type": 1,
+    "param01": "1",
+    "param02": "30",
+    "param03": "",
+    "param04": ""
+  },
+  {
+    "id": 2,
+    "trigger_type": 2,
+    "param01": "2",
+    "param02": "",
+    "param03": "",
+    "param04": ""
+  },
+  {
+    "id": 3,
+    "trigger_type": 3,
+    "param01": "60",
+    "param02": "",
+    "param03": "",
+    "param04": ""
+  },
+  {
+    "id": 4,
+    "trigger_type": 4,
+    "param01": "2023-08-15",
+    "param02": "20:00:00",
+    "param03": "2023-08-17",
+    "param04": "20:00:00"
+  },
+  {
+    "id": 5,
+    "trigger_type": 5,
+    "param01": "6001",
+    "param02": "2",
+    "param03": "",
+    "param04": ""
+  },
+  {
+    "id": 6,
+    "trigger_type": 6,
+    "param01": "601",
+    "param02": "",
+    "param03": "",
+    "param04": ""
+  },
+  {
+    "id": 7,
+    "trigger_type": 7,
+    "param01": "97",
+    "param02": "2",
+    "param03": "",
+    "param04": ""
+  },
+  {
+    "id": 8,
+    "trigger_type": 8,
+    "param01": "97",
+    "param02": "9701",
+    "param03": "",
+    "param04": ""
+  },
+  {
+    "id": 9,
+    "trigger_type": 9,
+    "param01": "2005",
+    "param02": "2",
+    "param03": "",
+    "param04": ""
+  },
+  {
+    "id": 10,
+    "trigger_type": 10,
+    "param01": "2",
+    "param02": "5",
+    "param03": "",
+    "param04": ""
+  },
+  {
+    "id": 11,
+    "trigger_type": 11,
+    "param01": "10014",
+    "param02": "",
+    "param03": "",
+    "param04": ""
+  },
+  {
+    "id": 12,
+    "trigger_type": 12,
+    "param01": "90123",
+    "param02": "",
+    "param03": "",
+    "param04": ""
+  },
+  {
+    "id": 13,
+    "trigger_type": 13,
+    "param01": "90123",
+    "param02": "3",
+    "param03": "",
+    "param04": ""
+  },
+  {
+    "id": 14,
+    "trigger_type": 14,
+    "param01": "30",
+    "param02": "",
+    "param03": "",
+    "param04": ""
+  },
+  {
+    "id": 15,
+    "trigger_type": 15,
+    "param01": "5",
+    "param02": "",
+    "param03": "",
+    "param04": ""
+  },
+  {
+    "id": 16,
+    "trigger_type": 16,
+    "param01": "2",
+    "param02": "",
+    "param03": "",
+    "param04": ""
+  },
+  {
+    "id": 17,
+    "trigger_type": 17,
+    "param01": "2",
+    "param02": "500",
+    "param03": "",
+    "param04": ""
+  }
+]

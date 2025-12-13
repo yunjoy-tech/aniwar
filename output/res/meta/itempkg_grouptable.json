@@ -1,0 +1,3362 @@
+[
+  {
+    "id": 1,
+    "item_group_id": 98011,
+    "item_id": 4201,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 2,
+    "item_group_id": 98012,
+    "item_id": 4202,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 3,
+    "item_group_id": 98013,
+    "item_id": 4203,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 4,
+    "item_group_id": 98014,
+    "item_id": 4204,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 5,
+    "item_group_id": 98015,
+    "item_id": 4205,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 6,
+    "item_group_id": 98061,
+    "item_id": 4206,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 7,
+    "item_group_id": 98062,
+    "item_id": 4207,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 8,
+    "item_group_id": 98063,
+    "item_id": 4208,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 9,
+    "item_group_id": 98064,
+    "item_id": 4209,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 10,
+    "item_group_id": 98065,
+    "item_id": 4210,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 11,
+    "item_group_id": 98111,
+    "item_id": 4211,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 12,
+    "item_group_id": 98112,
+    "item_id": 4212,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 13,
+    "item_group_id": 98113,
+    "item_id": 4213,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 14,
+    "item_group_id": 98114,
+    "item_id": 4214,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 15,
+    "item_group_id": 98115,
+    "item_id": 4215,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 16,
+    "item_group_id": 98161,
+    "item_id": 4216,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 17,
+    "item_group_id": 98162,
+    "item_id": 4217,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 18,
+    "item_group_id": 98163,
+    "item_id": 4218,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 19,
+    "item_group_id": 98164,
+    "item_id": 4219,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 20,
+    "item_group_id": 98165,
+    "item_id": 4220,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 21,
+    "item_group_id": 98211,
+    "item_id": 4221,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 22,
+    "item_group_id": 98212,
+    "item_id": 4222,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 23,
+    "item_group_id": 98213,
+    "item_id": 4223,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 24,
+    "item_group_id": 98214,
+    "item_id": 4224,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 25,
+    "item_group_id": 98215,
+    "item_id": 4225,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 26,
+    "item_group_id": 98261,
+    "item_id": 4226,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 27,
+    "item_group_id": 98262,
+    "item_id": 4227,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 28,
+    "item_group_id": 98263,
+    "item_id": 4228,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 29,
+    "item_group_id": 98264,
+    "item_id": 4229,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 30,
+    "item_group_id": 98265,
+    "item_id": 4230,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 31,
+    "item_group_id": 97011,
+    "item_id": 4601,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 32,
+    "item_group_id": 97012,
+    "item_id": 4602,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 33,
+    "item_group_id": 97013,
+    "item_id": 4603,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 34,
+    "item_group_id": 97061,
+    "item_id": 4604,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 35,
+    "item_group_id": 97062,
+    "item_id": 4605,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 36,
+    "item_group_id": 97063,
+    "item_id": 4606,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 37,
+    "item_group_id": 97111,
+    "item_id": 4607,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 38,
+    "item_group_id": 97112,
+    "item_id": 4608,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 39,
+    "item_group_id": 97113,
+    "item_id": 4609,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 40,
+    "item_group_id": 97161,
+    "item_id": 4610,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 41,
+    "item_group_id": 97162,
+    "item_id": 4611,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 42,
+    "item_group_id": 97163,
+    "item_id": 4612,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 43,
+    "item_group_id": 97211,
+    "item_id": 4613,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 44,
+    "item_group_id": 97212,
+    "item_id": 4614,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 45,
+    "item_group_id": 97213,
+    "item_id": 4615,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 46,
+    "item_group_id": 97261,
+    "item_id": 4616,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 47,
+    "item_group_id": 97262,
+    "item_id": 4617,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 48,
+    "item_group_id": 97263,
+    "item_id": 4618,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 49,
+    "item_group_id": 201001,
+    "item_id": 2001,
+    "item_num": 1200,
+    "item_weight": 100
+  },
+  {
+    "id": 50,
+    "item_group_id": 201002,
+    "item_id": 1001,
+    "item_num": 100,
+    "item_weight": 100
+  },
+  {
+    "id": 51,
+    "item_group_id": 201003,
+    "item_id": 4801,
+    "item_num": 10,
+    "item_weight": 100
+  },
+  {
+    "id": 52,
+    "item_group_id": 211011,
+    "item_id": 4101,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 53,
+    "item_group_id": 211021,
+    "item_id": 4106,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 54,
+    "item_group_id": 211031,
+    "item_id": 4111,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 55,
+    "item_group_id": 211041,
+    "item_id": 4116,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 56,
+    "item_group_id": 211051,
+    "item_id": 4121,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 57,
+    "item_group_id": 211061,
+    "item_id": 4102,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 58,
+    "item_group_id": 211071,
+    "item_id": 4107,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 59,
+    "item_group_id": 211081,
+    "item_id": 4112,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 60,
+    "item_group_id": 211091,
+    "item_id": 4117,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 61,
+    "item_group_id": 211101,
+    "item_id": 4122,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 62,
+    "item_group_id": 212041,
+    "item_id": 4103,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 63,
+    "item_group_id": 212051,
+    "item_id": 4108,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 64,
+    "item_group_id": 212061,
+    "item_id": 4113,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 65,
+    "item_group_id": 212071,
+    "item_id": 4118,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 66,
+    "item_group_id": 212081,
+    "item_id": 4123,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 67,
+    "item_group_id": 212091,
+    "item_id": 4104,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 68,
+    "item_group_id": 212101,
+    "item_id": 4109,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 69,
+    "item_group_id": 212111,
+    "item_id": 4114,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 70,
+    "item_group_id": 212121,
+    "item_id": 4119,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 71,
+    "item_group_id": 212131,
+    "item_id": 4124,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 72,
+    "item_group_id": 212141,
+    "item_id": 4105,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 73,
+    "item_group_id": 212151,
+    "item_id": 4110,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 74,
+    "item_group_id": 212161,
+    "item_id": 4115,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 75,
+    "item_group_id": 212171,
+    "item_id": 4120,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 76,
+    "item_group_id": 212181,
+    "item_id": 4125,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 77,
+    "item_group_id": 210001,
+    "item_id": 4101,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 78,
+    "item_group_id": 210001,
+    "item_id": 4106,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 79,
+    "item_group_id": 210001,
+    "item_id": 4111,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 80,
+    "item_group_id": 210001,
+    "item_id": 4116,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 81,
+    "item_group_id": 210001,
+    "item_id": 4121,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 82,
+    "item_group_id": 210002,
+    "item_id": 4102,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 83,
+    "item_group_id": 210002,
+    "item_id": 4107,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 84,
+    "item_group_id": 210002,
+    "item_id": 4112,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 85,
+    "item_group_id": 210002,
+    "item_id": 4117,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 86,
+    "item_group_id": 210002,
+    "item_id": 4122,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 87,
+    "item_group_id": 210003,
+    "item_id": 4103,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 88,
+    "item_group_id": 210003,
+    "item_id": 4108,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 89,
+    "item_group_id": 210003,
+    "item_id": 4113,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 90,
+    "item_group_id": 210003,
+    "item_id": 4118,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 91,
+    "item_group_id": 210003,
+    "item_id": 4123,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 92,
+    "item_group_id": 210004,
+    "item_id": 4104,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 93,
+    "item_group_id": 210004,
+    "item_id": 4109,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 94,
+    "item_group_id": 210004,
+    "item_id": 4114,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 95,
+    "item_group_id": 210004,
+    "item_id": 4119,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 96,
+    "item_group_id": 210004,
+    "item_id": 4124,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 97,
+    "item_group_id": 210005,
+    "item_id": 4105,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 98,
+    "item_group_id": 210005,
+    "item_id": 4110,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 99,
+    "item_group_id": 210005,
+    "item_id": 4115,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 100,
+    "item_group_id": 210005,
+    "item_id": 4120,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 101,
+    "item_group_id": 210005,
+    "item_id": 4125,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 102,
+    "item_group_id": 210006,
+    "item_id": 30050,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 103,
+    "item_group_id": 210007,
+    "item_id": 30051,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 104,
+    "item_group_id": 210008,
+    "item_id": 30052,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 105,
+    "item_group_id": 210009,
+    "item_id": 30053,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 106,
+    "item_group_id": 210010,
+    "item_id": 51001,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 107,
+    "item_group_id": 210010,
+    "item_id": 51004,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 108,
+    "item_group_id": 210010,
+    "item_id": 51007,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 109,
+    "item_group_id": 210010,
+    "item_id": 51013,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 110,
+    "item_group_id": 210010,
+    "item_id": 51018,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 111,
+    "item_group_id": 210010,
+    "item_id": 51003,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 112,
+    "item_group_id": 210010,
+    "item_id": 51006,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 113,
+    "item_group_id": 210010,
+    "item_id": 51009,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 114,
+    "item_group_id": 210010,
+    "item_id": 51015,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 115,
+    "item_group_id": 210010,
+    "item_id": 51017,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 116,
+    "item_group_id": 210010,
+    "item_id": 51019,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 117,
+    "item_group_id": 210010,
+    "item_id": 51002,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 118,
+    "item_group_id": 210010,
+    "item_id": 51005,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 119,
+    "item_group_id": 210010,
+    "item_id": 51008,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 120,
+    "item_group_id": 210010,
+    "item_id": 51014,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 121,
+    "item_group_id": 210010,
+    "item_id": 51016,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 122,
+    "item_group_id": 210011,
+    "item_id": 51020,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 123,
+    "item_group_id": 210011,
+    "item_id": 51023,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 124,
+    "item_group_id": 210011,
+    "item_id": 51026,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 125,
+    "item_group_id": 210011,
+    "item_id": 51032,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 126,
+    "item_group_id": 210011,
+    "item_id": 51037,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 127,
+    "item_group_id": 210011,
+    "item_id": 51022,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 128,
+    "item_group_id": 210011,
+    "item_id": 51025,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 129,
+    "item_group_id": 210011,
+    "item_id": 51028,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 130,
+    "item_group_id": 210011,
+    "item_id": 51034,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 131,
+    "item_group_id": 210011,
+    "item_id": 51036,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 132,
+    "item_group_id": 210011,
+    "item_id": 51038,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 133,
+    "item_group_id": 210011,
+    "item_id": 51021,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 134,
+    "item_group_id": 210011,
+    "item_id": 51024,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 135,
+    "item_group_id": 210011,
+    "item_id": 51027,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 136,
+    "item_group_id": 210011,
+    "item_id": 51033,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 137,
+    "item_group_id": 210011,
+    "item_id": 51035,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 138,
+    "item_group_id": 210012,
+    "item_id": 51039,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 139,
+    "item_group_id": 210012,
+    "item_id": 51042,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 140,
+    "item_group_id": 210012,
+    "item_id": 51045,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 141,
+    "item_group_id": 210012,
+    "item_id": 51051,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 142,
+    "item_group_id": 210012,
+    "item_id": 51056,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 143,
+    "item_group_id": 210012,
+    "item_id": 51041,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 144,
+    "item_group_id": 210012,
+    "item_id": 51044,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 145,
+    "item_group_id": 210012,
+    "item_id": 51047,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 146,
+    "item_group_id": 210012,
+    "item_id": 51053,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 147,
+    "item_group_id": 210012,
+    "item_id": 51055,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 148,
+    "item_group_id": 210012,
+    "item_id": 51057,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 149,
+    "item_group_id": 210012,
+    "item_id": 51040,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 150,
+    "item_group_id": 210012,
+    "item_id": 51043,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 151,
+    "item_group_id": 210012,
+    "item_id": 51046,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 152,
+    "item_group_id": 210012,
+    "item_id": 51052,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 153,
+    "item_group_id": 210012,
+    "item_id": 51054,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 154,
+    "item_group_id": 210013,
+    "item_id": 51058,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 155,
+    "item_group_id": 210013,
+    "item_id": 51061,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 156,
+    "item_group_id": 210013,
+    "item_id": 51064,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 157,
+    "item_group_id": 210013,
+    "item_id": 51070,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 158,
+    "item_group_id": 210013,
+    "item_id": 51075,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 159,
+    "item_group_id": 210013,
+    "item_id": 51060,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 160,
+    "item_group_id": 210013,
+    "item_id": 51063,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 161,
+    "item_group_id": 210013,
+    "item_id": 51066,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 162,
+    "item_group_id": 210013,
+    "item_id": 51072,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 163,
+    "item_group_id": 210013,
+    "item_id": 51074,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 164,
+    "item_group_id": 210013,
+    "item_id": 51076,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 165,
+    "item_group_id": 210013,
+    "item_id": 51059,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 166,
+    "item_group_id": 210013,
+    "item_id": 51062,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 167,
+    "item_group_id": 210013,
+    "item_id": 51065,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 168,
+    "item_group_id": 210013,
+    "item_id": 51071,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 169,
+    "item_group_id": 210013,
+    "item_id": 51073,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 170,
+    "item_group_id": 211001,
+    "item_id": 2001,
+    "item_num": 200,
+    "item_weight": 100
+  },
+  {
+    "id": 171,
+    "item_group_id": 211002,
+    "item_id": 1002,
+    "item_num": 60,
+    "item_weight": 100
+  },
+  {
+    "id": 172,
+    "item_group_id": 211003,
+    "item_id": 4801,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 173,
+    "item_group_id": 212001,
+    "item_id": 2001,
+    "item_num": 240,
+    "item_weight": 100
+  },
+  {
+    "id": 174,
+    "item_group_id": 212002,
+    "item_id": 1002,
+    "item_num": 72,
+    "item_weight": 100
+  },
+  {
+    "id": 175,
+    "item_group_id": 212003,
+    "item_id": 4802,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 176,
+    "item_group_id": 221001,
+    "item_id": 2001,
+    "item_num": 200,
+    "item_weight": 100
+  },
+  {
+    "id": 177,
+    "item_group_id": 221002,
+    "item_id": 1002,
+    "item_num": 60,
+    "item_weight": 100
+  },
+  {
+    "id": 178,
+    "item_group_id": 221003,
+    "item_id": 30050,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 179,
+    "item_group_id": 221004,
+    "item_id": 30051,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 180,
+    "item_group_id": 221005,
+    "item_id": 30052,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 181,
+    "item_group_id": 222001,
+    "item_id": 2001,
+    "item_num": 240,
+    "item_weight": 100
+  },
+  {
+    "id": 182,
+    "item_group_id": 222002,
+    "item_id": 1002,
+    "item_num": 72,
+    "item_weight": 100
+  },
+  {
+    "id": 183,
+    "item_group_id": 221011,
+    "item_id": 4701,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 184,
+    "item_group_id": 221012,
+    "item_id": 4702,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 185,
+    "item_group_id": 221013,
+    "item_id": 4703,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 186,
+    "item_group_id": 221021,
+    "item_id": 4704,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 187,
+    "item_group_id": 221022,
+    "item_id": 4705,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 188,
+    "item_group_id": 221023,
+    "item_id": 4706,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 189,
+    "item_group_id": 222011,
+    "item_id": 4707,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 190,
+    "item_group_id": 222012,
+    "item_id": 4708,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 191,
+    "item_group_id": 222013,
+    "item_id": 4709,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 192,
+    "item_group_id": 222021,
+    "item_id": 4710,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 193,
+    "item_group_id": 222022,
+    "item_id": 4711,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 194,
+    "item_group_id": 222023,
+    "item_id": 4712,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 195,
+    "item_group_id": 222031,
+    "item_id": 4713,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 196,
+    "item_group_id": 222032,
+    "item_id": 4714,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 197,
+    "item_group_id": 222033,
+    "item_id": 4715,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 198,
+    "item_group_id": 231001,
+    "item_id": 2001,
+    "item_num": 1800,
+    "item_weight": 100
+  },
+  {
+    "id": 199,
+    "item_group_id": 231002,
+    "item_id": 1002,
+    "item_num": 80,
+    "item_weight": 100
+  },
+  {
+    "id": 200,
+    "item_group_id": 232001,
+    "item_id": 2001,
+    "item_num": 2000,
+    "item_weight": 100
+  },
+  {
+    "id": 201,
+    "item_group_id": 232002,
+    "item_id": 1002,
+    "item_num": 96,
+    "item_weight": 100
+  },
+  {
+    "id": 202,
+    "item_group_id": 231011,
+    "item_id": 4901,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 203,
+    "item_group_id": 231012,
+    "item_id": 4902,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 204,
+    "item_group_id": 231013,
+    "item_id": 4903,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 205,
+    "item_group_id": 231014,
+    "item_id": 4904,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 206,
+    "item_group_id": 240001,
+    "item_id": 51001,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 207,
+    "item_group_id": 240001,
+    "item_id": 51004,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 208,
+    "item_group_id": 240001,
+    "item_id": 51007,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 209,
+    "item_group_id": 240001,
+    "item_id": 51013,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 210,
+    "item_group_id": 240001,
+    "item_id": 51018,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 211,
+    "item_group_id": 240002,
+    "item_id": 51003,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 212,
+    "item_group_id": 240002,
+    "item_id": 51006,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 213,
+    "item_group_id": 240002,
+    "item_id": 51009,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 214,
+    "item_group_id": 240002,
+    "item_id": 51015,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 215,
+    "item_group_id": 240002,
+    "item_id": 51017,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 216,
+    "item_group_id": 240002,
+    "item_id": 51019,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 217,
+    "item_group_id": 240003,
+    "item_id": 51002,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 218,
+    "item_group_id": 240003,
+    "item_id": 51005,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 219,
+    "item_group_id": 240003,
+    "item_id": 51008,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 220,
+    "item_group_id": 240003,
+    "item_id": 51014,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 221,
+    "item_group_id": 240003,
+    "item_id": 51016,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 222,
+    "item_group_id": 240004,
+    "item_id": 51020,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 223,
+    "item_group_id": 240004,
+    "item_id": 51023,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 224,
+    "item_group_id": 240004,
+    "item_id": 51026,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 225,
+    "item_group_id": 240004,
+    "item_id": 51032,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 226,
+    "item_group_id": 240004,
+    "item_id": 51037,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 227,
+    "item_group_id": 240005,
+    "item_id": 51022,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 228,
+    "item_group_id": 240005,
+    "item_id": 51025,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 229,
+    "item_group_id": 240005,
+    "item_id": 51028,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 230,
+    "item_group_id": 240005,
+    "item_id": 51034,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 231,
+    "item_group_id": 240005,
+    "item_id": 51036,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 232,
+    "item_group_id": 240005,
+    "item_id": 51038,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 233,
+    "item_group_id": 240006,
+    "item_id": 51021,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 234,
+    "item_group_id": 240006,
+    "item_id": 51024,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 235,
+    "item_group_id": 240006,
+    "item_id": 51027,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 236,
+    "item_group_id": 240006,
+    "item_id": 51033,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 237,
+    "item_group_id": 240006,
+    "item_id": 51035,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 238,
+    "item_group_id": 240007,
+    "item_id": 51039,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 239,
+    "item_group_id": 240007,
+    "item_id": 51042,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 240,
+    "item_group_id": 240007,
+    "item_id": 51045,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 241,
+    "item_group_id": 240007,
+    "item_id": 51051,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 242,
+    "item_group_id": 240007,
+    "item_id": 51056,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 243,
+    "item_group_id": 240008,
+    "item_id": 51041,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 244,
+    "item_group_id": 240008,
+    "item_id": 51044,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 245,
+    "item_group_id": 240008,
+    "item_id": 51047,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 246,
+    "item_group_id": 240008,
+    "item_id": 51053,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 247,
+    "item_group_id": 240008,
+    "item_id": 51055,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 248,
+    "item_group_id": 240008,
+    "item_id": 51057,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 249,
+    "item_group_id": 240009,
+    "item_id": 51040,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 250,
+    "item_group_id": 240009,
+    "item_id": 51043,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 251,
+    "item_group_id": 240009,
+    "item_id": 51046,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 252,
+    "item_group_id": 240009,
+    "item_id": 51052,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 253,
+    "item_group_id": 240009,
+    "item_id": 51054,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 254,
+    "item_group_id": 240010,
+    "item_id": 51058,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 255,
+    "item_group_id": 240010,
+    "item_id": 51061,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 256,
+    "item_group_id": 240010,
+    "item_id": 51064,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 257,
+    "item_group_id": 240010,
+    "item_id": 51070,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 258,
+    "item_group_id": 240010,
+    "item_id": 51075,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 259,
+    "item_group_id": 240011,
+    "item_id": 51060,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 260,
+    "item_group_id": 240011,
+    "item_id": 51063,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 261,
+    "item_group_id": 240011,
+    "item_id": 51066,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 262,
+    "item_group_id": 240011,
+    "item_id": 51072,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 263,
+    "item_group_id": 240011,
+    "item_id": 51074,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 264,
+    "item_group_id": 240011,
+    "item_id": 51076,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 265,
+    "item_group_id": 240012,
+    "item_id": 51059,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 266,
+    "item_group_id": 240012,
+    "item_id": 51062,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 267,
+    "item_group_id": 240012,
+    "item_id": 51065,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 268,
+    "item_group_id": 240012,
+    "item_id": 51071,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 269,
+    "item_group_id": 240012,
+    "item_id": 51073,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 270,
+    "item_group_id": 240013,
+    "item_id": 30050,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 271,
+    "item_group_id": 240014,
+    "item_id": 30051,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 272,
+    "item_group_id": 240015,
+    "item_id": 30052,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 273,
+    "item_group_id": 240016,
+    "item_id": 30053,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 274,
+    "item_group_id": 241001,
+    "item_id": 2001,
+    "item_num": 1800,
+    "item_weight": 100
+  },
+  {
+    "id": 275,
+    "item_group_id": 241002,
+    "item_id": 1002,
+    "item_num": 100,
+    "item_weight": 100
+  },
+  {
+    "id": 276,
+    "item_group_id": 242001,
+    "item_id": 2001,
+    "item_num": 2000,
+    "item_weight": 100
+  },
+  {
+    "id": 277,
+    "item_group_id": 242002,
+    "item_id": 1002,
+    "item_num": 120,
+    "item_weight": 100
+  },
+  {
+    "id": 278,
+    "item_group_id": 243001,
+    "item_id": 51003,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 279,
+    "item_group_id": 243001,
+    "item_id": 51013,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 280,
+    "item_group_id": 243002,
+    "item_id": 51022,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 281,
+    "item_group_id": 243002,
+    "item_id": 51032,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 282,
+    "item_group_id": 243003,
+    "item_id": 51041,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 283,
+    "item_group_id": 243003,
+    "item_id": 51051,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 284,
+    "item_group_id": 243004,
+    "item_id": 51060,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 285,
+    "item_group_id": 243004,
+    "item_id": 51070,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 286,
+    "item_group_id": 243005,
+    "item_id": 51006,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 287,
+    "item_group_id": 243005,
+    "item_id": 51017,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 288,
+    "item_group_id": 243006,
+    "item_id": 51025,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 289,
+    "item_group_id": 243006,
+    "item_id": 51036,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 290,
+    "item_group_id": 243007,
+    "item_id": 51044,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 291,
+    "item_group_id": 243007,
+    "item_id": 51055,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 292,
+    "item_group_id": 243008,
+    "item_id": 51063,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 293,
+    "item_group_id": 243008,
+    "item_id": 51074,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 294,
+    "item_group_id": 243009,
+    "item_id": 51009,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 295,
+    "item_group_id": 243009,
+    "item_id": 51007,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 296,
+    "item_group_id": 243010,
+    "item_id": 51028,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 297,
+    "item_group_id": 243010,
+    "item_id": 51026,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 298,
+    "item_group_id": 243011,
+    "item_id": 51047,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 299,
+    "item_group_id": 243011,
+    "item_id": 51045,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 300,
+    "item_group_id": 243012,
+    "item_id": 51066,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 301,
+    "item_group_id": 243012,
+    "item_id": 51064,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 302,
+    "item_group_id": 243013,
+    "item_id": 51002,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 303,
+    "item_group_id": 243013,
+    "item_id": 51015,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 304,
+    "item_group_id": 243014,
+    "item_id": 51021,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 305,
+    "item_group_id": 243014,
+    "item_id": 51034,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 306,
+    "item_group_id": 243015,
+    "item_id": 51040,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 307,
+    "item_group_id": 243015,
+    "item_id": 51053,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 308,
+    "item_group_id": 243016,
+    "item_id": 51059,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 309,
+    "item_group_id": 243016,
+    "item_id": 51072,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 310,
+    "item_group_id": 243017,
+    "item_id": 51005,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 311,
+    "item_group_id": 243017,
+    "item_id": 51019,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 312,
+    "item_group_id": 243018,
+    "item_id": 51024,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 313,
+    "item_group_id": 243018,
+    "item_id": 51038,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 314,
+    "item_group_id": 243019,
+    "item_id": 51043,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 315,
+    "item_group_id": 243019,
+    "item_id": 51057,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 316,
+    "item_group_id": 243020,
+    "item_id": 51062,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 317,
+    "item_group_id": 243020,
+    "item_id": 51076,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 318,
+    "item_group_id": 243021,
+    "item_id": 51008,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 319,
+    "item_group_id": 243021,
+    "item_id": 51014,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 320,
+    "item_group_id": 243022,
+    "item_id": 51027,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 321,
+    "item_group_id": 243022,
+    "item_id": 51033,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 322,
+    "item_group_id": 243023,
+    "item_id": 51046,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 323,
+    "item_group_id": 243023,
+    "item_id": 51052,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 324,
+    "item_group_id": 243024,
+    "item_id": 51065,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 325,
+    "item_group_id": 243024,
+    "item_id": 51071,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 326,
+    "item_group_id": 243025,
+    "item_id": 51001,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 327,
+    "item_group_id": 243025,
+    "item_id": 51016,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 328,
+    "item_group_id": 243026,
+    "item_id": 51020,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 329,
+    "item_group_id": 243026,
+    "item_id": 51035,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 330,
+    "item_group_id": 243027,
+    "item_id": 51039,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 331,
+    "item_group_id": 243027,
+    "item_id": 51054,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 332,
+    "item_group_id": 243028,
+    "item_id": 51058,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 333,
+    "item_group_id": 243028,
+    "item_id": 51073,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 334,
+    "item_group_id": 243029,
+    "item_id": 51004,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 335,
+    "item_group_id": 243029,
+    "item_id": 51018,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 336,
+    "item_group_id": 243030,
+    "item_id": 51023,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 337,
+    "item_group_id": 243030,
+    "item_id": 51037,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 338,
+    "item_group_id": 243031,
+    "item_id": 51042,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 339,
+    "item_group_id": 243031,
+    "item_id": 51056,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 340,
+    "item_group_id": 243032,
+    "item_id": 51061,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 341,
+    "item_group_id": 243032,
+    "item_id": 51075,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 342,
+    "item_group_id": 243033,
+    "item_id": 51012,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 343,
+    "item_group_id": 243033,
+    "item_id": 51011,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 344,
+    "item_group_id": 243034,
+    "item_id": 51031,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 345,
+    "item_group_id": 243034,
+    "item_id": 51030,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 346,
+    "item_group_id": 243035,
+    "item_id": 51050,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 347,
+    "item_group_id": 243035,
+    "item_id": 51049,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 348,
+    "item_group_id": 243036,
+    "item_id": 51069,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 349,
+    "item_group_id": 243036,
+    "item_id": 51068,
+    "item_num": 1,
+    "item_weight": 50
+  },
+  {
+    "id": 350,
+    "item_group_id": 243037,
+    "item_id": 51010,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 351,
+    "item_group_id": 243038,
+    "item_id": 51029,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 352,
+    "item_group_id": 243039,
+    "item_id": 51048,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 353,
+    "item_group_id": 243040,
+    "item_id": 51067,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 354,
+    "item_group_id": 243041,
+    "item_id": 51003,
+    "item_num": 1,
+    "item_weight": 0
+  },
+  {
+    "id": 355,
+    "item_group_id": 243041,
+    "item_id": 51022,
+    "item_num": 1,
+    "item_weight": 10
+  },
+  {
+    "id": 356,
+    "item_group_id": 243041,
+    "item_id": 51041,
+    "item_num": 1,
+    "item_weight": 20
+  },
+  {
+    "id": 357,
+    "item_group_id": 243041,
+    "item_id": 51060,
+    "item_num": 1,
+    "item_weight": 70
+  },
+  {
+    "id": 358,
+    "item_group_id": 243042,
+    "item_id": 51006,
+    "item_num": 1,
+    "item_weight": 0
+  },
+  {
+    "id": 359,
+    "item_group_id": 243042,
+    "item_id": 51025,
+    "item_num": 1,
+    "item_weight": 10
+  },
+  {
+    "id": 360,
+    "item_group_id": 243042,
+    "item_id": 51044,
+    "item_num": 1,
+    "item_weight": 20
+  },
+  {
+    "id": 361,
+    "item_group_id": 243042,
+    "item_id": 51063,
+    "item_num": 1,
+    "item_weight": 70
+  },
+  {
+    "id": 362,
+    "item_group_id": 243043,
+    "item_id": 51009,
+    "item_num": 1,
+    "item_weight": 0
+  },
+  {
+    "id": 363,
+    "item_group_id": 243043,
+    "item_id": 51028,
+    "item_num": 1,
+    "item_weight": 10
+  },
+  {
+    "id": 364,
+    "item_group_id": 243043,
+    "item_id": 51047,
+    "item_num": 1,
+    "item_weight": 20
+  },
+  {
+    "id": 365,
+    "item_group_id": 243043,
+    "item_id": 51066,
+    "item_num": 1,
+    "item_weight": 70
+  },
+  {
+    "id": 366,
+    "item_group_id": 243044,
+    "item_id": 51014,
+    "item_num": 1,
+    "item_weight": 0
+  },
+  {
+    "id": 367,
+    "item_group_id": 243044,
+    "item_id": 51033,
+    "item_num": 1,
+    "item_weight": 10
+  },
+  {
+    "id": 368,
+    "item_group_id": 243044,
+    "item_id": 51052,
+    "item_num": 1,
+    "item_weight": 20
+  },
+  {
+    "id": 369,
+    "item_group_id": 243044,
+    "item_id": 51071,
+    "item_num": 1,
+    "item_weight": 70
+  },
+  {
+    "id": 370,
+    "item_group_id": 243045,
+    "item_id": 51016,
+    "item_num": 1,
+    "item_weight": 0
+  },
+  {
+    "id": 371,
+    "item_group_id": 243045,
+    "item_id": 51035,
+    "item_num": 1,
+    "item_weight": 10
+  },
+  {
+    "id": 372,
+    "item_group_id": 243045,
+    "item_id": 51054,
+    "item_num": 1,
+    "item_weight": 20
+  },
+  {
+    "id": 373,
+    "item_group_id": 243045,
+    "item_id": 51073,
+    "item_num": 1,
+    "item_weight": 70
+  },
+  {
+    "id": 374,
+    "item_group_id": 243046,
+    "item_id": 51018,
+    "item_num": 1,
+    "item_weight": 0
+  },
+  {
+    "id": 375,
+    "item_group_id": 243046,
+    "item_id": 51037,
+    "item_num": 1,
+    "item_weight": 10
+  },
+  {
+    "id": 376,
+    "item_group_id": 243046,
+    "item_id": 51056,
+    "item_num": 1,
+    "item_weight": 20
+  },
+  {
+    "id": 377,
+    "item_group_id": 243046,
+    "item_id": 51075,
+    "item_num": 1,
+    "item_weight": 70
+  },
+  {
+    "id": 378,
+    "item_group_id": 243047,
+    "item_id": 51002,
+    "item_num": 1,
+    "item_weight": 0
+  },
+  {
+    "id": 379,
+    "item_group_id": 243047,
+    "item_id": 51021,
+    "item_num": 1,
+    "item_weight": 10
+  },
+  {
+    "id": 380,
+    "item_group_id": 243047,
+    "item_id": 51040,
+    "item_num": 1,
+    "item_weight": 20
+  },
+  {
+    "id": 381,
+    "item_group_id": 243047,
+    "item_id": 51059,
+    "item_num": 1,
+    "item_weight": 70
+  },
+  {
+    "id": 382,
+    "item_group_id": 243048,
+    "item_id": 51005,
+    "item_num": 1,
+    "item_weight": 0
+  },
+  {
+    "id": 383,
+    "item_group_id": 243048,
+    "item_id": 51024,
+    "item_num": 1,
+    "item_weight": 10
+  },
+  {
+    "id": 384,
+    "item_group_id": 243048,
+    "item_id": 51043,
+    "item_num": 1,
+    "item_weight": 20
+  },
+  {
+    "id": 385,
+    "item_group_id": 243048,
+    "item_id": 51062,
+    "item_num": 1,
+    "item_weight": 70
+  },
+  {
+    "id": 386,
+    "item_group_id": 243049,
+    "item_id": 51008,
+    "item_num": 1,
+    "item_weight": 0
+  },
+  {
+    "id": 387,
+    "item_group_id": 243049,
+    "item_id": 51027,
+    "item_num": 1,
+    "item_weight": 10
+  },
+  {
+    "id": 388,
+    "item_group_id": 243049,
+    "item_id": 51046,
+    "item_num": 1,
+    "item_weight": 20
+  },
+  {
+    "id": 389,
+    "item_group_id": 243049,
+    "item_id": 51065,
+    "item_num": 1,
+    "item_weight": 70
+  },
+  {
+    "id": 390,
+    "item_group_id": 243050,
+    "item_id": 51013,
+    "item_num": 1,
+    "item_weight": 0
+  },
+  {
+    "id": 391,
+    "item_group_id": 243050,
+    "item_id": 51032,
+    "item_num": 1,
+    "item_weight": 10
+  },
+  {
+    "id": 392,
+    "item_group_id": 243050,
+    "item_id": 51051,
+    "item_num": 1,
+    "item_weight": 20
+  },
+  {
+    "id": 393,
+    "item_group_id": 243050,
+    "item_id": 51070,
+    "item_num": 1,
+    "item_weight": 70
+  },
+  {
+    "id": 394,
+    "item_group_id": 243051,
+    "item_id": 51017,
+    "item_num": 1,
+    "item_weight": 0
+  },
+  {
+    "id": 395,
+    "item_group_id": 243051,
+    "item_id": 51036,
+    "item_num": 1,
+    "item_weight": 10
+  },
+  {
+    "id": 396,
+    "item_group_id": 243051,
+    "item_id": 51055,
+    "item_num": 1,
+    "item_weight": 20
+  },
+  {
+    "id": 397,
+    "item_group_id": 243051,
+    "item_id": 51074,
+    "item_num": 1,
+    "item_weight": 70
+  },
+  {
+    "id": 398,
+    "item_group_id": 243052,
+    "item_id": 51001,
+    "item_num": 1,
+    "item_weight": 0
+  },
+  {
+    "id": 399,
+    "item_group_id": 243052,
+    "item_id": 51020,
+    "item_num": 1,
+    "item_weight": 10
+  },
+  {
+    "id": 400,
+    "item_group_id": 243052,
+    "item_id": 51039,
+    "item_num": 1,
+    "item_weight": 20
+  },
+  {
+    "id": 401,
+    "item_group_id": 243052,
+    "item_id": 51058,
+    "item_num": 1,
+    "item_weight": 70
+  },
+  {
+    "id": 402,
+    "item_group_id": 243053,
+    "item_id": 51004,
+    "item_num": 1,
+    "item_weight": 0
+  },
+  {
+    "id": 403,
+    "item_group_id": 243053,
+    "item_id": 51023,
+    "item_num": 1,
+    "item_weight": 10
+  },
+  {
+    "id": 404,
+    "item_group_id": 243053,
+    "item_id": 51042,
+    "item_num": 1,
+    "item_weight": 20
+  },
+  {
+    "id": 405,
+    "item_group_id": 243053,
+    "item_id": 51061,
+    "item_num": 1,
+    "item_weight": 70
+  },
+  {
+    "id": 406,
+    "item_group_id": 243054,
+    "item_id": 51007,
+    "item_num": 1,
+    "item_weight": 0
+  },
+  {
+    "id": 407,
+    "item_group_id": 243054,
+    "item_id": 51026,
+    "item_num": 1,
+    "item_weight": 10
+  },
+  {
+    "id": 408,
+    "item_group_id": 243054,
+    "item_id": 51045,
+    "item_num": 1,
+    "item_weight": 20
+  },
+  {
+    "id": 409,
+    "item_group_id": 243054,
+    "item_id": 51064,
+    "item_num": 1,
+    "item_weight": 70
+  },
+  {
+    "id": 410,
+    "item_group_id": 243055,
+    "item_id": 51015,
+    "item_num": 1,
+    "item_weight": 0
+  },
+  {
+    "id": 411,
+    "item_group_id": 243055,
+    "item_id": 51034,
+    "item_num": 1,
+    "item_weight": 10
+  },
+  {
+    "id": 412,
+    "item_group_id": 243055,
+    "item_id": 51053,
+    "item_num": 1,
+    "item_weight": 20
+  },
+  {
+    "id": 413,
+    "item_group_id": 243055,
+    "item_id": 51072,
+    "item_num": 1,
+    "item_weight": 70
+  },
+  {
+    "id": 414,
+    "item_group_id": 243056,
+    "item_id": 51019,
+    "item_num": 1,
+    "item_weight": 0
+  },
+  {
+    "id": 415,
+    "item_group_id": 243056,
+    "item_id": 51038,
+    "item_num": 1,
+    "item_weight": 10
+  },
+  {
+    "id": 416,
+    "item_group_id": 243056,
+    "item_id": 51057,
+    "item_num": 1,
+    "item_weight": 20
+  },
+  {
+    "id": 417,
+    "item_group_id": 243056,
+    "item_id": 51076,
+    "item_num": 1,
+    "item_weight": 70
+  },
+  {
+    "id": 418,
+    "item_group_id": 243057,
+    "item_id": 51012,
+    "item_num": 1,
+    "item_weight": 0
+  },
+  {
+    "id": 419,
+    "item_group_id": 243057,
+    "item_id": 51031,
+    "item_num": 1,
+    "item_weight": 10
+  },
+  {
+    "id": 420,
+    "item_group_id": 243057,
+    "item_id": 51050,
+    "item_num": 1,
+    "item_weight": 20
+  },
+  {
+    "id": 421,
+    "item_group_id": 243057,
+    "item_id": 51069,
+    "item_num": 1,
+    "item_weight": 70
+  },
+  {
+    "id": 422,
+    "item_group_id": 243058,
+    "item_id": 51011,
+    "item_num": 1,
+    "item_weight": 0
+  },
+  {
+    "id": 423,
+    "item_group_id": 243058,
+    "item_id": 51030,
+    "item_num": 1,
+    "item_weight": 10
+  },
+  {
+    "id": 424,
+    "item_group_id": 243058,
+    "item_id": 51049,
+    "item_num": 1,
+    "item_weight": 20
+  },
+  {
+    "id": 425,
+    "item_group_id": 243058,
+    "item_id": 51068,
+    "item_num": 1,
+    "item_weight": 70
+  },
+  {
+    "id": 426,
+    "item_group_id": 243059,
+    "item_id": 51010,
+    "item_num": 1,
+    "item_weight": 0
+  },
+  {
+    "id": 427,
+    "item_group_id": 243059,
+    "item_id": 51029,
+    "item_num": 1,
+    "item_weight": 10
+  },
+  {
+    "id": 428,
+    "item_group_id": 243059,
+    "item_id": 51048,
+    "item_num": 1,
+    "item_weight": 20
+  },
+  {
+    "id": 429,
+    "item_group_id": 243059,
+    "item_id": 51067,
+    "item_num": 1,
+    "item_weight": 70
+  },
+  {
+    "id": 430,
+    "item_group_id": 251011,
+    "item_id": 2005,
+    "item_num": 100,
+    "item_weight": 100
+  },
+  {
+    "id": 431,
+    "item_group_id": 251021,
+    "item_id": 2005,
+    "item_num": 150,
+    "item_weight": 100
+  },
+  {
+    "id": 432,
+    "item_group_id": 251031,
+    "item_id": 2005,
+    "item_num": 180,
+    "item_weight": 100
+  },
+  {
+    "id": 433,
+    "item_group_id": 251041,
+    "item_id": 2005,
+    "item_num": 240,
+    "item_weight": 100
+  },
+  {
+    "id": 434,
+    "item_group_id": 251001,
+    "item_id": 3001,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 435,
+    "item_group_id": 30001,
+    "item_id": 4504,
+    "item_num": 4,
+    "item_weight": 50
+  },
+  {
+    "id": 436,
+    "item_group_id": 30001,
+    "item_id": 4504,
+    "item_num": 5,
+    "item_weight": 50
+  },
+  {
+    "id": 437,
+    "item_group_id": 30002,
+    "item_id": 4505,
+    "item_num": 5,
+    "item_weight": 50
+  },
+  {
+    "id": 438,
+    "item_group_id": 30002,
+    "item_id": 4505,
+    "item_num": 6,
+    "item_weight": 50
+  },
+  {
+    "id": 439,
+    "item_group_id": 30003,
+    "item_id": 4506,
+    "item_num": 3,
+    "item_weight": 50
+  },
+  {
+    "id": 440,
+    "item_group_id": 30003,
+    "item_id": 4506,
+    "item_num": 4,
+    "item_weight": 50
+  },
+  {
+    "id": 441,
+    "item_group_id": 30004,
+    "item_id": 4403,
+    "item_num": 3,
+    "item_weight": 50
+  },
+  {
+    "id": 442,
+    "item_group_id": 30004,
+    "item_id": 4403,
+    "item_num": 2,
+    "item_weight": 50
+  },
+  {
+    "id": 443,
+    "item_group_id": 30005,
+    "item_id": 4404,
+    "item_num": 3,
+    "item_weight": 50
+  },
+  {
+    "id": 444,
+    "item_group_id": 30005,
+    "item_id": 4404,
+    "item_num": 2,
+    "item_weight": 50
+  },
+  {
+    "id": 445,
+    "item_group_id": 30006,
+    "item_id": 4303,
+    "item_num": 3,
+    "item_weight": 50
+  },
+  {
+    "id": 446,
+    "item_group_id": 30006,
+    "item_id": 4303,
+    "item_num": 4,
+    "item_weight": 50
+  },
+  {
+    "id": 447,
+    "item_group_id": 30007,
+    "item_id": 4304,
+    "item_num": 3,
+    "item_weight": 50
+  },
+  {
+    "id": 448,
+    "item_group_id": 30007,
+    "item_id": 4304,
+    "item_num": 4,
+    "item_weight": 50
+  },
+  {
+    "id": 449,
+    "item_group_id": 30008,
+    "item_id": 4501,
+    "item_num": 4,
+    "item_weight": 50
+  },
+  {
+    "id": 450,
+    "item_group_id": 30008,
+    "item_id": 4501,
+    "item_num": 5,
+    "item_weight": 50
+  },
+  {
+    "id": 451,
+    "item_group_id": 30009,
+    "item_id": 4502,
+    "item_num": 5,
+    "item_weight": 50
+  },
+  {
+    "id": 452,
+    "item_group_id": 30009,
+    "item_id": 4502,
+    "item_num": 6,
+    "item_weight": 50
+  },
+  {
+    "id": 453,
+    "item_group_id": 30010,
+    "item_id": 4503,
+    "item_num": 3,
+    "item_weight": 50
+  },
+  {
+    "id": 454,
+    "item_group_id": 30010,
+    "item_id": 4503,
+    "item_num": 4,
+    "item_weight": 50
+  },
+  {
+    "id": 455,
+    "item_group_id": 30011,
+    "item_id": 4401,
+    "item_num": 3,
+    "item_weight": 50
+  },
+  {
+    "id": 456,
+    "item_group_id": 30011,
+    "item_id": 4401,
+    "item_num": 2,
+    "item_weight": 50
+  },
+  {
+    "id": 457,
+    "item_group_id": 30012,
+    "item_id": 4402,
+    "item_num": 3,
+    "item_weight": 50
+  },
+  {
+    "id": 458,
+    "item_group_id": 30012,
+    "item_id": 4402,
+    "item_num": 2,
+    "item_weight": 50
+  },
+  {
+    "id": 459,
+    "item_group_id": 30013,
+    "item_id": 4301,
+    "item_num": 3,
+    "item_weight": 50
+  },
+  {
+    "id": 460,
+    "item_group_id": 30013,
+    "item_id": 4301,
+    "item_num": 4,
+    "item_weight": 50
+  },
+  {
+    "id": 461,
+    "item_group_id": 30014,
+    "item_id": 4302,
+    "item_num": 3,
+    "item_weight": 50
+  },
+  {
+    "id": 462,
+    "item_group_id": 30014,
+    "item_id": 4302,
+    "item_num": 4,
+    "item_weight": 50
+  },
+  {
+    "id": 463,
+    "item_group_id": 31001,
+    "item_id": 40028,
+    "item_num": 100,
+    "item_weight": 100
+  },
+  {
+    "id": 464,
+    "item_group_id": 31001,
+    "item_id": 40029,
+    "item_num": 100,
+    "item_weight": 100
+  },
+  {
+    "id": 465,
+    "item_group_id": 31001,
+    "item_id": 40030,
+    "item_num": 100,
+    "item_weight": 100
+  },
+  {
+    "id": 466,
+    "item_group_id": 400011,
+    "item_id": 100001,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 467,
+    "item_group_id": 400012,
+    "item_id": 100002,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 468,
+    "item_group_id": 400013,
+    "item_id": 100003,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 469,
+    "item_group_id": 400014,
+    "item_id": 100004,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 470,
+    "item_group_id": 400015,
+    "item_id": 4401,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 471,
+    "item_group_id": 400016,
+    "item_id": 4402,
+    "item_num": 2,
+    "item_weight": 100
+  },
+  {
+    "id": 472,
+    "item_group_id": 400017,
+    "item_id": 4403,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 473,
+    "item_group_id": 400018,
+    "item_id": 4404,
+    "item_num": 2,
+    "item_weight": 100
+  },
+  {
+    "id": 474,
+    "item_group_id": 400019,
+    "item_id": 4501,
+    "item_num": 3,
+    "item_weight": 100
+  },
+  {
+    "id": 475,
+    "item_group_id": 400020,
+    "item_id": 4502,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 476,
+    "item_group_id": 400021,
+    "item_id": 4503,
+    "item_num": 3,
+    "item_weight": 100
+  },
+  {
+    "id": 477,
+    "item_group_id": 400022,
+    "item_id": 4504,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 478,
+    "item_group_id": 400023,
+    "item_id": 4714,
+    "item_num": 1,
+    "item_weight": 100
+  },
+  {
+    "id": 479,
+    "item_group_id": 400024,
+    "item_id": 5104,
+    "item_num": 2,
+    "item_weight": 100
+  },
+  {
+    "id": 480,
+    "item_group_id": 400025,
+    "item_id": 100005,
+    "item_num": 1,
+    "item_weight": 100
+  }
+]

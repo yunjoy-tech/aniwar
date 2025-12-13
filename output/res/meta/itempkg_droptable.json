@@ -1,0 +1,5143 @@
+[
+  {
+    "id": 9801,
+    "drop_id": 9801,
+    "group": [
+      {
+        "group_id": 98011,
+        "type": 100,
+        "times": 4
+      },
+      {
+        "group_id": 98012,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9802,
+    "drop_id": 9802,
+    "group": [
+      {
+        "group_id": 98012,
+        "type": 100,
+        "times": 4
+      },
+      {
+        "group_id": 98013,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9803,
+    "drop_id": 9803,
+    "group": [
+      {
+        "group_id": 98013,
+        "type": 100,
+        "times": 4
+      },
+      {
+        "group_id": 98014,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9804,
+    "drop_id": 9804,
+    "group": [
+      {
+        "group_id": 98014,
+        "type": 100,
+        "times": 4
+      },
+      {
+        "group_id": 98015,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9805,
+    "drop_id": 9805,
+    "group": [
+      {
+        "group_id": 98015,
+        "type": 100,
+        "times": 4
+      },
+      {
+        "group_id": 98014,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9806,
+    "drop_id": 9806,
+    "group": [
+      {
+        "group_id": 98061,
+        "type": 100,
+        "times": 4
+      },
+      {
+        "group_id": 98062,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9807,
+    "drop_id": 9807,
+    "group": [
+      {
+        "group_id": 98062,
+        "type": 100,
+        "times": 4
+      },
+      {
+        "group_id": 98063,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9808,
+    "drop_id": 9808,
+    "group": [
+      {
+        "group_id": 98063,
+        "type": 100,
+        "times": 4
+      },
+      {
+        "group_id": 98064,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9809,
+    "drop_id": 9809,
+    "group": [
+      {
+        "group_id": 98064,
+        "type": 100,
+        "times": 4
+      },
+      {
+        "group_id": 98065,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9810,
+    "drop_id": 9810,
+    "group": [
+      {
+        "group_id": 98065,
+        "type": 100,
+        "times": 4
+      },
+      {
+        "group_id": 98064,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9811,
+    "drop_id": 9811,
+    "group": [
+      {
+        "group_id": 98111,
+        "type": 100,
+        "times": 4
+      },
+      {
+        "group_id": 98112,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9812,
+    "drop_id": 9812,
+    "group": [
+      {
+        "group_id": 98112,
+        "type": 100,
+        "times": 4
+      },
+      {
+        "group_id": 98113,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9813,
+    "drop_id": 9813,
+    "group": [
+      {
+        "group_id": 98113,
+        "type": 100,
+        "times": 4
+      },
+      {
+        "group_id": 98114,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9814,
+    "drop_id": 9814,
+    "group": [
+      {
+        "group_id": 98114,
+        "type": 100,
+        "times": 4
+      },
+      {
+        "group_id": 98115,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9815,
+    "drop_id": 9815,
+    "group": [
+      {
+        "group_id": 98115,
+        "type": 100,
+        "times": 4
+      },
+      {
+        "group_id": 98114,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9816,
+    "drop_id": 9816,
+    "group": [
+      {
+        "group_id": 98161,
+        "type": 100,
+        "times": 4
+      },
+      {
+        "group_id": 98162,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9817,
+    "drop_id": 9817,
+    "group": [
+      {
+        "group_id": 98162,
+        "type": 100,
+        "times": 4
+      },
+      {
+        "group_id": 98163,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9818,
+    "drop_id": 9818,
+    "group": [
+      {
+        "group_id": 98163,
+        "type": 100,
+        "times": 4
+      },
+      {
+        "group_id": 98164,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9819,
+    "drop_id": 9819,
+    "group": [
+      {
+        "group_id": 98164,
+        "type": 100,
+        "times": 4
+      },
+      {
+        "group_id": 98165,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9820,
+    "drop_id": 9820,
+    "group": [
+      {
+        "group_id": 98165,
+        "type": 100,
+        "times": 4
+      },
+      {
+        "group_id": 98164,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9821,
+    "drop_id": 9821,
+    "group": [
+      {
+        "group_id": 98211,
+        "type": 100,
+        "times": 4
+      },
+      {
+        "group_id": 98212,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9822,
+    "drop_id": 9822,
+    "group": [
+      {
+        "group_id": 98212,
+        "type": 100,
+        "times": 4
+      },
+      {
+        "group_id": 98213,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9823,
+    "drop_id": 9823,
+    "group": [
+      {
+        "group_id": 98213,
+        "type": 100,
+        "times": 4
+      },
+      {
+        "group_id": 98214,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9824,
+    "drop_id": 9824,
+    "group": [
+      {
+        "group_id": 98214,
+        "type": 100,
+        "times": 4
+      },
+      {
+        "group_id": 98215,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9825,
+    "drop_id": 9825,
+    "group": [
+      {
+        "group_id": 98215,
+        "type": 100,
+        "times": 4
+      },
+      {
+        "group_id": 98214,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9826,
+    "drop_id": 9826,
+    "group": [
+      {
+        "group_id": 98261,
+        "type": 100,
+        "times": 4
+      },
+      {
+        "group_id": 98262,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9827,
+    "drop_id": 9827,
+    "group": [
+      {
+        "group_id": 98262,
+        "type": 100,
+        "times": 4
+      },
+      {
+        "group_id": 98263,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9828,
+    "drop_id": 9828,
+    "group": [
+      {
+        "group_id": 98263,
+        "type": 100,
+        "times": 4
+      },
+      {
+        "group_id": 98264,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9829,
+    "drop_id": 9829,
+    "group": [
+      {
+        "group_id": 98264,
+        "type": 100,
+        "times": 4
+      },
+      {
+        "group_id": 98265,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9830,
+    "drop_id": 9830,
+    "group": [
+      {
+        "group_id": 98265,
+        "type": 100,
+        "times": 4
+      },
+      {
+        "group_id": 98264,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9701,
+    "drop_id": 9701,
+    "group": [
+      {
+        "group_id": 97011,
+        "type": 100,
+        "times": 3
+      },
+      {
+        "group_id": 97011,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9702,
+    "drop_id": 9702,
+    "group": [
+      {
+        "group_id": 97011,
+        "type": 100,
+        "times": 5
+      },
+      {
+        "group_id": 97012,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9703,
+    "drop_id": 9703,
+    "group": [
+      {
+        "group_id": 97012,
+        "type": 100,
+        "times": 3
+      },
+      {
+        "group_id": 97011,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 97013,
+        "type": 30,
+        "times": 1
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9704,
+    "drop_id": 9704,
+    "group": [
+      {
+        "group_id": 97012,
+        "type": 100,
+        "times": 5
+      },
+      {
+        "group_id": 97013,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9705,
+    "drop_id": 9705,
+    "group": [
+      {
+        "group_id": 97013,
+        "type": 100,
+        "times": 3
+      },
+      {
+        "group_id": 97013,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 97012,
+        "type": 30,
+        "times": 1
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9706,
+    "drop_id": 9706,
+    "group": [
+      {
+        "group_id": 97061,
+        "type": 100,
+        "times": 3
+      },
+      {
+        "group_id": 97061,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9707,
+    "drop_id": 9707,
+    "group": [
+      {
+        "group_id": 97061,
+        "type": 100,
+        "times": 5
+      },
+      {
+        "group_id": 97062,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9708,
+    "drop_id": 9708,
+    "group": [
+      {
+        "group_id": 97062,
+        "type": 100,
+        "times": 3
+      },
+      {
+        "group_id": 97061,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 97063,
+        "type": 30,
+        "times": 1
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9709,
+    "drop_id": 9709,
+    "group": [
+      {
+        "group_id": 97062,
+        "type": 100,
+        "times": 5
+      },
+      {
+        "group_id": 97063,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9710,
+    "drop_id": 9710,
+    "group": [
+      {
+        "group_id": 97063,
+        "type": 100,
+        "times": 3
+      },
+      {
+        "group_id": 97063,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 97062,
+        "type": 30,
+        "times": 1
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9711,
+    "drop_id": 9711,
+    "group": [
+      {
+        "group_id": 97111,
+        "type": 100,
+        "times": 3
+      },
+      {
+        "group_id": 97111,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9712,
+    "drop_id": 9712,
+    "group": [
+      {
+        "group_id": 97111,
+        "type": 100,
+        "times": 5
+      },
+      {
+        "group_id": 97112,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9713,
+    "drop_id": 9713,
+    "group": [
+      {
+        "group_id": 97112,
+        "type": 100,
+        "times": 3
+      },
+      {
+        "group_id": 97111,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 97113,
+        "type": 30,
+        "times": 1
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9714,
+    "drop_id": 9714,
+    "group": [
+      {
+        "group_id": 97112,
+        "type": 100,
+        "times": 5
+      },
+      {
+        "group_id": 97113,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9715,
+    "drop_id": 9715,
+    "group": [
+      {
+        "group_id": 97113,
+        "type": 100,
+        "times": 3
+      },
+      {
+        "group_id": 97113,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 97112,
+        "type": 30,
+        "times": 1
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9716,
+    "drop_id": 9716,
+    "group": [
+      {
+        "group_id": 97161,
+        "type": 100,
+        "times": 3
+      },
+      {
+        "group_id": 97161,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9717,
+    "drop_id": 9717,
+    "group": [
+      {
+        "group_id": 97161,
+        "type": 100,
+        "times": 5
+      },
+      {
+        "group_id": 97162,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9718,
+    "drop_id": 9718,
+    "group": [
+      {
+        "group_id": 97162,
+        "type": 100,
+        "times": 3
+      },
+      {
+        "group_id": 97161,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 97163,
+        "type": 30,
+        "times": 1
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9719,
+    "drop_id": 9719,
+    "group": [
+      {
+        "group_id": 97162,
+        "type": 100,
+        "times": 5
+      },
+      {
+        "group_id": 97163,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9720,
+    "drop_id": 9720,
+    "group": [
+      {
+        "group_id": 97163,
+        "type": 100,
+        "times": 3
+      },
+      {
+        "group_id": 97163,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 97162,
+        "type": 30,
+        "times": 1
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9721,
+    "drop_id": 9721,
+    "group": [
+      {
+        "group_id": 97211,
+        "type": 100,
+        "times": 3
+      },
+      {
+        "group_id": 97211,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9722,
+    "drop_id": 9722,
+    "group": [
+      {
+        "group_id": 97211,
+        "type": 100,
+        "times": 5
+      },
+      {
+        "group_id": 97212,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9723,
+    "drop_id": 9723,
+    "group": [
+      {
+        "group_id": 97212,
+        "type": 100,
+        "times": 3
+      },
+      {
+        "group_id": 97211,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 97213,
+        "type": 30,
+        "times": 1
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9724,
+    "drop_id": 9724,
+    "group": [
+      {
+        "group_id": 97212,
+        "type": 100,
+        "times": 5
+      },
+      {
+        "group_id": 97213,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9725,
+    "drop_id": 9725,
+    "group": [
+      {
+        "group_id": 97213,
+        "type": 100,
+        "times": 3
+      },
+      {
+        "group_id": 97213,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 97212,
+        "type": 30,
+        "times": 1
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9726,
+    "drop_id": 9726,
+    "group": [
+      {
+        "group_id": 97261,
+        "type": 100,
+        "times": 3
+      },
+      {
+        "group_id": 97261,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9727,
+    "drop_id": 9727,
+    "group": [
+      {
+        "group_id": 97261,
+        "type": 100,
+        "times": 5
+      },
+      {
+        "group_id": 97262,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9728,
+    "drop_id": 9728,
+    "group": [
+      {
+        "group_id": 97262,
+        "type": 100,
+        "times": 3
+      },
+      {
+        "group_id": 97261,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 97263,
+        "type": 30,
+        "times": 1
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9729,
+    "drop_id": 9729,
+    "group": [
+      {
+        "group_id": 97262,
+        "type": 100,
+        "times": 5
+      },
+      {
+        "group_id": 97263,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 9730,
+    "drop_id": 9730,
+    "group": [
+      {
+        "group_id": 97263,
+        "type": 100,
+        "times": 3
+      },
+      {
+        "group_id": 97263,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 97262,
+        "type": 30,
+        "times": 1
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 21101,
+    "drop_id": 21101,
+    "group": [
+      {
+        "group_id": 211011,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 210001,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 210006,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 210007,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211003,
+        "type": 100,
+        "times": 4
+      },
+      {
+        "group_id": 243001,
+        "type": 80,
+        "times": 3
+      },
+      {
+        "group_id": 243002,
+        "type": 25,
+        "times": 1
+      },
+      {
+        "group_id": 243003,
+        "type": 10,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 21102,
+    "drop_id": 21102,
+    "group": [
+      {
+        "group_id": 211021,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 210001,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 210006,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 210007,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211003,
+        "type": 100,
+        "times": 4
+      },
+      {
+        "group_id": 243005,
+        "type": 80,
+        "times": 3
+      },
+      {
+        "group_id": 243006,
+        "type": 25,
+        "times": 1
+      },
+      {
+        "group_id": 243007,
+        "type": 10,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 21103,
+    "drop_id": 21103,
+    "group": [
+      {
+        "group_id": 211031,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 210001,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 210006,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 210007,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211003,
+        "type": 100,
+        "times": 4
+      },
+      {
+        "group_id": 243009,
+        "type": 80,
+        "times": 3
+      },
+      {
+        "group_id": 243010,
+        "type": 25,
+        "times": 1
+      },
+      {
+        "group_id": 243011,
+        "type": 10,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 21104,
+    "drop_id": 21104,
+    "group": [
+      {
+        "group_id": 211041,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 210001,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 210006,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 210007,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211003,
+        "type": 100,
+        "times": 4
+      },
+      {
+        "group_id": 243013,
+        "type": 80,
+        "times": 3
+      },
+      {
+        "group_id": 243014,
+        "type": 25,
+        "times": 1
+      },
+      {
+        "group_id": 243015,
+        "type": 10,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 21105,
+    "drop_id": 21105,
+    "group": [
+      {
+        "group_id": 211051,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 210001,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 210006,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 210007,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211003,
+        "type": 100,
+        "times": 4
+      },
+      {
+        "group_id": 243017,
+        "type": 80,
+        "times": 3
+      },
+      {
+        "group_id": 243018,
+        "type": 25,
+        "times": 1
+      },
+      {
+        "group_id": 243019,
+        "type": 10,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 21106,
+    "drop_id": 21201,
+    "group": [
+      {
+        "group_id": 211061,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 210002,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 210006,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 210007,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211003,
+        "type": 100,
+        "times": 6
+      },
+      {
+        "group_id": 243021,
+        "type": 80,
+        "times": 3
+      },
+      {
+        "group_id": 243022,
+        "type": 25,
+        "times": 1
+      },
+      {
+        "group_id": 243023,
+        "type": 10,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 21107,
+    "drop_id": 21202,
+    "group": [
+      {
+        "group_id": 211071,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 210002,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 210006,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 210007,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211003,
+        "type": 100,
+        "times": 6
+      },
+      {
+        "group_id": 243025,
+        "type": 80,
+        "times": 3
+      },
+      {
+        "group_id": 243026,
+        "type": 25,
+        "times": 1
+      },
+      {
+        "group_id": 243027,
+        "type": 10,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 21108,
+    "drop_id": 21203,
+    "group": [
+      {
+        "group_id": 211081,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 210002,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 210006,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 210007,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211003,
+        "type": 100,
+        "times": 6
+      },
+      {
+        "group_id": 243029,
+        "type": 80,
+        "times": 3
+      },
+      {
+        "group_id": 243030,
+        "type": 25,
+        "times": 1
+      },
+      {
+        "group_id": 243031,
+        "type": 10,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 21109,
+    "drop_id": 21204,
+    "group": [
+      {
+        "group_id": 211091,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 210002,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 210006,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 210007,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211003,
+        "type": 100,
+        "times": 6
+      },
+      {
+        "group_id": 243002,
+        "type": 80,
+        "times": 3
+      },
+      {
+        "group_id": 243001,
+        "type": 25,
+        "times": 1
+      },
+      {
+        "group_id": 243003,
+        "type": 10,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 21110,
+    "drop_id": 21205,
+    "group": [
+      {
+        "group_id": 211101,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 210002,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 210006,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 210007,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211003,
+        "type": 100,
+        "times": 6
+      },
+      {
+        "group_id": 243006,
+        "type": 80,
+        "times": 3
+      },
+      {
+        "group_id": 243005,
+        "type": 25,
+        "times": 1
+      },
+      {
+        "group_id": 243007,
+        "type": 10,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 21111,
+    "drop_id": 21111,
+    "group": [
+      {
+        "group_id": 211061,
+        "type": 100,
+        "times": 4
+      },
+      {
+        "group_id": 210003,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 210007,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 210007,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211003,
+        "type": 100,
+        "times": 8
+      },
+      {
+        "group_id": 243010,
+        "type": 80,
+        "times": 3
+      },
+      {
+        "group_id": 243009,
+        "type": 25,
+        "times": 1
+      },
+      {
+        "group_id": 243011,
+        "type": 10,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 21112,
+    "drop_id": 21112,
+    "group": [
+      {
+        "group_id": 211071,
+        "type": 100,
+        "times": 4
+      },
+      {
+        "group_id": 210003,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 210007,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 210007,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 211001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211003,
+        "type": 100,
+        "times": 8
+      },
+      {
+        "group_id": 243014,
+        "type": 80,
+        "times": 3
+      },
+      {
+        "group_id": 243013,
+        "type": 25,
+        "times": 1
+      },
+      {
+        "group_id": 243015,
+        "type": 10,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 21201,
+    "drop_id": 21201,
+    "group": [
+      {
+        "group_id": 211081,
+        "type": 100,
+        "times": 4
+      },
+      {
+        "group_id": 210003,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 210007,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 210008,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 212001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 212002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 212003,
+        "type": 100,
+        "times": 4
+      },
+      {
+        "group_id": 243018,
+        "type": 80,
+        "times": 3
+      },
+      {
+        "group_id": 243017,
+        "type": 25,
+        "times": 1
+      },
+      {
+        "group_id": 243019,
+        "type": 10,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 21202,
+    "drop_id": 21202,
+    "group": [
+      {
+        "group_id": 211091,
+        "type": 100,
+        "times": 4
+      },
+      {
+        "group_id": 210003,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 210007,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 210008,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 212001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 212002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 212003,
+        "type": 100,
+        "times": 4
+      },
+      {
+        "group_id": 243022,
+        "type": 80,
+        "times": 3
+      },
+      {
+        "group_id": 243021,
+        "type": 25,
+        "times": 1
+      },
+      {
+        "group_id": 243023,
+        "type": 10,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 21203,
+    "drop_id": 21203,
+    "group": [
+      {
+        "group_id": 211101,
+        "type": 100,
+        "times": 4
+      },
+      {
+        "group_id": 210003,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 210007,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 210008,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 212001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 212002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 212003,
+        "type": 100,
+        "times": 4
+      },
+      {
+        "group_id": 243026,
+        "type": 80,
+        "times": 3
+      },
+      {
+        "group_id": 243025,
+        "type": 25,
+        "times": 1
+      },
+      {
+        "group_id": 243027,
+        "type": 10,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 21204,
+    "drop_id": 21204,
+    "group": [
+      {
+        "group_id": 212041,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 210004,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 210007,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 210008,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 212001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 212002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 212003,
+        "type": 100,
+        "times": 4
+      },
+      {
+        "group_id": 243030,
+        "type": 80,
+        "times": 3
+      },
+      {
+        "group_id": 243029,
+        "type": 25,
+        "times": 1
+      },
+      {
+        "group_id": 243031,
+        "type": 10,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 21205,
+    "drop_id": 21205,
+    "group": [
+      {
+        "group_id": 212051,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 210004,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 210007,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 210008,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 212001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 212002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 212003,
+        "type": 100,
+        "times": 4
+      },
+      {
+        "group_id": 243034,
+        "type": 80,
+        "times": 3
+      },
+      {
+        "group_id": 243033,
+        "type": 25,
+        "times": 1
+      },
+      {
+        "group_id": 243035,
+        "type": 10,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 21206,
+    "drop_id": 21206,
+    "group": [
+      {
+        "group_id": 212061,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 210004,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 210007,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 210008,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 212001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 212002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 212003,
+        "type": 100,
+        "times": 4
+      },
+      {
+        "group_id": 243038,
+        "type": 80,
+        "times": 3
+      },
+      {
+        "group_id": 243037,
+        "type": 25,
+        "times": 1
+      },
+      {
+        "group_id": 243039,
+        "type": 10,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 21207,
+    "drop_id": 21207,
+    "group": [
+      {
+        "group_id": 212071,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 210004,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 210007,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 210008,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 212001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 212002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 212003,
+        "type": 100,
+        "times": 5
+      },
+      {
+        "group_id": 243003,
+        "type": 80,
+        "times": 3
+      },
+      {
+        "group_id": 243002,
+        "type": 25,
+        "times": 1
+      },
+      {
+        "group_id": 243004,
+        "type": 10,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 21208,
+    "drop_id": 21208,
+    "group": [
+      {
+        "group_id": 212081,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 210004,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 210007,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 210008,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 212001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 212002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 212003,
+        "type": 100,
+        "times": 5
+      },
+      {
+        "group_id": 243007,
+        "type": 80,
+        "times": 3
+      },
+      {
+        "group_id": 243006,
+        "type": 25,
+        "times": 1
+      },
+      {
+        "group_id": 243008,
+        "type": 10,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 21209,
+    "drop_id": 21209,
+    "group": [
+      {
+        "group_id": 212091,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 210005,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 210007,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 210007,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 212001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 212002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 212003,
+        "type": 100,
+        "times": 5
+      },
+      {
+        "group_id": 243011,
+        "type": 80,
+        "times": 3
+      },
+      {
+        "group_id": 243010,
+        "type": 25,
+        "times": 1
+      },
+      {
+        "group_id": 243012,
+        "type": 10,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 21210,
+    "drop_id": 21210,
+    "group": [
+      {
+        "group_id": 212101,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 210005,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 210007,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 210007,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 212001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 212002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 212003,
+        "type": 100,
+        "times": 5
+      },
+      {
+        "group_id": 243015,
+        "type": 80,
+        "times": 3
+      },
+      {
+        "group_id": 243014,
+        "type": 25,
+        "times": 1
+      },
+      {
+        "group_id": 243016,
+        "type": 10,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 21211,
+    "drop_id": 21211,
+    "group": [
+      {
+        "group_id": 212111,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 210005,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 210008,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 210009,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 212001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 212002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 212003,
+        "type": 100,
+        "times": 5
+      },
+      {
+        "group_id": 243019,
+        "type": 80,
+        "times": 3
+      },
+      {
+        "group_id": 243018,
+        "type": 25,
+        "times": 1
+      },
+      {
+        "group_id": 243020,
+        "type": 10,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 21212,
+    "drop_id": 21212,
+    "group": [
+      {
+        "group_id": 212121,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 210005,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 210008,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 210009,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 212001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 212002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 212003,
+        "type": 100,
+        "times": 5
+      },
+      {
+        "group_id": 243023,
+        "type": 80,
+        "times": 3
+      },
+      {
+        "group_id": 243022,
+        "type": 25,
+        "times": 1
+      },
+      {
+        "group_id": 243024,
+        "type": 10,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 21213,
+    "drop_id": 21213,
+    "group": [
+      {
+        "group_id": 212131,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 210005,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 210008,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 210009,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 212001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 212002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 212003,
+        "type": 100,
+        "times": 6
+      },
+      {
+        "group_id": 243027,
+        "type": 80,
+        "times": 3
+      },
+      {
+        "group_id": 243026,
+        "type": 25,
+        "times": 1
+      },
+      {
+        "group_id": 243028,
+        "type": 10,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 21214,
+    "drop_id": 21214,
+    "group": [
+      {
+        "group_id": 212141,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 210005,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 210008,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 210009,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 212001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 212002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 212003,
+        "type": 100,
+        "times": 6
+      },
+      {
+        "group_id": 243031,
+        "type": 80,
+        "times": 3
+      },
+      {
+        "group_id": 243030,
+        "type": 25,
+        "times": 1
+      },
+      {
+        "group_id": 243032,
+        "type": 10,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 21215,
+    "drop_id": 21215,
+    "group": [
+      {
+        "group_id": 212151,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 210005,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 210008,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 210009,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 212001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 212002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 212003,
+        "type": 100,
+        "times": 6
+      },
+      {
+        "group_id": 243035,
+        "type": 80,
+        "times": 3
+      },
+      {
+        "group_id": 243034,
+        "type": 25,
+        "times": 1
+      },
+      {
+        "group_id": 243036,
+        "type": 10,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 21216,
+    "drop_id": 21216,
+    "group": [
+      {
+        "group_id": 212161,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 210005,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 210008,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 210009,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 212001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 212002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 212003,
+        "type": 100,
+        "times": 6
+      },
+      {
+        "group_id": 243039,
+        "type": 80,
+        "times": 3
+      },
+      {
+        "group_id": 243038,
+        "type": 25,
+        "times": 1
+      },
+      {
+        "group_id": 243040,
+        "type": 10,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 21217,
+    "drop_id": 21217,
+    "group": [
+      {
+        "group_id": 212171,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 210005,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 210008,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 210009,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 212001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 212002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 212003,
+        "type": 100,
+        "times": 6
+      },
+      {
+        "group_id": 243041,
+        "type": 80,
+        "times": 1
+      },
+      {
+        "group_id": 243042,
+        "type": 80,
+        "times": 1
+      },
+      {
+        "group_id": 243043,
+        "type": 80,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 21218,
+    "drop_id": 21218,
+    "group": [
+      {
+        "group_id": 212181,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 210005,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 210008,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 210009,
+        "type": 50,
+        "times": 2
+      },
+      {
+        "group_id": 212001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 212002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 212003,
+        "type": 100,
+        "times": 6
+      },
+      {
+        "group_id": 243044,
+        "type": 80,
+        "times": 1
+      },
+      {
+        "group_id": 243045,
+        "type": 80,
+        "times": 1
+      },
+      {
+        "group_id": 243046,
+        "type": 80,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 20101,
+    "drop_id": 20101,
+    "group": [
+      {
+        "group_id": 201001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 201002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 201003,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211011,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 211041,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 211061,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 20102,
+    "drop_id": 20102,
+    "group": [
+      {
+        "group_id": 201001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 201002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 201003,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211021,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 211051,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 211071,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 20103,
+    "drop_id": 20103,
+    "group": [
+      {
+        "group_id": 201001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 201002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 201003,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211031,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 211091,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211081,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211101,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 20201,
+    "drop_id": 20201,
+    "group": [
+      {
+        "group_id": 201001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 201002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 201003,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211061,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 211101,
+        "type": 100,
+        "times": 2
+      }
+    ]
+  },
+  {
+    "id": 20202,
+    "drop_id": 20202,
+    "group": [
+      {
+        "group_id": 201001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 201002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 201003,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211071,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 212041,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 20203,
+    "drop_id": 20203,
+    "group": [
+      {
+        "group_id": 201001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 201002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 201003,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211081,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 212051,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 212081,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 20204,
+    "drop_id": 20204,
+    "group": [
+      {
+        "group_id": 201001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 201002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 201003,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 211091,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 212061,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 212071,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 20205,
+    "drop_id": 20205,
+    "group": [
+      {
+        "group_id": 201001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 201002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 201003,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 212041,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 212081,
+        "type": 100,
+        "times": 2
+      }
+    ]
+  },
+  {
+    "id": 20206,
+    "drop_id": 20206,
+    "group": [
+      {
+        "group_id": 201001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 201002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 201003,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 212051,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 212091,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 20207,
+    "drop_id": 20207,
+    "group": [
+      {
+        "group_id": 201001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 201002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 201003,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 212061,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 212101,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 212121,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 20208,
+    "drop_id": 20208,
+    "group": [
+      {
+        "group_id": 201001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 201002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 201003,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 212071,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 212111,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 212131,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 22101,
+    "drop_id": 22101,
+    "group": [
+      {
+        "group_id": 221001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 221002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 221003,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 221004,
+        "type": 50,
+        "times": 1
+      },
+      {
+        "group_id": 221011,
+        "type": 80,
+        "times": 5
+      },
+      {
+        "group_id": 221012,
+        "type": 40,
+        "times": 2
+      },
+      {
+        "group_id": 221013,
+        "type": 10,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 22102,
+    "drop_id": 22102,
+    "group": [
+      {
+        "group_id": 221001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 221002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 221003,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 221004,
+        "type": 50,
+        "times": 1
+      },
+      {
+        "group_id": 221021,
+        "type": 80,
+        "times": 5
+      },
+      {
+        "group_id": 221022,
+        "type": 40,
+        "times": 2
+      },
+      {
+        "group_id": 221023,
+        "type": 10,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 22103,
+    "drop_id": 22103,
+    "group": [
+      {
+        "group_id": 221001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 221002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 221003,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 211011,
+        "type": 80,
+        "times": 4
+      },
+      {
+        "group_id": 211061,
+        "type": 40,
+        "times": 2
+      }
+    ]
+  },
+  {
+    "id": 22104,
+    "drop_id": 22104,
+    "group": [
+      {
+        "group_id": 221001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 221002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 221003,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 211021,
+        "type": 80,
+        "times": 4
+      },
+      {
+        "group_id": 211071,
+        "type": 40,
+        "times": 2
+      }
+    ]
+  },
+  {
+    "id": 22105,
+    "drop_id": 22105,
+    "group": [
+      {
+        "group_id": 221001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 221002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 221003,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 211031,
+        "type": 80,
+        "times": 4
+      },
+      {
+        "group_id": 211081,
+        "type": 40,
+        "times": 2
+      }
+    ]
+  },
+  {
+    "id": 22106,
+    "drop_id": 22106,
+    "group": [
+      {
+        "group_id": 221001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 221002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 221003,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 211041,
+        "type": 80,
+        "times": 4
+      },
+      {
+        "group_id": 211091,
+        "type": 40,
+        "times": 2
+      }
+    ]
+  },
+  {
+    "id": 22107,
+    "drop_id": 22107,
+    "group": [
+      {
+        "group_id": 221001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 221002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 221003,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 211051,
+        "type": 80,
+        "times": 4
+      },
+      {
+        "group_id": 211101,
+        "type": 40,
+        "times": 2
+      }
+    ]
+  },
+  {
+    "id": 22201,
+    "drop_id": 22201,
+    "group": [
+      {
+        "group_id": 221002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 222002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 221004,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 221005,
+        "type": 50,
+        "times": 1
+      },
+      {
+        "group_id": 222011,
+        "type": 80,
+        "times": 5
+      },
+      {
+        "group_id": 222012,
+        "type": 40,
+        "times": 2
+      },
+      {
+        "group_id": 222013,
+        "type": 10,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 22202,
+    "drop_id": 22202,
+    "group": [
+      {
+        "group_id": 221002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 222002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 221004,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 221005,
+        "type": 50,
+        "times": 1
+      },
+      {
+        "group_id": 222021,
+        "type": 80,
+        "times": 5
+      },
+      {
+        "group_id": 222022,
+        "type": 40,
+        "times": 2
+      },
+      {
+        "group_id": 222023,
+        "type": 10,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 22203,
+    "drop_id": 22203,
+    "group": [
+      {
+        "group_id": 221002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 222002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 221004,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 221005,
+        "type": 50,
+        "times": 1
+      },
+      {
+        "group_id": 222031,
+        "type": 80,
+        "times": 5
+      },
+      {
+        "group_id": 222032,
+        "type": 40,
+        "times": 2
+      },
+      {
+        "group_id": 222033,
+        "type": 10,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 22204,
+    "drop_id": 22204,
+    "group": [
+      {
+        "group_id": 222001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 222002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 221003,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 221004,
+        "type": 50,
+        "times": 1
+      },
+      {
+        "group_id": 212041,
+        "type": 80,
+        "times": 4
+      },
+      {
+        "group_id": 212091,
+        "type": 40,
+        "times": 2
+      },
+      {
+        "group_id": 212141,
+        "type": 10,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 22205,
+    "drop_id": 22205,
+    "group": [
+      {
+        "group_id": 222001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 222002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 221003,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 221004,
+        "type": 50,
+        "times": 1
+      },
+      {
+        "group_id": 212051,
+        "type": 80,
+        "times": 4
+      },
+      {
+        "group_id": 212101,
+        "type": 40,
+        "times": 2
+      },
+      {
+        "group_id": 212151,
+        "type": 10,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 22206,
+    "drop_id": 22206,
+    "group": [
+      {
+        "group_id": 222001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 222002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 221003,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 221004,
+        "type": 50,
+        "times": 1
+      },
+      {
+        "group_id": 212061,
+        "type": 80,
+        "times": 4
+      },
+      {
+        "group_id": 212111,
+        "type": 40,
+        "times": 2
+      },
+      {
+        "group_id": 212161,
+        "type": 10,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 22207,
+    "drop_id": 22207,
+    "group": [
+      {
+        "group_id": 222001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 222002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 221003,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 221004,
+        "type": 50,
+        "times": 1
+      },
+      {
+        "group_id": 212071,
+        "type": 80,
+        "times": 4
+      },
+      {
+        "group_id": 212121,
+        "type": 40,
+        "times": 2
+      },
+      {
+        "group_id": 212171,
+        "type": 10,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 22208,
+    "drop_id": 22208,
+    "group": [
+      {
+        "group_id": 222001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 222002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 221003,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 221004,
+        "type": 50,
+        "times": 1
+      },
+      {
+        "group_id": 212081,
+        "type": 80,
+        "times": 4
+      },
+      {
+        "group_id": 212131,
+        "type": 40,
+        "times": 2
+      },
+      {
+        "group_id": 212181,
+        "type": 10,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 23101,
+    "drop_id": 23101,
+    "group": [
+      {
+        "group_id": 231001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 231002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 231011,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 231012,
+        "type": 40,
+        "times": 2
+      },
+      {
+        "group_id": 231011,
+        "type": 80,
+        "times": 5
+      }
+    ]
+  },
+  {
+    "id": 23201,
+    "drop_id": 23201,
+    "group": [
+      {
+        "group_id": 232001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 232002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 231012,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 231013,
+        "type": 40,
+        "times": 2
+      },
+      {
+        "group_id": 231014,
+        "type": 30,
+        "times": 1
+      },
+      {
+        "group_id": 231012,
+        "type": 80,
+        "times": 5
+      }
+    ]
+  },
+  {
+    "id": 24101,
+    "drop_id": 24101,
+    "group": [
+      {
+        "group_id": 241001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 241002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 240013,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 240014,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 243047,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 243052,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 243049,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 243055,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 243051,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 243056,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 24201,
+    "drop_id": 24201,
+    "group": [
+      {
+        "group_id": 242001,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 242002,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 240015,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 240016,
+        "type": 60,
+        "times": 2
+      },
+      {
+        "group_id": 243048,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 243053,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 243054,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 243050,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 243057,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 243058,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 243059,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 25101,
+    "drop_id": 25101,
+    "group": [
+      {
+        "group_id": 251011,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 210006,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 251001,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 25102,
+    "drop_id": 25102,
+    "group": [
+      {
+        "group_id": 251021,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 210007,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 251001,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 25103,
+    "drop_id": 25103,
+    "group": [
+      {
+        "group_id": 251031,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 210008,
+        "type": 100,
+        "times": 2
+      },
+      {
+        "group_id": 251001,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 25104,
+    "drop_id": 25104,
+    "group": [
+      {
+        "group_id": 251041,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 210009,
+        "type": 100,
+        "times": 1
+      },
+      {
+        "group_id": 251001,
+        "type": 100,
+        "times": 2
+      }
+    ]
+  },
+  {
+    "id": 30001,
+    "drop_id": 30001,
+    "group": [
+      {
+        "group_id": 30001,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 30002,
+    "drop_id": 30002,
+    "group": [
+      {
+        "group_id": 30002,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 30003,
+    "drop_id": 30003,
+    "group": [
+      {
+        "group_id": 30003,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 30004,
+    "drop_id": 30004,
+    "group": [
+      {
+        "group_id": 30004,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 30005,
+    "drop_id": 30005,
+    "group": [
+      {
+        "group_id": 30005,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 30006,
+    "drop_id": 30006,
+    "group": [
+      {
+        "group_id": 30006,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 30007,
+    "drop_id": 30007,
+    "group": [
+      {
+        "group_id": 30007,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 30008,
+    "drop_id": 30008,
+    "group": [
+      {
+        "group_id": 30008,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 30009,
+    "drop_id": 30009,
+    "group": [
+      {
+        "group_id": 30009,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 30010,
+    "drop_id": 30010,
+    "group": [
+      {
+        "group_id": 30010,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 30011,
+    "drop_id": 30011,
+    "group": [
+      {
+        "group_id": 30011,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 30012,
+    "drop_id": 30012,
+    "group": [
+      {
+        "group_id": 30012,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 30013,
+    "drop_id": 30013,
+    "group": [
+      {
+        "group_id": 30013,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 30014,
+    "drop_id": 30014,
+    "group": [
+      {
+        "group_id": 30014,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 31001,
+    "drop_id": 31001,
+    "group": [
+      {
+        "group_id": 30001,
+        "type": 100,
+        "times": 2
+      }
+    ]
+  },
+  {
+    "id": 31002,
+    "drop_id": 31002,
+    "group": [
+      {
+        "group_id": 30002,
+        "type": 100,
+        "times": 2
+      }
+    ]
+  },
+  {
+    "id": 31003,
+    "drop_id": 31003,
+    "group": [
+      {
+        "group_id": 30003,
+        "type": 100,
+        "times": 2
+      }
+    ]
+  },
+  {
+    "id": 31004,
+    "drop_id": 31004,
+    "group": [
+      {
+        "group_id": 30004,
+        "type": 100,
+        "times": 2
+      }
+    ]
+  },
+  {
+    "id": 31005,
+    "drop_id": 31005,
+    "group": [
+      {
+        "group_id": 30005,
+        "type": 100,
+        "times": 2
+      }
+    ]
+  },
+  {
+    "id": 31006,
+    "drop_id": 31006,
+    "group": [
+      {
+        "group_id": 30006,
+        "type": 100,
+        "times": 2
+      }
+    ]
+  },
+  {
+    "id": 31007,
+    "drop_id": 31007,
+    "group": [
+      {
+        "group_id": 30007,
+        "type": 100,
+        "times": 2
+      }
+    ]
+  },
+  {
+    "id": 31008,
+    "drop_id": 31008,
+    "group": [
+      {
+        "group_id": 30008,
+        "type": 100,
+        "times": 2
+      }
+    ]
+  },
+  {
+    "id": 31009,
+    "drop_id": 31009,
+    "group": [
+      {
+        "group_id": 30009,
+        "type": 100,
+        "times": 2
+      }
+    ]
+  },
+  {
+    "id": 31010,
+    "drop_id": 31010,
+    "group": [
+      {
+        "group_id": 30010,
+        "type": 100,
+        "times": 2
+      }
+    ]
+  },
+  {
+    "id": 31011,
+    "drop_id": 31011,
+    "group": [
+      {
+        "group_id": 30011,
+        "type": 100,
+        "times": 2
+      }
+    ]
+  },
+  {
+    "id": 31012,
+    "drop_id": 31012,
+    "group": [
+      {
+        "group_id": 30012,
+        "type": 100,
+        "times": 2
+      }
+    ]
+  },
+  {
+    "id": 31013,
+    "drop_id": 31013,
+    "group": [
+      {
+        "group_id": 30013,
+        "type": 100,
+        "times": 2
+      }
+    ]
+  },
+  {
+    "id": 31014,
+    "drop_id": 31014,
+    "group": [
+      {
+        "group_id": 30014,
+        "type": 100,
+        "times": 2
+      }
+    ]
+  },
+  {
+    "id": 32001,
+    "drop_id": 32001,
+    "group": [
+      {
+        "group_id": 30001,
+        "type": 100,
+        "times": 3
+      }
+    ]
+  },
+  {
+    "id": 32002,
+    "drop_id": 32002,
+    "group": [
+      {
+        "group_id": 30002,
+        "type": 100,
+        "times": 3
+      }
+    ]
+  },
+  {
+    "id": 32003,
+    "drop_id": 32003,
+    "group": [
+      {
+        "group_id": 30003,
+        "type": 100,
+        "times": 3
+      }
+    ]
+  },
+  {
+    "id": 32004,
+    "drop_id": 32004,
+    "group": [
+      {
+        "group_id": 30004,
+        "type": 100,
+        "times": 3
+      }
+    ]
+  },
+  {
+    "id": 32005,
+    "drop_id": 32005,
+    "group": [
+      {
+        "group_id": 30005,
+        "type": 100,
+        "times": 3
+      }
+    ]
+  },
+  {
+    "id": 32006,
+    "drop_id": 32006,
+    "group": [
+      {
+        "group_id": 30006,
+        "type": 100,
+        "times": 3
+      }
+    ]
+  },
+  {
+    "id": 32007,
+    "drop_id": 32007,
+    "group": [
+      {
+        "group_id": 30007,
+        "type": 100,
+        "times": 3
+      }
+    ]
+  },
+  {
+    "id": 32008,
+    "drop_id": 32008,
+    "group": [
+      {
+        "group_id": 30008,
+        "type": 100,
+        "times": 3
+      }
+    ]
+  },
+  {
+    "id": 32009,
+    "drop_id": 32009,
+    "group": [
+      {
+        "group_id": 30009,
+        "type": 100,
+        "times": 3
+      }
+    ]
+  },
+  {
+    "id": 32010,
+    "drop_id": 32010,
+    "group": [
+      {
+        "group_id": 30010,
+        "type": 100,
+        "times": 3
+      }
+    ]
+  },
+  {
+    "id": 32011,
+    "drop_id": 32011,
+    "group": [
+      {
+        "group_id": 30011,
+        "type": 100,
+        "times": 3
+      }
+    ]
+  },
+  {
+    "id": 32012,
+    "drop_id": 32012,
+    "group": [
+      {
+        "group_id": 30012,
+        "type": 100,
+        "times": 3
+      }
+    ]
+  },
+  {
+    "id": 32013,
+    "drop_id": 32013,
+    "group": [
+      {
+        "group_id": 30013,
+        "type": 100,
+        "times": 3
+      }
+    ]
+  },
+  {
+    "id": 32014,
+    "drop_id": 32014,
+    "group": [
+      {
+        "group_id": 30014,
+        "type": 100,
+        "times": 3
+      }
+    ]
+  },
+  {
+    "id": 40001,
+    "drop_id": 40001,
+    "group": [
+      {
+        "group_id": 400011,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 40002,
+    "drop_id": 40002,
+    "group": [
+      {
+        "group_id": 400012,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 40003,
+    "drop_id": 40003,
+    "group": [
+      {
+        "group_id": 400013,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 40004,
+    "drop_id": 40004,
+    "group": [
+      {
+        "group_id": 400014,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 40005,
+    "drop_id": 40005,
+    "group": [
+      {
+        "group_id": 400015,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 40006,
+    "drop_id": 40006,
+    "group": [
+      {
+        "group_id": 400016,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 40007,
+    "drop_id": 40007,
+    "group": [
+      {
+        "group_id": 400017,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 40008,
+    "drop_id": 40008,
+    "group": [
+      {
+        "group_id": 400018,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 40009,
+    "drop_id": 40009,
+    "group": [
+      {
+        "group_id": 400019,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 40010,
+    "drop_id": 40010,
+    "group": [
+      {
+        "group_id": 400020,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 40011,
+    "drop_id": 40011,
+    "group": [
+      {
+        "group_id": 400021,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 40012,
+    "drop_id": 40012,
+    "group": [
+      {
+        "group_id": 400022,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 40013,
+    "drop_id": 40013,
+    "group": [
+      {
+        "group_id": 400023,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 40014,
+    "drop_id": 40014,
+    "group": [
+      {
+        "group_id": 400024,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  },
+  {
+    "id": 40015,
+    "drop_id": 40015,
+    "group": [
+      {
+        "group_id": 400025,
+        "type": 100,
+        "times": 1
+      }
+    ]
+  }
+]
