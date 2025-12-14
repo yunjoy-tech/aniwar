@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"time"
 
-	"gitee.com/bychannel/aniwar/src/common"
+	"gitee.com/aniwar2/aniwar/src/common"
 
-	"gitee.com/bychannel/aniwar/src/excel/data"
+	"gitee.com/aniwar2/aniwar/src/excel/data"
 	"github.com/pkg/errors"
 )
 

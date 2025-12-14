@@ -2,8 +2,8 @@ package logic
 
 import (
 	"encoding/json"
-	excel "gitee.com/bychannel/aniwar/src/excel/data"
-	"gitee.com/bychannel/aniwar/src/proto/pb"
+	excel "gitee.com/aniwar2/aniwar/src/excel/data"
+	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"github.com/dapr/go-sdk/service/common"
 	"net/http"
 )

@@ -1,4 +1,4 @@
-module gitee.com/bychannel/aniwar
+module gitee.com/aniwar2/aniwar
 
 go 1.22
 

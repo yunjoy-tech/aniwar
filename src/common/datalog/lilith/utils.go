@@ -3,7 +3,7 @@ package lilith
 // import (
 //	"encoding/json"
 //	"fmt"
-//	"gitee.com/bychannel/aniwar/src/proto/pb"
+//	"gitee.com/aniwar2/aniwar/src/proto/pb"
 //	"reflect"
 //	"strings"
 // )

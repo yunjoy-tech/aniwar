@@ -8,22 +8,22 @@ import (
 
 	"gitee.com/aniwar2/musae/framework/logger"
 
-	"gitee.com/bychannel/aniwar/src/actorserver/useractor/event"
+	"gitee.com/aniwar2/aniwar/src/actorserver/useractor/event"
 
 	"github.com/pkg/errors"
 
-	"gitee.com/bychannel/aniwar/src/common/datahelper"
+	"gitee.com/aniwar2/aniwar/src/common/datahelper"
 
-	"gitee.com/bychannel/aniwar/src/common/utils"
+	"gitee.com/aniwar2/aniwar/src/common/utils"
 
-	"gitee.com/bychannel/aniwar/src/common"
+	"gitee.com/aniwar2/aniwar/src/common"
 
+	"gitee.com/aniwar2/aniwar/src/excel/data"
 	"gitee.com/aniwar2/musae/framework/base"
-	"gitee.com/bychannel/aniwar/src/excel/data"
 
+	"gitee.com/aniwar2/aniwar/src/common/db"
+	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/framework/service"
-	"gitee.com/bychannel/aniwar/src/common/db"
-	"gitee.com/bychannel/aniwar/src/proto/pb"
 	"google.golang.org/protobuf/proto"
 )
 

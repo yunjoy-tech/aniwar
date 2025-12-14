@@ -1,7 +1,7 @@
 package builder
 
 import (
-	"gitee.com/bychannel/aniwar/src/proto/pb"
+	"gitee.com/aniwar2/aniwar/src/proto/pb"
 )
 
 func BuildTroopList(data *pb.PCardTroopsInfo) []*pb.PClientCardTroopInfo {

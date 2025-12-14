@@ -1,11 +1,11 @@
 package frame
 
 import (
+	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/framework/base"
 	"gitee.com/aniwar2/musae/framework/logger"
 	"gitee.com/aniwar2/musae/framework/process"
 	"gitee.com/aniwar2/musae/framework/threading"
-	"gitee.com/bychannel/aniwar/src/proto/pb"
 	"google.golang.org/protobuf/proto"
 	"time"
 )

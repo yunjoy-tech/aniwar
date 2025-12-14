@@ -4,9 +4,9 @@ import (
 	"encoding/base64"
 	"encoding/json"
 
-	"gitee.com/bychannel/aniwar/src/common/aes"
+	"gitee.com/aniwar2/aniwar/src/common/aes"
 
-	"gitee.com/bychannel/aniwar/src/common/db"
+	"gitee.com/aniwar2/aniwar/src/common/db"
 
 	"gitee.com/aniwar2/musae/framework/service"
 )

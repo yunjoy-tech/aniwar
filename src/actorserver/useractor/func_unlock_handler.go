@@ -2,9 +2,9 @@ package useractor
 
 import (
 	"fmt"
+	excel "gitee.com/aniwar2/aniwar/src/excel/data"
+	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/framework/service"
-	excel "gitee.com/bychannel/aniwar/src/excel/data"
-	"gitee.com/bychannel/aniwar/src/proto/pb"
 	"google.golang.org/protobuf/proto"
 )
 

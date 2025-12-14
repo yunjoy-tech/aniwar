@@ -1,7 +1,7 @@
 package taptap
 
 import (
-	"gitee.com/bychannel/aniwar/src/proto/pb"
+	"gitee.com/aniwar2/aniwar/src/proto/pb"
 )
 
 // 系统字段定义

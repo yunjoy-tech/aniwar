@@ -7,9 +7,9 @@ import (
 
 	"gitee.com/aniwar2/musae/framework/utils"
 
+	"gitee.com/aniwar2/aniwar/src/common/actor/stub"
+	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/framework/base"
-	"gitee.com/bychannel/aniwar/src/common/actor/stub"
-	"gitee.com/bychannel/aniwar/src/proto/pb"
 	"github.com/dapr/go-sdk/service/common"
 	"google.golang.org/protobuf/proto"
 )

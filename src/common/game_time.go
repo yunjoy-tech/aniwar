@@ -3,7 +3,7 @@ package common
 import (
 	"fmt"
 	"time"
-	// "gitee.com/bychannel/aniwar/src/common"
+	// "gitee.com/aniwar2/aniwar/src/common"
 )
 
 const (

@@ -3,9 +3,9 @@ package useractor
 import (
 	"strconv"
 
-	"gitee.com/bychannel/aniwar/src/actorserver/useractor/event"
-	excel "gitee.com/bychannel/aniwar/src/excel/data"
-	"gitee.com/bychannel/aniwar/src/proto/pb"
+	"gitee.com/aniwar2/aniwar/src/actorserver/useractor/event"
+	excel "gitee.com/aniwar2/aniwar/src/excel/data"
+	"gitee.com/aniwar2/aniwar/src/proto/pb"
 )
 
 type TaskTriggerMgr struct {

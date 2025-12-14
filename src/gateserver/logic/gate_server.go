@@ -3,7 +3,7 @@ package logic
 import (
 	"context"
 	"fmt"
-	"gitee.com/bychannel/aniwar/src/common/datalog/taptap"
+	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
 	"os"
 	"sync"
 	"time"
@@ -13,11 +13,13 @@ import (
 
 	"github.com/pkg/errors"
 
-	myCommon "gitee.com/bychannel/aniwar/src/common"
+	myCommon "gitee.com/aniwar2/aniwar/src/common"
 
+	comn "gitee.com/aniwar2/aniwar/src/common/server"
 	"gitee.com/aniwar2/musae/framework/global"
-	comn "gitee.com/bychannel/aniwar/src/common/server"
 
+	"gitee.com/aniwar2/aniwar/src/common/conf"
+	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/framework/base"
 	"gitee.com/aniwar2/musae/framework/baseconf"
 	"gitee.com/aniwar2/musae/framework/logger"
@@ -25,8 +27,6 @@ import (
 	svc "gitee.com/aniwar2/musae/framework/service"
 	"gitee.com/aniwar2/musae/framework/tcpx"
 	"gitee.com/aniwar2/musae/framework/threading"
-	"gitee.com/bychannel/aniwar/src/common/conf"
-	"gitee.com/bychannel/aniwar/src/proto/pb"
 	"github.com/dapr/go-sdk/service/common"
 )
 

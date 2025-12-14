@@ -10,15 +10,15 @@ import (
 
 	"gitee.com/aniwar2/musae/framework/utils"
 
-	"gitee.com/bychannel/aniwar/src/common/sdkconstant"
-	"gitee.com/bychannel/aniwar/src/common/sdkconstant/sdksign"
+	"gitee.com/aniwar2/aniwar/src/common/sdkconstant"
+	"gitee.com/aniwar2/aniwar/src/common/sdkconstant/sdksign"
 
+	myCommon "gitee.com/aniwar2/aniwar/src/common"
+	"gitee.com/aniwar2/aniwar/src/common/conf"
+	myUtils "gitee.com/aniwar2/aniwar/src/common/utils"
+	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/framework/base"
 	"gitee.com/aniwar2/musae/framework/logger"
-	myCommon "gitee.com/bychannel/aniwar/src/common"
-	"gitee.com/bychannel/aniwar/src/common/conf"
-	myUtils "gitee.com/bychannel/aniwar/src/common/utils"
-	"gitee.com/bychannel/aniwar/src/proto/pb"
 	"github.com/dapr/go-sdk/service/common"
 	"google.golang.org/protobuf/proto"
 )

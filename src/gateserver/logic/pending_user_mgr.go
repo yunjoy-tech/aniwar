@@ -1,8 +1,8 @@
 package logic
 
 import (
+	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/framework/tcpx"
-	"gitee.com/bychannel/aniwar/src/proto/pb"
 	"google.golang.org/protobuf/proto"
 )
 

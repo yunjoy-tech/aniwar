@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 
-	"gitee.com/bychannel/aniwar/src/common/db"
+	"gitee.com/aniwar2/aniwar/src/common/db"
 
 	"gitee.com/aniwar2/musae/framework/service"
 

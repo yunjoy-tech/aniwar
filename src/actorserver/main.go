@@ -2,17 +2,17 @@ package main
 
 import (
 	"errors"
-	"gitee.com/bychannel/aniwar/src/actorserver/allianceactor"
-	"gitee.com/bychannel/aniwar/src/actorserver/mailactor"
+	"gitee.com/aniwar2/aniwar/src/actorserver/allianceactor"
+	"gitee.com/aniwar2/aniwar/src/actorserver/mailactor"
 
+	"gitee.com/aniwar2/aniwar/src/actorserver/centeractor"
+	"gitee.com/aniwar2/aniwar/src/actorserver/frame"
+	"gitee.com/aniwar2/aniwar/src/actorserver/roomactor"
+	"gitee.com/aniwar2/aniwar/src/actorserver/useractor"
 	"gitee.com/aniwar2/musae/framework/base"
 	"gitee.com/aniwar2/musae/framework/global"
 	"gitee.com/aniwar2/musae/framework/logger"
 	"gitee.com/aniwar2/musae/framework/process"
-	"gitee.com/bychannel/aniwar/src/actorserver/centeractor"
-	"gitee.com/bychannel/aniwar/src/actorserver/frame"
-	"gitee.com/bychannel/aniwar/src/actorserver/roomactor"
-	"gitee.com/bychannel/aniwar/src/actorserver/useractor"
 )
 
 func InitActorFactory(srv base.IServer) error {

@@ -4,9 +4,9 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"gitee.com/bychannel/aniwar/src/common/conf"
-	"gitee.com/bychannel/aniwar/src/common/http/request"
-	"gitee.com/bychannel/aniwar/src/common/utils"
+	"gitee.com/aniwar2/aniwar/src/common/conf"
+	"gitee.com/aniwar2/aniwar/src/common/http/request"
+	"gitee.com/aniwar2/aniwar/src/common/utils"
 	"net/http"
 	"testing"
 )

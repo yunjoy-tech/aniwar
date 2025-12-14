@@ -10,10 +10,10 @@ import (
 
 	"github.com/pkg/errors"
 
-	"gitee.com/bychannel/aniwar/src/common/sdkconstant"
+	"gitee.com/aniwar2/aniwar/src/common/sdkconstant"
 
+	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/framework/logger"
-	"gitee.com/bychannel/aniwar/src/proto/pb"
 )
 
 type KuaiBaoLoginReq struct {

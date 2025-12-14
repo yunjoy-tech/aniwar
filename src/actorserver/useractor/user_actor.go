@@ -3,13 +3,13 @@ package useractor
 import (
 	"context"
 	"fmt"
-	"gitee.com/bychannel/aniwar/src/common/datalog/taptap"
+	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
 	"strconv"
 
-	"gitee.com/bychannel/aniwar/src/actorserver/frame"
+	"gitee.com/aniwar2/aniwar/src/actorserver/frame"
 	"github.com/dapr/go-sdk/actor"
 
-	"gitee.com/bychannel/aniwar/src/common/clidto"
+	"gitee.com/aniwar2/aniwar/src/common/clidto"
 	"github.com/pkg/errors"
 
 	"gitee.com/aniwar2/musae/framework/service"
@@ -20,14 +20,14 @@ import (
 
 	"time"
 
+	"gitee.com/aniwar2/aniwar/src/actorserver/useractor/event"
+	"gitee.com/aniwar2/aniwar/src/common"
+	"gitee.com/aniwar2/aniwar/src/common/db"
+	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/framework/base"
 	"gitee.com/aniwar2/musae/framework/baseactor"
 	svc "gitee.com/aniwar2/musae/framework/service"
 	"gitee.com/aniwar2/musae/framework/threading"
-	"gitee.com/bychannel/aniwar/src/actorserver/useractor/event"
-	"gitee.com/bychannel/aniwar/src/common"
-	"gitee.com/bychannel/aniwar/src/common/db"
-	"gitee.com/bychannel/aniwar/src/proto/pb"
 	"google.golang.org/protobuf/proto"
 )
 

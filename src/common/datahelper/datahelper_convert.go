@@ -1,7 +1,7 @@
 package datahelper
 
 import (
-	"gitee.com/bychannel/aniwar/src/excel/data"
+	"gitee.com/aniwar2/aniwar/src/excel/data"
 )
 
 func ConvertItem2ByTpl(items []*data.ItemReward) map[int32]int32 {

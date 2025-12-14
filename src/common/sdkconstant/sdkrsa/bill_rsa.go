@@ -9,7 +9,7 @@ import (
 	"encoding/asn1"
 	"encoding/pem"
 	"errors"
-	"gitee.com/bychannel/aniwar/src/common/conf"
+	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"strings"
 	"sync"
 

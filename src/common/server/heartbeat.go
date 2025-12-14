@@ -9,10 +9,10 @@ import (
 	"gitee.com/aniwar2/musae/framework/service"
 	"google.golang.org/protobuf/proto"
 
+	"gitee.com/aniwar2/aniwar/src/common/conf"
+	"gitee.com/aniwar2/aniwar/src/common/db"
+	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/framework/logger"
-	"gitee.com/bychannel/aniwar/src/common/conf"
-	"gitee.com/bychannel/aniwar/src/common/db"
-	"gitee.com/bychannel/aniwar/src/proto/pb"
 )
 
 func (s *Server) SaveHeartBeat(uid string, gateTopic string) {

@@ -8,11 +8,11 @@ import (
 	"sort"
 	"strings"
 
-	"gitee.com/bychannel/aniwar/src/common/sdkconstant/sdkrsa"
+	"gitee.com/aniwar2/aniwar/src/common/sdkconstant/sdkrsa"
 
 	"github.com/samber/lo"
 
-	"gitee.com/bychannel/aniwar/src/common/utils"
+	"gitee.com/aniwar2/aniwar/src/common/utils"
 
 	"gitee.com/aniwar2/musae/framework/logger"
 )

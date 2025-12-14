@@ -8,13 +8,13 @@ import (
 	"strconv"
 	"time"
 
-	"gitee.com/bychannel/aniwar/src/common/datahelper"
+	"gitee.com/aniwar2/aniwar/src/common/datahelper"
 
 	"gitee.com/aniwar2/musae/framework/global"
 
 	"gitee.com/aniwar2/musae/framework/logger"
 
-	myUtils "gitee.com/bychannel/aniwar/src/common/utils"
+	myUtils "gitee.com/aniwar2/aniwar/src/common/utils"
 
 	"github.com/forgoer/openssl"
 
@@ -22,12 +22,12 @@ import (
 
 	"github.com/pkg/errors"
 
-	"gitee.com/bychannel/aniwar/src/common"
-	"gitee.com/bychannel/aniwar/src/common/db"
+	"gitee.com/aniwar2/aniwar/src/common"
+	"gitee.com/aniwar2/aniwar/src/common/db"
 
+	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/framework/base"
 	"gitee.com/aniwar2/musae/framework/service"
-	"gitee.com/bychannel/aniwar/src/proto/pb"
 	"google.golang.org/protobuf/proto"
 )
 

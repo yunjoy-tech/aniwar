@@ -2,9 +2,9 @@ package request_test
 
 import (
 	"fmt"
-	"gitee.com/bychannel/aniwar/src/common/http/ctype"
-	"gitee.com/bychannel/aniwar/src/common/http/request"
-	"gitee.com/bychannel/aniwar/src/common/utils"
+	"gitee.com/aniwar2/aniwar/src/common/http/ctype"
+	"gitee.com/aniwar2/aniwar/src/common/http/request"
+	"gitee.com/aniwar2/aniwar/src/common/utils"
 	"github.com/stretchr/testify/assert"
 	"testing"
 )

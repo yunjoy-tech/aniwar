@@ -3,17 +3,17 @@ package useractor
 import (
 	"errors"
 	"fmt"
-	"gitee.com/bychannel/aniwar/src/common/datahelper"
-	"gitee.com/bychannel/aniwar/src/common/utils"
+	"gitee.com/aniwar2/aniwar/src/common/datahelper"
+	"gitee.com/aniwar2/aniwar/src/common/utils"
 	"time"
 
-	"gitee.com/bychannel/aniwar/src/actorserver/useractor/event"
+	"gitee.com/aniwar2/aniwar/src/actorserver/useractor/event"
 
-	"gitee.com/bychannel/aniwar/src/common/clidto"
+	"gitee.com/aniwar2/aniwar/src/common/clidto"
 
-	"gitee.com/bychannel/aniwar/src/common"
-	excel "gitee.com/bychannel/aniwar/src/excel/data"
-	"gitee.com/bychannel/aniwar/src/proto/pb"
+	"gitee.com/aniwar2/aniwar/src/common"
+	excel "gitee.com/aniwar2/aniwar/src/excel/data"
+	"gitee.com/aniwar2/aniwar/src/proto/pb"
 )
 
 type ConsumeMgr struct {

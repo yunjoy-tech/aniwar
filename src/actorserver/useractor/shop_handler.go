@@ -7,19 +7,19 @@ import (
 
 	"github.com/pkg/errors"
 
-	"gitee.com/bychannel/aniwar/src/common/datalog/taptap"
+	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
 
-	"gitee.com/bychannel/aniwar/src/common/datahelper"
+	"gitee.com/aniwar2/aniwar/src/common/datahelper"
 
 	"gitee.com/aniwar2/musae/framework/threading"
 
+	"gitee.com/aniwar2/aniwar/src/common"
+	"gitee.com/aniwar2/aniwar/src/common/clidto"
+	"gitee.com/aniwar2/aniwar/src/common/db"
+	"gitee.com/aniwar2/aniwar/src/excel/data"
+	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/framework/base"
 	"gitee.com/aniwar2/musae/framework/service"
-	"gitee.com/bychannel/aniwar/src/common"
-	"gitee.com/bychannel/aniwar/src/common/clidto"
-	"gitee.com/bychannel/aniwar/src/common/db"
-	"gitee.com/bychannel/aniwar/src/excel/data"
-	"gitee.com/bychannel/aniwar/src/proto/pb"
 	"google.golang.org/protobuf/proto"
 )
 

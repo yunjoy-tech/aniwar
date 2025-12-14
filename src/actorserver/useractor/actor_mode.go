@@ -7,7 +7,7 @@ package useractor
 //
 //	"gitee.com/aniwar2/musae/framework/threading"
 //
-//	"gitee.com/bychannel/aniwar/src/common/datalog"
+//	"gitee.com/aniwar2/aniwar/src/common/datalog"
 //	"gitee.com/aniwar2/musae/framework/global"
 //
 //	"github.com/dapr/go-sdk/actor"

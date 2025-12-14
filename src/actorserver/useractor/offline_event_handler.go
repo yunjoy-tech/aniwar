@@ -9,11 +9,11 @@ import (
 
 	"google.golang.org/protobuf/proto"
 
+	"gitee.com/aniwar2/aniwar/src/common/db"
 	"gitee.com/aniwar2/musae/framework/service"
-	"gitee.com/bychannel/aniwar/src/common/db"
 
-	"gitee.com/bychannel/aniwar/src/common"
-	"gitee.com/bychannel/aniwar/src/proto/pb"
+	"gitee.com/aniwar2/aniwar/src/common"
+	"gitee.com/aniwar2/aniwar/src/proto/pb"
 )
 
 type OfflineEventHandler struct {

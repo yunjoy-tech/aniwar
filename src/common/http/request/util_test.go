@@ -2,7 +2,7 @@ package request_test
 
 import (
 	"fmt"
-	"gitee.com/bychannel/aniwar/src/common/http/request"
+	"gitee.com/aniwar2/aniwar/src/common/http/request"
 	"github.com/stretchr/testify/assert"
 	"io"
 	"net/http"

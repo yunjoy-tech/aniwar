@@ -7,31 +7,31 @@ import (
 	"strconv"
 	"time"
 
-	"gitee.com/bychannel/aniwar/src/common/conf"
-	"gitee.com/bychannel/aniwar/src/common/datalog/taptap"
+	"gitee.com/aniwar2/aniwar/src/common/conf"
+	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
 
-	"gitee.com/bychannel/aniwar/src/common/datahelper"
+	"gitee.com/aniwar2/aniwar/src/common/datahelper"
 
-	"gitee.com/bychannel/aniwar/src/common/sdkconstant/sdkutil"
+	"gitee.com/aniwar2/aniwar/src/common/sdkconstant/sdkutil"
 
 	"gitee.com/aniwar2/musae/framework/baseconf"
 
 	"gitee.com/aniwar2/musae/framework/threading"
 
-	"gitee.com/bychannel/aniwar/src/common"
+	"gitee.com/aniwar2/aniwar/src/common"
 
 	"github.com/pkg/errors"
 
-	"gitee.com/bychannel/aniwar/src/common/com_order"
+	"gitee.com/aniwar2/aniwar/src/common/com_order"
 
-	excel "gitee.com/bychannel/aniwar/src/excel/data"
+	excel "gitee.com/aniwar2/aniwar/src/excel/data"
 
 	"gitee.com/aniwar2/musae/framework/base"
 	"gitee.com/aniwar2/musae/framework/utils"
 
+	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/framework/logger"
 	"gitee.com/aniwar2/musae/framework/service"
-	"gitee.com/bychannel/aniwar/src/proto/pb"
 	"google.golang.org/protobuf/proto"
 )
 

@@ -1,7 +1,7 @@
 package datahelper
 
 import (
-	"gitee.com/bychannel/aniwar/src/proto/pb"
+	"gitee.com/aniwar2/aniwar/src/proto/pb"
 )
 
 // MiniGameWinType 小游戏胜利类型

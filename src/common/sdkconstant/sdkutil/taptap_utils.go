@@ -4,15 +4,15 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"gitee.com/bychannel/aniwar/src/proto/pb"
+	"gitee.com/aniwar2/aniwar/src/proto/pb"
 
-	"gitee.com/bychannel/aniwar/src/common/conf"
+	"gitee.com/aniwar2/aniwar/src/common/conf"
 
 	"github.com/pkg/errors"
 
+	"gitee.com/aniwar2/aniwar/src/common/sdkconstant"
 	myHttp "gitee.com/aniwar2/musae/framework/http"
 	"gitee.com/aniwar2/musae/framework/logger"
-	"gitee.com/bychannel/aniwar/src/common/sdkconstant"
 )
 
 type TapUrlResp struct {

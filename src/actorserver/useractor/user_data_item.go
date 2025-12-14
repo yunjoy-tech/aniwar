@@ -1,17 +1,17 @@
 package useractor
 
 import (
+	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
 	"gitee.com/aniwar2/musae/framework/threading"
-	"gitee.com/bychannel/aniwar/src/common/datalog/taptap"
 	"github.com/pkg/errors"
 	"strconv"
 
+	"gitee.com/aniwar2/aniwar/src/common"
+	"gitee.com/aniwar2/aniwar/src/common/utils"
+	excel "gitee.com/aniwar2/aniwar/src/excel/data"
+	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/framework/logger"
 	"gitee.com/aniwar2/musae/framework/safe"
-	"gitee.com/bychannel/aniwar/src/common"
-	"gitee.com/bychannel/aniwar/src/common/utils"
-	excel "gitee.com/bychannel/aniwar/src/excel/data"
-	"gitee.com/bychannel/aniwar/src/proto/pb"
 )
 
 func (x *UserData) GetUserItems() *pb.PCommonItemInfos {

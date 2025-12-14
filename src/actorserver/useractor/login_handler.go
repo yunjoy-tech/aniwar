@@ -3,14 +3,14 @@ package useractor
 import (
 	"context"
 	"fmt"
-	"gitee.com/bychannel/aniwar/src/common/builder"
+	"gitee.com/aniwar2/aniwar/src/common/builder"
 	"strconv"
 	"time"
 	"unicode/utf8"
 
-	"gitee.com/bychannel/aniwar/src/common/datalog/taptap"
+	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
 
-	"gitee.com/bychannel/aniwar/src/common/server"
+	"gitee.com/aniwar2/aniwar/src/common/server"
 
 	"gitee.com/aniwar2/musae/framework/logger"
 
@@ -18,18 +18,18 @@ import (
 
 	"gitee.com/aniwar2/musae/framework/threading"
 
-	"gitee.com/bychannel/aniwar/src/common/clidto"
-	myUtils "gitee.com/bychannel/aniwar/src/common/utils"
+	"gitee.com/aniwar2/aniwar/src/common/clidto"
+	myUtils "gitee.com/aniwar2/aniwar/src/common/utils"
 
-	"gitee.com/bychannel/aniwar/src/common/conf"
+	"gitee.com/aniwar2/aniwar/src/common/conf"
 
+	"gitee.com/aniwar2/aniwar/src/actorserver/useractor/event"
+	"gitee.com/aniwar2/aniwar/src/common"
+	"gitee.com/aniwar2/aniwar/src/common/db"
+	excel "gitee.com/aniwar2/aniwar/src/excel/data"
+	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/framework/base"
 	"gitee.com/aniwar2/musae/framework/service"
-	"gitee.com/bychannel/aniwar/src/actorserver/useractor/event"
-	"gitee.com/bychannel/aniwar/src/common"
-	"gitee.com/bychannel/aniwar/src/common/db"
-	excel "gitee.com/bychannel/aniwar/src/excel/data"
-	"gitee.com/bychannel/aniwar/src/proto/pb"
 	"google.golang.org/protobuf/proto"
 )
 

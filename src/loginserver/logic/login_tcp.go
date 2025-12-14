@@ -3,12 +3,12 @@ package logic
 import (
 	"strconv"
 
+	"gitee.com/aniwar2/aniwar/src/common/conf"
+	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/framework/baseconf"
 	"gitee.com/aniwar2/musae/framework/errorx"
 	"gitee.com/aniwar2/musae/framework/logger"
 	"gitee.com/aniwar2/musae/framework/tcpx"
-	"gitee.com/bychannel/aniwar/src/common/conf"
-	"gitee.com/bychannel/aniwar/src/proto/pb"
 )
 
 func (s *LoginServer) OnTcp(c *tcpx.Context) {

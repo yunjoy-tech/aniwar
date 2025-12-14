@@ -1,7 +1,7 @@
 package logic
 
 import (
-	"gitee.com/bychannel/aniwar/src/proto/pb"
+	"gitee.com/aniwar2/aniwar/src/proto/pb"
 )
 
 func IsBroadcastCmd(messageId int32) bool {

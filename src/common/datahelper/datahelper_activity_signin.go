@@ -1,7 +1,7 @@
 package datahelper
 
 import (
-	"gitee.com/bychannel/aniwar/src/excel/data"
+	"gitee.com/aniwar2/aniwar/src/excel/data"
 )
 
 func GetActivitySinginRewards(activityId, dayIndex int32) []*data.ItemReward {

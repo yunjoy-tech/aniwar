@@ -6,9 +6,9 @@ import (
 
 	"gitee.com/aniwar2/musae/framework/base"
 
+	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/framework/logger"
 	"gitee.com/aniwar2/musae/framework/tcpx"
-	"gitee.com/bychannel/aniwar/src/proto/pb"
 )
 
 func (s *GateServer) HandleLoginGame(c *tcpx.Context, session *pb.UserSession, messageID int32, data []byte, reqIdx uint32) ([]byte, *base.RpcError) {

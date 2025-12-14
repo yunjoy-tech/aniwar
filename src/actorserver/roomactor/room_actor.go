@@ -6,12 +6,12 @@ import (
 	"strconv"
 	"time"
 
+	"gitee.com/aniwar2/aniwar/src/actorserver/frame"
+	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/framework/baseactor"
 	"gitee.com/aniwar2/musae/framework/global"
 	"gitee.com/aniwar2/musae/framework/service"
 	svc "gitee.com/aniwar2/musae/framework/service"
-	"gitee.com/bychannel/aniwar/src/actorserver/frame"
-	"gitee.com/bychannel/aniwar/src/proto/pb"
 	"github.com/dapr/go-sdk/actor"
 	_ "github.com/dapr/go-sdk/actor"
 )

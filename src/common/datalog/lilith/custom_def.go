@@ -2,7 +2,7 @@ package lilith
 
 //
 // import (
-//	"gitee.com/bychannel/aniwar/src/proto/pb"
+//	"gitee.com/aniwar2/aniwar/src/proto/pb"
 // )
 //
 // // 自定义日志公共头

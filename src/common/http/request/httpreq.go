@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"strings"
 
-	"gitee.com/bychannel/aniwar/src/common/http/ctype"
+	"gitee.com/aniwar2/aniwar/src/common/http/ctype"
 )
 
 // Req an simple http requester.

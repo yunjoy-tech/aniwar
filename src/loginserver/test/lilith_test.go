@@ -2,14 +2,14 @@ package test
 
 import (
 	"fmt"
-	"gitee.com/bychannel/aniwar/src/common/conf"
+	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strings"
 	"testing"
 
-	"gitee.com/bychannel/aniwar/src/common/sdkconstant"
+	"gitee.com/aniwar2/aniwar/src/common/sdkconstant"
 
 	"gitee.com/aniwar2/musae/framework/logger"
 )

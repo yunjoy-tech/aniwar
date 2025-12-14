@@ -1,12 +1,12 @@
 package centeractor
 
 import (
+	"gitee.com/aniwar2/aniwar/src/actorserver/frame"
+	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/framework/global"
 	"gitee.com/aniwar2/musae/framework/service"
 	"gitee.com/aniwar2/musae/framework/state"
 	"gitee.com/aniwar2/musae/framework/threading"
-	"gitee.com/bychannel/aniwar/src/actorserver/frame"
-	"gitee.com/bychannel/aniwar/src/proto/pb"
 	"github.com/dapr/go-sdk/actor"
 	"google.golang.org/protobuf/proto"
 	"sync"

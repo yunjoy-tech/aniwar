@@ -3,8 +3,8 @@ package datahelper
 import (
 	"math/rand"
 
+	"gitee.com/aniwar2/aniwar/src/excel/data"
 	"gitee.com/aniwar2/musae/framework/logger"
-	"gitee.com/bychannel/aniwar/src/excel/data"
 )
 
 // 根据掉落id掉落奖励

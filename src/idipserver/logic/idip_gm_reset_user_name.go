@@ -3,9 +3,9 @@ package logic
 import (
 	"encoding/json"
 	"fmt"
-	"gitee.com/bychannel/aniwar/src/common/db"
-	"gitee.com/bychannel/aniwar/src/common/sdkconstant"
-	"gitee.com/bychannel/aniwar/src/proto/pb"
+	"gitee.com/aniwar2/aniwar/src/common/db"
+	"gitee.com/aniwar2/aniwar/src/common/sdkconstant"
+	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"github.com/dapr/go-sdk/service/common"
 	"net/http"
 )

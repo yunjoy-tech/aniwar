@@ -2,7 +2,7 @@ package lilith
 
 // import (
 //	"fmt"
-//	"gitee.com/bychannel/aniwar/src/proto/pb"
+//	"gitee.com/aniwar2/aniwar/src/proto/pb"
 //	"testing"
 // )
 //

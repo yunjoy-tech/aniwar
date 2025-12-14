@@ -6,19 +6,19 @@ import (
 
 	"github.com/pkg/errors"
 
-	"gitee.com/bychannel/aniwar/src/common"
+	"gitee.com/aniwar2/aniwar/src/common"
 
 	"gitee.com/aniwar2/musae/framework/global"
 
+	"gitee.com/aniwar2/aniwar/src/common/conf"
+	"gitee.com/aniwar2/aniwar/src/common/db"
+	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/framework/base"
 	"gitee.com/aniwar2/musae/framework/baseconf"
 	"gitee.com/aniwar2/musae/framework/errorx"
 	"gitee.com/aniwar2/musae/framework/logger"
 	"gitee.com/aniwar2/musae/framework/metrics"
 	"gitee.com/aniwar2/musae/framework/tcpx"
-	"gitee.com/bychannel/aniwar/src/common/conf"
-	"gitee.com/bychannel/aniwar/src/common/db"
-	"gitee.com/bychannel/aniwar/src/proto/pb"
 	"google.golang.org/protobuf/proto"
 )
 

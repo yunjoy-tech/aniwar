@@ -9,10 +9,10 @@ import (
 
 	"gitee.com/aniwar2/musae/framework/threading"
 
+	baseconf "gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/musae/framework/logger"
-	baseconf "gitee.com/bychannel/aniwar/src/common/conf"
 
-	excel "gitee.com/bychannel/aniwar/src/excel/data"
+	excel "gitee.com/aniwar2/aniwar/src/excel/data"
 )
 
 func init() {

@@ -1,7 +1,7 @@
 package gmeta
 
 import (
-	"gitee.com/bychannel/aniwar/src/meta"
+	"gitee.com/aniwar2/aniwar/src/meta"
 )
 
 var (

@@ -2,7 +2,7 @@ package sdkconstant
 
 import (
 	"fmt"
-	"gitee.com/bychannel/aniwar/src/common/conf"
+	"gitee.com/aniwar2/aniwar/src/common/conf"
 )
 
 const (

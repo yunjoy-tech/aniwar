@@ -3,10 +3,10 @@ package common
 import (
 	"fmt"
 
-	"gitee.com/bychannel/aniwar/src/common/utils"
+	"gitee.com/aniwar2/aniwar/src/common/utils"
 	"github.com/pkg/errors"
 
-	"gitee.com/bychannel/aniwar/src/proto/pb"
+	"gitee.com/aniwar2/aniwar/src/proto/pb"
 )
 
 var (

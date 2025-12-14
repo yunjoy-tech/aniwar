@@ -1,6 +1,6 @@
 package logic
 
-import "gitee.com/bychannel/aniwar/src/proto/pb"
+import "gitee.com/aniwar2/aniwar/src/proto/pb"
 
 func (s *LoginServer) handleAuthPC(req *pb.C2LS_LoginReq) pb.ErrorCode {
 

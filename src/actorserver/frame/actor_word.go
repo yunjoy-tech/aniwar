@@ -7,9 +7,9 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"gitee.com/aniwar2/aniwar/src/common/db"
+	excel "gitee.com/aniwar2/aniwar/src/excel/data"
 	"gitee.com/aniwar2/musae/framework/wordfilter"
-	"gitee.com/bychannel/aniwar/src/common/db"
-	excel "gitee.com/bychannel/aniwar/src/excel/data"
 	"math/rand"
 	"net/http"
 	"net/url"
@@ -19,11 +19,11 @@ import (
 	"time"
 	"unicode"
 
+	myCommon "gitee.com/aniwar2/aniwar/src/common"
+	"gitee.com/aniwar2/aniwar/src/common/conf"
+	"gitee.com/aniwar2/aniwar/src/common/http/request"
+	myUtils "gitee.com/aniwar2/aniwar/src/common/utils"
 	"gitee.com/aniwar2/musae/framework/logger"
-	myCommon "gitee.com/bychannel/aniwar/src/common"
-	"gitee.com/bychannel/aniwar/src/common/conf"
-	"gitee.com/bychannel/aniwar/src/common/http/request"
-	myUtils "gitee.com/bychannel/aniwar/src/common/utils"
 )
 
 const (

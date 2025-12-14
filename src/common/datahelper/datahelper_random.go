@@ -6,7 +6,7 @@ import (
 
 	"fmt"
 
-	"gitee.com/bychannel/aniwar/src/excel/data"
+	"gitee.com/aniwar2/aniwar/src/excel/data"
 )
 
 // RandomByWeightVo 根据WeightVo随机权重

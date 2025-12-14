@@ -3,8 +3,8 @@ package useractor
 import (
 	"context"
 	"fmt"
+	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
 	"gitee.com/aniwar2/musae/framework/threading"
-	"gitee.com/bychannel/aniwar/src/common/datalog/taptap"
 	"strconv"
 	"time"
 
@@ -12,10 +12,10 @@ import (
 
 	"google.golang.org/protobuf/proto"
 
+	"gitee.com/aniwar2/aniwar/src/common/db"
 	"gitee.com/aniwar2/musae/framework/service"
-	"gitee.com/bychannel/aniwar/src/common/db"
 
-	"gitee.com/bychannel/aniwar/src/proto/pb"
+	"gitee.com/aniwar2/aniwar/src/proto/pb"
 )
 
 type AccountHandler struct {

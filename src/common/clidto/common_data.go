@@ -3,9 +3,9 @@ package clidto
 import (
 	"time"
 
-	"gitee.com/bychannel/aniwar/src/common"
+	"gitee.com/aniwar2/aniwar/src/common"
 
-	"gitee.com/bychannel/aniwar/src/proto/pb"
+	"gitee.com/aniwar2/aniwar/src/proto/pb"
 )
 
 type Comdata struct {

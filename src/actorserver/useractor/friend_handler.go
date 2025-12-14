@@ -7,15 +7,15 @@ import (
 	"strconv"
 	"time"
 
-	"gitee.com/bychannel/aniwar/src/common"
-	myUtils "gitee.com/bychannel/aniwar/src/common/utils"
-	excel "gitee.com/bychannel/aniwar/src/excel/data"
+	"gitee.com/aniwar2/aniwar/src/common"
+	myUtils "gitee.com/aniwar2/aniwar/src/common/utils"
+	excel "gitee.com/aniwar2/aniwar/src/excel/data"
 
+	"gitee.com/aniwar2/aniwar/src/common/db"
 	"gitee.com/aniwar2/musae/framework/service"
-	"gitee.com/bychannel/aniwar/src/common/db"
 
+	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/framework/base"
-	"gitee.com/bychannel/aniwar/src/proto/pb"
 	"google.golang.org/protobuf/proto"
 )
 

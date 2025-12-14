@@ -3,8 +3,8 @@ package server
 import (
 	"context"
 	"encoding/json"
-	"gitee.com/bychannel/aniwar/src/common/db"
-	"gitee.com/bychannel/aniwar/src/proto/pb"
+	"gitee.com/aniwar2/aniwar/src/common/db"
+	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"google.golang.org/protobuf/proto"
 	"time"
 

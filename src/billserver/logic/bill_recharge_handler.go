@@ -10,17 +10,17 @@ import (
 
 	"gitee.com/aniwar2/musae/framework/utils"
 
+	"gitee.com/aniwar2/aniwar/src/common/com_order"
+	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/framework/base"
-	"gitee.com/bychannel/aniwar/src/common/com_order"
-	"gitee.com/bychannel/aniwar/src/proto/pb"
 	"google.golang.org/protobuf/proto"
 
-	"gitee.com/bychannel/aniwar/src/common/sdkconstant/sdksign"
+	"gitee.com/aniwar2/aniwar/src/common/sdkconstant/sdksign"
 
-	"gitee.com/bychannel/aniwar/src/common/conf"
-	gameUtils "gitee.com/bychannel/aniwar/src/common/utils"
+	"gitee.com/aniwar2/aniwar/src/common/conf"
+	gameUtils "gitee.com/aniwar2/aniwar/src/common/utils"
 
-	"gitee.com/bychannel/aniwar/src/idipserver/logic"
+	"gitee.com/aniwar2/aniwar/src/idipserver/logic"
 
 	"github.com/dapr/go-sdk/service/common"
 	"github.com/pkg/errors"
