@@ -3,7 +3,7 @@ module gitee.com/aniwar2/aniwar
 go 1.22
 
 require (
-	gitee.com/aniwar2/musae v0.1.1-0.20220906131011-54e969989540
+	gitee.com/aniwar2/musae v0.0.0-20251214061148-c25f913d403a
 	github.com/aliyun/aliyun-oss-go-sdk v2.2.7+incompatible
 	github.com/dapr/go-sdk v1.6.0
 	github.com/elastic/go-elasticsearch/v8 v8.7.1
