@@ -26,7 +26,6 @@ import (
 	"gitee.com/aniwar2/aniwar/src/actorserver/useractor/event"
 	"gitee.com/aniwar2/aniwar/src/common"
 	"gitee.com/aniwar2/aniwar/src/common/db"
-	excel "gitee.com/aniwar2/aniwar/src/excel/data"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/framework/base"
 	"gitee.com/aniwar2/musae/framework/service"
@@ -133,20 +132,20 @@ func (h *LoginHandler) tryUnlockHeadsEvent(e event.IEvent) error {
 func (h *LoginHandler) tryUnlockHeads(unlockType, param int32) error {
 	newHeads := make([]int32, 0)
 	tempMap := make(map[int32]int32)
-	excel.GetPlayerInfoMgr().Foreach(func(cfg *excel.PlayerInfoCfg) bool {
-		if cfg.Type != common.PLAYER_HEAD {
-			return true
-		}
-		if cfg.UnlockWay != unlockType {
-			return true
-		}
-		// 尝试解锁
-		if cfg.WayId == param {
-			newHeads = append(newHeads, cfg.Id)
-		}
-
-		return true
-	}, true)
+	// excel.GetPlayerInfoMgr().Foreach(func(cfg *excel.PlayerInfoCfg) bool {
+	// 	if cfg.Type != common.PLAYER_HEAD {
+	// 		return true
+	// 	}
+	// 	if cfg.UnlockWay != unlockType {
+	// 		return true
+	// 	}
+	// 	// 尝试解锁
+	// 	if cfg.WayId == param {
+	// 		newHeads = append(newHeads, cfg.Id)
+	// 	}
+	//
+	// 	return true
+	// }, true)
 
 	data := h.actor.GetUserData()
 	if len(newHeads) > 0 {
@@ -243,21 +242,21 @@ func (h *LoginHandler) checkNickName(nickname string, isCreate bool) (error, int
 
 	// 扣除改名道具
 	if !isCreate && data.ChangeName > 0 {
-		cost := excel.GetConfigMgr().GetCfg().PLAYER_RENAME_COST
-		if !GetConsumeMgr(h.actor).CheckKeyValEnough([]*excel.KeyVal{cost}) {
-			return fmt.Errorf("item not enough"), int32(pb.ErrorCode_NotEnoughItem)
-		}
+		// cost := excel.GetConfigMgr().GetCfg().PLAYER_RENAME_COST
+		// if !GetConsumeMgr(h.actor).CheckKeyValEnough([]*excel.KeyVal{cost}) {
+		// 	return fmt.Errorf("item not enough"), int32(pb.ErrorCode_NotEnoughItem)
+		// }
 	}
 	return nil, 0
 }
 
 func (h *LoginHandler) handleChangeNickname(nickname string, isCreate bool) (error, int32) {
 	if !isCreate && h.actor.GetUserData().ChangeName > 0 {
-		cost := excel.GetConfigMgr().GetCfg().PLAYER_RENAME_COST
-		err := GetConsumeMgr(h.actor).ConsumeKeyValList([]*excel.KeyVal{cost}, h.actor.comData, common.CR_CHANGE_NICKNAME)
-		if err != nil {
-			return err, int32(pb.ErrorCode_InternalError)
-		}
+		// cost := excel.GetConfigMgr().GetCfg().PLAYER_RENAME_COST
+		// err := GetConsumeMgr(h.actor).ConsumeKeyValList([]*excel.KeyVal{cost}, h.actor.comData, common.CR_CHANGE_NICKNAME)
+		// if err != nil {
+		// 	return err, int32(pb.ErrorCode_InternalError)
+		// }
 	}
 	// 保存新的昵称
 	h.changeNickname(nickname)
@@ -404,9 +403,9 @@ func (h *LoginHandler) sendPlayerKickOutNtf(reason string) error {
 
 // 新手礼包
 func (h *LoginHandler) handleNewbieGift() error {
-	items := excel.GetConfigMgr().GetCfg().ACCOUNT_CREATE_STATE
+	// items := excel.GetConfigMgr().GetCfg().ACCOUNT_CREATE_STATE
 
-	_, err := GetDropMgr(h.actor).DropListByItems(items, true, nil, h.actor.comData, common.CR_NewbieGift)
+	_, err := GetDropMgr(h.actor).DropListByItems(nil, true, nil, h.actor.comData, common.CR_NewbieGift)
 	if err != nil {
 		return err
 	}
@@ -558,7 +557,7 @@ func (h *LoginHandler) LoginEnterGame(ctx context.Context, in *base.ProtoMsg) (p
 		Friends:             h.actor.FriendHandler.buildFriendData(true),
 		Alliance:            h.actor.UserAllianceHandler.buildAllianceData(true),
 		GuideTask:           h.actor.GuideTaskHandler.buildGuideTask(),
-		ActivityData:        h.actor.ActivityHandler.formatActivity2Client(),
+		// ActivityData:        h.actor.ActivityHandler.formatActivity2Client(),
 	}
 
 	res := &pb.G2C_LoginGameRes{
@@ -752,14 +751,14 @@ func (h *LoginHandler) updateRoleBase(newLevel uint32, newExp uint64, commonData
 // 返回实际增加的经验值和错误信息
 func (h *LoginHandler) AddRoleExp(expValue uint64, commonData *clidto.Comdata) (uint64, error) {
 
-	maxLevel := uint32(excel.GetConfigMgr().GetCfg().PLAYER_MAX_LEVEL)
+	// maxLevel := uint32(excel.GetConfigMgr().GetCfg().PLAYER_MAX_LEVEL)
 	oldLevel := h.getRoleLevel()
 	oldExp := h.actor.GetUserData().Common.RoleExp
-	maxLevelConfig := excel.GetPlayerLevelMgr().GetById(int32(maxLevel))
+	// maxLevelConfig := excel.GetPlayerLevelMgr().GetById(int32(maxLevel))
 
-	if maxLevelConfig == nil {
-		return 0, fmt.Errorf("player max level config not found: %d", maxLevel)
-	}
+	// if maxLevelConfig == nil {
+	// 	return 0, fmt.Errorf("player max level config not found: %d", maxLevel)
+	// }
 	remainExp := oldExp + expValue
 	newLevel := oldLevel
 
@@ -767,36 +766,36 @@ func (h *LoginHandler) AddRoleExp(expValue uint64, commonData *clidto.Comdata) (
 	var lvUpTimes uint32
 
 	// 获取当前等级配置
-	curLevelConfig := excel.GetPlayerLevelMgr().GetById(int32(oldLevel))
+	// curLevelConfig := excel.GetPlayerLevelMgr().GetById(int32(oldLevel))
 	// 配置不存在，返回错误
-	if curLevelConfig == nil {
-		return 0, fmt.Errorf("player level config not found: %d", oldLevel)
-	}
+	// if curLevelConfig == nil {
+	// 	return 0, fmt.Errorf("player level config not found: %d", oldLevel)
+	// }
 
-	for {
-		expLimit := uint64(curLevelConfig.Exp)
-		if remainExp < expLimit {
-			break
-		}
-		// 获取下一等级配置
-		nextLevelConfig := excel.GetPlayerLevelMgr().GetById(int32(newLevel + 1))
-		if nextLevelConfig == nil || maxLevel <= newLevel {
-			// 配置不存在或者达到当前等级上限了,不可以升级
-			remainExp = expLimit
-			break
-		}
-		// 可以升级
-		remainExp -= expLimit
-		newLevel++
-		lvUpTimes++
-		if lvUpTimes == 1 {
-			addExp = expLimit - oldExp
-		} else {
-			addExp += expLimit
-		}
-
-		curLevelConfig = nextLevelConfig
-	}
+	// for {
+	// 	expLimit := uint64(curLevelConfig.Exp)
+	// 	if remainExp < expLimit {
+	// 		break
+	// 	}
+	// 	// 获取下一等级配置
+	// 	nextLevelConfig := excel.GetPlayerLevelMgr().GetById(int32(newLevel + 1))
+	// 	if nextLevelConfig == nil || maxLevel <= newLevel {
+	// 		// 配置不存在或者达到当前等级上限了,不可以升级
+	// 		remainExp = expLimit
+	// 		break
+	// 	}
+	// 	// 可以升级
+	// 	remainExp -= expLimit
+	// 	newLevel++
+	// 	lvUpTimes++
+	// 	if lvUpTimes == 1 {
+	// 		addExp = expLimit - oldExp
+	// 	} else {
+	// 		addExp += expLimit
+	// 	}
+	//
+	// 	curLevelConfig = nextLevelConfig
+	// }
 	if newLevel != oldLevel || remainExp != oldExp {
 		if lvUpTimes == 0 {
 			addExp = remainExp - oldExp
@@ -840,12 +839,12 @@ func (h *LoginHandler) getLoginDay() int32 {
 func (h *LoginHandler) DirectLevelUpByGM(level uint32, commonData *clidto.Comdata) error {
 	oldLevel := h.getRoleLevel()
 	oldExp := h.actor.GetUserData().Common.RoleExp
-	maxLevel := uint32(excel.GetConfigMgr().GetCfg().PLAYER_MAX_LEVEL)
+	maxLevel := uint32(0) /*uint32(excel.GetConfigMgr().GetCfg().PLAYER_MAX_LEVEL)*/
 
-	maxLevelConfig := excel.GetPlayerLevelMgr().GetById(int32(maxLevel))
-	if maxLevelConfig == nil {
-		return fmt.Errorf("player max level config not found: %d", maxLevel)
-	}
+	// maxLevelConfig := excel.GetPlayerLevelMgr().GetById(int32(maxLevel))
+	// if maxLevelConfig == nil {
+	// 	return fmt.Errorf("player max level config not found: %d", maxLevel)
+	// }
 
 	targetLevel := oldLevel + level
 
@@ -855,10 +854,10 @@ func (h *LoginHandler) DirectLevelUpByGM(level uint32, commonData *clidto.Comdat
 	}
 
 	for i := oldLevel + 1; i <= targetLevel; i++ {
-		levelConfig := excel.GetPlayerLevelMgr().GetById(int32(i))
-		if levelConfig == nil {
-			return fmt.Errorf("player level config not found: %d", i)
-		}
+		// levelConfig := excel.GetPlayerLevelMgr().GetById(int32(i))
+		// if levelConfig == nil {
+		// 	return fmt.Errorf("player level config not found: %d", i)
+		// }
 	}
 	return h.updateRoleBase(targetLevel, oldExp, commonData)
 }

@@ -3,20 +3,18 @@ package useractor
 import (
 	"context"
 	"fmt"
+	"gitee.com/aniwar2/aniwar/src/meta"
 	"time"
 
 	"github.com/pkg/errors"
 
 	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
 
-	"gitee.com/aniwar2/aniwar/src/common/datahelper"
-
 	"gitee.com/aniwar2/musae/framework/threading"
 
 	"gitee.com/aniwar2/aniwar/src/common"
 	"gitee.com/aniwar2/aniwar/src/common/clidto"
 	"gitee.com/aniwar2/aniwar/src/common/db"
-	"gitee.com/aniwar2/aniwar/src/excel/data"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/framework/base"
 	"gitee.com/aniwar2/musae/framework/service"
@@ -219,21 +217,22 @@ func (h *ShopHandler) ShopBuyReq(ctx context.Context, in *base.ProtoMsg) (proto.
 			continue
 		}
 
-		goodsCfg := data.GetShopGoodsMgr().GetById(int32(eachGoods.GoodsId))
+		var goodsCfg *meta.GameShopPkgGoodsMeta
+		// goodsCfg := data.GetShopGoodsMgr().GetById(int32(eachGoods.GoodsId))
 
 		if goodsCfg.Limit != -1 { // 配置成-1, 表示不做限制
 			if int32(eachGoods.HadBuyCount) >= goodsCfg.Limit {
-				return nil, fmt.Errorf("购买次数不足, shopId=%d, goodsId=%d", req.ShopId, goodsCfg.GetId()), int32(pb.ErrorCode_Shop_goods_buy_count_limit)
+				return nil, fmt.Errorf("购买次数不足, shopId=%d, goodsId=%d", req.ShopId, goodsCfg.Id), int32(pb.ErrorCode_Shop_goods_buy_count_limit)
 			}
 
 			if int32(eachGoods.HadBuyCount+req.GetBuyNum()) > goodsCfg.Limit {
-				return nil, fmt.Errorf("库存不足, shopId=%d, goodsId=%d", req.ShopId, goodsCfg.GetId()), int32(pb.ErrorCode_Shop_goods_not_enough)
+				return nil, fmt.Errorf("库存不足, shopId=%d, goodsId=%d", req.ShopId, goodsCfg.Id), int32(pb.ErrorCode_Shop_goods_not_enough)
 			}
 		}
 
-		if goodsCfg.GetLayer() != shopInfo.ShopLayer {
-			return nil, fmt.Errorf("商品层级不匹配, shopId=%d, goodsId=%d", req.ShopId, goodsCfg.GetId()), int32(pb.ErrorCode_Shop_goods_invalid_layer)
-		}
+		// if goodsCfg.GetLayer() != shopInfo.ShopLayer {
+		// 	return nil, fmt.Errorf("商品层级不匹配, shopId=%d, goodsId=%d", req.ShopId, goodsCfg.GetId()), int32(pb.ErrorCode_Shop_goods_invalid_layer)
+		// }
 
 		dropChange, err, errorCode := h.doBuy(uid, int32(req.BuyNum), goodsCfg, h.actor.comData)
 		if err != nil {
@@ -294,7 +293,8 @@ func (h *ShopHandler) ShopManualRefreshReq(ctx context.Context, in *base.ProtoMs
 		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
-	shopCfg := data.GetShopMgr().GetById(req.ShopId)
+	var shopCfg *meta.GameShopPkgShopMeta
+	// shopCfg := data.GetShopMgr().GetById(req.ShopId)
 	if shopCfg == nil {
 		return nil, fmt.Errorf("没有对应的配置, shopId=%d", req.ShopId), int32(pb.ErrorCode_Shop_not_exist)
 	}
@@ -365,30 +365,30 @@ func (h *ShopHandler) tryUpdateShopLayer(shopInfo *pb.ShopInfo) {
 	)
 
 	// 检查是否全部商品卖完了
-	for _, each := range shopInfo.GoodsIds {
-		goodsCfg := data.GetShopGoodsMgr().GetById(int32(each.GoodsId))
-
-		if int32(shopInfo.ShopLayer) != goodsCfg.GetLayer() {
-			// 只关心当前层
-			continue
-		}
-
-		if goodsCfg.Limit != -1 && // 配置成-1, 表示不限制
-			int32(each.HadBuyCount) != goodsCfg.Limit {
-			return
-		}
-	}
+	// for _, each := range shopInfo.GoodsIds {
+	// 	goodsCfg := data.GetShopGoodsMgr().GetById(int32(each.GoodsId))
+	//
+	// 	if int32(shopInfo.ShopLayer) != goodsCfg.GetLayer() {
+	// 		// 只关心当前层
+	// 		continue
+	// 	}
+	//
+	// 	if goodsCfg.Limit != -1 && // 配置成-1, 表示不限制
+	// 		int32(each.HadBuyCount) != goodsCfg.Limit {
+	// 		return
+	// 	}
+	// }
 
 	nextLayer = shopInfo.ShopLayer + 1
 
-	data.GetShopGoodsMgr().Foreach(func(cfg *data.ShopGoodsCfg) bool {
-		if cfg.GetShopId() == shopInfo.GetShopId() && cfg.GetLayer() == nextLayer {
-			nextLayerGoodExist = true
-			return false // 停止查找
-		}
-
-		return true
-	}, false)
+	// data.GetShopGoodsMgr().Foreach(func(cfg *data.ShopGoodsCfg) bool {
+	// 	if cfg.GetShopId() == shopInfo.GetShopId() && cfg.GetLayer() == nextLayer {
+	// 		nextLayerGoodExist = true
+	// 		return false // 停止查找
+	// 	}
+	//
+	// 	return true
+	// }, false)
 
 	if nextLayerGoodExist {
 		shopInfo.ShopLayer = nextLayer
@@ -410,7 +410,8 @@ func (h *ShopHandler) createShopInfo(shopId, layerIdx int32, lastExpireTimeSec i
 	)
 
 	// 创建商品(所有层)
-	shopCfg := data.GetShopMgr().GetById(shopId)
+	var shopCfg *meta.GameShopPkgShopMeta
+	// shopCfg := data.GetShopMgr().GetById(shopId)
 	if shopCfg == nil {
 		return errors.New(fmt.Sprintf("不存在的商店id, shopId=%d", shopId)), nil
 	}
@@ -452,7 +453,8 @@ func (h *ShopHandler) getShopNextRefreshTime(shopId int32, lastExpireTimeSec int
 		return lastExpireTimeSec, nil
 	}
 
-	shopCfg := data.GetShopMgr().GetById(shopId)
+	var shopCfg *meta.GameShopPkgShopMeta
+	// shopCfg := data.GetShopMgr().GetById(shopId)
 	if shopCfg == nil {
 		return 0, fmt.Errorf("没有对应的商店配置, shopId:%d", shopId)
 	}
@@ -509,15 +511,15 @@ func (h *ShopHandler) getShopNextRefreshTime(shopId int32, lastExpireTimeSec int
 	// return 0, fmt.Errorf("没有对应的刷新类型, shopId:%d, refreshType:%d", shopId, shopCfg.RefreshType)
 }
 
-func (h *ShopHandler) doBuy(uid string, buyNum int32, goodsCfg *data.ShopGoodsCfg, commonData *clidto.Comdata) (*pb.DropChange, error, pb.ErrorCode) {
+func (h *ShopHandler) doBuy(uid string, buyNum int32, goodsCfg *meta.GameShopPkgGoodsMeta, commonData *clidto.Comdata) (*pb.DropChange, error, pb.ErrorCode) {
 	costMap := make(map[int32]int32)
-	costMap[goodsCfg.GetPrice().Key] = goodsCfg.GetPrice().Val * buyNum
+	costMap[goodsCfg.Price.Key] = goodsCfg.Price.Val * buyNum
 
 	if !GetConsumeMgr(h.actor).CheckMapEnough(costMap) {
 		return nil, fmt.Errorf("道具不足, uid=%d", uid), pb.ErrorCode_CurrencyNotEnough
 	}
 
-	if GetDropMgr(h.actor).CheckLimit(goodsCfg.GetItemId().Key, goodsCfg.GetItemId().Val*buyNum) {
+	if GetDropMgr(h.actor).CheckLimit(goodsCfg.ItemId.Key, goodsCfg.ItemId.Val*buyNum) {
 		return nil, fmt.Errorf("已达持有最大数量, uid=%s", uid), pb.ErrorCode_Shop_item_limit
 	}
 
@@ -538,7 +540,7 @@ func (h *ShopHandler) doBuy(uid string, buyNum int32, goodsCfg *data.ShopGoodsCf
 	//	return nil, fmt.Errorf("已达持有最大数量, uid=%s", uid), pb.ErrorCode_Shop_item_limit
 	// }
 
-	dropChange, err := GetDropMgr(h.actor).DropList2(map[int32]int32{goodsCfg.GetItemId().Key: goodsCfg.GetItemId().Val * buyNum}, true, nil, commonData, common.CR_Shop_buy)
+	dropChange, err := GetDropMgr(h.actor).DropList2(map[int32]int32{goodsCfg.ItemId.Key: goodsCfg.ItemId.Val * buyNum}, true, nil, commonData, common.CR_Shop_buy)
 	if err != nil {
 		return nil, fmt.Errorf("奖励道具报错, uid=%s", uid), pb.ErrorCode_InternalError
 	}
@@ -594,50 +596,51 @@ func (h *ShopHandler) getShopInfo(shopId int32) (*pb.ShopInfo, error) {
 func (h *ShopHandler) createShopGoods(shopId int32, layerIdx int32) []*pb.ShopGoodsInfo {
 	var (
 		// layer      = uint32(1) // 初始层级
-		tempGoodsCfgs = make([]*data.ShopGoodsCfg, 0)
-		goodsInfos    = make([]*pb.ShopGoodsInfo, 0)
+		// tempGoodsCfgs = make([]*data.ShopGoodsCfg, 0)
+		goodsInfos = make([]*pb.ShopGoodsInfo, 0)
 	)
 
-	data.GetShopGoodsMgr().Foreach(func(cfg *data.ShopGoodsCfg) bool {
-		if cfg.GetShopId() == shopId && cfg.Layer == layerIdx {
-			tempGoodsCfgs = append(tempGoodsCfgs, cfg)
-		}
-		return true
-	}, false)
+	// data.GetShopGoodsMgr().Foreach(func(cfg *data.ShopGoodsCfg) bool {
+	// 	if cfg.GetShopId() == shopId && cfg.Layer == layerIdx {
+	// 		tempGoodsCfgs = append(tempGoodsCfgs, cfg)
+	// 	}
+	// 	return true
+	// }, false)
 
-	posGoodsMap := make(map[int32][]*data.ShopGoodsCfg)
-	for _, cfg := range tempGoodsCfgs {
-		if _, ok := posGoodsMap[cfg.PosIdx]; !ok {
-			posGoodsMap[cfg.PosIdx] = make([]*data.ShopGoodsCfg, 0)
-		}
+	posGoodsMap := make(map[int32][]*meta.GameShopPkgGoodsMeta)
+	// for _, cfg := range tempGoodsCfgs {
+	// 	if _, ok := posGoodsMap[cfg.PosIdx]; !ok {
+	// 		posGoodsMap[cfg.PosIdx] = make([]*data.ShopGoodsCfg, 0)
+	// 	}
+	//
+	// 	posGoodsMap[cfg.PosIdx] = append(posGoodsMap[cfg.PosIdx], cfg)
+	// }
 
-		posGoodsMap[cfg.PosIdx] = append(posGoodsMap[cfg.PosIdx], cfg)
-	}
-
-	finalGoodsCfg := make([]*data.ShopGoodsCfg, 0)
-	for posIdx, eachPosCfgs := range posGoodsMap {
+	finalGoodsCfg := make([]*meta.GameShopPkgGoodsMeta, 0)
+	for _, eachPosCfgs := range posGoodsMap {
 		if len(eachPosCfgs) <= 0 {
 			// 没有商品数据
 			continue
 		}
 
 		// 有多条数据, 需要根据权重随机
-		weightVos := make([]*data.WeightVo, 0)
-		for _, cfg := range eachPosCfgs {
-			wVo := &data.WeightVo{
-				Weight: cfg.RefreshWeight,
-				VoId:   cfg.Id,
-			}
+		// weightVos := make([]*data.WeightVo, 0)
+		// for _, cfg := range eachPosCfgs {
+		// 	wVo := &data.WeightVo{
+		// 		Weight: cfg.RefreshWeight,
+		// 		VoId:   cfg.Id,
+		// 	}
+		//
+		// 	weightVos = append(weightVos, wVo)
+		// }
+		// vo, err := datahelper.RandomByWeightVo(weightVos)
+		// if err != nil {
+		// 	h.Errorf("随机商店物品报错, shopId=%d, layerIdx=%d posIdx=%d, err:%v", shopId, layerIdx, posIdx, err.Error())
+		// 	continue
+		// }
 
-			weightVos = append(weightVos, wVo)
-		}
-		vo, err := datahelper.RandomByWeightVo(weightVos)
-		if err != nil {
-			h.Errorf("随机商店物品报错, shopId=%d, layerIdx=%d posIdx=%d, err:%v", shopId, layerIdx, posIdx, err.Error())
-			continue
-		}
-
-		goodsCfg := data.GetShopGoodsMgr().GetById(vo.GetVoId())
+		var goodsCfg *meta.GameShopPkgGoodsMeta
+		// goodsCfg := data.GetShopGoodsMgr().GetById(vo.GetVoId())
 		if goodsCfg == nil {
 			continue
 		}
@@ -647,7 +650,7 @@ func (h *ShopHandler) createShopGoods(shopId int32, layerIdx int32) []*pb.ShopGo
 
 	for _, cfg := range finalGoodsCfg {
 		goodsInfo := &pb.ShopGoodsInfo{
-			GoodsId:     cfg.GetId(),
+			GoodsId:     cfg.Id,
 			HadBuyCount: 0,
 		}
 
@@ -664,14 +667,14 @@ func getShopIds(showType int32) []int32 {
 		shopIds = make([]int32, 0)
 	)
 
-	data.GetShopMgr().Foreach(func(cfg *data.ShopCfg) bool {
-		if cfg.ShowType != showType {
-			return true
-		}
-
-		shopIds = append(shopIds, cfg.GetId())
-		return true
-	}, false)
+	// data.GetShopMgr().Foreach(func(cfg *data.ShopCfg) bool {
+	// 	if cfg.ShowType != showType {
+	// 		return true
+	// 	}
+	//
+	// 	shopIds = append(shopIds, cfg.GetId())
+	// 	return true
+	// }, false)
 
 	return shopIds
 }

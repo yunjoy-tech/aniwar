@@ -2,13 +2,13 @@ package useractor
 
 import (
 	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
+	"gitee.com/aniwar2/aniwar/src/meta"
 	"gitee.com/aniwar2/musae/framework/threading"
 	"github.com/pkg/errors"
 	"strconv"
 
 	"gitee.com/aniwar2/aniwar/src/common"
 	"gitee.com/aniwar2/aniwar/src/common/utils"
-	excel "gitee.com/aniwar2/aniwar/src/excel/data"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/framework/logger"
 	"gitee.com/aniwar2/musae/framework/safe"
@@ -35,7 +35,8 @@ func (x *UserData) AddItems(uid string, reason common.ChangeReason, itemInfos ..
 			continue
 		}
 
-		itemCfg := excel.GetItemMgr().GetById(int32(item.BaseId))
+		var itemCfg *meta.ItemPkgItemMeta
+		// itemCfg := excel.GetItemMgr().GetById(int32(item.BaseId))
 		if itemCfg == nil {
 			continue
 		}
@@ -49,15 +50,15 @@ func (x *UserData) AddItems(uid string, reason common.ChangeReason, itemInfos ..
 			if err != nil {
 				return changeItems, finalItems, limitItems, errors.WithStack(err)
 			}
-			target.ItemNum = utils.Min(addedNum, uint32(itemCfg.GetNumLimit()))
+			target.ItemNum = utils.Min(addedNum, uint32(itemCfg.NumLimit))
 
 			afterNum = target.ItemNum
 			finalItems = append(finalItems, target)
-			limitNum = int32(addedNum - uint32(itemCfg.GetNumLimit()))
+			limitNum = int32(addedNum - uint32(itemCfg.NumLimit))
 		} else {
 			// 原来数据中未找到，直接合并
-			limitNum = int32(item.ItemNum - uint32(itemCfg.GetNumLimit()))
-			item.ItemNum = utils.Min(item.ItemNum, uint32(itemCfg.GetNumLimit()))
+			limitNum = int32(item.ItemNum - uint32(itemCfg.NumLimit))
+			item.ItemNum = utils.Min(item.ItemNum, uint32(itemCfg.NumLimit))
 			x.GetUserItems().Items[item.UniqueId] = item
 			afterNum = item.GetItemNum()
 			finalItems = append(finalItems, item)
@@ -105,10 +106,10 @@ func (x *UserData) AddItems(uid string, reason common.ChangeReason, itemInfos ..
 }
 
 // SubItems 扣除道具
-func (x *UserData) SubItems(costItemUniqueId uint64, costNum uint32, uid string, reason common.ChangeReason) (*pb.PCommonItemInfo, []*excel.ItemReward, error) {
+func (x *UserData) SubItems(costItemUniqueId uint64, costNum uint32, uid string, reason common.ChangeReason) (*pb.PCommonItemInfo, []*meta.ItemReward, error) {
 	var (
 		ret             = &pb.PCommonItemInfo{}
-		exchangeRewards = make([]*excel.ItemReward, 0)
+		exchangeRewards = make([]*meta.ItemReward, 0)
 	)
 
 	var beforeNum uint32
@@ -125,13 +126,13 @@ func (x *UserData) SubItems(costItemUniqueId uint64, costNum uint32, uid string,
 		ret = target
 
 		// 道具消耗转换的奖励
-		itemCfg := excel.GetItemMgr().GetById(int32(target.BaseId))
-		if itemCfg.Change.ItemId > 0 && itemCfg.Change.Num > 0 {
-			exchangeRewards = append(exchangeRewards, &excel.ItemReward{
-				ItemId: itemCfg.Change.ItemId,
-				Num:    itemCfg.Change.Num * int32(costNum),
-			})
-		}
+		// itemCfg := excel.GetItemMgr().GetById(int32(target.BaseId))
+		// if itemCfg.Change.ItemId > 0 && itemCfg.Change.Num > 0 {
+		// 	exchangeRewards = append(exchangeRewards, &excel.ItemReward{
+		// 		ItemId: itemCfg.Change.ItemId,
+		// 		Num:    itemCfg.Change.Num * int32(costNum),
+		// 	})
+		// }
 
 		// threading.RunSafe(func() {
 		//	lilith.WriteDataLog(&lilith.ItemFlow{
@@ -183,7 +184,7 @@ func (x *UserData) SubItems(costItemUniqueId uint64, costNum uint32, uid string,
 					ItemId:            int32(target.BaseId),
 					ItemNum:           int32(costNum),
 					Expire:            target.ExpirationTimestamp,
-					Exchange:          taptap.ConvertMap2Str(map[int32]int32{itemCfg.Change.ItemId: itemCfg.Change.Num * int32(costNum)}),
+					// Exchange:          taptap.ConvertMap2Str(map[int32]int32{itemCfg.Change.ItemId: itemCfg.Change.Num * int32(costNum)}),
 				}
 				taptap.WriteDataLog(taptap.LogType_DestroyExpireItem, uid, x.Account.TapUserInfo, e)
 			})

@@ -18,8 +18,6 @@ import (
 
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 
-	excel "gitee.com/aniwar2/aniwar/src/excel/data"
-
 	"gitee.com/aniwar2/aniwar/src/common/com_order"
 	"gitee.com/aniwar2/aniwar/src/common/conf"
 
@@ -84,19 +82,19 @@ func (s *BillServer) RefundHandler(ctx context.Context, in *common.InvocationEve
 	}
 
 	// 透传参数
-	cbiObj, err := com_order.ParsePayCbi(apiReq.Ext)
+	// cbiObj, err := com_order.ParsePayCbi(apiReq.Ext)
 	if err != nil {
 		err = errors.Wrap(err, fmt.Sprintf("解析透传参数失败, ext:%s", apiReq.Ext))
 		logger.Errorf(err.Error())
 		return reply2Lilith(in, logic.FAIL), err
 	}
 
-	shopGiftCfg := excel.GetShopGiftMgr().GetById(cbiObj.PayId)
-	if shopGiftCfg == nil {
-		err = errors.New(fmt.Sprintf("无效的支付id, payId=%d", cbiObj.PayId))
-		logger.Errorf(err.Error())
-		return reply2Lilith(in, logic.FAIL), err
-	}
+	// shopGiftCfg := excel.GetShopGiftMgr().GetById(cbiObj.PayId)
+	// if shopGiftCfg == nil {
+	// 	err = errors.New(fmt.Sprintf("无效的支付id, payId=%d", cbiObj.PayId))
+	// 	logger.Errorf(err.Error())
+	// 	return reply2Lilith(in, logic.FAIL), err
+	// }
 
 	// 转为自己的uid
 	myUid := sdkconstant.GenLilithUid(int(apiReq.AppUid))
@@ -111,7 +109,7 @@ func (s *BillServer) RefundHandler(ctx context.Context, in *common.InvocationEve
 
 	// 累计退款次数
 	refundData.RefundCount += 1
-	refundData.RefundAmount += shopGiftCfg.PayCount
+	// refundData.RefundAmount += shopGiftCfg.PayCount
 
 	// 持久化
 	s.SaveMongoAndRedisDB(dbMongoType, dbKey, dbOrders, nil)

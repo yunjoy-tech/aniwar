@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
-	"math"
+	"gitee.com/aniwar2/aniwar/src/meta"
 	"strconv"
 	"time"
 
@@ -14,7 +14,6 @@ import (
 	"gitee.com/aniwar2/aniwar/src/common/clidto"
 	"gitee.com/aniwar2/aniwar/src/common/db"
 	"gitee.com/aniwar2/aniwar/src/common/utils"
-	excel "gitee.com/aniwar2/aniwar/src/excel/data"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/framework/base"
 	"gitee.com/aniwar2/musae/framework/service"
@@ -104,7 +103,8 @@ func (h *CurrencyHandler) CurrencyExchangeReq(ctx context.Context, in *base.Prot
 	}
 
 	// 是否可以兑换
-	cfg := excel.GetCoinageMgr().GetById(req.CurrencyType)
+	var cfg *meta.ItemPkgItemMeta
+	// cfg := excel.GetCoinageMgr().GetById(req.CurrencyType)
 	if cfg == nil {
 		return nil, fmt.Errorf("currency unsupport exchange %d", req.CurrencyType), int32(pb.ErrorCode_CurrencyUnsupportExchange)
 	}
@@ -160,26 +160,26 @@ func (h *CurrencyHandler) CurrencyExchangeReq(ctx context.Context, in *base.Prot
 	return &pb.LS2C_CurrencyExchangeRes{CommonData: h.actor.comData.FixDownComData()}, nil, 0
 }
 
-func (h *CurrencyHandler) exchangeCheck(cfg *excel.CoinageCfg, costs map[uint64]uint32) (int64, pb.ErrorCode) {
+func (h *CurrencyHandler) exchangeCheck(cfg *meta.ItemPkgItemMeta, costs map[uint64]uint32) (int64, pb.ErrorCode) {
 	sum := int64(0)
 	// 是否可用道具
-	for uniqueId, num := range costs {
-		f := true
-		item := h.actor.BagHandler.GetItemByUniqueId(uniqueId)
-		if item == nil {
-			return 0, pb.ErrorCode_ParamError
-		}
-
-		for _, keyVal := range cfg.BuyEffect {
-			if keyVal.Key == int32(item.BaseId) {
-				f = false
-				sum += int64(uint32(keyVal.Val) * num)
-			}
-		}
-		if f {
-			return 0, pb.ErrorCode_ParamError
-		}
-	}
+	// for uniqueId, num := range costs {
+	// 	f := true
+	// 	item := h.actor.BagHandler.GetItemByUniqueId(uniqueId)
+	// 	if item == nil {
+	// 		return 0, pb.ErrorCode_ParamError
+	// 	}
+	//
+	// 	// for _, keyVal := range cfg.BuyEffect {
+	// 	// 	if keyVal.Key == int32(item.BaseId) {
+	// 	// 		f = false
+	// 	// 		sum += int64(uint32(keyVal.Val) * num)
+	// 	// 	}
+	// 	// }
+	// 	if f {
+	// 		return 0, pb.ErrorCode_ParamError
+	// 	}
+	// }
 
 	// 道具是否足够
 	if !GetConsumeMgr(h.actor).CheckMapEnoughByUniqueId(costs) {
@@ -197,20 +197,22 @@ func (h *CurrencyHandler) CurrencyBuyReq(ctx context.Context, in *base.ProtoMsg)
 	}
 
 	// 是否可以兑换
-	cfg := excel.GetCoinageMgr().GetById(req.CurrencyType)
-	if cfg == nil {
-		return nil, fmt.Errorf("currency unsupport exchange %d", req.CurrencyType), int32(pb.ErrorCode_CurrencyUnsupportExchange)
-	}
+	// cfg := excel.GetCoinageMgr().GetById(req.CurrencyType)
+	// if cfg == nil {
+	// 	return nil, fmt.Errorf("currency unsupport exchange %d", req.CurrencyType), int32(pb.ErrorCode_CurrencyUnsupportExchange)
+	// }
 
 	// 货币检查
-	itemCfg := excel.GetItemMgr().GetById(cfg.CurrencyExchange.GetKey())
+	var itemCfg *meta.ItemPkgItemMeta
+	// itemCfg := excel.GetItemMgr().GetById(cfg.CurrencyExchange.GetKey())
 	if itemCfg == nil {
 		return nil, fmt.Errorf("item config not found %d", 0), int32(pb.ErrorCode_NotFoundConfig)
 	}
 	if !h.CheckEnough(itemCfg.ItemId, int64(req.GetNum())) {
 		return nil, fmt.Errorf("currency not enough"), int32(pb.ErrorCode_CurrencyNotEnough)
 	}
-	sum := cfg.CurrencyExchange.GetVal() * req.GetNum()
+	sum := 0
+	// sum := cfg.CurrencyExchange.GetVal() * req.GetNum()
 
 	item, err := h.GetValue(req.CurrencyType)
 	if err != nil {
@@ -227,7 +229,7 @@ func (h *CurrencyHandler) CurrencyBuyReq(ctx context.Context, in *base.ProtoMsg)
 	}
 
 	// 加货币
-	_, err = GetDropMgr(h.actor).DropList2(map[int32]int32{req.CurrencyType: sum}, true, nil, h.actor.comData, common.CR_Currency_Exchange)
+	_, err = GetDropMgr(h.actor).DropList2(map[int32]int32{req.CurrencyType: 0}, true, nil, h.actor.comData, common.CR_Currency_Exchange)
 	if err != nil {
 		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
@@ -247,8 +249,8 @@ func (h *CurrencyHandler) CurrencyBuyReq(ctx context.Context, in *base.ProtoMsg)
 			PropertyFieldInfo: taptap.BuildPropertyFieldInfo(h.actor.Account.CliDeviceInfo),
 			MoneyType:         req.CurrencyType,
 			ExchangeNum:       int32(sum),
-			CostType:          itemCfg.SubType,
-			CostNum:           req.Num,
+			// CostType:          itemCfg.SubType,
+			CostNum: req.Num,
 		}
 		taptap.WriteDataLog(taptap.LogType_CurrencyBuy, h.actor.uid, h.actor.Account.TapUserInfo, e)
 	})
@@ -526,20 +528,22 @@ func (h *CurrencyHandler) CheckEnough(typ int32, value int64) bool {
 }
 
 func isValidType(typ int32) bool {
-	cfg := excel.GetItemMgr().GetById(typ)
-	if cfg == nil {
-		return false
-	}
-	return cfg.Type == int32(pb.ItemType_Currency)
+	return false
+	// cfg := excel.GetItemMgr().GetById(typ)
+	// if cfg == nil {
+	// 	return false
+	// }
+	// return cfg.Type == int32(pb.ItemType_Currency)
 }
 
 // 获取硬上限
 func getHardLimit(typ int32) int64 {
-	cfg := excel.GetItemMgr().GetById(typ)
-	if cfg == nil {
-		return math.MaxInt64
-	}
-	return cfg.NumLimit
+	// cfg := excel.GetItemMgr().GetById(typ)
+	// if cfg == nil {
+	// 	return math.MaxInt64
+	// }
+	// return cfg.NumLimit
+	return 0
 }
 
 func (h *CurrencyHandler) CheckLimit(typ int32, value int64) bool {

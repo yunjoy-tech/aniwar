@@ -3,11 +3,11 @@ package useractor
 import (
 	"context"
 	"fmt"
+	"gitee.com/aniwar2/aniwar/src/common/gmeta"
 
 	"gitee.com/aniwar2/aniwar/src/common"
 
 	"gitee.com/aniwar2/aniwar/src/common/utils"
-	excel "gitee.com/aniwar2/aniwar/src/excel/data"
 	"gitee.com/aniwar2/musae/framework/baseconf"
 	"gitee.com/aniwar2/musae/framework/global"
 
@@ -302,7 +302,7 @@ func (h *BattleHandler) buildBattleFoods(troopType pb.CardTroopType, playerLevel
 }
 
 func GetMarkItemNum(playerLevelData *pb.PlayerLevelData, foodId int32) int32 {
-	maxFoodNum := excel.GetConfigMgr().GetCfg().FOOD_BATTLEUSE_LIMIT
+	maxFoodNum := gmeta.GetMetaMgr().ConfigTable.Get().FOODBATTLEUSELIMIT
 	if playerLevelData != nil {
 		for _, v := range playerLevelData.UseFoods {
 			if v.GetKey() == foodId {

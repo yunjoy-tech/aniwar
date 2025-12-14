@@ -5,7 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"gitee.com/aniwar2/aniwar/src/common/db"
-	excel "gitee.com/aniwar2/aniwar/src/excel/data"
+	"gitee.com/aniwar2/aniwar/src/common/gmeta"
+	"gitee.com/aniwar2/aniwar/src/meta"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/framework/base"
 	"gitee.com/aniwar2/musae/framework/service"
@@ -260,17 +261,17 @@ func (h *AllianceHandler) handleAddTotalContribute(addValue int32) {
 	// 增加总经验 暂定1:1
 	data.Base.Exp += addValue
 
+	allianceTable := gmeta.GetMetaMgr().AllianceTable
 	// 尝试升级
 	var maxLevel int32
-	excel.GetAllianceMgr().Foreach(func(cfg *excel.AllianceCfg) bool {
-		if cfg.Id > maxLevel {
-			maxLevel = cfg.Id
+	for _, meta := range allianceTable.GetDataList() {
+		if meta.Id > maxLevel {
+			maxLevel = meta.Id
 		}
-		return true
-	}, true)
+	}
 
 	for i := data.Base.Level; i < maxLevel; i++ {
-		cfg := excel.GetAllianceMgr().GetById(i)
+		cfg := allianceTable.Get(i)
 		if cfg == nil {
 			break
 		}
@@ -332,7 +333,8 @@ func (h *AllianceHandler) GetAllianceLogReq(ctx context.Context, in *base.ProtoM
 	}
 	data := h.GetAllianceData()
 	// 按页取数据
-	size := excel.GetAllianceParmMgr().GetById(4).AllianceParm
+	allianceTable := gmeta.GetMetaMgr().ParamTable
+	size := allianceTable.Get(4).AllianceParm
 	start := (req.Page - 1) * size
 	end := req.Page * size
 	if int32(len(data.Log)) < end {
@@ -573,7 +575,8 @@ func (h *AllianceHandler) JoinAllianceReq(ctx context.Context, in *base.ProtoMsg
 	}
 
 	// 是否到上限
-	limit := int(excel.GetAllianceParmMgr().GetById(6).AllianceParm)
+	paramTable := gmeta.GetMetaMgr().ParamTable
+	limit := int(paramTable.Get(6).AllianceParm)
 	if len(data.Examines) >= limit {
 		h.Warnf("alliance apply limit. allianceId: %v, roleId: %v", data.Base.Id, in.RoleId)
 		return &pb.S2S_JoinAllianceRes{ErrCode: int32(pb.ErrorCode_Alliance_apply_limit)}, nil, 0
@@ -640,8 +643,8 @@ func (h *AllianceHandler) getMaxMember() int {
 }
 
 // 获取联盟等级配置
-func (h *AllianceHandler) getAllianceLevelCfg() *excel.AllianceCfg {
-	return excel.GetAllianceMgr().GetById(h.actor.Data.Base.Level)
+func (h *AllianceHandler) getAllianceLevelCfg() *meta.AlliancePkgAllianceMeta {
+	return gmeta.GetMetaMgr().AllianceTable.Get(h.actor.Data.Base.Level)
 }
 
 // IsAllianceMember 是否是联盟成员

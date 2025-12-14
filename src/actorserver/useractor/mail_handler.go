@@ -3,6 +3,7 @@ package useractor
 import (
 	"context"
 	"fmt"
+	"gitee.com/aniwar2/aniwar/src/meta"
 	"math"
 	"sort"
 	"time"
@@ -19,7 +20,6 @@ import (
 
 	"gitee.com/aniwar2/aniwar/src/common"
 	myUtils "gitee.com/aniwar2/aniwar/src/common/utils"
-	excel "gitee.com/aniwar2/aniwar/src/excel/data"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/framework/base"
 	"gitee.com/aniwar2/musae/framework/guid"
@@ -341,7 +341,8 @@ func (h *MailHandler) receiveMailAttachment(mails []*pb.PMailInfo, commonData *c
 		newItems := make(map[int32]int32)
 		for id, num := range items {
 			// 排除家具类型道具
-			cfg := excel.GetItemMgr().GetById(id)
+			var cfg *meta.ItemPkgItemMeta
+			// cfg := excel.GetItemMgr().GetById(id)
 			if cfg == nil || cfg.Type == int32(pb.ItemType_PlayerCamp) {
 				continue
 			}
@@ -392,16 +393,17 @@ func (h *MailHandler) receiveMailAttachment(mails []*pb.PMailInfo, commonData *c
 func fixExpiredItem(mails *pb.PMailInfo) ([]*pb.ItemReward, []*pb.ItemReward) {
 	items := make([]*pb.ItemReward, 0)
 	campItems := make([]*pb.ItemReward, 0)
-	now := time.Now().Unix()
+	// now := time.Now().Unix()
 	for _, attachment := range mails.Attachments {
-		cfg := excel.GetItemMgr().GetById(int32(attachment.ItemId))
+		var cfg *meta.ItemPkgItemMeta
+		// cfg := excel.GetItemMgr().GetById(int32(attachment.ItemId))
 		if cfg == nil {
 			continue
 		}
 
-		if cfg.GetTimeLimit() > 0 && mails.CreateTime+int64(cfg.GetTimeLimit()) < now {
-			continue
-		}
+		// if cfg.GetTimeLimit() > 0 && mails.CreateTime+int64(cfg.GetTimeLimit()) < now {
+		// 	continue
+		// }
 
 		if cfg.Type == int32(pb.ItemType_PlayerCamp) {
 			campItems = append(campItems, attachment)
@@ -451,9 +453,9 @@ func (h *MailHandler) GMTAddUserMail(req *pb.S2S_SendGMAddUserMailReq, commonDat
 	mails.UserMail[newMail.Id] = newMail
 	commonData.Data.Mails = append(commonData.Data.Mails, newMail)
 	// 上限判定，删除最旧的邮件
-	if int32(len(mails.UserMail)) > excel.GetConfigMgr().GetCfg().MAIL_NUM_LIMIT {
-		h.tryDelMail(mails.UserMail)
-	}
+	// if int32(len(mails.UserMail)) > excel.GetConfigMgr().GetCfg().MAIL_NUM_LIMIT {
+	// 	h.tryDelMail(mails.UserMail)
+	// }
 
 	if err := h.SaveDB(); err != nil {
 		return err
@@ -465,7 +467,8 @@ func (h *MailHandler) GMTAddUserMail(req *pb.S2S_SendGMAddUserMailReq, commonDat
 // AddUserMail 发送模板邮件
 func (h *MailHandler) AddUserMail(mailId int32, reward map[int32]int32, commonData *clidto.Comdata) error {
 	// 邮件配置
-	mailCfg := excel.GetMailMgr().GetById(mailId)
+	var mailCfg *meta.MailPkgMailMeta
+	// mailCfg := excel.GetMailMgr().GetById(mailId)
 	if mailCfg == nil {
 		return fmt.Errorf("mail config not found: %d", mailId)
 	}
@@ -477,14 +480,15 @@ func (h *MailHandler) AddUserMail(mailId int32, reward map[int32]int32, commonDa
 		attachment = reward
 	}
 	// 模板配置
-	for _, r := range mailCfg.GetGiftsContents() {
+	for _, r := range mailCfg.GiftsContents {
 		attachment[r.ItemId] += r.Num
 	}
 	// 计算奖励发送次数
 	max := 0
 	for k, v := range attachment {
 		// 道具上限
-		cfg := excel.GetItemMgr().GetById(k)
+		var cfg *meta.ItemPkgItemMeta
+		// cfg := excel.GetItemMgr().GetById(k)
 		if cfg == nil {
 			return fmt.Errorf("item config not found %d", k)
 		}
@@ -507,7 +511,8 @@ func (h *MailHandler) AddUserMail(mailId int32, reward map[int32]int32, commonDa
 		r := make([]*pb.ItemReward, 0)
 		for k, v := range attachment {
 			// 道具上限
-			cfg := excel.GetItemMgr().GetById(k)
+			var cfg *meta.ItemPkgItemMeta
+			// cfg := excel.GetItemMgr().GetById(k)
 
 			num := uint32(0)
 			if int64(v) > cfg.NumLimit {
@@ -532,9 +537,9 @@ func (h *MailHandler) AddUserMail(mailId int32, reward map[int32]int32, commonDa
 	}
 
 	// 上限判定，删除最旧的邮件
-	if int32(len(mails.UserMail)) > excel.GetConfigMgr().GetCfg().MAIL_NUM_LIMIT {
-		h.tryDelMail(mails.UserMail)
-	}
+	// if int32(len(mails.UserMail)) > excel.GetConfigMgr().GetCfg().MAIL_NUM_LIMIT {
+	// 	h.tryDelMail(mails.UserMail)
+	// }
 
 	if err := h.SaveDB(); err != nil {
 		return err
@@ -543,11 +548,11 @@ func (h *MailHandler) AddUserMail(mailId int32, reward map[int32]int32, commonDa
 }
 
 // 根据邮件模板创建一封邮件
-func (h *MailHandler) createMail(mailCfg *excel.MailCfg, attachment []*pb.ItemReward) *pb.PMailInfo {
+func (h *MailHandler) createMail(mailCfg *meta.MailPkgMailMeta, attachment []*pb.ItemReward) *pb.PMailInfo {
 	now := time.Now()
 	expireTime := int64(0)
-	if mailCfg.GetExpireTime() > 0 {
-		expireTime = now.Add(time.Hour * time.Duration(24*mailCfg.GetExpireTime())).Unix()
+	if mailCfg.ExpireTime > 0 {
+		expireTime = now.Add(time.Hour * time.Duration(24*mailCfg.ExpireTime)).Unix()
 	}
 
 	isReceived := common.MAIL_STATUS_UNRECEIVE
@@ -556,17 +561,17 @@ func (h *MailHandler) createMail(mailCfg *excel.MailCfg, attachment []*pb.ItemRe
 	}
 	mail := &pb.PMailInfo{
 		Id:          int64(h.actor.Srv.GenGUID(guid.GUID_MAIL)),
-		Title:       mailCfg.GetTitle(),
-		Content:     mailCfg.GetContent(),
+		Title:       mailCfg.Title,
+		Content:     mailCfg.Content,
 		Sender:      mailCfg.Addresser,
 		SendType:    common.MAIL_SEND_TYPE_SYSTEM,
-		MailType:    mailCfg.GetMailType(),
+		MailType:    mailCfg.MailType,
 		CreateTime:  now.Unix(),
 		ExpireTime:  expireTime,
 		IsRead:      common.MAIL_STATUS_UNREAD,
 		IsReceived:  int32(isReceived),
 		Attachments: attachment,
-		GiftsType:   mailCfg.GetGiftsType(),
+		GiftsType:   mailCfg.GiftsType,
 		QuestionUrl: "",
 	}
 
@@ -699,7 +704,8 @@ func (h *MailHandler) tryDelMail(mails map[int64]*pb.PMailInfo) []int64 {
 	}
 
 	// 到达上限
-	limit := int(excel.GetConfigMgr().GetCfg().MAIL_NUM_LIMIT)
+	// limit := int(excel.GetConfigMgr().GetCfg().MAIL_NUM_LIMIT)
+	limit := 0
 	if len(keySet) > limit {
 		sort.Ints(keySet)          // 增序排列
 		sub := len(keySet) - limit //  需要删除的数量

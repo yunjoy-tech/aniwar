@@ -21,7 +21,6 @@ import (
 
 	"github.com/xuri/excelize/v2"
 
-	"gitee.com/aniwar2/aniwar/src/excel/data"
 	daprCommon "github.com/dapr/go-sdk/service/common"
 
 	"gitee.com/aniwar2/aniwar/src/common"
@@ -513,7 +512,8 @@ func (s *Server) LoadNeedExcel(assign []string) error {
 		}
 		files = append(files, f)
 	}
-	return data.LoadByFileNames(s.DataDir, files, s.AppId, s.AppId)
+	// return data.LoadByFileNames(s.DataDir, files, s.AppId, s.AppId)
+	return nil
 }
 
 // LoadLocalizedStr 加载需要的国际化配置文件
@@ -703,9 +703,10 @@ func GetExcelData(sheetName string) []byte {
 	if !strings.Contains(sheetName, ".data") {
 		sheetName = sheetName + ".data"
 	}
-	excelData, err := data.GetDataByFileName(sheetName)
-	if err != nil {
-		return []byte(err.Error())
-	}
-	return []byte(excelData)
+	// excelData, err := data.GetDataByFileName(sheetName)
+	// if err != nil {
+	// 	return []byte(err.Error())
+	// }
+	// return []byte(excelData)
+	return nil
 }

@@ -3,8 +3,8 @@ package useractor
 import (
 	"errors"
 	"fmt"
-	"gitee.com/aniwar2/aniwar/src/common/datahelper"
 	"gitee.com/aniwar2/aniwar/src/common/utils"
+	"gitee.com/aniwar2/aniwar/src/meta"
 	"time"
 
 	"gitee.com/aniwar2/aniwar/src/actorserver/useractor/event"
@@ -12,19 +12,18 @@ import (
 	"gitee.com/aniwar2/aniwar/src/common/clidto"
 
 	"gitee.com/aniwar2/aniwar/src/common"
-	excel "gitee.com/aniwar2/aniwar/src/excel/data"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 )
 
 type ConsumeMgr struct {
 	actor           *UserActor
-	ExchangeRewards []*excel.ItemReward // 道具消耗转换的奖励(item表配置)
+	ExchangeRewards []*meta.ItemReward // 道具消耗转换的奖励(item表配置)
 }
 
 func newConsumeMgr(userActor *UserActor) *ConsumeMgr {
 	return &ConsumeMgr{
 		actor:           userActor,
-		ExchangeRewards: make([]*excel.ItemReward, 0),
+		ExchangeRewards: make([]*meta.ItemReward, 0),
 	}
 }
 
@@ -108,9 +107,9 @@ func (m *ConsumeMgr) ConsumeKeyValItemList(items []*pb.KeyValueItem, commonData 
 	return m.ConsumeList(itemList, commonData, reason)
 }
 
-func (m *ConsumeMgr) ConsumeKeyValList(items []*excel.KeyVal, commonData *clidto.Comdata, reason common.ChangeReason) error {
-	itemList := datahelper.ConvertItem3(items)
-	return m.ConsumeList(itemList, commonData, reason)
+func (m *ConsumeMgr) ConsumeKeyValList(items []*meta.KeyVal, commonData *clidto.Comdata, reason common.ChangeReason) error {
+	// itemList := datahelper.ConvertItem3(items)
+	return m.ConsumeList(nil, commonData, reason)
 }
 
 func (m *ConsumeMgr) ConsumeList(items map[int32]int32, commonData *clidto.Comdata, reason common.ChangeReason) error {
@@ -119,7 +118,8 @@ func (m *ConsumeMgr) ConsumeList(items map[int32]int32, commonData *clidto.Comda
 			return errors.New(fmt.Sprintf("扣除数量为负数, itemId=%d, itemNum=%d", itemId, itemNum))
 		}
 
-		itemCfg := excel.GetItemMgr().GetById(itemId)
+		var itemCfg *meta.ItemPkgItemMeta
+		// itemCfg := excel.GetItemMgr().GetById(itemId)
 		if itemCfg == nil {
 			return fmt.Errorf("item not found %d", itemId)
 		}
@@ -141,7 +141,7 @@ func (m *ConsumeMgr) ConsumeList(items map[int32]int32, commonData *clidto.Comda
 	return nil
 }
 
-func (m *ConsumeMgr) doConsume(itemCfg *excel.ItemCfg, costNum uint32, commonData *clidto.Comdata, reason common.ChangeReason) error {
+func (m *ConsumeMgr) doConsume(itemCfg *meta.ItemPkgItemMeta, costNum uint32, commonData *clidto.Comdata, reason common.ChangeReason) error {
 
 	var (
 		err error
@@ -233,7 +233,7 @@ func (m *ConsumeMgr) CheckMapEnough(items map[int32]int32) bool {
 //	@receiver m
 //	@param items 扣除资源列表
 //	@return bool 足够返回true，否则返回false
-func (m *ConsumeMgr) CheckKeyValEnough(items []*excel.KeyVal) bool {
+func (m *ConsumeMgr) CheckKeyValEnough(items []*meta.KeyVal) bool {
 	for _, kv := range items {
 		if !m.CheckEnough(kv.Key, kv.Val) {
 			return false
@@ -264,7 +264,8 @@ func (m *ConsumeMgr) CheckEnough(costId, costNum int32) bool {
 		return false
 	}
 
-	cfg := excel.GetItemMgr().GetById(costId)
+	var cfg *meta.ItemPkgItemMeta
+	// cfg := excel.GetItemMgr().GetById(costId)
 	if cfg == nil {
 		m.actor.Warnf("CheckEnough ===>>> 不存在的道具costId=%d, costNum=%d, ", costId, costNum)
 		return false
@@ -303,16 +304,16 @@ func (m *ConsumeMgr) CheckEnough(costId, costNum int32) bool {
 //	@param sType 子类型 填0表示不校验
 //	@return bool
 func (m *ConsumeMgr) CheckItemType(itemId int32, fType, sType int32) bool {
-	itemCfg := excel.GetItemMgr().GetById(itemId)
-	if itemCfg == nil {
-		return false
-	}
-	if itemCfg.Type != fType {
-		return false
-	}
-	if sType > 0 && itemCfg.SubType != sType {
-		return false
-	}
+	// itemCfg := excel.GetItemMgr().GetById(itemId)
+	// if itemCfg == nil {
+	// 	return false
+	// }
+	// if itemCfg.Type != fType {
+	// 	return false
+	// }
+	// if sType > 0 && itemCfg.SubType != sType {
+	// 	return false
+	// }
 	return true
 }
 

@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	comn "gitee.com/aniwar2/aniwar/src/common"
-	"gitee.com/aniwar2/aniwar/src/excel/data"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/framework/base"
 	"gitee.com/aniwar2/musae/framework/global"
@@ -61,7 +60,8 @@ func (s *Server) HotReload(ctx context.Context, in *common.InvocationEvent) (out
 		} else {
 			files := strings.Split(param.Files, "|")
 			if s.AppId == "actor" {
-				err = data.LoadByFileNames(s.DataDir, files, s.AppId, "actorserver")
+				// TODO
+				// err = data.LoadByFileNames(s.DataDir, files, s.AppId, "actorserver")
 			} else {
 				err = s.LoadNeedExcel(files) // 非actorserver都调用这个加载方法
 			}

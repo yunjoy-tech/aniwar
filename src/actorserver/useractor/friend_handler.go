@@ -8,10 +8,8 @@ import (
 	"time"
 
 	"gitee.com/aniwar2/aniwar/src/common"
-	myUtils "gitee.com/aniwar2/aniwar/src/common/utils"
-	excel "gitee.com/aniwar2/aniwar/src/excel/data"
-
 	"gitee.com/aniwar2/aniwar/src/common/db"
+	myUtils "gitee.com/aniwar2/aniwar/src/common/utils"
 	"gitee.com/aniwar2/musae/framework/service"
 
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
@@ -225,9 +223,9 @@ func (h *FriendHandler) AddFriendApplyReq(ctx context.Context, in *base.ProtoMsg
 		return nil, fmt.Errorf("role in black %d", req.RoleId), int32(pb.ErrorCode_AlreadyInBlack)
 	}
 	// 好友上限
-	if int32(len(data.Friends)) >= excel.GetConfigMgr().GetCfg().FRIEND_MAX_NUM {
-		return nil, fmt.Errorf("friend num is limit"), int32(pb.ErrorCode_SelfFriendNumLimit)
-	}
+	// if int32(len(data.Friends)) >= excel.GetConfigMgr().GetCfg().FRIEND_MAX_NUM {
+	// 	return nil, fmt.Errorf("friend num is limit"), int32(pb.ErrorCode_SelfFriendNumLimit)
+	// }
 	// 已经申请过了, 判定申请cd
 	if _, ok := data.Applys[req.RoleId]; ok {
 		return nil, fmt.Errorf("apply exist %d", req.RoleId), int32(pb.ErrorCode_ApplyFriendCD)
@@ -238,13 +236,13 @@ func (h *FriendHandler) AddFriendApplyReq(ctx context.Context, in *base.ProtoMsg
 		return nil, err, int32(pb.ErrorCode_NotFoundPlayer)
 	}
 	// 对方好友是否达上限
-	friend, err := h.actor.getFriendDataByRoleId(req.RoleId)
+	// friend, err := h.actor.getFriendDataByRoleId(req.RoleId)
 	if err != nil {
 		return nil, err, int32(pb.ErrorCode_NotFoundPlayer)
 	}
-	if int32(len(friend.Friends)) >= excel.GetConfigMgr().GetCfg().FRIEND_MAX_NUM {
-		return nil, fmt.Errorf("friend num is limit"), int32(pb.ErrorCode_FriendNumLimit)
-	}
+	// if int32(len(friend.Friends)) >= excel.GetConfigMgr().GetCfg().FRIEND_MAX_NUM {
+	// 	return nil, fmt.Errorf("friend num is limit"), int32(pb.ErrorCode_FriendNumLimit)
+	// }
 
 	// 发送申请
 	reqMsg := &pb.S2S_AddFriendApplyReq{RoleId: h.actor.roleId}
@@ -254,7 +252,7 @@ func (h *FriendHandler) AddFriendApplyReq(ctx context.Context, in *base.ProtoMsg
 	}
 
 	// 已申请处理
-	data.Applys[req.RoleId] = time.Now().Unix() + int64(excel.GetConfigMgr().GetCfg().FRIEND_ADD_CD)
+	data.Applys[req.RoleId] = time.Now().Unix() /*int64(excel.GetConfigMgr().GetCfg().FRIEND_ADD_CD)*/
 	if err = h.SaveDB(); err != nil {
 		return nil, err, int32(pb.ErrorCode_SaveDBError)
 	}
@@ -287,13 +285,13 @@ func (h *FriendHandler) tryClearExaminesList(examines map[uint64]int64) {
 		}
 	}
 	// 总数量超过上限,从老到新删除
-	if int32(len(examines)) > excel.GetConfigMgr().GetCfg().FRIEND_REQUEST_MAX_NUM {
-		keys := myUtils.SortMapKeyByVal(examines, myUtils.SORT_ORDER_ASC)
-		costNum := len(keys) - int(excel.GetConfigMgr().GetCfg().FRIEND_REQUEST_MAX_NUM)
-		for i := 0; i < costNum; i++ {
-			delete(examines, keys[i])
-		}
-	}
+	// if int32(len(examines)) > excel.GetConfigMgr().GetCfg().FRIEND_REQUEST_MAX_NUM {
+	// 	keys := myUtils.SortMapKeyByVal(examines, myUtils.SORT_ORDER_ASC)
+	// 	costNum := len(keys) - int(excel.GetConfigMgr().GetCfg().FRIEND_REQUEST_MAX_NUM)
+	// 	for i := 0; i < costNum; i++ {
+	// 		delete(examines, keys[i])
+	// 	}
+	// }
 }
 
 func (h *FriendHandler) FriendApplyHandleReq(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
@@ -331,21 +329,21 @@ func (h *FriendHandler) FriendApplyHandleReq(ctx context.Context, in *base.Proto
 		reqMsg := &pb.S2S_AgreeFriendApplyReq{RoleId: h.actor.roleId}
 		for _, roleId := range roleIds {
 			// 判定自己的好友是否上限
-			if int32(len(data.Friends)) >= excel.GetConfigMgr().GetCfg().FRIEND_MAX_NUM {
-				errCode = int32(pb.ErrorCode_SelfFriendNumLimit)
-				continue
-			}
+			// if int32(len(data.Friends)) >= excel.GetConfigMgr().GetCfg().FRIEND_MAX_NUM {
+			// 	errCode = int32(pb.ErrorCode_SelfFriendNumLimit)
+			// 	continue
+			// }
 			// 对方好友是否上限
-			friendData, err := h.actor.getFriendDataByRoleId(roleId)
+			// friendData, err := h.actor.getFriendDataByRoleId(roleId)
 			if err != nil {
 				h.Errorf("FriendApplyHandleReq got err: %s", err.Error())
 				errCode = int32(pb.ErrorCode_InternalError)
 				continue
 			}
-			if int32(len(friendData.Friends)) >= excel.GetConfigMgr().GetCfg().FRIEND_MAX_NUM {
-				errCode = int32(pb.ErrorCode_FriendNumLimit)
-				continue
-			}
+			// if int32(len(friendData.Friends)) >= excel.GetConfigMgr().GetCfg().FRIEND_MAX_NUM {
+			// 	errCode = int32(pb.ErrorCode_FriendNumLimit)
+			// 	continue
+			// }
 			baseInfo, err := h.actor.getRoleBaseDataByRoleId(roleId)
 			if err != nil {
 				h.Errorf("FriendApplyHandleReq got err: %s", err.Error())
@@ -456,9 +454,9 @@ func (h *FriendHandler) GetFriendRecommendReq(ctx context.Context, in *base.Prot
 		return nil, fmt.Errorf("refresh cd %d", data.RecommendTs), int32(pb.ErrorCode_OperateCdError)
 	}
 	// 好友上限判定
-	if int32(len(data.Friends)) >= excel.GetConfigMgr().GetCfg().FRIEND_MAX_NUM {
-		return &pb.LS2C_GetFriendRecommendRes{}, nil, 0
-	}
+	// if int32(len(data.Friends)) >= excel.GetConfigMgr().GetCfg().FRIEND_MAX_NUM {
+	// 	return &pb.LS2C_GetFriendRecommendRes{}, nil, 0
+	// }
 
 	// 拉取推荐数据
 	infos := h.getRecommendList()
@@ -480,7 +478,7 @@ func (h *FriendHandler) GetFriendRecommendReq(ctx context.Context, in *base.Prot
 // 尝试拉取当前在线的，足够了直接返回，否则尝试拉取今日在线的
 func (h *FriendHandler) getRecommendList() []*pb.PCommonRoleBaseInfo {
 	userData := h.actor.GetUserData()
-	hitSize := int(excel.GetConfigMgr().GetCfg().FRIEND_RECOMMENDATION_NUM)
+	hitSize := 0
 	infos := make([]*pb.PCommonRoleBaseInfo, 0)
 
 	minLv := uint32(1)
@@ -576,9 +574,9 @@ func (h *FriendHandler) BlackOperateReq(ctx context.Context, in *base.ProtoMsg) 
 			return nil, err, int32(pb.ErrorCode_NotFoundPlayer)
 		}
 		// 上限
-		if int32(len(data.Blacks)) >= excel.GetConfigMgr().GetCfg().FRIEND_BLACKLIST_MAX_NUM {
-			return nil, fmt.Errorf("black is limit"), int32(pb.ErrorCode_BlackNumLimit)
-		}
+		// if int32(len(data.Blacks)) >= excel.GetConfigMgr().GetCfg().FRIEND_BLACKLIST_MAX_NUM {
+		// 	return nil, fmt.Errorf("black is limit"), int32(pb.ErrorCode_BlackNumLimit)
+		// }
 		// 好友？删除好友
 		if _, ok := data.Friends[req.RoleId]; ok {
 			if err, code = h.tryHandleDelFriend(req.RoleId); err != nil {
@@ -740,9 +738,9 @@ func (h *FriendHandler) handleSendGift(data *pb.PFriendData, targetIds []uint64)
 			continue
 		}
 		// 次数上限
-		if int32(len(data.Sends)) >= excel.GetConfigMgr().GetCfg().FRIEND_GIVE_RECEIVE_MAX_NUM {
-			continue
-		}
+		// if int32(len(data.Sends)) >= excel.GetConfigMgr().GetCfg().FRIEND_GIVE_RECEIVE_MAX_NUM {
+		// 	continue
+		// }
 
 		// 赠送给对方
 		if err, code = h.actor.Srv.CallUserActor(true, roleId, int32(pb.Protocols_PS2S_SendFriendPointReq), reqMsg, nil); err != nil {
@@ -781,13 +779,13 @@ func (h *FriendHandler) handleReceiveGift(data *pb.PFriendData, targetIds []uint
 			continue
 		}
 		// 次数上限
-		if calReceivesNum(data.Receives) >= excel.GetConfigMgr().GetCfg().FRIEND_GIVE_RECEIVE_MAX_NUM {
-			continue
-		}
+		// if calReceivesNum(data.Receives) >= excel.GetConfigMgr().GetCfg().FRIEND_GIVE_RECEIVE_MAX_NUM {
+		// 	continue
+		// }
 
 		// 处理逻辑
 		data.Receives[roleId] = 1
-		sum += excel.GetConfigMgr().GetCfg().FRIEND_GIFT_NUM
+		// sum += excel.GetConfigMgr().GetCfg().FRIEND_GIFT_NUM
 		recvList = append(recvList, roleId)
 	}
 	if sum > 0 {

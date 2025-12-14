@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
 	comn "gitee.com/aniwar2/aniwar/src/common/server"
-	excel "gitee.com/aniwar2/aniwar/src/excel/data"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/framework/base"
 	"gitee.com/aniwar2/musae/framework/baseconf"
@@ -70,10 +69,10 @@ func (s *IDIPServer) PreInit() error {
 func (s *IDIPServer) ServerInit() error {
 	s.LiveTime = time.Now().Unix() // 创建server时间戳
 	s.NeedExcel = map[string]int{  // 需要加载的策划表 TODO 后台导入字典元数据
-		excel.GetPackageMgr().GetDataFileName(): 0,
-		excel.GetItemMgr().GetDataFileName():    0,
+		// excel.GetPackageMgr().GetDataFileName(): 0,
+		// excel.GetItemMgr().GetDataFileName():    0,
 		// excel.GetBeastarMgr().GetDataFileName():   0,
-		excel.GetEquipmentMgr().GetDataFileName(): 0,
+		// excel.GetEquipmentMgr().GetDataFileName(): 0,
 		// excel.GetSkinMgr().GetDataFileName():      0,
 	}
 

@@ -2,7 +2,6 @@ package logic
 
 import (
 	"encoding/json"
-	excel "gitee.com/aniwar2/aniwar/src/excel/data"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"github.com/dapr/go-sdk/service/common"
 	"net/http"
@@ -27,13 +26,13 @@ func (s *IDIPServer) GetGiftList(out *common.Content, reqJson []byte) {
 		return
 	}
 	giftList := make([]*GiftDetail, 0)
-	excel.GetPackageMgr().Foreach(func(cfg *excel.PackageCfg) bool {
-		giftList = append(giftList, &GiftDetail{
-			PackageID: int(cfg.Id),
-			Name:      cfg.NameShow,
-			BuyCount:  0,
-		})
-		return true
-	}, true)
+	// excel.GetPackageMgr().Foreach(func(cfg *excel.PackageCfg) bool {
+	// 	giftList = append(giftList, &GiftDetail{
+	// 		PackageID: int(cfg.Id),
+	// 		Name:      cfg.NameShow,
+	// 		BuyCount:  0,
+	// 	})
+	// 	return true
+	// }, true)
 	RetCommonMsg(out, http.StatusOK, int32(RET_CODE_SUCCESS), giftList)
 }

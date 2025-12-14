@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	excel "gitee.com/aniwar2/aniwar/src/excel/data"
+	"gitee.com/aniwar2/aniwar/src/meta"
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
 	"io"
 	"os"
@@ -324,11 +324,12 @@ func ConvertItem2(uids map[string]int32) string {
 func (s *IDIPServer) ConvertItem(items []*pb.ItemReward) string {
 	var sb strings.Builder
 	for _, v := range items {
-		cfg := excel.GetItemMgr().GetById(int32(v.ItemId))
+		var cfg *meta.ItemPkgItemMeta
+		// cfg := excel.GetItemMgr().GetById(int32(v.ItemId))
 		if cfg == nil {
 			continue
 		}
-		sb.WriteString(fmt.Sprintf("%s:%d;", s.GetLocalizedStr(cfg.NameShow), v.Num))
+		sb.WriteString(fmt.Sprintf("%s:%d;", s.GetLocalizedStr(""), v.Num))
 	}
 	return sb.String()
 }
@@ -352,7 +353,8 @@ type TempItem struct {
 func (s *IDIPServer) ConvertBagItem(items map[uint64]*pb.PCommonItemInfo) []*TempItem {
 	ret := make([]*TempItem, 0, len(items))
 	for _, v := range items {
-		cfg := excel.GetItemMgr().GetById(int32(v.GetBaseId()))
+		var cfg *meta.ItemPkgItemMeta
+		// cfg := excel.GetItemMgr().GetById(int32(v.GetBaseId()))
 		if cfg == nil {
 			continue
 		}
@@ -364,7 +366,7 @@ func (s *IDIPServer) ConvertBagItem(items map[uint64]*pb.PCommonItemInfo) []*Tem
 			ItemId:              int32(v.GetBaseId()),
 			Num:                 int32(v.GetItemNum()),
 			ExpirationTimestamp: timestamp,
-			Name:                s.GetLocalizedStr(cfg.NameShow),
+			Name:                s.GetLocalizedStr(""),
 		})
 	}
 	return ret
@@ -418,16 +420,16 @@ type EquipInfo struct {
 }
 
 func (s *IDIPServer) NewEquipInfo(pos, configId, equipId int32) *EquipInfo {
-	cfg := excel.GetEquipmentMgr().GetById(configId)
-	if cfg == nil {
-		return nil
-	}
+	// cfg := excel.GetEquipmentMgr().GetById(configId)
+	// if cfg == nil {
+	// 	return nil
+	// }
 
 	return &EquipInfo{
 		Pos:      pos,
 		EquipId:  equipId,
 		ConfigId: configId,
-		Name:     s.GetLocalizedStr(cfg.Name),
+		Name:     s.GetLocalizedStr(""),
 		Level:    0,
 	}
 }

@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
+	"gitee.com/aniwar2/aniwar/src/meta"
 	"time"
 
 	"gitee.com/aniwar2/musae/framework/threading"
@@ -13,7 +14,6 @@ import (
 
 	"gitee.com/aniwar2/aniwar/src/common"
 	"gitee.com/aniwar2/aniwar/src/common/clidto"
-	excel "gitee.com/aniwar2/aniwar/src/excel/data"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/framework/base"
 	"google.golang.org/protobuf/proto"
@@ -104,7 +104,8 @@ func (h *BagHandler) UseItemReq(_ context.Context, in *base.ProtoMsg) (proto.Mes
 	}
 
 	// 检查配置
-	itemCfg := excel.GetItemMgr().GetById(int32(req.ItemId))
+	var itemCfg *meta.ItemPkgItemMeta
+	// itemCfg := excel.GetItemMgr().GetById(int32(req.ItemId))
 	if itemCfg == nil {
 		return nil, fmt.Errorf("item config not found"), int32(pb.ErrorCode_NotFoundConfig)
 	}
@@ -207,7 +208,8 @@ func (h *BagHandler) ItemBuyReq(ctx context.Context, in *base.ProtoMsg) (proto.M
 	costItem := make(map[int32]int32)
 	// 检查是否可购买
 	for _, v := range req.Items {
-		cfg := excel.GetDirectPurchaseMgr().GetById(v.Key)
+		var cfg *meta.ShopPkgDirectPurchaseMeta
+		// cfg := excel.GetDirectPurchaseMgr().GetById(v.Key)
 		if cfg == nil || v.Value <= 0 {
 			return nil, fmt.Errorf("param error"), int32(pb.ErrorCode_ParamError)
 		}
@@ -233,7 +235,8 @@ func (h *BagHandler) ItemBuyReq(ctx context.Context, in *base.ProtoMsg) (proto.M
 	}
 
 	for _, v := range req.Items {
-		cfg := excel.GetDirectPurchaseMgr().GetById(v.Key)
+		var cfg *meta.ShopPkgDirectPurchaseMeta
+		// cfg := excel.GetDirectPurchaseMgr().GetById(v.Key)
 		// 埋点log
 		// threading.RunSafe(func() {
 		//	lilith.WriteDataLog(&lilith.ItemBuy{

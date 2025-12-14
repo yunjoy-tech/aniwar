@@ -12,7 +12,6 @@ import (
 	"unicode/utf8"
 
 	"gitee.com/aniwar2/aniwar/src/common/db"
-	excel "gitee.com/aniwar2/aniwar/src/excel/data"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/framework/base"
 	"gitee.com/aniwar2/musae/framework/service"
@@ -320,7 +319,8 @@ func (h *UserChatHandler) IsCD(roleId uint64, channel pb.ChatChannel) bool {
 		return false
 	}
 	nowTime, chatInfo := time.Now().Unix(), h.actor.GetChatData()
-	cd := excel.GetConfigMgr().GetCfg().CHAT_CD
+	// cd := excel.GetConfigMgr().GetCfg().CHAT_CD
+	cd := 10
 	lastSendTime, ok := int64(0), false
 
 	if lastSendTime, ok = chatInfo.LastSendTime[uaid]; !ok {

@@ -8,7 +8,6 @@ import (
 	"errors"
 	"fmt"
 	"gitee.com/aniwar2/aniwar/src/common/db"
-	excel "gitee.com/aniwar2/aniwar/src/excel/data"
 	"gitee.com/aniwar2/musae/framework/wordfilter"
 	"math/rand"
 	"net/http"
@@ -104,7 +103,7 @@ func (s *ActorServer) CheckSpecialLetters(str string, ignoreSpace bool) bool {
 		}
 	}
 	// 配置的字符
-	letters := strings.Split(excel.GetConfigMgr().GetCfg().NAME_SHIELD, ",")
+	letters := []string{} /*strings.Split(excel.GetConfigMgr().GetCfg().NAME_SHIELD, ",")*/
 	return strings.ContainsAny(str, strings.Join(letters, ""))
 }
 

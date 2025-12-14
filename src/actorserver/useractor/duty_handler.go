@@ -4,16 +4,15 @@ import (
 	"context"
 	"fmt"
 	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
+	"gitee.com/aniwar2/aniwar/src/meta"
 	"time"
 
-	"gitee.com/aniwar2/aniwar/src/common/datahelper"
 	"gitee.com/aniwar2/musae/framework/threading"
 
 	"gitee.com/aniwar2/aniwar/src/actorserver/useractor/event"
 	"gitee.com/aniwar2/aniwar/src/common"
 	"gitee.com/aniwar2/aniwar/src/common/clidto"
 	"gitee.com/aniwar2/aniwar/src/common/db"
-	excel "gitee.com/aniwar2/aniwar/src/excel/data"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/framework/base"
 	"gitee.com/aniwar2/musae/framework/service"
@@ -113,7 +112,7 @@ func (h *DutyHandler) Init() error {
 	// 初始化
 	data := &pb.PDutyData{}
 	data.Createtime = time.Now().Unix()
-	data.CardId = excel.GetConfigMgr().GetCfg().DUTY_DEFAULT_HERO // 默认值日生
+	data.CardId = 0 /*excel.GetConfigMgr().GetCfg().DUTY_DEFAULT_HERO*/ // 默认值日生
 	data.ShowTime = data.Createtime
 	data.RefreshTime = data.Createtime
 	data.OldCardId = data.CardId
@@ -316,7 +315,7 @@ func (h *DutyHandler) ReceiveDailyTaskRewardReq(ctx context.Context, in *base.Pr
 	}
 
 	var totalActivePoint, cycleType int32
-	var cfgReward []*excel.KeyVal
+	var cfgReward []*meta.KeyVal
 	var tasks []*pb.TaskInfoItem
 
 	dutyData := h.actor.GetDutyData()
@@ -324,7 +323,8 @@ func (h *DutyHandler) ReceiveDailyTaskRewardReq(ctx context.Context, in *base.Pr
 	// step:2 统计奖励
 	if req.GetTaskId() > 0 { // 领取单个
 
-		cfg := excel.GetDailyTaskMgr().GetById(req.TaskId)
+		var cfg *meta.DutyPkgDutyTaskMeta
+		// cfg := excel.GetDailyTaskMgr().GetById(req.TaskId)
 		if cfg == nil {
 			return nil, fmt.Errorf("daily task config not found %d", req.TaskId), int32(pb.ErrorCode_NotFoundConfig)
 		}
@@ -367,7 +367,8 @@ func (h *DutyHandler) ReceiveDailyTaskRewardReq(ctx context.Context, in *base.Pr
 		}
 		// 处理逻辑
 		task.Status = TASK_STATUS_RECEIVED
-		cfg := excel.GetDailyTaskMgr().GetById(task.Id)
+		var cfg *meta.DutyPkgDutyTaskMeta
+		// cfg := excel.GetDailyTaskMgr().GetById(task.Id)
 		if cfg == nil {
 			return nil, fmt.Errorf("daily task config not found %d", req.TaskId), int32(pb.ErrorCode_NotFoundConfig)
 		}
@@ -395,7 +396,7 @@ func (h *DutyHandler) ReceiveDailyTaskRewardReq(ctx context.Context, in *base.Pr
 				CondId:            task.CondId,
 				Target:            task.TargetValue,
 				Active:            cfg.ActivePoint,
-				Reward:            taptap.ConvertMap2Str(datahelper.ConvertItem3(cfg.Rewards)),
+				// Reward:            taptap.ConvertMap2Str(datahelper.ConvertItem3(cfg.Rewards)),
 			}
 			taptap.WriteDataLog(taptap.LogType_ReceiveDailyReward, h.actor.uid, h.actor.Account.TapUserInfo, e)
 		})
@@ -418,8 +419,8 @@ func (h *DutyHandler) ReceiveDailyTaskRewardReq(ctx context.Context, in *base.Pr
 		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
 
-	reward := datahelper.ConvertItem3(cfgReward)
-	dropChange, err := GetDropMgr(h.actor).DropList2(reward, true, nil, h.actor.comData, common.CR_Daily_Task_Reward)
+	// reward := datahelper.ConvertItem3(cfgReward)
+	dropChange, err := GetDropMgr(h.actor).DropList2(nil, true, nil, h.actor.comData, common.CR_Daily_Task_Reward)
 	if err != nil {
 		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
@@ -447,7 +448,8 @@ func (h *DutyHandler) ReceiveActiveRewardReq(ctx context.Context, in *base.Proto
 	if active == nil {
 		return nil, fmt.Errorf("active not found %d", req.ActiveType), int32(pb.ErrorCode_InvalidParam)
 	}
-	cfg := excel.GetDailyActiveMgr().GetById(req.ActiveNode)
+	var cfg *meta.DutyPkgActiveMeta
+	// cfg := excel.GetDailyActiveMgr().GetById(req.ActiveNode)
 	if cfg == nil {
 		return nil, fmt.Errorf("daily active config not found %d", req.ActiveNode), int32(pb.ErrorCode_NotFoundConfig)
 	}
@@ -470,9 +472,9 @@ func (h *DutyHandler) ReceiveActiveRewardReq(ctx context.Context, in *base.Proto
 
 	var reward map[int32]int32
 	if req.ActiveType == TASK_TYPE_DAILY {
-		reward = datahelper.ConvertItem3(cfg.DailyRewards)
+		// reward = datahelper.ConvertItem3(cfg.DailyRewards)
 	} else {
-		reward = datahelper.ConvertItem3(cfg.WeeklyRewards)
+		// reward = datahelper.ConvertItem3(cfg.WeeklyRewards)
 	}
 	dropChange, err := GetDropMgr(h.actor).DropList2(reward, true, nil, h.actor.comData, common.CR_Daily_Task_Active_Reward)
 	if err != nil {
@@ -562,13 +564,13 @@ func (h *DutyHandler) tryClearDutyInfo(dutyData *pb.PDutyData) error {
 
 // 未领取每日任务奖励发送邮件
 func (h *DutyHandler) tryAutoReceiveReward(tasks map[int32]*pb.TaskInfoItem) {
-	reward := make([]*excel.KeyVal, 0)
+	reward := make([]*meta.KeyVal, 0)
 	for _, task := range tasks {
 		if task.Status != TASK_STATUS_COMPLETE {
 			continue
 		}
-
-		cfg := excel.GetDailyTaskMgr().GetById(task.Id)
+		var cfg *meta.DutyPkgDutyTaskMeta
+		// cfg := excel.GetDailyTaskMgr().GetById(task.Id)
 		if cfg == nil {
 			continue
 		}
@@ -578,57 +580,57 @@ func (h *DutyHandler) tryAutoReceiveReward(tasks map[int32]*pb.TaskInfoItem) {
 	}
 
 	if len(reward) > 0 {
-		attachment := datahelper.ConvertItem3(reward)
-		h.actor.MailHandler.AddUserMail(common.MAIL_TEMPLATE_3, attachment, h.actor.comData)
+		// attachment := datahelper.ConvertItem3(reward)
+		h.actor.MailHandler.AddUserMail(common.MAIL_TEMPLATE_3, nil, h.actor.comData)
 	}
 }
 
 // 未领取活跃度奖励发送邮件
 func (h *DutyHandler) tryAutoReceiveActive(active *pb.ActiveInfoItem) {
-	reward := make([]*excel.KeyVal, 0)
+	reward := make([]*meta.KeyVal, 0)
 	received := make(map[int32]int32)
 	for _, v := range active.Received {
 		received[v] = v
 	}
-	excel.GetDailyActiveMgr().Foreach(func(cfg *excel.DailyActiveCfg) bool {
-		if _, ok := received[cfg.Id]; !ok && cfg.Id <= active.CurValue {
-			if active.ActiveType == TASK_TYPE_DAILY {
-				reward = append(reward, cfg.DailyRewards...)
-			}
-			if active.ActiveType == TASK_TYPE_WEEKLY {
-				reward = append(reward, cfg.WeeklyRewards...)
-			}
-		}
-
-		return true
-	}, true)
+	// excel.GetDailyActiveMgr().Foreach(func(cfg *excel.DailyActiveCfg) bool {
+	// 	if _, ok := received[cfg.Id]; !ok && cfg.Id <= active.CurValue {
+	// 		if active.ActiveType == TASK_TYPE_DAILY {
+	// 			reward = append(reward, cfg.DailyRewards...)
+	// 		}
+	// 		if active.ActiveType == TASK_TYPE_WEEKLY {
+	// 			reward = append(reward, cfg.WeeklyRewards...)
+	// 		}
+	// 	}
+	//
+	// 	return true
+	// }, true)
 
 	if len(reward) > 0 {
-		attachment := datahelper.ConvertItem3(reward)
-		h.actor.MailHandler.AddUserMail(common.MAIL_TEMPLATE_3, attachment, h.actor.comData)
+		// attachment := datahelper.ConvertItem3(reward)
+		h.actor.MailHandler.AddUserMail(common.MAIL_TEMPLATE_3, nil, h.actor.comData)
 	}
 }
 
 // 接取称号数据
 func (h *DutyHandler) refreshTags() map[int32]*pb.TaskInfoItem {
 	tasks := make(map[int32]*pb.TaskInfoItem)
-	excel.GetDailyTagMgr().Foreach(func(cfg *excel.DailyTagCfg) bool {
-		// 特殊处理
-		if cfg.TagType == 0 {
-			tasks[cfg.Id] = &pb.TaskInfoItem{
-				Id:     cfg.Id,
-				Status: TASK_STATUS_COMPLETE,
-			}
-		} else {
-			// 正常的数据
-			task := h.actor.TaskTypeMgr.CreateTaskInfoItem(cfg.Id, cfg.TagType, cfg.Target, cfg.Tagparams, true)
-			if task != nil {
-				tasks[cfg.Id] = task
-			}
-		}
-
-		return true
-	}, true)
+	// excel.GetDailyTagMgr().Foreach(func(cfg *excel.DailyTagCfg) bool {
+	// 	// 特殊处理
+	// 	if cfg.TagType == 0 {
+	// 		tasks[cfg.Id] = &pb.TaskInfoItem{
+	// 			Id:     cfg.Id,
+	// 			Status: TASK_STATUS_COMPLETE,
+	// 		}
+	// 	} else {
+	// 		// 正常的数据
+	// 		task := h.actor.TaskTypeMgr.CreateTaskInfoItem(cfg.Id, cfg.TagType, cfg.Target, cfg.Tagparams, true)
+	// 		if task != nil {
+	// 			tasks[cfg.Id] = task
+	// 		}
+	// 	}
+	//
+	// 	return true
+	// }, true)
 
 	return tasks
 }
@@ -636,22 +638,22 @@ func (h *DutyHandler) refreshTags() map[int32]*pb.TaskInfoItem {
 // 接取任务数据
 func (h *DutyHandler) refreshTasks(cycleType int32) map[int32]*pb.TaskInfoItem {
 	tasks := make(map[int32]*pb.TaskInfoItem)
-	excel.GetDailyTaskMgr().Foreach(func(cfg *excel.DailyTaskCfg) bool {
-		if cfg.CycleType != cycleType {
-			return true
-		}
-		// 正常的数据
-		task := h.actor.TaskTypeMgr.CreateTaskInfoItem(cfg.Id, cfg.TaskType, cfg.Target, cfg.Taskparams, true)
-		if task != nil {
-			if cfg.DutySp == 1 {
-				task.Param1 = h.GetCurDutyCard()
-			}
-			task.TaskType = cycleType
-			tasks[cfg.Id] = task
-		}
-
-		return true
-	}, true)
+	// excel.GetDailyTaskMgr().Foreach(func(cfg *excel.DailyTaskCfg) bool {
+	// 	if cfg.CycleType != cycleType {
+	// 		return true
+	// 	}
+	// 	// 正常的数据
+	// 	task := h.actor.TaskTypeMgr.CreateTaskInfoItem(cfg.Id, cfg.TaskType, cfg.Target, cfg.Taskparams, true)
+	// 	if task != nil {
+	// 		if cfg.DutySp == 1 {
+	// 			task.Param1 = h.GetCurDutyCard()
+	// 		}
+	// 		task.TaskType = cycleType
+	// 		tasks[cfg.Id] = task
+	// 	}
+	//
+	// 	return true
+	// }, true)
 	h.Debugf("refreshTasks uid:%s, data:%d", h.actor.ID(), len(tasks))
 	return tasks
 }
@@ -677,7 +679,8 @@ func (h *DutyHandler) GetCurDutyCard() int32 {
 	if data != nil {
 		return data.CardId
 	}
-	return excel.GetConfigMgr().GetCfg().DUTY_DEFAULT_HERO
+	// return excel.GetConfigMgr().GetCfg().DUTY_DEFAULT_HERO
+	return 0
 }
 
 func (h *DutyHandler) ResetTaskByGM(commonData *clidto.Comdata) error {
@@ -701,7 +704,8 @@ func (h *DutyHandler) ResetTaskByGM(commonData *clidto.Comdata) error {
 }
 
 func (h *DutyHandler) DirectCompleteTaskByGM(taskId int32, commonData *clidto.Comdata) error {
-	cfg := excel.GetDailyTaskMgr().GetById(taskId)
+	var cfg *meta.DutyPkgDutyTaskMeta
+	// cfg := excel.GetDailyTaskMgr().GetById(taskId)
 	if cfg == nil {
 		return fmt.Errorf("daily task config not found %d", taskId)
 	}

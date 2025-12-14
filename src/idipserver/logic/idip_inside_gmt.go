@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"gitee.com/aniwar2/aniwar/src/meta"
 	"io"
 	"io/ioutil"
 	"os"
@@ -18,7 +19,6 @@ import (
 	"github.com/go-redis/redis/v8"
 
 	"gitee.com/aniwar2/aniwar/src/common/server"
-	excel "gitee.com/aniwar2/aniwar/src/excel/data"
 	"gitee.com/aniwar2/musae/framework/service"
 
 	myCommon "gitee.com/aniwar2/aniwar/src/common"
@@ -311,13 +311,14 @@ func (s *IDIPServer) CheckItem(items []*pb.CommonItem) []byte {
 		NumLimit []string `json:"num_limit"`
 	}{}
 	for _, item := range items {
-		id, err := strconv.Atoi(item.ItemId)
-		if err != nil {
-			ret.NotFound = append(ret.NotFound, item.ItemId)
-			continue
-		}
+		// id, err := strconv.Atoi(item.ItemId)
+		// if err != nil {
+		// 	ret.NotFound = append(ret.NotFound, item.ItemId)
+		// 	continue
+		// }
 		// 不存在
-		cfg := excel.GetItemMgr().GetById(int32(id))
+		var cfg *meta.ItemPkgItemMeta
+		// cfg := excel.GetItemMgr().GetById(int32(id))
 		if cfg == nil {
 			ret.NotFound = append(ret.NotFound, item.ItemId)
 			continue

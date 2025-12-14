@@ -82,7 +82,7 @@ type UserActor struct {
 	UserChatHandler     *UserChatHandler
 	OfflineEventHandler *OfflineEventHandler
 	UserAllianceHandler *UserAllianceHandler
-	ActivityHandler     *ActivityHandler
+	// ActivityHandler     *ActivityHandler
 }
 
 func New() actor.Server {
@@ -566,8 +566,8 @@ func (u *UserActor) initHandlers() {
 	u.UserAllianceHandler = NewUserUserAllianceHandler(u)
 	u.KeepHandler(u.UserAllianceHandler)
 
-	u.ActivityHandler = NewActivityHandler(u)
-	u.KeepHandler(u.ActivityHandler)
+	// u.ActivityHandler = NewActivityHandler(u)
+	// u.KeepHandler(u.ActivityHandler)
 
 	// ------------------任务数据初始化，必须放置在最后处理，否则导致任务初始化异常-------------------
 	u.DutyHandler = NewDutyHandler(u)
@@ -592,9 +592,9 @@ func (u *UserActor) initAsyncFunc() {
 	// 任务监听
 	u.TaskTypeMgr.RegisterTaskTypeHandler(event.ListenerFunc(u.GuideTaskHandler.handleTaskType))
 	u.TaskTypeMgr.RegisterTaskTypeHandler(event.ListenerFunc(u.DutyHandler.handleTaskType))
-	u.TaskTypeMgr.RegisterTaskTypeHandler(event.ListenerFunc(u.ActivityHandler.handleTaskType))
+	// u.TaskTypeMgr.RegisterTaskTypeHandler(event.ListenerFunc(u.ActivityHandler.handleTaskType))
 	// 触发器监听
-	u.TaskTriggerMgr.RegisterTaskTriggerHandler(event.ListenerFunc(u.ActivityHandler.handleTaskTrigger))
+	// u.TaskTriggerMgr.RegisterTaskTriggerHandler(event.ListenerFunc(u.ActivityHandler.handleTaskTrigger))
 	u.TaskTriggerMgr.RegisterTaskTriggerHandler(event.ListenerFunc(u.GuideTaskHandler.handleTaskTrigger))
 }
 

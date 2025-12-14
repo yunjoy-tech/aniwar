@@ -2,6 +2,7 @@ package useractor
 
 import (
 	"fmt"
+	"gitee.com/aniwar2/aniwar/src/meta"
 	"time"
 
 	"gitee.com/aniwar2/aniwar/src/actorserver/useractor/event"
@@ -10,7 +11,6 @@ import (
 
 	"gitee.com/aniwar2/aniwar/src/common"
 	myUtils "gitee.com/aniwar2/aniwar/src/common/utils"
-	excel "gitee.com/aniwar2/aniwar/src/excel/data"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/framework/utils"
 )
@@ -74,7 +74,7 @@ func mergeItems(items []*pb.ItemReward) []*pb.ItemReward {
 
 // --------------------------- 统一掉落资源的处理逻辑 ---------------------------
 
-func (m *DropMgr) DropListByItems(dropItemRewards []*excel.ItemReward, isFullMail bool, params []int32,
+func (m *DropMgr) DropListByItems(dropItemRewards []*meta.ItemReward, isFullMail bool, params []int32,
 	commonData *clidto.Comdata, reason common.ChangeReason) (*pb.DropChange, error) {
 
 	items := make(map[uint32]uint32, 0)
@@ -124,7 +124,8 @@ func (m *DropMgr) DropList(items map[uint32]uint32, isFullMail bool, params []in
 
 	m.actor.Infof("掉落奖励道具 reason: %v, 内容：%v", reason, items)
 	for itemId, itemNum := range items {
-		itemCfg := excel.GetItemMgr().GetById(int32(itemId))
+		var itemCfg *meta.ItemPkgItemMeta
+		// itemCfg := excel.GetItemMgr().GetById(int32(itemId))
 		if itemCfg == nil {
 			m.actor.Warnf("item not found %d", itemId)
 			return nil, fmt.Errorf("item config not found %d", itemId)
@@ -160,7 +161,7 @@ func (m *DropMgr) DropList(items map[uint32]uint32, isFullMail bool, params []in
 // 奖励物品掉落
 // @param DropChange 给前端的改变量-界面显示
 // @param commonData 给前端最终量-修改前端的缓存数据
-func (m *DropMgr) doDrop(itemCfg *excel.ItemCfg, itemNum uint32, params []int32, commonData *clidto.Comdata, reason common.ChangeReason) (*pb.DropChange, error) {
+func (m *DropMgr) doDrop(itemCfg *meta.ItemPkgItemMeta, itemNum uint32, params []int32, commonData *clidto.Comdata, reason common.ChangeReason) (*pb.DropChange, error) {
 
 	var (
 		err        error
@@ -229,7 +230,7 @@ func (m *DropMgr) doDrop(itemCfg *excel.ItemCfg, itemNum uint32, params []int32,
 }
 
 // 掉落道具子类型1处理
-func (m *DropMgr) handleItemTypeAbility(itemCfg *excel.ItemCfg, itemNum uint32, params []int32,
+func (m *DropMgr) handleItemTypeAbility(itemCfg *meta.ItemPkgItemMeta, itemNum uint32, params []int32,
 	commonData *clidto.Comdata, dropChange *pb.DropChange) ([]*pb.CommonCardExpReward, error) {
 
 	switch itemCfg.SubType {
@@ -266,7 +267,7 @@ func (m *DropMgr) handleItemTypeAbility(itemCfg *excel.ItemCfg, itemNum uint32, 
 }
 
 // 直接掉落背包的处理
-func (m *DropMgr) handleItemTypeBag(itemCfg *excel.ItemCfg, itemNum uint32, reason common.ChangeReason) ([]*pb.ItemReward, []*pb.PCommonItemInfo, map[int32]int32, error) {
+func (m *DropMgr) handleItemTypeBag(itemCfg *meta.ItemPkgItemMeta, itemNum uint32, reason common.ChangeReason) ([]*pb.ItemReward, []*pb.PCommonItemInfo, map[int32]int32, error) {
 
 	itemInfo := m.CreatePCommonItemInfo(uint32(itemCfg.Id), itemNum)
 	changeItems, finalItems, limitItems, err := m.actor.UserData.AddItems(m.actor.uid, reason, itemInfo)
@@ -287,14 +288,15 @@ func (m *DropMgr) handleItemTypeBag(itemCfg *excel.ItemCfg, itemNum uint32, reas
 func (m *DropMgr) CreatePCommonItemInfo(itemId, itemNum uint32) *pb.PCommonItemInfo {
 	// 到期时间
 	expireSec := int64(0)
-	itemCfg := excel.GetItemMgr().GetById(int32(itemId))
-	if itemCfg.GetTimeLimit() > 0 {
-		expireSec = time.Now().Unix() + int64(itemCfg.GetTimeLimit())
+	var itemCfg *meta.ItemPkgItemMeta
+	// itemCfg := excel.GetItemMgr().GetById(int32(itemId))
+	if itemCfg.TimeLimit > 0 {
+		expireSec = time.Now().Unix() + int64(itemCfg.TimeLimit)
 	}
 
 	// 主键id
 	uniqueId := uint64(0)
-	if itemCfg.GetTimeLimit() > 0 {
+	if itemCfg.TimeLimit > 0 {
 		uniqueId = uint64(utils.GenIntUUID()) // 有过期时间，就重新生成一个主键id
 	} else {
 		uniqueId = uint64(itemId)
@@ -322,7 +324,8 @@ func (m *DropMgr) CheckMapLimit(items map[int32]int32) bool {
 
 // CheckLimit 指定道具是否超过上限
 func (m *DropMgr) CheckLimit(itemId, itemNum int32) bool {
-	itemCfg := excel.GetItemMgr().GetById(itemId)
+	var itemCfg *meta.ItemPkgItemMeta
+	// itemCfg := excel.GetItemMgr().GetById(itemId)
 	if itemCfg == nil {
 		return true
 	}
@@ -346,7 +349,7 @@ func (m *DropMgr) CheckLimit(itemId, itemNum int32) bool {
 				cur += int32(item.ItemNum)
 			}
 		}
-		if int64(cur+itemNum) > itemCfg.GetNumLimit() {
+		if int64(cur+itemNum) > itemCfg.NumLimit {
 			return true
 		}
 		return false

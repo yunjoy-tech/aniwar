@@ -2,7 +2,7 @@ package useractor
 
 import (
 	"gitee.com/aniwar2/aniwar/src/actorserver/useractor/event"
-	excel "gitee.com/aniwar2/aniwar/src/excel/data"
+	"gitee.com/aniwar2/aniwar/src/meta"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"time"
 )
@@ -169,7 +169,7 @@ func (m *TaskTypeMgr) RegisterTaskTypeHandler(handler event.IListener) {
 
 // --------------------- 任务数据统一创建 ---------------------
 
-func (m *TaskTypeMgr) CreateTaskInfoItemNew(cfg *excel.TaskCfg, canCreate bool) *pb.TaskInfoItem {
+func (m *TaskTypeMgr) CreateTaskInfoItemNew(cfg *meta.TaskPkgTaskMeta, canCreate bool) *pb.TaskInfoItem {
 	return m.CreateTaskInfoItem(cfg.Id, cfg.TaskType, cfg.TaskValue, cfg.TaskParam1, canCreate) // fixme 过期时间修正
 }
 
@@ -658,21 +658,21 @@ func (m *TaskTypeMgr) handleTaskAchieveChange(task *pb.TaskInfoItem) {
 		m.actor.Error(err)
 	}
 	// 任务组处理
-	excel.GetTaskgroupMgr().Foreach(func(cfg *excel.TaskgroupCfg) bool {
-		// for _, id := range cfg.TaskId {
-		// 	num := m.actor.AchieveHandler.GetAchieveNum(buildTaskKey(int(id)))
-		// 	if num == 0 {
-		// 		return true
-		// 	}
-		// }
-		err = m.actor.eventManager.SyncPublish(event.NewBasicEvent(TASK_EVENT_TASK_GROUP_COMPLETE, []int32{}, map[string]interface{}{
-			"group_id": cfg.Id,
-		}))
-		if err != nil {
-			m.actor.Error(err)
-		}
-		return true
-	}, true)
+	// excel.GetTaskgroupMgr().Foreach(func(cfg *excel.TaskgroupCfg) bool {
+	// for _, id := range cfg.TaskId {
+	// 	num := m.actor.AchieveHandler.GetAchieveNum(buildTaskKey(int(id)))
+	// 	if num == 0 {
+	// 		return true
+	// 	}
+	// }
+	// 	err = m.actor.eventManager.SyncPublish(event.NewBasicEvent(TASK_EVENT_TASK_GROUP_COMPLETE, []int32{}, map[string]interface{}{
+	// 		"group_id": cfg.Id,
+	// 	}))
+	// 	if err != nil {
+	// 		m.actor.Error(err)
+	// 	}
+	// 	return true
+	// }, true)
 }
 
 // 通用的check逻辑
@@ -917,27 +917,27 @@ func (m *TaskTypeMgr) checkType521(task *pb.TaskInfoItem, e event.IEvent) {
 }
 
 func (m *TaskTypeMgr) checkType525(task *pb.TaskInfoItem, e event.IEvent) {
-	reward, ok := e.Get("reward").(map[int32]int32)
-	if !ok {
-		return
-	}
-	for itemId, num := range reward {
-		cfg := excel.GetItemMgr().GetById(itemId)
-		if cfg != nil && cfg.Type == task.Params[0] && cfg.SubType == task.Params[1] {
-			task.CurValue += num
-		}
-	}
+	// reward, ok := e.Get("reward").(map[int32]int32)
+	// if !ok {
+	// 	return
+	// }
+	// for itemId, num := range reward {
+	// 	cfg := excel.GetItemMgr().GetById(itemId)
+	// 	if cfg != nil && cfg.Type == task.Params[0] && cfg.SubType == task.Params[1] {
+	// 		task.CurValue += num
+	// 	}
+	// }
 }
 
 func (m *TaskTypeMgr) checkType527(task *pb.TaskInfoItem, e event.IEvent) {
-	reward, ok := e.Get("reward").(map[int32]int32)
-	if !ok {
-		return
-	}
-	for itemId := range reward {
-		cfg := excel.GetItemMgr().GetById(itemId)
-		if cfg != nil && cfg.Type == task.Params[0] && cfg.SubType == task.Params[1] {
-			task.CurValue++
-		}
-	}
+	// reward, ok := e.Get("reward").(map[int32]int32)
+	// if !ok {
+	// 	return
+	// }
+	// for itemId := range reward {
+	// 	cfg := excel.GetItemMgr().GetById(itemId)
+	// 	if cfg != nil && cfg.Type == task.Params[0] && cfg.SubType == task.Params[1] {
+	// 		task.CurValue++
+	// 	}
+	// }
 }

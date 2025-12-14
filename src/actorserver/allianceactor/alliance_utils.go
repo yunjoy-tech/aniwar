@@ -6,7 +6,6 @@ import (
 	"gitee.com/aniwar2/aniwar/src/common"
 	"gitee.com/aniwar2/aniwar/src/common/db"
 	"gitee.com/aniwar2/aniwar/src/common/utils"
-	excel "gitee.com/aniwar2/aniwar/src/excel/data"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/framework/base"
 	"gitee.com/aniwar2/musae/framework/logger"
@@ -64,15 +63,15 @@ func (h *AllianceHandler) joinAlliance(targetId uint64, positionId int32, in *ba
 	base, err := h.actor.getRoleBaseDataByRoleId(targetId)
 	if err == nil && base.Common.OfflineTime == -1 {
 		var add int32
-		excel.GetAllianceExpMgr().Foreach(func(cfg *excel.AllianceExpCfg) bool {
-			if cfg.Type != 1 {
-				return true
-			}
-			if cfg.TypeParm == 1 {
-				add += cfg.Contribution
-			}
-			return true
-		}, true)
+		// excel.GetAllianceExpMgr().Foreach(func(cfg *excel.AllianceExpCfg) bool {
+		// 	if cfg.Type != 1 {
+		// 		return true
+		// 	}
+		// 	if cfg.TypeParm == 1 {
+		// 		add += cfg.Contribution
+		// 	}
+		// 	return true
+		// }, true)
 		h.handleAddContribute(1, add, targetId)
 	}
 	// 绑定Topic
@@ -202,7 +201,7 @@ func (h *AllianceHandler) addAllianceLog(targetId uint64, typ pb.AllianceLogType
 	}
 	data.Log = append(data.Log, log)
 	// 尝试清理日志
-	needDel := len(data.Log) - int(excel.GetAllianceParmMgr().GetById(5).AllianceParm)
+	needDel := len(data.Log) /*- int(excel.GetAllianceParmMgr().GetById(5).AllianceParm)*/
 	if needDel > 0 {
 		data.Log = data.Log[needDel:]
 	}
@@ -211,23 +210,23 @@ func (h *AllianceHandler) addAllianceLog(targetId uint64, typ pb.AllianceLogType
 
 // 检查权限是否合法
 func (h *AllianceHandler) checkPermission(roleId uint64, typ PermissionType) bool {
-	data := h.GetAllianceData()
+	// data := h.GetAllianceData()
 	// 获取成员的职位
-	member, ok := data.Member[roleId]
-	if !ok {
-		return false
-	}
+	// member, ok := data.Member[roleId]
+	// if !ok {
+	// 	return false
+	// }
 
 	// 查找权限配置
-	cfg := excel.GetAlliancePostMgr().GetById(member.Position)
-	if cfg == nil {
-		return false
-	}
-	for _, id := range cfg.Permission {
-		if id == int32(typ) {
-			return true
-		}
-	}
+	// cfg := excel.GetAlliancePostMgr().GetById(member.Position)
+	// if cfg == nil {
+	// 	return false
+	// }
+	// for _, id := range cfg.Permission {
+	// 	if id == int32(typ) {
+	// 		return true
+	// 	}
+	// }
 	return false
 }
 

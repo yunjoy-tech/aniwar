@@ -4,13 +4,12 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"gitee.com/aniwar2/aniwar/src/meta"
 	"strconv"
 	"time"
 
 	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
-
-	"gitee.com/aniwar2/aniwar/src/common/datahelper"
 
 	"gitee.com/aniwar2/aniwar/src/common/sdkconstant/sdkutil"
 
@@ -23,8 +22,6 @@ import (
 	"github.com/pkg/errors"
 
 	"gitee.com/aniwar2/aniwar/src/common/com_order"
-
-	excel "gitee.com/aniwar2/aniwar/src/excel/data"
 
 	"gitee.com/aniwar2/musae/framework/base"
 	"gitee.com/aniwar2/musae/framework/utils"
@@ -106,8 +103,8 @@ func (h *OrderHandler) CreateOrderReq(ctx context.Context, in *base.ProtoMsg) (p
 	if err != nil {
 		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
-
-	productCfg := excel.GetShopGiftMgr().GetById(req.ProductId)
+	var productCfg *meta.GameShopPkgGiftMeta
+	// productCfg := excel.GetShopGiftMgr().GetById(req.ProductId)
 	if productCfg == nil {
 		return nil, fmt.Errorf("无效的ProductId=%d", req.ProductId), int32(pb.ErrorCode_NotFoundConfig)
 	}
@@ -200,8 +197,8 @@ func (h *OrderHandler) BillCallbackReq(ctx context.Context, in *base.ProtoMsg) (
 		logger.Errorf(err.Error())
 		return nil, errors.New(fmt.Sprintf("解析透传参数失败:%s, %s", req.CpOrderId, sdkReq.Ext)), int32(pb.ErrorCode_Order_cbi_invalid)
 	}
-
-	shopGiftCfg := excel.GetShopGiftMgr().GetById(cbiObj.PayId)
+	var shopGiftCfg *meta.GameShopPkgGiftMeta
+	// shopGiftCfg := excel.GetShopGiftMgr().GetById(cbiObj.PayId)
 	if shopGiftCfg == nil {
 		err = errors.New(fmt.Sprintf("无效的支付id, payId=%d", cbiObj.PayId))
 		logger.Errorf(err.Error())
@@ -401,7 +398,8 @@ func (h *OrderHandler) paySendReward(order *pb.Order, paymentType pb.PaymentType
 		return errors.New(fmt.Sprintf("订单已经处理过了:%v", order.OrderStatus)), pb.ErrorCode_Order_status_unusual
 	}
 
-	shopGiftCfg := excel.GetShopGiftMgr().GetById(order.CpProductId)
+	var shopGiftCfg *meta.GameShopPkgGiftMeta
+	// shopGiftCfg := excel.GetShopGiftMgr().GetById(order.CpProductId)
 
 	// 累计充值金额
 	h.actor.OrderData.TotalRecharge += shopGiftCfg.PayCount
@@ -415,8 +413,9 @@ func (h *OrderHandler) paySendReward(order *pb.Order, paymentType pb.PaymentType
 	}
 	h.Infof("充值成功, %+v", order)
 
-	giftCfg := excel.GetShopGiftMgr().GetById(order.CpProductId)
-	rewards := make([]*excel.ItemReward, 0)
+	var giftCfg *meta.GameShopPkgGiftMeta
+	// giftCfg := excel.GetShopGiftMgr().GetById(order.CpProductId)
+	rewards := make([]*meta.ItemReward, 0)
 	rewards = append(rewards, giftCfg.Reward...)
 
 	// 首次购买
@@ -425,7 +424,8 @@ func (h *OrderHandler) paySendReward(order *pb.Order, paymentType pb.PaymentType
 	}
 	// 月卡奖励
 	if giftCfg.PeriodReward > 0 {
-		monthcardCfg := excel.GetMonthcardMgr().GetById(giftCfg.PeriodReward)
+		var monthcardCfg *meta.GameShopPkgMonthCardMeta
+		// monthcardCfg := excel.GetMonthcardMgr().GetById(giftCfg.PeriodReward)
 		rewards = append(rewards, monthcardCfg.DirectReward...)
 	}
 
@@ -567,7 +567,8 @@ func (h *OrderHandler) getOrderItemById(productId int32) *pb.OrderItemInfo {
 }
 
 func (h *OrderHandler) extraHandle(productId int32) {
-	cfg := excel.GetShopGiftMgr().GetById(productId)
+	var cfg *meta.GameShopPkgGiftMeta
+	// cfg := excel.GetShopGiftMgr().GetById(productId)
 	orderData := h.actor.GetOrderData()
 	info := orderData.ItemInfo[productId]
 	if info == nil {
@@ -585,7 +586,8 @@ func (h *OrderHandler) extraHandle(productId int32) {
 			info.MonthExpire = now
 		}
 		// 记录月卡数据
-		monthcardCfg := excel.GetMonthcardMgr().GetById(cfg.PeriodReward)
+		var monthcardCfg *meta.GameShopPkgMonthCardMeta
+		// monthcardCfg := excel.GetMonthcardMgr().GetById(cfg.PeriodReward)
 		target := time.Unix(info.MonthExpire, 0).AddDate(0, 0, int(monthcardCfg.Day))
 		info.MonthExpire = common.GetTodayRefreshTime(target).Unix()
 		info.MonthNodeExpire = append(info.MonthNodeExpire, info.MonthExpire)
@@ -602,14 +604,16 @@ func (h *OrderHandler) extraHandle(productId int32) {
 // 订单商品是否能购买
 func (h *OrderHandler) checkCanBuy(productId int32) (error, pb.ErrorCode) {
 	orderData := h.actor.GetOrderData()
-	cfg := excel.GetShopGiftMgr().GetById(productId)
+	var cfg *meta.GameShopPkgGiftMeta
+	// cfg := excel.GetShopGiftMgr().GetById(productId)
 	if cfg == nil {
 		return fmt.Errorf("config not found %v", productId), pb.ErrorCode_NotFoundConfig
 	}
 
 	// 月卡类型检查
 	if cfg.PeriodReward > 0 {
-		monthcardCfg := excel.GetMonthcardMgr().GetById(cfg.PeriodReward)
+		var monthcardCfg *meta.GameShopPkgMonthCardMeta
+		// monthcardCfg := excel.GetMonthcardMgr().GetById(cfg.PeriodReward)
 		if monthcardCfg == nil {
 			return fmt.Errorf("config not found %v", productId), pb.ErrorCode_NotFoundConfig
 		}
@@ -641,8 +645,9 @@ func (h *OrderHandler) trySendMonthMail(productId int32) {
 	}
 
 	// 尝试发奖励
-	for id, info := range itemInfos {
-		cfg := excel.GetShopGiftMgr().GetById(id)
+	for _, info := range itemInfos {
+		var cfg *meta.GameShopPkgGiftMeta
+		// cfg := excel.GetShopGiftMgr().GetById(id)
 		if cfg == nil {
 			continue
 		}
@@ -656,13 +661,14 @@ func (h *OrderHandler) trySendMonthMail(productId int32) {
 			continue
 		}
 
-		monthcardCfg := excel.GetMonthcardMgr().GetById(cfg.PeriodReward)
+		var monthcardCfg *meta.GameShopPkgMonthCardMeta
+		// monthcardCfg := excel.GetMonthcardMgr().GetById(cfg.PeriodReward)
 		if monthcardCfg == nil {
 			continue
 		}
 		// 发奖励邮件
-		attachment := datahelper.ConvertItem2ByTpl(monthcardCfg.DailyReward)
-		h.actor.MailHandler.AddUserMail(common.MAIL_TEMPLATE_6, attachment, h.actor.comData)
+		// attachment := datahelper.ConvertItem2ByTpl(monthcardCfg.DailyReward)
+		h.actor.MailHandler.AddUserMail(common.MAIL_TEMPLATE_6, nil, h.actor.comData)
 	}
 	h.SaveDB()
 }

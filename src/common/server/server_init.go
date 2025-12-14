@@ -7,7 +7,6 @@ import (
 	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
 	"gitee.com/aniwar2/aniwar/src/common/gmeta"
-	"gitee.com/aniwar2/aniwar/src/excel/data"
 	"gitee.com/aniwar2/musae/framework/base"
 	"gitee.com/aniwar2/musae/framework/baseconf"
 	"gitee.com/aniwar2/musae/framework/global"
@@ -467,7 +466,8 @@ func (s *Server) LoadExcelData() (err error) {
 // 按需加载excel配置表数据
 func (s *Server) LoadExcelDataByFiles(files []string) (err error) {
 	if global.IsDev || s.RedisCenter == nil {
-		err = data.LoadByFileNames(s.DataDir, files, s.AppId, "actorserver")
+		// TODO
+		// err = data.LoadByFileNames(s.DataDir, files, s.AppId, "actorserver")
 	} else {
 		err = s.LoadExcelFromRedisByFile(files, s.AppId, "actorserver")
 	}
@@ -493,20 +493,21 @@ func (s *Server) LoadExcel() error {
 // 加载配置中心策划配置数据
 func (s *Server) LoadExcelFromRedis() error {
 	logger.Info("\n===>>> LoadExcel from redis  begin")
-	fileNames := s.GetAllExcelFileName()
-	for _, fileName := range fileNames {
-		key := fmt.Sprintf("%s:%s:%s:%s:%s", global.RdsCfgNameSpace, global.RdsCfgGroup, "aniwar", global.ROLLING_VERSION, fileName)
-		stringCmd := s.RedisCenter.Get(context.Background(), key)
-		value, err := stringCmd.Bytes()
-		if err != nil {
-			logger.Errorf("===>>> LoadExcelFromRedis key:%s fail:%v", key, err)
-			return err
-		}
-		if err = data.LoadByFileData(fileName, value); err != nil {
-			logger.Errorf("===>>> LoadExcelFromRedis file:%s fail:%v", fileName, err)
-			return err
-		}
-	}
+	// TODO
+	// fileNames := s.GetAllExcelFileName()
+	// for _, fileName := range fileNames {
+	// 	key := fmt.Sprintf("%s:%s:%s:%s:%s", global.RdsCfgNameSpace, global.RdsCfgGroup, "aniwar", global.ROLLING_VERSION, fileName)
+	// 	stringCmd := s.RedisCenter.Get(context.Background(), key)
+	// 	value, err := stringCmd.Bytes()
+	// 	if err != nil {
+	// 		logger.Errorf("===>>> LoadExcelFromRedis key:%s fail:%v", key, err)
+	// 		return err
+	// 	}
+	// 	if err = data.LoadByFileData(fileName, value); err != nil {
+	// 		logger.Errorf("===>>> LoadExcelFromRedis file:%s fail:%v", fileName, err)
+	// 		return err
+	// 	}
+	// }
 
 	logger.Info("===>>> LoadExcel from redis end\n")
 	return nil
@@ -516,23 +517,24 @@ func (s *Server) LoadExcelFromRedisByFile(fileNames []string, appId, serverName 
 	successArr := make([]string, 0) // 成功的文件列表
 	errorArr := make([]string, 0)   // 失败的文件列表
 	logger.Infof("BeginLoad fileNames:%+v appId:%s serverName:%s", fileNames, appId, serverName)
-	for _, fileName := range fileNames {
-		key := fmt.Sprintf("%s:%s:%s:%s:%s", global.RdsCfgNameSpace, global.RdsCfgGroup, "aniwar", global.ROLLING_VERSION, fileName)
-		stringCmd := s.RedisCenter.Get(context.Background(), key)
-		value, err := stringCmd.Bytes()
-		if err != nil {
-			errorArr = append(errorArr, fileName)
-			continue
-		}
-		if err = data.LoadByFileData(fileName, value); err != nil {
-			errorArr = append(errorArr, fileName)
-			logger.Errorf("LoadFail fileNames:%+v err:%v key:%s", fileNames, err, key)
-
-		} else {
-			successArr = append(successArr, fileName)
-			logger.Infof("LoadSuccess fileNames:%+v", fileNames)
-		}
-	}
+	// TODO
+	// for _, fileName := range fileNames {
+	// 	key := fmt.Sprintf("%s:%s:%s:%s:%s", global.RdsCfgNameSpace, global.RdsCfgGroup, "aniwar", global.ROLLING_VERSION, fileName)
+	// 	stringCmd := s.RedisCenter.Get(context.Background(), key)
+	// 	value, err := stringCmd.Bytes()
+	// 	if err != nil {
+	// 		errorArr = append(errorArr, fileName)
+	// 		continue
+	// 	}
+	// 	if err = data.LoadByFileData(fileName, value); err != nil {
+	// 		errorArr = append(errorArr, fileName)
+	// 		logger.Errorf("LoadFail fileNames:%+v err:%v key:%s", fileNames, err, key)
+	//
+	// 	} else {
+	// 		successArr = append(successArr, fileName)
+	// 		logger.Infof("LoadSuccess fileNames:%+v", fileNames)
+	// 	}
+	// }
 
 	// 服务热更新埋点
 	taptap.ServeReloadComm(appId, global.APP_VERSION, "", global.ROLLING_VERSION, serverName, taptap.ConvertList2Str(successArr), taptap.ConvertList2Str(errorArr))
@@ -550,9 +552,10 @@ func (s *Server) LoadExcelFromRedisByFile(fileNames []string, appId, serverName 
 // 获取策划配置文件名
 func (s *Server) GetAllExcelFileName() []string {
 	if baseconf.GetBaseConf().ExcelDataZip == 1 {
-		return data.GetAllJsonBinaryFileNames()
+		// TODO
+		// return data.GetAllJsonBinaryFileNames()
 	} else if baseconf.GetBaseConf().ExcelDataZip == 0 {
-		return data.GetAllJsonFileNames()
+		// return data.GetAllJsonFileNames()
 	}
 	return []string{}
 }

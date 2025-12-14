@@ -2,7 +2,6 @@ package useractor
 
 import (
 	"fmt"
-	excel "gitee.com/aniwar2/aniwar/src/excel/data"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/framework/service"
 	"google.golang.org/protobuf/proto"
@@ -74,21 +73,21 @@ func (h *FuncUnlockHandler) CheckFuncUnlock(funcId int32) (error, pb.ErrorCode) 
 
 func (h *FuncUnlockHandler) CheckFuncUnlockBase(funcId int32) (error, pb.ErrorCode) {
 	// 未配置解锁要求
-	cfg := excel.GetSystemUnlockMgr().GetById(funcId)
-	if cfg == nil {
-		return nil, pb.ErrorCode_Success
-	}
-	// 玩家等级判定
-	if h.actor.LoginHandler.getRoleLevel() < uint32(cfg.Unlocklevel) {
-		return fmt.Errorf("role level not enough"), pb.ErrorCode_FuncUnlockError
-	}
-	// 其他条件判定
-	switch cfg.UnlockType {
-	case UNLOCK_TYPE_QUEST:
-		// if !h.actor.QuestHandler.checkQuestFinish(cfg.UnlockParam) {
-		// 	return fmt.Errorf("func unlock condition not match %d", UNLOCK_TYPE_QUEST), pb.ErrorCode_FuncUnlockError
-		// }
-	}
+	// cfg := excel.GetSystemUnlockMgr().GetById(funcId)
+	// if cfg == nil {
+	// 	return nil, pb.ErrorCode_Success
+	// }
+	// // 玩家等级判定
+	// if h.actor.LoginHandler.getRoleLevel() < uint32(cfg.Unlocklevel) {
+	// 	return fmt.Errorf("role level not enough"), pb.ErrorCode_FuncUnlockError
+	// }
+	// // 其他条件判定
+	// switch cfg.UnlockType {
+	// case UNLOCK_TYPE_QUEST:
+	// 	// if !h.actor.QuestHandler.checkQuestFinish(cfg.UnlockParam) {
+	// 	// 	return fmt.Errorf("func unlock condition not match %d", UNLOCK_TYPE_QUEST), pb.ErrorCode_FuncUnlockError
+	// 	// }
+	// }
 	return nil, pb.ErrorCode_Success
 }
 

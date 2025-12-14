@@ -7,7 +7,6 @@ import (
 	"gitee.com/aniwar2/aniwar/src/actorserver/useractor/event"
 	"gitee.com/aniwar2/aniwar/src/common"
 	"gitee.com/aniwar2/aniwar/src/common/db"
-	excel "gitee.com/aniwar2/aniwar/src/excel/data"
 	"gitee.com/aniwar2/musae/framework/global"
 	"gitee.com/aniwar2/musae/framework/guid"
 	"gitee.com/aniwar2/musae/framework/utils"
@@ -128,47 +127,47 @@ func (h *UserAllianceHandler) tryRefreshWeekDay() error {
 
 func (h *UserAllianceHandler) handleAddContribution(typ int32, params []int32) error {
 	var add int32
-	var min int32
-	var max int32
+	// var min int32
+	// var max int32
 
 	// 处理类型1参数
-	if typ == common.ALLIANCE_CONTRIBUTION_1 {
-		data := h.actor.GetUserAllianceData()
-		// 同一个联盟多次签到
-		signTs := data.SignLog[h.getAllianceId()]
-		if common.IsSameDayByOffset(time.Unix(signTs, 0), time.Now(), common.GAME_DAILY_REFRESH_HOUR) {
-			return nil
-		}
-
-		data.WeekDay++
-		data.SignLog[h.getAllianceId()] = time.Now().Unix()
-		if err := h.SaveDB(); err != nil {
-			return err
-		}
-		min = data.WeekDay
-	}
-	if typ == common.ALLIANCE_CONTRIBUTION_2 {
-		min = params[0]
-		max = params[1]
-	}
+	// if typ == common.ALLIANCE_CONTRIBUTION_1 {
+	// 	data := h.actor.GetUserAllianceData()
+	// 	// 同一个联盟多次签到
+	// 	signTs := data.SignLog[h.getAllianceId()]
+	// 	if common.IsSameDayByOffset(time.Unix(signTs, 0), time.Now(), common.GAME_DAILY_REFRESH_HOUR) {
+	// 		return nil
+	// 	}
+	//
+	// 	data.WeekDay++
+	// 	data.SignLog[h.getAllianceId()] = time.Now().Unix()
+	// 	if err := h.SaveDB(); err != nil {
+	// 		return err
+	// 	}
+	// 	min = data.WeekDay
+	// }
+	// if typ == common.ALLIANCE_CONTRIBUTION_2 {
+	// 	min = params[0]
+	// 	max = params[1]
+	// }
 
 	// 取增加值
-	excel.GetAllianceExpMgr().Foreach(func(cfg *excel.AllianceExpCfg) bool {
-		if cfg.Type != typ {
-			return true
-		}
-		if typ == common.ALLIANCE_CONTRIBUTION_1 {
-			if cfg.TypeParm == min {
-				add += cfg.Contribution
-			}
-		}
-		if typ == common.ALLIANCE_CONTRIBUTION_2 {
-			if min < cfg.TypeParm && cfg.TypeParm <= max {
-				add += cfg.Contribution
-			}
-		}
-		return true
-	}, true)
+	// excel.GetAllianceExpMgr().Foreach(func(cfg *excel.AllianceExpCfg) bool {
+	// 	if cfg.Type != typ {
+	// 		return true
+	// 	}
+	// 	if typ == common.ALLIANCE_CONTRIBUTION_1 {
+	// 		if cfg.TypeParm == min {
+	// 			add += cfg.Contribution
+	// 		}
+	// 	}
+	// 	if typ == common.ALLIANCE_CONTRIBUTION_2 {
+	// 		if min < cfg.TypeParm && cfg.TypeParm <= max {
+	// 			add += cfg.Contribution
+	// 		}
+	// 	}
+	// 	return true
+	// }, true)
 
 	// 上报到联盟处理
 	reqMsg := &pb.S2S_AddContributeReq{AddValue: add, AddType: typ}
@@ -270,7 +269,7 @@ func (h *UserAllianceHandler) GetAllianceRecommendReq(ctx context.Context, in *b
 	if data.RecommendTs == 0 {
 		data.RecommendTs = 1 // 首次打开界面自动刷新一次
 	} else {
-		data.RecommendTs = now + int64(excel.GetAllianceParmMgr().GetById(1).AllianceParm)
+		// data.RecommendTs = now + int64(excel.GetAllianceParmMgr().GetById(1).AllianceParm)
 	}
 
 	if err = h.SaveDB(); err != nil {
@@ -283,7 +282,7 @@ func (h *UserAllianceHandler) GetAllianceRecommendReq(ctx context.Context, in *b
 }
 
 func (h *UserAllianceHandler) getRecommendList() []*pb.PCommonAllianceBaseInfo {
-	hitSize := int(excel.GetAllianceParmMgr().GetById(2).AllianceParm)
+	hitSize := int(0)
 	infos := make([]*pb.PCommonAllianceBaseInfo, 0)
 
 	err, hitData := h.actor.Srv.ESMultiSearch(common.ES_ALLIANCE_BASE_KEY, nil, nil, nil, hitSize, true)
@@ -534,10 +533,10 @@ func (h *UserAllianceHandler) ChangeAllianceInfoReq(ctx context.Context, in *bas
 	} else if req.EditType == 2 {
 		infos["notice"] = req.Notice
 	} else if req.EditType == 3 {
-		headCfg := excel.GetAllianceHeadMgr().GetById(req.LogoId)
-		if headCfg == nil {
-			return nil, fmt.Errorf("logo id illegal %v", req.LogoId), int32(pb.ErrorCode_ParamError)
-		}
+		// headCfg := excel.GetAllianceHeadMgr().GetById(req.LogoId)
+		// if headCfg == nil {
+		// 	return nil, fmt.Errorf("logo id illegal %v", req.LogoId), int32(pb.ErrorCode_ParamError)
+		// }
 	} else {
 		return nil, fmt.Errorf("edit type illegal"), int32(pb.ErrorCode_ParamError)
 	}
@@ -662,10 +661,10 @@ func (h *UserAllianceHandler) CreateAllianceReq(ctx context.Context, in *base.Pr
 		return nil, fmt.Errorf("exist alliance"), int32(pb.ErrorCode_Had_exist_alliance)
 	}
 	// logo id校验
-	headCfg := excel.GetAllianceHeadMgr().GetById(req.LogoId)
-	if headCfg == nil {
-		return nil, fmt.Errorf("logo id illegal %v", req.LogoId), int32(pb.ErrorCode_ParamError)
-	}
+	// headCfg := excel.GetAllianceHeadMgr().GetById(req.LogoId)
+	// if headCfg == nil {
+	// 	return nil, fmt.Errorf("logo id illegal %v", req.LogoId), int32(pb.ErrorCode_ParamError)
+	// }
 
 	infos := map[string]string{
 		"name":    req.Name,
@@ -676,10 +675,10 @@ func (h *UserAllianceHandler) CreateAllianceReq(ctx context.Context, in *base.Pr
 		return nil, err, int32(code)
 	}
 
-	cost := excel.GetConfigMgr().GetCfg().ALLIANCE_CREATE_COST
-	if !GetConsumeMgr(h.actor).CheckMapEnough(map[int32]int32{cost[0]: cost[1]}) {
-		return nil, fmt.Errorf("currency not enough"), int32(pb.ErrorCode_CurrencyNotEnough)
-	}
+	// cost := excel.GetConfigMgr().GetCfg().ALLIANCE_CREATE_COST
+	// if !GetConsumeMgr(h.actor).CheckMapEnough(map[int32]int32{cost[0]: cost[1]}) {
+	// 	return nil, fmt.Errorf("currency not enough"), int32(pb.ErrorCode_CurrencyNotEnough)
+	// }
 
 	// 创建联盟数据
 	allianceId := h.actor.Srv.GenGUID(guid.GUID_ALLIANCE)
@@ -704,7 +703,7 @@ func (h *UserAllianceHandler) CreateAllianceReq(ctx context.Context, in *base.Pr
 		return nil, err, int32(pb.ErrorCode_SaveDBError)
 	}
 
-	err = GetConsumeMgr(h.actor).ConsumeList(map[int32]int32{cost[0]: cost[1]}, h.actor.comData, common.CR_ALLIANCE_CREATE)
+	err = GetConsumeMgr(h.actor).ConsumeList(map[int32]int32{}, h.actor.comData, common.CR_ALLIANCE_CREATE)
 	if err != nil {
 		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
@@ -784,10 +783,10 @@ func (h *UserAllianceHandler) HandleExitAlliance(exitType int32) error {
 	data.RecommendTs = 0
 	// 踢出没有cd
 	if exitType == 1 {
-		cfg := excel.GetAllianceParmMgr().GetById(7)
-		if cfg != nil {
-			data.JoinTs = time.Now().Add(time.Hour * time.Duration(cfg.AllianceParm)).Unix()
-		}
+		// cfg := excel.GetAllianceParmMgr().GetById(7)
+		// if cfg != nil {
+		// 	data.JoinTs = time.Now().Add(time.Hour * time.Duration(cfg.AllianceParm)).Unix()
+		// }
 	}
 	h.Debug("HandleExitAlliance success")
 	if exitType == 2 {

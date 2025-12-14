@@ -3,13 +3,12 @@ package useractor
 import (
 	"context"
 	"fmt"
+	"gitee.com/aniwar2/aniwar/src/common/gmeta"
 	"time"
 
 	"gitee.com/aniwar2/aniwar/src/actorserver/useractor/event"
 	"gitee.com/aniwar2/aniwar/src/common"
-	"gitee.com/aniwar2/aniwar/src/common/datahelper"
 	"gitee.com/aniwar2/aniwar/src/common/db"
-	excel "gitee.com/aniwar2/aniwar/src/excel/data"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/framework/base"
 	"gitee.com/aniwar2/musae/framework/service"
@@ -143,7 +142,7 @@ func (h *GuideTaskHandler) ReceiveGuideTaskRewardReq(ctx context.Context, in *ba
 	h.tryCloseExpireTask(false)
 
 	data := h.actor.GetGuideTaskData()
-	cfg := excel.GetTaskMgr().GetById(req.TaskId)
+	cfg := gmeta.GetMetaMgr().TaskTable.Get(req.TaskId)
 	// 任务不存在
 	task := data.Tasks[req.TaskId]
 	if task == nil || cfg == nil {
@@ -161,8 +160,8 @@ func (h *GuideTaskHandler) ReceiveGuideTaskRewardReq(ctx context.Context, in *ba
 	// 尝试接取
 	h.tryUnlockTask()
 
-	reward := datahelper.ConvertItem3(cfg.Reward)
-	dropChange, err := GetDropMgr(h.actor).DropList2(reward, true, nil, h.actor.comData, common.CR_FINISH_GUIDE_TASK)
+	// reward := datahelper.ConvertItem3(cfg.Reward)
+	dropChange, err := GetDropMgr(h.actor).DropList2(nil, true, nil, h.actor.comData, common.CR_FINISH_GUIDE_TASK)
 	if err != nil {
 		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
@@ -190,10 +189,10 @@ func (h *GuideTaskHandler) tryCloseExpireTask(tryUnlock bool) error {
 
 		// 尝试发奖励邮件
 		if task.Status == TASK_STATUS_COMPLETE {
-			cfg := excel.GetTaskMgr().GetById(id)
+			cfg := gmeta.GetMetaMgr().TaskTable.Get(id)
 			if cfg != nil {
-				attachment := datahelper.ConvertItem3(cfg.Reward)
-				err := h.actor.MailHandler.AddUserMail(common.MAIL_TEMPLATE_3, attachment, h.actor.comData) // fixme 奖励邮件模板
+				// attachment := datahelper.ConvertItem3(cfg.Reward)
+				err := h.actor.MailHandler.AddUserMail(common.MAIL_TEMPLATE_3, nil, h.actor.comData) // fixme 奖励邮件模板
 				if err != nil {
 					return err
 				}
@@ -218,7 +217,8 @@ func (h *GuideTaskHandler) tryUnlockTask() error {
 
 	// 任务队列是否满了
 	data := h.actor.GetGuideTaskData()
-	if len(data.Tasks) >= int(excel.GetConfigMgr().GetCfg().GUIDETASK_MAX_NUM) {
+	maxNum := gmeta.GetMetaMgr().ConfigTable.Get().GUIDETASKMAXNUM
+	if len(data.Tasks) >= int(maxNum) {
 		return nil
 	}
 
@@ -238,9 +238,9 @@ func (h *GuideTaskHandler) tryUnlockTask() error {
 			continue
 		}
 		// 是否满了
-		if len(data.Tasks) >= int(excel.GetConfigMgr().GetCfg().GUIDETASK_MAX_NUM) {
-			continue
-		}
+		// if len(data.Tasks) >= int(excel.GetConfigMgr().GetCfg().GUIDETASK_MAX_NUM) {
+		// 	continue
+		// }
 
 		// 创建任务
 		taskInfo := h.actor.TaskTypeMgr.CreateTaskInfoItemNew(task, true)

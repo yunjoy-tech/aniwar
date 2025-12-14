@@ -1,10 +1,11 @@
 package useractor
 
 import (
+	"gitee.com/aniwar2/aniwar/src/common/gmeta"
+	"gitee.com/aniwar2/aniwar/src/meta"
 	"strconv"
 
 	"gitee.com/aniwar2/aniwar/src/actorserver/useractor/event"
-	excel "gitee.com/aniwar2/aniwar/src/excel/data"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 )
 
@@ -71,29 +72,29 @@ func (m *TaskTriggerMgr) RegisterTaskTriggerHandler(handler event.IListener) {
 
 // --------------------- 任务类型统一触发 ---------------------
 
-func (m *TaskTriggerMgr) TriggerTaskGroupById(groupId int32) []*excel.TaskCfg {
-	cfg := excel.GetTaskgroupMgr().GetById(groupId)
+func (m *TaskTriggerMgr) TriggerTaskGroupById(groupId int32) []*meta.TaskPkgTaskMeta {
+	var cfg *meta.TaskPkgTaskGroupMeta
+	// cfg := excel.GetTaskgroupMgr().GetById(groupId)
 	if cfg == nil {
-		return []*excel.TaskCfg{}
+		return []*meta.TaskPkgTaskMeta{}
 	}
-	return m.checkTriggerCondition(map[int32]*excel.TaskgroupCfg{groupId: cfg})
+	return m.checkTriggerCondition(map[int32]*meta.TaskPkgTaskGroupMeta{groupId: cfg})
 }
 
 // TriggerTaskGroupByType 对外统一触发任务组
-func (m *TaskTriggerMgr) TriggerTaskGroupByType(groupType int32) []*excel.TaskCfg {
+func (m *TaskTriggerMgr) TriggerTaskGroupByType(groupType int32) []*meta.TaskPkgTaskMeta {
 	// 获取任务组配置
-	groups := make(map[int32]*excel.TaskgroupCfg)
-	excel.GetTaskgroupMgr().Foreach(func(cfg *excel.TaskgroupCfg) bool {
-		if cfg.TaskgroupType == groupType {
-			groups[cfg.Id] = cfg
+	groups := make(map[int32]*meta.TaskPkgTaskGroupMeta)
+	for _, groupMeta := range gmeta.GetMetaMgr().TaskGroupTable.GetDataList() {
+		if groupMeta.TaskgroupType == groupType {
+			groups[groupMeta.Id] = groupMeta
 		}
-		return true
-	}, true)
+	}
 
 	return m.checkTriggerCondition(groups)
 }
 
-func (m *TaskTriggerMgr) checkTriggerCondition(groups map[int32]*excel.TaskgroupCfg) []*excel.TaskCfg {
+func (m *TaskTriggerMgr) checkTriggerCondition(groups map[int32]*meta.TaskPkgTaskGroupMeta) []*meta.TaskPkgTaskMeta {
 	tasks := make([]*pb.KeyValueItem, 0)
 	for _, cfg := range groups {
 		// 触发条件
@@ -113,9 +114,10 @@ func (m *TaskTriggerMgr) checkTriggerCondition(groups map[int32]*excel.Taskgroup
 	}
 
 	// 处理任务触发
-	openTasks := make([]*excel.TaskCfg, 0)
+	openTasks := make([]*meta.TaskPkgTaskMeta, 0)
 	for _, taskItem := range tasks {
-		taskCfg := excel.GetTaskMgr().GetById(taskItem.Value)
+		var taskCfg *meta.TaskPkgTaskMeta
+		// taskCfg := excel.GetTaskMgr().GetById(taskItem.Value)
 		if taskCfg == nil {
 			continue
 		}
@@ -133,7 +135,7 @@ func (m *TaskTriggerMgr) checkTriggerCondition(groups map[int32]*excel.Taskgroup
 }
 
 // 判断前置任务是否完成，完成返回true
-func (m *TaskTriggerMgr) checkPreTaskComplete(groupType int32, cfg *excel.TaskCfg) bool {
+func (m *TaskTriggerMgr) checkPreTaskComplete(groupType int32, cfg *meta.TaskPkgTaskMeta) bool {
 	// 没配置
 	if len(cfg.PreTaskId) == 0 {
 		return true
@@ -170,7 +172,7 @@ func (m *TaskTriggerMgr) checkPreCondition(conditions map[int32]int32) bool {
 }
 
 // 判断前置任务组是否完成，完成返回true
-func (m *TaskTriggerMgr) checkPreGroupComplete(cfg *excel.TaskgroupCfg) bool {
+func (m *TaskTriggerMgr) checkPreGroupComplete(cfg *meta.TaskPkgTaskGroupMeta) bool {
 	// 没配置
 	if cfg.PreTaskgroupId <= 0 {
 		return true
@@ -193,7 +195,8 @@ func (m *TaskTriggerMgr) checkTriggerType(triggerIds []int32) bool {
 		}
 
 		// 获取触发器配置
-		cfg := excel.GetTriggerMgr().GetById(id)
+		var cfg *meta.TaskPkgTriggerMeta
+		// cfg := excel.GetTriggerMgr().GetById(id)
 		if cfg == nil {
 			return false
 		}
@@ -219,7 +222,7 @@ func (m *TaskTriggerMgr) checkTriggerType(triggerIds []int32) bool {
 }
 
 // 触发器:账号等级区间
-func (m *TaskTriggerMgr) checkTrigger1(cfg *excel.TriggerCfg) bool {
+func (m *TaskTriggerMgr) checkTrigger1(cfg *meta.TaskPkgTriggerMeta) bool {
 	level := int(m.actor.LoginHandler.getRoleLevel())
 	min, err := strconv.Atoi(cfg.Param01)
 	max, err := strconv.Atoi(cfg.Param02)
@@ -233,7 +236,7 @@ func (m *TaskTriggerMgr) checkTrigger1(cfg *excel.TriggerCfg) bool {
 }
 
 // 触发器:账号等级>=N
-func (m *TaskTriggerMgr) checkTrigger2(cfg *excel.TriggerCfg) bool {
+func (m *TaskTriggerMgr) checkTrigger2(cfg *meta.TaskPkgTriggerMeta) bool {
 	level := int(m.actor.LoginHandler.getRoleLevel())
 	min, err := strconv.Atoi(cfg.Param01)
 	if err != nil {

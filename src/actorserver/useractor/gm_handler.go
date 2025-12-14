@@ -8,9 +8,7 @@ import (
 	"gitee.com/aniwar2/aniwar/src/common"
 	"gitee.com/aniwar2/aniwar/src/common/clidto"
 	"gitee.com/aniwar2/aniwar/src/common/conf"
-	"gitee.com/aniwar2/aniwar/src/common/datahelper"
 	myUtils "gitee.com/aniwar2/aniwar/src/common/utils"
-	excel "gitee.com/aniwar2/aniwar/src/excel/data"
 	"gitee.com/aniwar2/aniwar/src/idipserver/logic"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/framework/base"
@@ -225,12 +223,12 @@ func (h *GmHandler) GMAddGift(ctx context.Context, in *base.ProtoMsg) (proto.Mes
 	if err != nil {
 		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
-	cfg := excel.GetPackageMgr().GetById(req.PackageId)
-	if cfg == nil {
-		return nil, errors.New("配置不存在"), int32(pb.ErrorCode_ConfigError)
-	}
+	// cfg := excel.GetPackageMgr().GetById(req.PackageId)
+	// if cfg == nil {
+	// 	return nil, errors.New("配置不存在"), int32(pb.ErrorCode_ConfigError)
+	// }
 
-	_, err = GetDropMgr(h.actor).DropList2(cfg.Itemcontain, true, nil, h.actor.comData, common.CR_GM)
+	// _, err = GetDropMgr(h.actor).DropList2(cfg.Itemcontain, true, nil, h.actor.comData, common.CR_GM)
 
 	return &pb.S2SReceiveGMAddResRsp{}, nil, 0
 }
@@ -594,10 +592,10 @@ func (h *GmHandler) GMDelItemById(param []string, commonData *clidto.Comdata) er
 
 func (h *GmHandler) GMAddItemAll(param []string, commonData *clidto.Comdata) error {
 	addItems := make(map[int32]int32)
-	excel.GetItemMgr().Foreach(func(cfg *excel.ItemCfg) bool {
-		addItems[cfg.Id] = int32(cfg.NumLimit)
-		return true
-	}, true)
+	// excel.GetItemMgr().Foreach(func(cfg *excel.ItemCfg) bool {
+	// 	addItems[cfg.Id] = int32(cfg.NumLimit)
+	// 	return true
+	// }, true)
 
 	_, err := GetDropMgr(h.actor).DropList2(addItems, true, nil, commonData, common.CR_GM)
 	return err
@@ -681,22 +679,22 @@ func (h *GmHandler) GMAddItem(param []string, commonData *clidto.Comdata) error 
 func (h *GmHandler) GMAddItemByType(param []string, commonData *clidto.Comdata) error {
 	addItems := make(map[uint32]uint32)
 	for i := 0; i < len(param); {
-		typeId, err := strconv.ParseInt(param[i], 10, 32)
-		if err != nil {
-			h.Debugf("gm 命令解析错误, err=%+v", err)
-		}
-		itemNum, err := strconv.ParseInt(param[i+1], 10, 32)
-		if err != nil {
-			h.Debugf("gm 命令解析错误, err=%+v", err)
-		}
+		// typeId, err := strconv.ParseInt(param[i], 10, 32)
+		// if err != nil {
+		// 	h.Debugf("gm 命令解析错误, err=%+v", err)
+		// }
+		// itemNum, err := strconv.ParseInt(param[i+1], 10, 32)
+		// if err != nil {
+		// 	h.Debugf("gm 命令解析错误, err=%+v", err)
+		// }
 
 		// 根据typeId查找道具id
-		excel.GetItemMgr().Foreach(func(cfg *excel.ItemCfg) bool {
-			if typeId == int64(cfg.GetType()) {
-				addItems[uint32(cfg.GetId())] = uint32(itemNum)
-			}
-			return true
-		}, true)
+		// excel.GetItemMgr().Foreach(func(cfg *excel.ItemCfg) bool {
+		// 	if typeId == int64(cfg.GetType()) {
+		// 		addItems[uint32(cfg.GetId())] = uint32(itemNum)
+		// 	}
+		// 	return true
+		// }, true)
 
 		i += 2
 	}
@@ -709,10 +707,10 @@ func (h *GmHandler) GmTestDrop(param []string, commonData *clidto.Comdata) error
 	if len(param) < 2 {
 		return fmt.Errorf("param error")
 	}
-	dropId, err := strconv.Atoi(param[0])
-	if err != nil {
-		return err
-	}
+	// dropId, err := strconv.Atoi(param[0])
+	// if err != nil {
+	// 	return err
+	// }
 	num, err := strconv.Atoi(param[1])
 	if err != nil {
 		return err
@@ -720,9 +718,8 @@ func (h *GmHandler) GmTestDrop(param []string, commonData *clidto.Comdata) error
 
 	var builder strings.Builder
 	for i := 1; i <= num; i++ {
-		itemRewards := datahelper.GetRewardsByDropId(int32(dropId))
-
-		builder.WriteString(fmt.Sprintf("dropId: %d, num: %d, reward: %v \n", dropId, i, datahelper.ConvertItem2ByTpl(itemRewards)))
+		// itemRewards := datahelper.GetRewardsByDropId(int32(dropId))
+		// builder.WriteString(fmt.Sprintf("dropId: %d, num: %d, reward: %v \n", dropId, i, datahelper.ConvertItem2ByTpl(itemRewards)))
 	}
 	myUtils.SaveLogToFile("./log/plog/testdrop.txt", builder.String())
 	return nil
