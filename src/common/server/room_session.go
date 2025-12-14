@@ -7,9 +7,9 @@ import (
 	"gitee.com/bychannel/aniwar/src/common/conf"
 	"github.com/pkg/errors"
 
+	"gitee.com/aniwar2/musae/framework/service"
 	"gitee.com/bychannel/aniwar/src/common/db"
 	"gitee.com/bychannel/aniwar/src/proto/pb"
-	"gitee.com/bychannel/musae/framework/service"
 )
 
 func (s *Server) SaveRoomBindingData(uid string, roomId string) error {

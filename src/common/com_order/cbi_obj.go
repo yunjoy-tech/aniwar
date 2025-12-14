@@ -8,7 +8,7 @@ import (
 
 	"gitee.com/bychannel/aniwar/src/common/db"
 
-	"gitee.com/bychannel/musae/framework/service"
+	"gitee.com/aniwar2/musae/framework/service"
 )
 
 // CBI_AES_KEY AES加解密的key

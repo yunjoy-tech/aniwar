@@ -1,7 +1,7 @@
 package allianceactor
 
 import (
-	"gitee.com/bychannel/musae/framework/baseactor"
+	"gitee.com/aniwar2/musae/framework/baseactor"
 )
 
 type USBaseHandler struct {

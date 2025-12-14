@@ -3,8 +3,8 @@ package stub
 import (
 	"context"
 
-	"gitee.com/bychannel/musae/framework/base"
-	"gitee.com/bychannel/musae/framework/global"
+	"gitee.com/aniwar2/musae/framework/base"
+	"gitee.com/aniwar2/musae/framework/global"
 )
 
 type RoomStub struct {

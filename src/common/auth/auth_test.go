@@ -3,7 +3,7 @@ package auth
 import (
 	"testing"
 
-	"gitee.com/bychannel/musae/framework/utils"
+	"gitee.com/aniwar2/musae/framework/utils"
 )
 
 func Test_AuthToken(t *testing.T) {

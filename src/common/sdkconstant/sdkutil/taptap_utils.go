@@ -10,9 +10,9 @@ import (
 
 	"github.com/pkg/errors"
 
+	myHttp "gitee.com/aniwar2/musae/framework/http"
+	"gitee.com/aniwar2/musae/framework/logger"
 	"gitee.com/bychannel/aniwar/src/common/sdkconstant"
-	myHttp "gitee.com/bychannel/musae/framework/http"
-	"gitee.com/bychannel/musae/framework/logger"
 )
 
 type TapUrlResp struct {

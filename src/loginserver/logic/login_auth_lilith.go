@@ -12,7 +12,7 @@ import (
 	"gitee.com/bychannel/aniwar/src/common/conf"
 	"gitee.com/bychannel/aniwar/src/idipserver/logic"
 
-	"gitee.com/bychannel/musae/framework/logger"
+	"gitee.com/aniwar2/musae/framework/logger"
 
 	"gitee.com/bychannel/aniwar/src/common/sdkconstant"
 	"gitee.com/bychannel/aniwar/src/proto/pb"

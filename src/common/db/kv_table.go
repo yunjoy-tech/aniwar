@@ -2,13 +2,13 @@ package db
 
 import (
 	"encoding/json"
-	"gitee.com/bychannel/musae/framework/baseconf"
-	"gitee.com/bychannel/musae/framework/logger"
-	"gitee.com/bychannel/musae/framework/utils"
+	"gitee.com/aniwar2/musae/framework/baseconf"
+	"gitee.com/aniwar2/musae/framework/logger"
+	"gitee.com/aniwar2/musae/framework/utils"
 	"github.com/pkg/errors"
 	"time"
 
-	"gitee.com/bychannel/musae/framework/state"
+	"gitee.com/aniwar2/musae/framework/state"
 	"google.golang.org/protobuf/proto"
 )
 

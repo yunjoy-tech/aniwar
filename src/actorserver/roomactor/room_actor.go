@@ -1,17 +1,17 @@
 package roomactor
 
 import (
-	"gitee.com/bychannel/musae/framework/baseconf"
-	"gitee.com/bychannel/musae/framework/threading"
+	"gitee.com/aniwar2/musae/framework/baseconf"
+	"gitee.com/aniwar2/musae/framework/threading"
 	"strconv"
 	"time"
 
+	"gitee.com/aniwar2/musae/framework/baseactor"
+	"gitee.com/aniwar2/musae/framework/global"
+	"gitee.com/aniwar2/musae/framework/service"
+	svc "gitee.com/aniwar2/musae/framework/service"
 	"gitee.com/bychannel/aniwar/src/actorserver/frame"
 	"gitee.com/bychannel/aniwar/src/proto/pb"
-	"gitee.com/bychannel/musae/framework/baseactor"
-	"gitee.com/bychannel/musae/framework/global"
-	"gitee.com/bychannel/musae/framework/service"
-	svc "gitee.com/bychannel/musae/framework/service"
 	"github.com/dapr/go-sdk/actor"
 	_ "github.com/dapr/go-sdk/actor"
 )

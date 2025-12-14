@@ -1,9 +1,9 @@
 package logic
 
 import (
+	"gitee.com/aniwar2/musae/framework/guid"
 	"gitee.com/bychannel/aniwar/src/common"
 	"gitee.com/bychannel/aniwar/src/proto/pb"
-	"gitee.com/bychannel/musae/framework/guid"
 )
 
 // 创建用户用户信息并落库

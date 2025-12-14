@@ -12,8 +12,8 @@ import (
 
 	"gitee.com/bychannel/aniwar/src/common/sdkconstant"
 
+	"gitee.com/aniwar2/musae/framework/logger"
 	"gitee.com/bychannel/aniwar/src/proto/pb"
-	"gitee.com/bychannel/musae/framework/logger"
 )
 
 type KuaiBaoLoginReq struct {

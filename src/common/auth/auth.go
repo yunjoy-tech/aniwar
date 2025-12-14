@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"time"
 
-	"gitee.com/bychannel/musae/framework/global"
-	"gitee.com/bychannel/musae/framework/utils"
+	"gitee.com/aniwar2/musae/framework/global"
+	"gitee.com/aniwar2/musae/framework/utils"
 	"github.com/forgoer/openssl"
 )
 

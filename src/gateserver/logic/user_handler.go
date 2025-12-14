@@ -3,11 +3,11 @@ package logic
 import (
 	"time"
 
-	"gitee.com/bychannel/musae/framework/global"
+	"gitee.com/aniwar2/musae/framework/global"
 
+	"gitee.com/aniwar2/musae/framework/base"
+	"gitee.com/aniwar2/musae/framework/logger"
 	"gitee.com/bychannel/aniwar/src/proto/pb"
-	"gitee.com/bychannel/musae/framework/base"
-	"gitee.com/bychannel/musae/framework/logger"
 	"google.golang.org/protobuf/proto"
 )
 

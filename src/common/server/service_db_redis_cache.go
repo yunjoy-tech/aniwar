@@ -6,11 +6,11 @@ import (
 
 	"gitee.com/bychannel/aniwar/src/common/db"
 
-	"gitee.com/bychannel/musae/framework/service"
+	"gitee.com/aniwar2/musae/framework/service"
 
-	"gitee.com/bychannel/musae/framework/baseconf"
-	"gitee.com/bychannel/musae/framework/logger"
-	"gitee.com/bychannel/musae/framework/state"
+	"gitee.com/aniwar2/musae/framework/baseconf"
+	"gitee.com/aniwar2/musae/framework/logger"
+	"gitee.com/aniwar2/musae/framework/state"
 	dapr "github.com/dapr/go-sdk/client"
 	"google.golang.org/protobuf/proto"
 )

@@ -7,8 +7,8 @@
 
 ::set hour=
 ::if %time:~0,2% leq 9 (set hour=0%time:~1,1%) else (set hour=%time:~0,2%)
-::set LDFLAGS="-ldflags=-X gitee.com/bychannel/musae/framework/global.APP_VERSION=DEBUG|"%date:~0,4%-%date:~5,2%-%date:~8,2%-%hour%-%time:~3,2%-%time:~6,2%
-set LDFLAGS="-ldflags=-X gitee.com/bychannel/musae/framework/global.APP_VERSION=DEBUG"
+::set LDFLAGS="-ldflags=-X gitee.com/aniwar2/musae/framework/global.APP_VERSION=DEBUG|"%date:~0,4%-%date:~5,2%-%date:~8,2%-%hour%-%time:~3,2%-%time:~6,2%
+set LDFLAGS="-ldflags=-X gitee.com/aniwar2/musae/framework/global.APP_VERSION=DEBUG"
 
 echo "Build ActorServer"
 go build -gcflags "-N -l" %LDFLAGS% -o ./output/bin/win/actorserver.exe ./src/actorserver || exit /b 1

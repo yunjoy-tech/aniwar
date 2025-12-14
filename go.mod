@@ -3,7 +3,7 @@ module gitee.com/bychannel/aniwar
 go 1.22
 
 require (
-	gitee.com/bychannel/musae v0.1.1-0.20220906131011-54e969989540
+	gitee.com/aniwar2/musae v0.1.1-0.20220906131011-54e969989540
 	github.com/aliyun/aliyun-oss-go-sdk v2.2.7+incompatible
 	github.com/dapr/go-sdk v1.6.0
 	github.com/elastic/go-elasticsearch/v8 v8.7.1
@@ -74,7 +74,7 @@ require (
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 
-replace gitee.com/bychannel/musae => ../musae/
+replace gitee.com/aniwar2/musae => ../musae/
 
 replace github.com/dapr/go-sdk v1.6.0 => github.com/wXwcoder/go-sdk v1.6.9 // indirect
 

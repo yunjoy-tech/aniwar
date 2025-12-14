@@ -14,9 +14,9 @@ import (
 
 	"gitee.com/bychannel/aniwar/src/common/sdkconstant/sdkutil"
 
-	"gitee.com/bychannel/musae/framework/baseconf"
+	"gitee.com/aniwar2/musae/framework/baseconf"
 
-	"gitee.com/bychannel/musae/framework/threading"
+	"gitee.com/aniwar2/musae/framework/threading"
 
 	"gitee.com/bychannel/aniwar/src/common"
 
@@ -26,12 +26,12 @@ import (
 
 	excel "gitee.com/bychannel/aniwar/src/excel/data"
 
-	"gitee.com/bychannel/musae/framework/base"
-	"gitee.com/bychannel/musae/framework/utils"
+	"gitee.com/aniwar2/musae/framework/base"
+	"gitee.com/aniwar2/musae/framework/utils"
 
+	"gitee.com/aniwar2/musae/framework/logger"
+	"gitee.com/aniwar2/musae/framework/service"
 	"gitee.com/bychannel/aniwar/src/proto/pb"
-	"gitee.com/bychannel/musae/framework/logger"
-	"gitee.com/bychannel/musae/framework/service"
 	"google.golang.org/protobuf/proto"
 )
 

@@ -2,16 +2,16 @@ package server
 
 import (
 	"fmt"
+	"gitee.com/aniwar2/musae/framework/base"
 	"gitee.com/bychannel/aniwar/src/common/conf"
 	"gitee.com/bychannel/aniwar/src/proto/pb"
-	"gitee.com/bychannel/musae/framework/base"
 	"google.golang.org/protobuf/proto"
 	"runtime"
 	"time"
 
-	"gitee.com/bychannel/musae/framework/global"
-	"gitee.com/bychannel/musae/framework/logger"
-	"gitee.com/bychannel/musae/framework/utils"
+	"gitee.com/aniwar2/musae/framework/global"
+	"gitee.com/aniwar2/musae/framework/logger"
+	"gitee.com/aniwar2/musae/framework/utils"
 )
 
 func (s *Server) Info() string {

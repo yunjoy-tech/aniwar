@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strconv"
 
-	"gitee.com/bychannel/musae/framework/utils"
+	"gitee.com/aniwar2/musae/framework/utils"
 
 	"gitee.com/bychannel/aniwar/src/common/sdkconstant/sdksign"
 
@@ -13,7 +13,7 @@ import (
 	gameUtils "gitee.com/bychannel/aniwar/src/common/utils"
 	"github.com/dapr/go-sdk/service/common"
 
-	"gitee.com/bychannel/musae/framework/base"
+	"gitee.com/aniwar2/musae/framework/base"
 	"google.golang.org/protobuf/proto"
 
 	"gitee.com/bychannel/aniwar/src/proto/pb"
@@ -25,7 +25,7 @@ import (
 
 	"gitee.com/bychannel/aniwar/src/common/sdkconstant"
 
-	"gitee.com/bychannel/musae/framework/logger"
+	"gitee.com/aniwar2/musae/framework/logger"
 	"github.com/pkg/errors"
 
 	"gitee.com/bychannel/aniwar/src/idipserver/logic"

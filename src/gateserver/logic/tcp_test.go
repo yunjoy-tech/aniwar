@@ -3,9 +3,9 @@ package logic
 import (
 	"encoding/binary"
 	"fmt"
-	"gitee.com/bychannel/musae/framework/errorx"
-	"gitee.com/bychannel/musae/framework/logger"
-	"gitee.com/bychannel/musae/framework/tcpx"
+	"gitee.com/aniwar2/musae/framework/errorx"
+	"gitee.com/aniwar2/musae/framework/logger"
+	"gitee.com/aniwar2/musae/framework/tcpx"
 	"net"
 	"testing"
 	"time"

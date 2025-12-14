@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"io/ioutil"
 
-	"gitee.com/bychannel/musae/framework/baseconf"
-	"gitee.com/bychannel/musae/framework/logger"
+	"gitee.com/aniwar2/musae/framework/baseconf"
+	"gitee.com/aniwar2/musae/framework/logger"
 )
 
 var gConf ServerConf

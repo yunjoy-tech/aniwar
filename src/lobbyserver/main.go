@@ -1,8 +1,8 @@
 package main
 
 import (
+	"gitee.com/aniwar2/musae/framework/process"
 	"gitee.com/bychannel/aniwar/src/lobbyserver/logic"
-	"gitee.com/bychannel/musae/framework/process"
 )
 
 func main() {

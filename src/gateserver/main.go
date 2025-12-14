@@ -1,9 +1,9 @@
 package main
 
 import (
+	"gitee.com/aniwar2/musae/framework/elog"
+	"gitee.com/aniwar2/musae/framework/process"
 	"gitee.com/bychannel/aniwar/src/gateserver/logic"
-	"gitee.com/bychannel/musae/framework/elog"
-	"gitee.com/bychannel/musae/framework/process"
 )
 
 func main() {

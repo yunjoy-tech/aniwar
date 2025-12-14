@@ -1,7 +1,7 @@
 package useractor
 
 import (
-	"gitee.com/bychannel/musae/framework/state"
+	"gitee.com/aniwar2/musae/framework/state"
 )
 
 func (u *UserActor) GetStateManager() *UserActor {
