@@ -29,7 +29,7 @@ import (
 	myUtils "gitee.com/aniwar2/aniwar/src/common/utils"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/framework/base"
-	"gitee.com/aniwar2/musae/framework/guid"
+	"gitee.com/aniwar2/musae/framework/gamelib/guid"
 	"gitee.com/aniwar2/musae/framework/logger"
 	"gitee.com/aniwar2/musae/framework/state"
 	"github.com/dapr/go-sdk/service/common"
@@ -1039,7 +1039,7 @@ func (s *IDIPServer) ImportUserInfo(files map[string]string) []byte {
 }
 
 func (s *IDIPServer) GenRoleId() uint64 {
-	id := s.GenGUID(guid.GUID_PLAYER)
+	id := uint64(guid.GenIntUuid())
 	var roleId uint64
 	if id > 0 {
 		roleId = id + myCommon.USER_ID_BASE

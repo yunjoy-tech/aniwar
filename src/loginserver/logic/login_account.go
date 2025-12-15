@@ -3,13 +3,13 @@ package logic
 import (
 	"gitee.com/aniwar2/aniwar/src/common"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	"gitee.com/aniwar2/musae/framework/guid"
+	"gitee.com/aniwar2/musae/framework/gamelib/guid"
 )
 
 // 创建用户用户信息并落库
 func (s *LoginServer) createAccount(openId, uid, channel string, curTime int64) *pb.UserData {
 	account := &pb.UserData{}
-	id := s.GenGUID(guid.GUID_PLAYER)
+	id := uint64(guid.GenIntUuid())
 	var playerId uint64
 	if id > 0 {
 		playerId = id + common.USER_ID_BASE // playerId基数从10000开始

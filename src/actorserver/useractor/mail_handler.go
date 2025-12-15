@@ -22,7 +22,7 @@ import (
 	myUtils "gitee.com/aniwar2/aniwar/src/common/utils"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/framework/base"
-	"gitee.com/aniwar2/musae/framework/guid"
+	"gitee.com/aniwar2/musae/framework/gamelib/guid"
 	"google.golang.org/protobuf/proto"
 )
 
@@ -560,7 +560,7 @@ func (h *MailHandler) createMail(mailCfg *meta.MailPkgMailMeta, attachment []*pb
 		isReceived = common.MAIL_STATUS_NOT_RECEIVE
 	}
 	mail := &pb.PMailInfo{
-		Id:          int64(h.actor.Srv.GenGUID(guid.GUID_MAIL)),
+		Id:          int64(guid.GenIntUuid()),
 		Title:       mailCfg.Title,
 		Content:     mailCfg.Content,
 		Sender:      mailCfg.Addresser,

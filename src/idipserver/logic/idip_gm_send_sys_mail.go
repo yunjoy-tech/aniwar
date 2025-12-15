@@ -9,8 +9,8 @@ import (
 
 	myCommon "gitee.com/aniwar2/aniwar/src/common"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
+	"gitee.com/aniwar2/musae/framework/gamelib/guid"
 	"gitee.com/aniwar2/musae/framework/global"
-	"gitee.com/aniwar2/musae/framework/guid"
 	"gitee.com/aniwar2/musae/framework/logger"
 	"github.com/dapr/go-sdk/service/common"
 )
@@ -106,7 +106,7 @@ func (s *IDIPServer) SendSysMail(out *common.Content, reqJson []byte) {
 		}
 	}
 
-	mailID := s.GenGUID(guid.GUID_MAIL)
+	mailID := uint64(guid.GenIntUuid())
 	if mailID == 0 {
 		logger.Error("get mail id error")
 		RetCommonMsg(out, http.StatusInternalServerError, int32(pb.ErrorCode_ParamError), Param_Error)
