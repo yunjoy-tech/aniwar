@@ -12,13 +12,12 @@ import (
 	"gitee.com/aniwar2/aniwar/src/idipserver/logic"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/framework/base"
+	"gitee.com/aniwar2/musae/framework/gamelib/guid"
 	"gitee.com/aniwar2/musae/framework/global"
-	"gitee.com/aniwar2/musae/framework/guid"
 	"gitee.com/aniwar2/musae/framework/logger"
 	"gitee.com/aniwar2/musae/framework/service"
 	svc "gitee.com/aniwar2/musae/framework/service"
 	"gitee.com/aniwar2/musae/framework/threading"
-	"gitee.com/aniwar2/musae/framework/utils"
 	"gitee.com/aniwar2/musae/framework/wordfilter"
 	dapr "github.com/dapr/go-sdk/client"
 	"github.com/xuri/excelize/v2"
@@ -417,7 +416,7 @@ func (h *GmHandler) GmTestCmd(param []string, comdata *clidto.Comdata) error {
 		Data:    data,
 		ErrCode: 0,
 		// GUID:    utils.GenIntUUID(),
-		ServerReqIdx: utils.GenIntUUID(),
+		ServerReqIdx: guid.GenIntUuid(),
 	})
 	logger.Debugf("调用结果 msg:%+v, err:%v, code:%d", message, err, code)
 	return nil
@@ -860,45 +859,45 @@ func (h *GmHandler) operateDB(isRedis, isRead bool) (int64, error) {
 }
 
 func (h *GmHandler) GmTestGUID(param []string, commonData *clidto.Comdata) error {
-	if len(param) < 2 {
-		return fmt.Errorf("param error")
-	}
-	threadNum, err := strconv.Atoi(param[0])
-	if err != nil {
-		return err
-	}
-	idNum, err := strconv.Atoi(param[1])
-	if err != nil {
-		return err
-	}
-
-	startId := h.actor.Srv.GenGUID(guid.GUID_PLAYER)
-	guids := sync.Map{}
-	var wg sync.WaitGroup
-	for i := 1; i <= threadNum; i++ {
-		wg.Add(1)
-		threading.RunSafe(func() {
-			for i := 1; i <= idNum; i++ {
-				time.Sleep(time.Millisecond * time.Duration(rand.Int()%30+10))
-				id := h.actor.Srv.GenGUID(guid.GUID_PLAYER)
-				if id == 0 {
-					h.Warn("GUID Test id err")
-					break
-				}
-				guids.Store(id, id)
-			}
-			wg.Done()
-		})
-	}
-	endId := h.actor.Srv.GenGUID(guid.GUID_PLAYER)
-	wg.Wait()
-	realCount := 0
-	guids.Range(func(key, value any) bool {
-		realCount += 1
-		return true
-	})
-	allCount := threadNum * idNum
-	h.Warnf("GUID Test,startId:[%d],endId[%d],allCount:[%d],realCount[%d]", startId, endId, allCount, realCount)
+	// if len(param) < 2 {
+	// 	return fmt.Errorf("param error")
+	// }
+	// threadNum, err := strconv.Atoi(param[0])
+	// if err != nil {
+	// 	return err
+	// }
+	// idNum, err := strconv.Atoi(param[1])
+	// if err != nil {
+	// 	return err
+	// }
+	//
+	// startId := h.actor.Srv.GenGUID(guid.GUID_PLAYER)
+	// guids := sync.Map{}
+	// var wg sync.WaitGroup
+	// for i := 1; i <= threadNum; i++ {
+	// 	wg.Add(1)
+	// 	threading.RunSafe(func() {
+	// 		for i := 1; i <= idNum; i++ {
+	// 			time.Sleep(time.Millisecond * time.Duration(rand.Int()%30+10))
+	// 			id := h.actor.Srv.GenGUID(guid.GUID_PLAYER)
+	// 			if id == 0 {
+	// 				h.Warn("GUID Test id err")
+	// 				break
+	// 			}
+	// 			guids.Store(id, id)
+	// 		}
+	// 		wg.Done()
+	// 	})
+	// }
+	// endId := h.actor.Srv.GenGUID(guid.GUID_PLAYER)
+	// wg.Wait()
+	// realCount := 0
+	// guids.Range(func(key, value any) bool {
+	// 	realCount += 1
+	// 	return true
+	// })
+	// allCount := threadNum * idNum
+	// h.Warnf("GUID Test,startId:[%d],endId[%d],allCount:[%d],realCount[%d]", startId, endId, allCount, realCount)
 	return nil
 }
 
@@ -978,7 +977,7 @@ func (h *GmHandler) GMTestRoom(param []string, commonData *clidto.Comdata) error
 			UAID:   h.actor.Srv.UAID(h.actor.ID(), h.actor.roleId),
 			Data:   data,
 			// GUID:    utils.GenIntUUID(),
-			ServerReqIdx: utils.GenIntUUID(),
+			ServerReqIdx: guid.GenIntUuid(),
 		}
 
 		resp, err := h.actor.Srv.ActorInvoke(global.RoomActorType, roomId, &msg)
@@ -1011,7 +1010,7 @@ func (h *GmHandler) GMTestRoom(param []string, commonData *clidto.Comdata) error
 			UAID:   h.actor.Srv.UAID(h.actor.ID(), h.actor.roleId),
 			Data:   data,
 			// GUID:    utils.GenIntUUID(),
-			ServerReqIdx: utils.GenIntUUID(),
+			ServerReqIdx: guid.GenIntUuid(),
 		}
 
 		resp, err := h.actor.Srv.ActorInvoke(global.RoomActorType, roomId, &msg)

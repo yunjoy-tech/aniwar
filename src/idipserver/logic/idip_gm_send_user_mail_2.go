@@ -6,12 +6,10 @@ import (
 	"strconv"
 	"time"
 
-	"gitee.com/aniwar2/musae/framework/utils"
-
 	myCommon "gitee.com/aniwar2/aniwar/src/common"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/framework/base"
-	"gitee.com/aniwar2/musae/framework/guid"
+	"gitee.com/aniwar2/musae/framework/gamelib/guid"
 	"gitee.com/aniwar2/musae/framework/logger"
 	"github.com/dapr/go-sdk/service/common"
 	"google.golang.org/protobuf/proto"
@@ -98,7 +96,7 @@ func (s *IDIPServer) SendUserMail2(out *common.Content, reqJson []byte) {
 		langMap[lang] = &pb.S2S_SendGMAddUserMailReqLanguage{Content: m}
 	}
 
-	mailID := s.GenGUID(guid.GUID_MAIL)
+	mailID := uint64(guid.GenIntUuid())
 	if mailID == 0 {
 		RetCommonMsg(out, http.StatusInternalServerError, int32(pb.ErrorCode_InternalError), Internal_Error)
 		return
@@ -148,7 +146,7 @@ func (s *IDIPServer) SendUserMail2(out *common.Content, reqJson []byte) {
 			Data:    data,
 			ErrCode: 0,
 			// GUID:    utils.GenIntUUID(),
-			ServerReqIdx: utils.GenIntUUID(),
+			ServerReqIdx: guid.GenIntUuid(),
 			Topic:        "",
 		}
 		rsp, err := s.UserInvoke(uaid, in)

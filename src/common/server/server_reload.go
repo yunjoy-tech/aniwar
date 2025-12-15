@@ -7,9 +7,9 @@ import (
 	comn "gitee.com/aniwar2/aniwar/src/common"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/framework/base"
+	"gitee.com/aniwar2/musae/framework/gamelib/guid"
 	"gitee.com/aniwar2/musae/framework/global"
 	"gitee.com/aniwar2/musae/framework/logger"
-	"gitee.com/aniwar2/musae/framework/utils"
 	"github.com/dapr/go-sdk/service/common"
 	"google.golang.org/protobuf/proto"
 	"strings"
@@ -122,7 +122,7 @@ func (s *Server) HandlerHotEvent(in *base.ProtoMsg) (err error) {
 			UAID:    global.CenterActorID,
 			Data:    reqData,
 			ErrCode: 0,
-			ReqIdx:  utils.GenIntUUID(),
+			ReqIdx:  guid.GenIntUuid(),
 			Topic:   "",
 			Uids:    nil,
 		})

@@ -3,10 +3,10 @@ package auth
 import (
 	"encoding/base64"
 	"encoding/json"
+	"gitee.com/aniwar2/musae/framework/gamelib/guid"
 	"time"
 
 	"gitee.com/aniwar2/musae/framework/global"
-	"gitee.com/aniwar2/musae/framework/utils"
 	"github.com/forgoer/openssl"
 )
 
@@ -32,7 +32,7 @@ const AuthTokenSecret = "63c163@00e730387"
 
 func EncodeAuthToken(uid, channel, uuid string, lifeTime int64) (string, error) {
 	if len(uuid) <= 0 {
-		uuid = utils.GenStrUUID()
+		uuid = guid.GenStrUuid()
 	}
 	if lifeTime <= 0 {
 		lifeTime = global.TOKEN_LIFE_TIME

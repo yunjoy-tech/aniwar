@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"gitee.com/aniwar2/aniwar/src/meta"
+	"gitee.com/aniwar2/musae/framework/gamelib/guid"
 	"strconv"
 	"time"
 
@@ -23,10 +24,8 @@ import (
 
 	"gitee.com/aniwar2/aniwar/src/common/com_order"
 
-	"gitee.com/aniwar2/musae/framework/base"
-	"gitee.com/aniwar2/musae/framework/utils"
-
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
+	"gitee.com/aniwar2/musae/framework/base"
 	"gitee.com/aniwar2/musae/framework/logger"
 	"gitee.com/aniwar2/musae/framework/service"
 	"google.golang.org/protobuf/proto"
@@ -134,7 +133,7 @@ func (h *OrderHandler) CreateOrderReq(ctx context.Context, in *base.ProtoMsg) (p
 		h.Debugf("不是tap用户, 不做tap消费限制检查")
 	}
 
-	orderId := utils.GenStrUUID()
+	orderId := guid.GenStrUuid()
 	order := &pb.Order{
 		CreateTs:      now.Unix(),
 		UpdateTs:      now.Unix(),

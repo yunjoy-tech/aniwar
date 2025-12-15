@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"gitee.com/aniwar2/musae/framework/gamelib/guid"
 	"strconv"
 	"strings"
 	"time"
@@ -114,7 +115,7 @@ func (s *LoginServer) handleLoginReq(msg *Msg) *pb.LS2C_LoginRes {
 		_, base64SrvKey, rsaKey = rsa.CreateSrvRsaKey(nil, req.CliRandomSeed)
 	}
 
-	sessionId := utils.GenIntGUID()
+	sessionId := guid.GenIntUuid()
 	uid, errCode := s.DoHandleLoginReq(req, res, msg.ClientIp, rsaKey)
 	res.ErrCode = int32(errCode)
 	if res.ErrCode == int32(pb.ErrorCode_Success) {
@@ -235,7 +236,7 @@ func (s *LoginServer) DoHandleLoginReq(req *pb.C2LS_LoginReq, res *pb.LS2C_Login
 
 	now := time.Now().Unix()
 
-	res.Token, err = auth.EncodeAuthToken(uid, channel, utils.GenStrUUID(), int64(baseconf.GetBaseConf().AccTokenTTL))
+	res.Token, err = auth.EncodeAuthToken(uid, channel, guid.GenStrUuid(), int64(baseconf.GetBaseConf().AccTokenTTL))
 	if err != nil {
 		res.ErrCode = int32(pb.ErrorCode_InternalError)
 		logger.Warnf("create token error, account=%s", req.AccountId)
@@ -348,7 +349,7 @@ func (s *LoginServer) DoHandleLoginReq(req *pb.C2LS_LoginReq, res *pb.LS2C_Login
 					Data:    nil,
 					ErrCode: 0,
 					// GUID:    utils.GenIntUUID(),
-					ServerReqIdx: utils.GenIntUUID(),
+					ServerReqIdx: guid.GenIntUuid(),
 				})
 			}
 		})

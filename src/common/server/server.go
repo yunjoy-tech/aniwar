@@ -14,8 +14,6 @@ import (
 
 	"gitee.com/aniwar2/aniwar/src/common/sdkconstant"
 
-	"gitee.com/aniwar2/musae/framework/utils"
-
 	"gitee.com/aniwar2/musae/framework/global"
 	"google.golang.org/protobuf/types/known/emptypb"
 
@@ -26,7 +24,7 @@ import (
 	"gitee.com/aniwar2/aniwar/src/common"
 	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/musae/framework/baseconf"
-	"gitee.com/aniwar2/musae/framework/guid"
+	"gitee.com/aniwar2/musae/framework/gamelib/guid"
 
 	"gitee.com/aniwar2/musae/framework/service"
 	"gitee.com/aniwar2/musae/framework/state"
@@ -239,7 +237,7 @@ func (s *Server) OnUpdateStatus() {
 		UAID:    global.CenterActorID,
 		Data:    data,
 		ErrCode: 0,
-		ReqIdx:  utils.GenIntUUID(),
+		ReqIdx:  guid.GenIntUuid(),
 		Topic:   "",
 		Uids:    nil,
 	})
@@ -465,11 +463,11 @@ func (s *Server) GetPlayerId(uid string) (uint64, error) {
 				if account.PlayerList.PlayerId > 0 {
 					playerId = account.PlayerList.PlayerId
 				} else {
-					id := s.GenGUID(guid.GUID_PLAYER)
+					id := guid.GenIntUuid()
 					if id == 0 {
 						return 0, fmt.Errorf("guid error")
 					}
-					playerId = id + common.USER_ID_BASE // playerId基数从10000开始
+					playerId = uint64(id + common.USER_ID_BASE) // playerId基数从10000开始
 				}
 			}
 		}
@@ -662,7 +660,7 @@ func (s *Server) GetTaptapUid(unionId string) (int, error) {
 // 建立taptap openId-roleId映射
 func (s *Server) UpdateTaptapUidCache(unionId string) (int, error) {
 	now := time.Now().Unix()
-	uid := s.GenGUID(guid.GUID_ACCOUNT)
+	uid := uint64(guid.GenIntUuid())
 	if uid == 0 {
 		return 0, fmt.Errorf("uid generate failed")
 	}

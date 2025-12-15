@@ -4,11 +4,10 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"gitee.com/aniwar2/musae/framework/gamelib/guid"
 	"net/http"
 	"strconv"
 	"strings"
-
-	"gitee.com/aniwar2/musae/framework/utils"
 
 	"gitee.com/aniwar2/aniwar/src/common/sdkconstant"
 	"gitee.com/aniwar2/aniwar/src/common/sdkconstant/sdksign"
@@ -182,7 +181,7 @@ func (s *IDIPServer) QuestionRewardHandler(ctx context.Context, in *common.Invoc
 		Data:    data,
 		ErrCode: 0,
 		// GUID:    utils.GenIntUUID(),
-		ServerReqIdx: utils.GenIntUUID(),
+		ServerReqIdx: guid.GenIntUuid(),
 		Topic:        "",
 	})
 	if rsp.ErrCode != RET_CODE_SUCCESS || err != nil {
@@ -255,7 +254,7 @@ func (s *IDIPServer) DelAccountHandler(ctx context.Context, in *common.Invocatio
 		Data:    data,
 		ErrCode: 0,
 		// GUID:    utils.GenIntUUID(),
-		ServerReqIdx: utils.GenIntUUID(),
+		ServerReqIdx: guid.GenIntUuid(),
 		Topic:        "",
 	}
 	rsp, err := s.UserInvoke(uaid, callData)

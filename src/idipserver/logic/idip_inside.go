@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"gitee.com/aniwar2/musae/framework/gamelib/guid"
 	"gitee.com/aniwar2/musae/framework/global"
 	"net/http"
 	"strconv"
@@ -423,7 +424,7 @@ func (s *IDIPServer) getUserOrderList(out *common.Content, apiData []byte) {
 		Data:    data,
 		ErrCode: 0,
 		// GUID:    utils.GenIntUUID(),
-		ServerReqIdx: utils.GenIntUUID(),
+		ServerReqIdx: guid.GenIntUuid(),
 		Topic:        "",
 	})
 	if rsp.ErrCode != RET_CODE_SUCCESS || err != nil {
@@ -461,7 +462,7 @@ func (s *IDIPServer) ReDropOrderReward(apiData []byte) []byte {
 		Data:    data,
 		ErrCode: 0,
 		// GUID:    utils.GenIntUUID(),
-		ServerReqIdx: utils.GenIntUUID(),
+		ServerReqIdx: guid.GenIntUuid(),
 		Topic:        "",
 	})
 	if rsp.ErrCode != RET_CODE_SUCCESS || err != nil {
@@ -561,7 +562,7 @@ func (s *IDIPServer) ReduceItem(apiData []byte) []byte {
 		Data:    data,
 		ErrCode: 0,
 		// GUID:    utils.GenIntUUID(),
-		ServerReqIdx: utils.GenIntUUID(),
+		ServerReqIdx: guid.GenIntUuid(),
 		Topic:        "",
 	})
 	if rsp.ErrCode != RET_CODE_SUCCESS || err != nil {

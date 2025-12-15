@@ -4,11 +4,11 @@ import (
 	"context"
 	"fmt"
 	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
+	"gitee.com/aniwar2/musae/framework/gamelib/guid"
 	"os"
 	"sync"
 	"time"
 
-	"gitee.com/aniwar2/musae/framework/utils"
 	"google.golang.org/protobuf/proto"
 
 	"github.com/pkg/errors"
@@ -389,7 +389,7 @@ func (s *GateServer) NotifyActorGateTopic(uid string, uaid string, operator pb.G
 	_, err = s.UserInvoke(uaid, &base.ProtoMsg{
 		AppId:        s.AppId,
 		MsgId:        int32(pb.Protocols_PS2S_TcpGateTopicReq1),
-		ServerReqIdx: utils.GenIntUUID(),
+		ServerReqIdx: guid.GenIntUuid(),
 		UserId:       uid,
 		RoleId:       playerId,
 		UAID:         uaid,

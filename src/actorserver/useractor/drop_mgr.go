@@ -3,6 +3,7 @@ package useractor
 import (
 	"fmt"
 	"gitee.com/aniwar2/aniwar/src/meta"
+	"gitee.com/aniwar2/musae/framework/gamelib/guid"
 	"time"
 
 	"gitee.com/aniwar2/aniwar/src/actorserver/useractor/event"
@@ -12,7 +13,6 @@ import (
 	"gitee.com/aniwar2/aniwar/src/common"
 	myUtils "gitee.com/aniwar2/aniwar/src/common/utils"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	"gitee.com/aniwar2/musae/framework/utils"
 )
 
 type DropMgr struct {
@@ -297,7 +297,7 @@ func (m *DropMgr) CreatePCommonItemInfo(itemId, itemNum uint32) *pb.PCommonItemI
 	// 主键id
 	uniqueId := uint64(0)
 	if itemCfg.TimeLimit > 0 {
-		uniqueId = uint64(utils.GenIntUUID()) // 有过期时间，就重新生成一个主键id
+		uniqueId = uint64(guid.GenIntUuid()) // 有过期时间，就重新生成一个主键id
 	} else {
 		uniqueId = uint64(itemId)
 	}

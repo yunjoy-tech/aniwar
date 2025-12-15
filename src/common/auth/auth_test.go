@@ -1,12 +1,11 @@
 package auth
 
 import (
+	"gitee.com/aniwar2/musae/framework/gamelib/guid"
 	"testing"
-
-	"gitee.com/aniwar2/musae/framework/utils"
 )
 
 func Test_AuthToken(t *testing.T) {
-	token, _ := EncodeAuthToken("test", "pc", utils.GenStrUUID(), 15)
+	token, _ := EncodeAuthToken("test", "pc", guid.GenStrUuid(), 15)
 	DecodeAuthToken([]byte(token))
 }

@@ -5,10 +5,9 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"gitee.com/aniwar2/musae/framework/gamelib/guid"
 	"net/url"
 	"strconv"
-
-	"gitee.com/aniwar2/musae/framework/utils"
 
 	"gitee.com/aniwar2/aniwar/src/common/com_order"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
@@ -139,7 +138,7 @@ func (s *BillServer) PayHandler(ctx context.Context, in *common.InvocationEvent)
 		Data:    actorData,
 		ErrCode: 0,
 		// GUID:    utils.GenIntUUID(),
-		ServerReqIdx: utils.GenIntUUID(),
+		ServerReqIdx: guid.GenIntUuid(),
 		Topic:        "",
 	})
 	if err != nil {

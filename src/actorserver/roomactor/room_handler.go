@@ -5,6 +5,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"gitee.com/aniwar2/musae/framework/gamelib/guid"
 	"strconv"
 	"time"
 
@@ -17,8 +18,6 @@ import (
 	myUtils "gitee.com/aniwar2/aniwar/src/common/utils"
 
 	"github.com/forgoer/openssl"
-
-	"gitee.com/aniwar2/musae/framework/utils"
 
 	"github.com/pkg/errors"
 
@@ -106,7 +105,7 @@ func (h *RoomHandler) CreateRoomReq(ctx context.Context, in *base.ProtoMsg) (pro
 
 	h.Infof("-----------------玩家:%s, 申请创建房间", playerUid)
 	h.actor.Data.RoomId = h.actor.ID()
-	h.actor.Data.RoomSecret = utils.GenStrUUID()
+	h.actor.Data.RoomSecret = guid.GenStrUuid()
 	h.actor.Data.RoomState = pb.RoomState_RoomState_created
 	h.actor.Data.PlayType = req.PlayType
 	h.actor.Data.OwnerUid = playerUid
@@ -627,7 +626,7 @@ func (h *RoomHandler) InviteIntoRoomReq(ctx context.Context, in *base.ProtoMsg) 
 	inviteRespData, err := h.actor.Srv.UserInvoke(fromUaid, &base.ProtoMsg{
 		AppId:        global.ACTOR_SVC,
 		MsgId:        int32(pb.Protocols_PS2S_InviteIntoRoomReq),
-		ServerReqIdx: utils.GenIntUUID(),
+		ServerReqIdx: guid.GenIntUuid(),
 		UserId:       fromPlayerUid,
 		RoleId:       req.InvitedRoleId,
 		UAID:         fromUaid,

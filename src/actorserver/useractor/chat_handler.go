@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"gitee.com/aniwar2/aniwar/src/common"
+	"gitee.com/aniwar2/musae/framework/gamelib/guid"
 	"gitee.com/aniwar2/musae/framework/threading"
 	"strconv"
 	"strings"
@@ -15,7 +16,6 @@ import (
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/framework/base"
 	"gitee.com/aniwar2/musae/framework/service"
-	"gitee.com/aniwar2/musae/framework/utils"
 	"github.com/elastic/go-elasticsearch/v8/typedapi/types/enums/sortorder"
 	"github.com/pkg/errors"
 	"google.golang.org/protobuf/proto"
@@ -394,7 +394,7 @@ func (h *UserChatHandler) PushMessage2Friend(roleId uint64, msgId int32, data []
 		Data:    data,
 		ErrCode: 0,
 		// GUID:    utils.GenIntUUID(),
-		ServerReqIdx: utils.GenIntUUID(),
+		ServerReqIdx: guid.GenIntUuid(),
 		Topic:        "",
 	}
 	h.Infof("给好友[%d]推送消息[%v]", roleId, string(data))

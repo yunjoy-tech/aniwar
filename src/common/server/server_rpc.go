@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"gitee.com/aniwar2/musae/framework/gamelib/guid"
 	"net/http"
 	"strconv"
 	"time"
@@ -195,7 +196,7 @@ func (s *Server) UserEventInvoke(uaid string, msg *base.ProtoMsg) (*base.ProtoMs
 func (s *Server) userInvoke(uaid string, msg *base.ProtoMsg, isEvent bool) (*base.ProtoMsg, error) {
 	startTime := time.Now()
 	if msg.ReqIdx == 0 {
-		msg.ReqIdx = utils.GenIntUUID()
+		msg.ReqIdx = guid.GenIntUuid()
 	}
 
 	invokeName := "UserInvoke"
@@ -233,7 +234,7 @@ func (s *Server) userInvoke(uaid string, msg *base.ProtoMsg, isEvent bool) (*bas
 func (s *Server) ActorInvoke(actorType, actorId string, msg *base.ProtoMsg) (*base.ProtoMsg, error) {
 	startTime := time.Now()
 	if msg.ReqIdx == 0 {
-		msg.ReqIdx = utils.GenIntUUID()
+		msg.ReqIdx = guid.GenIntUuid()
 	}
 	ctx := context.Background()
 	md := metadata.Pairs("msg-id", fmt.Sprintf("%v", pb.Protocols(msg.MsgId)))
@@ -314,7 +315,7 @@ func (s *Server) CallUserActor(isEvent bool, roleId uint64, msgId int32, reqMsg 
 		UAID:    uaid,
 		Data:    callData,
 		ErrCode: 0,
-		ReqIdx:  utils.GenIntUUID(),
+		ReqIdx:  guid.GenIntUuid(),
 		Topic:   "",
 	}
 	var rsp *base.ProtoMsg

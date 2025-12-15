@@ -3,9 +3,8 @@ package logic
 import (
 	"context"
 	"fmt"
+	"gitee.com/aniwar2/musae/framework/gamelib/guid"
 	"strconv"
-
-	"gitee.com/aniwar2/musae/framework/utils"
 
 	"gitee.com/aniwar2/aniwar/src/common/sdkconstant/sdksign"
 
@@ -137,7 +136,7 @@ func (s *BillServer) RefundHandler(ctx context.Context, in *common.InvocationEve
 			Data:    actorData,
 			ErrCode: 0,
 			// GUID:    utils.GenIntUUID(),
-			ServerReqIdx: utils.GenIntUUID(),
+			ServerReqIdx: guid.GenIntUuid(),
 			Topic:        "",
 		})
 		if err != nil {

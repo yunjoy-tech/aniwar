@@ -5,6 +5,7 @@ import (
 	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/framework/base"
+	"gitee.com/aniwar2/musae/framework/gamelib/guid"
 	"google.golang.org/protobuf/proto"
 	"runtime"
 	"time"
@@ -89,7 +90,7 @@ func (s *Server) CenterSrvInvoke(msgId int32, data []byte) []byte {
 		UAID:    global.CenterActorID,
 		Data:    data,
 		ErrCode: 0,
-		ReqIdx:  utils.GenIntUUID(),
+		ReqIdx:  guid.GenIntUuid(),
 		Topic:   "",
 		Uids:    nil,
 	})

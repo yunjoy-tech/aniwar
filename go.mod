@@ -3,7 +3,7 @@ module gitee.com/aniwar2/aniwar
 go 1.22
 
 require (
-	gitee.com/aniwar2/musae v0.0.0-20251214061148-c25f913d403a
+	gitee.com/aniwar2/musae v0.0.0-20251215062541-fbbce5d37d59
 	github.com/aliyun/aliyun-oss-go-sdk v2.2.7+incompatible
 	github.com/dapr/go-sdk v1.6.0
 	github.com/elastic/go-elasticsearch/v8 v8.7.1
@@ -37,7 +37,7 @@ require (
 	github.com/gofrs/uuid v4.0.0+incompatible // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/google/go-cmp v0.5.9 // indirect
-	github.com/google/uuid v1.3.0 // indirect
+	github.com/google/uuid v1.6.0 // indirect
 	github.com/gorilla/mux v1.8.0 // indirect
 	github.com/gorilla/websocket v1.4.2 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
@@ -76,6 +76,6 @@ require (
 
 replace gitee.com/aniwar2/musae => ../musae/
 
-replace github.com/dapr/go-sdk v1.6.0 => github.com/wXwcoder/go-sdk v1.6.9 // indirect
+replace github.com/dapr/go-sdk v1.6.0 => github.com/bychannel/go-sdk v1.6.9 // indirect
 
 //replace  github.com/dapr/go-sdk v1.6.0 => ../go-sdk

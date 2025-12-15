@@ -5,15 +5,14 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"gitee.com/aniwar2/musae/framework/gamelib/guid"
 	"strconv"
 	"time"
 
 	"github.com/forgoer/openssl"
 
-	"gitee.com/aniwar2/musae/framework/global"
-	"gitee.com/aniwar2/musae/framework/utils"
-
 	"gitee.com/aniwar2/musae/framework/base"
+	"gitee.com/aniwar2/musae/framework/global"
 
 	"gitee.com/aniwar2/aniwar/src/common"
 	"gitee.com/aniwar2/aniwar/src/common/com_order"
@@ -134,7 +133,7 @@ func (h *UserRoomHandler) CreateRoomReq(ctx context.Context, in *base.ProtoMsg) 
 		UAID:   h.actor.Srv.UAID(h.actor.ID(), h.actor.roleId),
 		Data:   data,
 		// GUID:    utils.GenIntUUID(),
-		ServerReqIdx: utils.GenIntUUID(),
+		ServerReqIdx: guid.GenIntUuid(),
 	}
 	createRoomRspMsg, err := h.actor.Srv.ActorInvoke(global.RoomActorType, roomId, createRoomReqMsg)
 	if err != nil {
@@ -208,7 +207,7 @@ func (h *UserRoomHandler) JoinRoomReq(ctx context.Context, in *base.ProtoMsg) (p
 		UAID:   h.actor.Srv.UAID(h.actor.ID(), h.actor.roleId),
 		Data:   data,
 		// GUID:    utils.GenIntUUID(),
-		ServerReqIdx: utils.GenIntUUID(),
+		ServerReqIdx: guid.GenIntUuid(),
 	}
 	joinRoomRspMsg, err := h.actor.Srv.ActorInvoke(global.RoomActorType, req.RoomId, joinRoomReqMsg)
 	if err != nil {
@@ -317,7 +316,7 @@ func (h *UserRoomHandler) RoomInvoke(roomId string, msgId int32, reqMsg proto.Me
 		UAID:   h.actor.ID(),
 		Data:   callData,
 		// GUID:    utils.GenIntUUID(),
-		ServerReqIdx: utils.GenIntUUID(),
+		ServerReqIdx: guid.GenIntUuid(),
 	}
 	rspMsg, err := h.actor.Srv.ActorInvoke(global.RoomActorType, roomId, protoMsg)
 	if err != nil {

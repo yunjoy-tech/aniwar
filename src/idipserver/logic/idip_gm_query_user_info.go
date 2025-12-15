@@ -3,9 +3,8 @@ package logic
 import (
 	"context"
 	"encoding/json"
+	"gitee.com/aniwar2/musae/framework/gamelib/guid"
 	"net/http"
-
-	"gitee.com/aniwar2/musae/framework/utils"
 
 	"gitee.com/aniwar2/aniwar/src/common/actor/stub"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
@@ -91,7 +90,7 @@ func (s *IDIPServer) GetUserInfo2(roleId string) (*CommonUser, error) {
 		Data:    nil,
 		ErrCode: 0,
 		// GUID:    utils.GenIntUUID(),
-		ServerReqIdx: utils.GenIntUUID(),
+		ServerReqIdx: guid.GenIntUuid(),
 		Topic:        "",
 	}
 	s.ImpActorStub(userStub)

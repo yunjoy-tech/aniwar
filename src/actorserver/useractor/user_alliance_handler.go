@@ -7,9 +7,8 @@ import (
 	"gitee.com/aniwar2/aniwar/src/actorserver/useractor/event"
 	"gitee.com/aniwar2/aniwar/src/common"
 	"gitee.com/aniwar2/aniwar/src/common/db"
+	"gitee.com/aniwar2/musae/framework/gamelib/guid"
 	"gitee.com/aniwar2/musae/framework/global"
-	"gitee.com/aniwar2/musae/framework/guid"
-	"gitee.com/aniwar2/musae/framework/utils"
 	"strconv"
 	"time"
 	"unicode/utf8"
@@ -681,7 +680,7 @@ func (h *UserAllianceHandler) CreateAllianceReq(ctx context.Context, in *base.Pr
 	// }
 
 	// 创建联盟数据
-	allianceId := h.actor.Srv.GenGUID(guid.GUID_ALLIANCE)
+	allianceId := guid.GenIntUuid()
 	if allianceId == 0 {
 		return nil, fmt.Errorf("allianceId generate failed"), int32(pb.ErrorCode_InternalError)
 	}
@@ -819,7 +818,7 @@ func (h *UserAllianceHandler) AllianceInvoke(allianceId int64, msgId int32, reqM
 		Data:   callData,
 		// GUID:    utils.GenIntUUID(),
 		Topic:        topic,
-		ServerReqIdx: utils.GenIntUUID(),
+		ServerReqIdx: guid.GenIntUuid(),
 	}
 	rspMsg, err := h.actor.Srv.ActorInvoke(global.AllianceActorType, strconv.Itoa(int(allianceId)), protoMsg)
 	if err != nil {

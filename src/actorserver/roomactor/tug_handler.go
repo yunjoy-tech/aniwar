@@ -3,6 +3,7 @@ package roomactor
 import (
 	"context"
 	"fmt"
+	"gitee.com/aniwar2/musae/framework/gamelib/guid"
 	"time"
 
 	"gitee.com/aniwar2/aniwar/src/common/datahelper"
@@ -10,8 +11,6 @@ import (
 	myUtils "gitee.com/aniwar2/aniwar/src/common/utils"
 
 	"gitee.com/aniwar2/musae/framework/base"
-
-	"gitee.com/aniwar2/musae/framework/utils"
 
 	"gitee.com/aniwar2/musae/framework/threading"
 
@@ -126,7 +125,7 @@ func (h *TugHandler) tugGameStart(roomModel pb.RoomModel) {
 
 	h.actor.Tug = &pb.Tug{
 		RoomGameInfo: &pb.RoomGameInfo{
-			GameId:      utils.GenStrUUID(),
+			GameId:      guid.GenStrUuid(),
 			TugStartSec: time.Now().Unix(),
 		},
 		TugState:  pb.TugState_ts_countDown,
