@@ -15,21 +15,21 @@ func (s *LoginServer) OnTcp(c *tcpx.Context) {
 
 	messageID, e := tcpx.MessageIDOf(c.Stream)
 	if e != nil {
-		logger.Warn(errorx.Wrap(e).Error())
+		logger.Warn(errorx.Wrap(e, "").Error())
 		return
 	}
 	logger.Debug("OnTcp: ", c.ClientIP(), c.Network(), pb.Protocols(messageID), len(c.Stream), c.Stream)
 
 	data, err := tcpx.BodyBytesOf(c.Stream)
 	if err != nil {
-		logger.Warn("OnTcp BodyBytesOf", errorx.Wrap(err).Error())
+		logger.Warn("OnTcp BodyBytesOf", errorx.Wrap(err, "").Error())
 		return
 	}
 
 	dataLen := len(data)
 	// 包体大小限制
 	if dataLen > baseconf.GetBaseConf().GateMsgMaxSize {
-		logger.Warn("OnTcp BodyBytesOf", errorx.Wrap(err).Error())
+		logger.Warn("OnTcp BodyBytesOf", errorx.Wrap(err, "").Error())
 		return
 	}
 

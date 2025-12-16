@@ -60,7 +60,7 @@ func (s *LoginServer) OnHttp(ctx context.Context, in *common.InvocationEvent) (o
 
 	srcData, err := tcpx.Decrypt(in.Data, "")
 	if err != nil {
-		logger.Warn("OnLogin Unpack Decrypt", errorx.Wrap(err).Error())
+		logger.Warn("OnLogin Unpack Decrypt", errorx.Wrap(err, "").Error())
 		return nil, err
 	}
 
@@ -72,7 +72,7 @@ func (s *LoginServer) OnHttp(ctx context.Context, in *common.InvocationEvent) (o
 
 	data, err := tcpx.BodyBytesOf(srcData)
 	if err != nil {
-		logger.Warn("OnLogin BodyBytesOf", errorx.Wrap(err).Error())
+		logger.Warn("OnLogin BodyBytesOf", errorx.Wrap(err, "").Error())
 		return nil, err
 	}
 
@@ -89,7 +89,7 @@ func (s *LoginServer) OnHttp(ctx context.Context, in *common.InvocationEvent) (o
 		data, err = s.Pack(pb.Protocols_PS2C_ErrorCodeNtf, pb.ErrorCode(res.ErrCode), &pb.S2C_ErrorCodeNtf{ErrorCode: uint32(res.ErrCode), Param: []string{strconv.Itoa(int(res.ErrCode))}}, "")
 	}
 	if err != nil {
-		logger.Warnf("OnLogin res pack err: %s", errorx.Wrap(err).Error())
+		logger.Warnf("OnLogin res pack err: %s", errorx.Wrap(err, "").Error())
 	}
 	out = &common.Content{
 		Data:        data,

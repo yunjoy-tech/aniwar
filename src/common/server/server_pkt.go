@@ -27,11 +27,11 @@ func (s *Server) PackWithBody(cmdId pb.Protocols, errCode pb.ErrorCode, body []b
 func (s *Server) Unpack(allData []byte, dest proto.Message) error {
 	body, err := tcpx.BodyBytesOf(allData)
 	if err != nil {
-		logger.Warn("Unpack BodyBytesOf", errorx.Wrap(err).Error())
+		logger.Warn("Unpack BodyBytesOf", errorx.Wrap(err, "").Error())
 	}
 	err = proto.Unmarshal(body, dest)
 	if err != nil {
-		logger.Warn("Unpack Unmarshal", errorx.Wrap(err).Error())
+		logger.Warn("Unpack Unmarshal", errorx.Wrap(err, "").Error())
 	}
 
 	return nil

@@ -20,12 +20,12 @@ func CreateSrvRsaKey(c *tcpx.Context, base64CliRsaKey string) (string, string, s
 	// base64解码
 	bytes, err := base64.StdEncoding.DecodeString(base64CliRsaKey)
 	if err != nil {
-		logger.Warn(errorx.Wrap(err).Error())
+		logger.Warn(errorx.Wrap(err, "").Error())
 		return "", "", ""
 	}
 	// rsa解密
 	if cliKeyBytes, err := tls.RsaDecrypt(bytes); err != nil {
-		logger.Warn(errorx.Wrap(err).Error())
+		logger.Warn(errorx.Wrap(err, "").Error())
 		return "", "", ""
 	} else {
 		cliKey = string(cliKeyBytes)

@@ -137,16 +137,16 @@ func (u *User) HandleClientMsg(msgId int32, data []byte, reqIdx uint32) ([]byte,
 				rsp := &pb.S2C_ErrorCodeNtf{ErrorCode: uint32(errCode), Param: []string{strconv.Itoa(int(errCode))}}
 				b, err = proto.Marshal(rsp)
 				if err != nil {
-					logger.Warn("OnNetMessage, HandleDeprecatedMsg Marshal, reply error:", u.String(), messageId, messageId, errorx.Wrap(err).Error())
+					logger.Warn("OnNetMessage, HandleDeprecatedMsg Marshal, reply error:", u.String(), messageId, messageId, errorx.Wrap(err, "").Error())
 				}
 				err = u.ReplyWithBody(int32(messageId), reqIdx, errCode, b) // errCode不走加密
 				if err != nil {
-					logger.Warn("OnNetMessage, HandleDeprecatedMsg, reply error:", u.String(), messageId, messageId, errorx.Wrap(err).Error())
+					logger.Warn("OnNetMessage, HandleDeprecatedMsg, reply error:", u.String(), messageId, messageId, errorx.Wrap(err, "").Error())
 				}
 			} else {
 				err = u.ReplyWithBody(int32(messageId), reqIdx, pb.ErrorCode_Success, b)
 				if err != nil {
-					logger.Warn("OnNetMessage, HandleDeprecatedMsg, reply error:", u.String(), messageId, messageId, errorx.Wrap(err).Error())
+					logger.Warn("OnNetMessage, HandleDeprecatedMsg, reply error:", u.String(), messageId, messageId, errorx.Wrap(err, "").Error())
 				}
 			}
 

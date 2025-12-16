@@ -123,14 +123,14 @@ func (s *GateServer) HandlerGate(in *common.InvocationEvent, session *pb.UserSes
 	}
 	msgId, e := tcpx.MessageIDOf(data)
 	if e != nil {
-		logger.Warn(errorx.Wrap(e).Error())
+		logger.Warn(errorx.Wrap(e, "").Error())
 		return nil, pb.Protocols_Protocols_None, pb.ErrorCode_UnKnownMsg
 	}
 	logger.Debug("OnMessage: ", in.Request.RemoteAddr, msgId, len(data))
 
 	reqIdx, err := tcpx.ReqIndexOf(data)
 	if err != nil {
-		logger.Warn("OnNetMessage ReqIndexOf", errorx.Wrap(err).Error())
+		logger.Warn("OnNetMessage ReqIndexOf", errorx.Wrap(err, "").Error())
 		return nil, pb.Protocols_Protocols_None, pb.ErrorCode_UnKnownMsg
 	}
 	// logger.Infof(" c.GetReqIndex() : %d", reqIdx)

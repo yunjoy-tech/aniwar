@@ -79,11 +79,11 @@ func (s *GateServer) HandleAuth(c *tcpx.Context, messageID int32, data []byte) e
 //	//err = c.Reply(int32(pb.Protocols_PDB2C_SessionAuthRes), rsp)
 //	b, err := proto.Marshal(rsp)
 //	if err != nil {
-//		return fmt.Errorf("OnNetMessage Reply, error:%v", errorx.Wrap(err).Error())
+//		return fmt.Errorf("OnNetMessage Reply, error:%v", errorx.Wrap(err,"").Error())
 //	}
 //	err = req.ctx.ReplyWithBody(int32(pb.Protocols_PDB2C_SessionAuthRes), b)
 //	if err != nil {
-//		return fmt.Errorf("OnNetMessage Reply, error:%v", errorx.Wrap(err).Error())
+//		return fmt.Errorf("OnNetMessage Reply, error:%v", errorx.Wrap(err,"").Error())
 //	}
 //
 //	metrics.GaugeInc(metrics.GateAuthCount)
@@ -99,11 +99,11 @@ func (s *GateServer) HandleAuth(c *tcpx.Context, messageID int32, data []byte) e
 //	//err = c.Reply(int32(pb.Protocols_PDB2C_SessionAuthRes), rsp)
 //	b, err := proto.Marshal(rsp)
 //	if err != nil {
-//		return fmt.Errorf("OnNetMessage Reply, error:%v", errorx.Wrap(err).Error())
+//		return fmt.Errorf("OnNetMessage Reply, error:%v", errorx.Wrap(err,"").Error())
 //	}
 //	err = ctx.ReplyWithBody(int32(pb.Protocols_PDB2C_SessionAuthRes), int32(pb.ErrorCode_Success), b)
 //	if err != nil {
-//		return fmt.Errorf("OnNetMessage Reply, error:%v", errorx.Wrap(err).Error())
+//		return fmt.Errorf("OnNetMessage Reply, error:%v", errorx.Wrap(err,"").Error())
 //	}
 //
 //	metrics.GaugeInc(metrics.GateAuthFailCount)
@@ -250,7 +250,7 @@ func (s *GateServer) HandleRsa(c *tcpx.Context, messageID int32, data []byte) ([
 	)
 	err = base.UnmarshalData(data, &req)
 	if err != nil {
-		logger.Warn(errorx.Wrap(err).Error())
+		logger.Warn(errorx.Wrap(err, "").Error())
 		return nil, "", err
 	}
 	logger.Debugf("HandleRsa req: %v", &req)
@@ -272,7 +272,7 @@ func (s *GateServer) HandleRsa(c *tcpx.Context, messageID int32, data []byte) ([
 	b, err := proto.Marshal(res)
 	if err != nil {
 		logger.Debugf(err.Error())
-		return nil, "", fmt.Errorf("OnNetMessage Reply proto.Marshal, error:%v", errorx.Wrap(err).Error())
+		return nil, "", fmt.Errorf("OnNetMessage Reply proto.Marshal, error:%v", errorx.Wrap(err, "").Error())
 	}
 	logger.Debugf("OnNetMessage HandleRsa %v %v %v", pb.Protocols(messageID), &req, res)
 	if c != nil {
@@ -280,7 +280,7 @@ func (s *GateServer) HandleRsa(c *tcpx.Context, messageID int32, data []byte) ([
 		err = c.ReplyWithBody(int32(pb.Protocols_PLS2C_RsaServerRandomRes), int32(pb.ErrorCode_Success), b)
 		if err != nil {
 			logger.Debugf(err.Error())
-			return nil, "", fmt.Errorf("OnNetMessage Reply ReplyWithBody, error:%v", errorx.Wrap(err).Error())
+			return nil, "", fmt.Errorf("OnNetMessage Reply ReplyWithBody, error:%v", errorx.Wrap(err, "").Error())
 		}
 
 		defer func() {
@@ -302,7 +302,7 @@ func (s *GateServer) HandleLoginGate(c *tcpx.Context, messageID int32, data []by
 	)
 	err = base.UnmarshalData(data, &req)
 	if err != nil {
-		logger.Warn(errorx.Wrap(err).Error())
+		logger.Warn(errorx.Wrap(err, "").Error())
 		return nil, err
 	}
 	logger.Debugf("LoginGateReq: %v", &req)
@@ -330,7 +330,7 @@ func (s *GateServer) HandleLoginGate(c *tcpx.Context, messageID int32, data []by
 	b, err := proto.Marshal(res)
 	if err != nil {
 		logger.Debugf(err.Error())
-		return nil, fmt.Errorf("reply proto.Marshal, error:%v", errorx.Wrap(err).Error())
+		return nil, fmt.Errorf("reply proto.Marshal, error:%v", errorx.Wrap(err, "").Error())
 	}
 	logger.Debugf("HandleLoginGate %v %v %v", pb.Protocols(messageID), &req, res)
 
@@ -350,7 +350,7 @@ func (s *GateServer) HandleLoginGate(c *tcpx.Context, messageID int32, data []by
 		err = user.ReplyWithBody(int32(pb.Protocols_PG2C_LoginGateRes), 0, pb.ErrorCode_Success, b)
 		if err != nil {
 			logger.Debugf(err.Error())
-			return nil, fmt.Errorf("reply ReplyWithBody, error:%v", errorx.Wrap(err).Error())
+			return nil, fmt.Errorf("reply ReplyWithBody, error:%v", errorx.Wrap(err, "").Error())
 		}
 		if account, err := s.GetAccount(db.KeyAccountInfo(req.AccountId)); err == nil {
 			taptap.TcpEnterComm(req.AccountId, account.TapUserInfo, account.CliDeviceInfo)

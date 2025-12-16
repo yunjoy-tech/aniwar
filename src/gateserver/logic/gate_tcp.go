@@ -31,12 +31,12 @@ func (s *GateServer) OnTcp(c *tcpx.Context) {
 	if accountId != "" {
 		session, err, _ = s.GetUserSession(accountId)
 		if err != nil {
-			logger.Warn("OnNetMessage GetUserSession", errorx.Wrap(err).Error())
+			logger.Warn("OnNetMessage GetUserSession", errorx.Wrap(err, "").Error())
 			return
 		}
 		user := s.userMgr.GetUser(accountId)
 		if user == nil {
-			logger.Warn("OnTcp GetUser", errorx.Wrap(err).Error())
+			logger.Warn("OnTcp GetUser", errorx.Wrap(err, "").Error())
 			return
 		}
 
@@ -72,13 +72,13 @@ func (s *GateServer) OnTcp(c *tcpx.Context) {
 
 	messageID, err := tcpx.MessageIDOf(allData)
 	if err != nil {
-		logger.Warn("OnNetMessage MessageIDOf", errorx.Wrap(err).Error())
+		logger.Warn("OnNetMessage MessageIDOf", errorx.Wrap(err, "").Error())
 		return
 	}
 
 	reqIdx, err := tcpx.ReqIndexOf(allData)
 	if err != nil {
-		logger.Warn("OnNetMessage ReqIndexOf", errorx.Wrap(err).Error())
+		logger.Warn("OnNetMessage ReqIndexOf", errorx.Wrap(err, "").Error())
 		return
 	}
 	logger.Infof(" c.GetReqIndex() : %d", c.GetReqIndex())
@@ -101,14 +101,14 @@ func (s *GateServer) OnTcp(c *tcpx.Context) {
 
 	data, err := tcpx.BodyBytesOf(allData)
 	if err != nil {
-		logger.Warn("OnNetMessage BodyBytesOf", errorx.Wrap(err).Error())
+		logger.Warn("OnNetMessage BodyBytesOf", errorx.Wrap(err, "").Error())
 		return
 	}
 
 	dataLen := len(data)
 	// 包体大小限制
 	if dataLen > baseconf.GetBaseConf().GateMsgMaxSize {
-		logger.Warn("OnNetMessage BodyBytesOf", errorx.Wrap(err).Error())
+		logger.Warn("OnNetMessage BodyBytesOf", errorx.Wrap(err, "").Error())
 
 		// TODO 处理踢人操作
 		return
@@ -242,11 +242,11 @@ func (s *GateServer) TcpLoginGame(pendingUser *PendingUser) ([]byte, *base.RpcEr
 			rsp := &pb.S2C_ErrorCodeNtf{ErrorCode: uint32(msg.ErrCode), Param: []string{string(respData)}}
 			b, err := proto.Marshal(rsp)
 			if err != nil {
-				logger.Warn("GateServer:ExecuteLoginGame, UserInvoke, reply error:", uaid, pb.Protocols(respMessageID), respMessageID, errorx.Wrap(err).Error())
+				logger.Warn("GateServer:ExecuteLoginGame, UserInvoke, reply error:", uaid, pb.Protocols(respMessageID), respMessageID, errorx.Wrap(err, "").Error())
 			}
 			err = pendingUser.ctx.ReplyWithBody(int32(pb.Protocols_PS2C_ErrorCodeNtf), msg.ErrCode, b)
 			if err != nil {
-				logger.Warn("GateServer:ExecuteLoginGame, UserInvoke, reply error:", uaid, pb.Protocols(respMessageID), respMessageID, errorx.Wrap(err).Error())
+				logger.Warn("GateServer:ExecuteLoginGame, UserInvoke, reply error:", uaid, pb.Protocols(respMessageID), respMessageID, errorx.Wrap(err, "").Error())
 			}
 			metrics.GaugeInc(metrics.EnterFailedCount)
 		} else if msg.ErrCode == int32(pb.ErrorCode_RepeatMsg) {
@@ -255,14 +255,14 @@ func (s *GateServer) TcpLoginGame(pendingUser *PendingUser) ([]byte, *base.RpcEr
 			lastRspData, _ := s.reqRepeated(nil, pendingUser.msgId, pendingUser.reqIdx, pendingUser.session)
 			err = pendingUser.ctx.ReplyWithBody(respMessageID, int32(pb.ErrorCode_Success), lastRspData)
 			if err != nil {
-				logger.Warn("GateServer:ExecuteLoginGame, UserInvoke, reply error:", uaid, pb.Protocols(respMessageID), respMessageID, errorx.Wrap(err).Error())
+				logger.Warn("GateServer:ExecuteLoginGame, UserInvoke, reply error:", uaid, pb.Protocols(respMessageID), respMessageID, errorx.Wrap(err, "").Error())
 			}
 		} else {
 			// deprecated
 			user := s.userMgr.AddUser(pendingUser.uid, playerId, pendingUser.ctx, pendingUser.session)
 			err = user.ReplyWithBody(respMessageID, pendingUser.reqIdx, pb.ErrorCode_Success, respData)
 			if err != nil {
-				logger.Warn("GateServer:ExecuteLoginGame, UserInvoke ReplyWithBody err: ", errorx.Wrap(err).Error())
+				logger.Warn("GateServer:ExecuteLoginGame, UserInvoke ReplyWithBody err: ", errorx.Wrap(err, "").Error())
 			}
 			metrics.HistogramPut(metrics.EnterDelayHist, time.Since(now).Milliseconds(), metrics.Delay)
 			metrics.GaugeInc(metrics.EnterSucceedCount)
