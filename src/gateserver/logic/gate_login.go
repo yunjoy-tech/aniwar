@@ -18,7 +18,7 @@ func (s *GateServer) HandleLoginGame(c *tcpx.Context, session *pb.UserSession, m
 		return nil, &base.RpcError{Err: err, Code: int32(pb.ErrorCode_DeSerializeError)}
 	}
 
-	// if conf.GConf().Base.VersionCheck {
+	// if conf.Base().VersionCheck {
 	//	err = s.VersionCheck(req.GetVersion())
 	//	if err != nil {
 	//		return nil, &base.RpcError{Err: err, Code: int32(pb.ErrorCode_VersionLimit)}

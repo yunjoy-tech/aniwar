@@ -44,7 +44,7 @@ type UserJsonExport struct {
 func (s *IDIPServer) InsideGMT(ctx context.Context, in *common.InvocationEvent) (out *common.Content, err error) {
 	defer func() {
 		if err := recover(); err != any(nil) {
-			logger.Trace("GMTHandler failed, err: ", err)
+			logger.Error("GMTHandler failed, err: ", err)
 		}
 	}()
 
@@ -58,7 +58,7 @@ func (s *IDIPServer) InsideGMT(ctx context.Context, in *common.InvocationEvent) 
 		DataTypeURL: in.DataTypeURL,
 	}
 
-	reqJson, code, errMsg := s.PreHandle(in, conf.GConf().GMT.ApiSecret)
+	reqJson, code, errMsg := s.PreHandle(in, conf.GMT().ApiSecret)
 	if code != pb.ErrorCode_Success {
 		out.Data = s.GenRet(errMsg)
 		return out, err
@@ -1682,7 +1682,7 @@ func (s *IDIPServer) SrvRestart(req *pb.GMTSrvRestartReq) []byte {
 func (s *IDIPServer) NotifyDownloadPkg(req *pb.GMTNotifyDownloadPkgReq) []byte {
 	ret := &pb.GMTNotifyDownloadPkgRet{}
 	// 按包名称下载
-	err := OssGetObjectToLocalFile(conf.GConf().OSS.VersionBucket, req.PkgName, conf.GConf().OSS.DownPath+req.PkgName)
+	err := OssGetObjectToLocalFile(conf.OSS().VersionBucket, req.PkgName, conf.OSS().DownPath+req.PkgName)
 	if err != nil {
 		logger.Warn("oss get object failed, err: %s", err.Error())
 		ret.Code = 1

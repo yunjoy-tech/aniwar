@@ -47,7 +47,7 @@ func NewGateServer() base.IServer {
 	srv.OutAddr = ":13001"
 	srv.HasPriTopic = true // 开启私有频道订阅
 	srv.OnPreInit = srv.PreInit
-	srv.OnServerInit = srv.ServerInit
+	srv.OnPostInit = srv.PostInit
 	srv.OnConnect = srv.OnNetConnect
 	srv.OnMessage = srv.OnNetMessage
 	srv.OnClose = srv.OnNetClose
@@ -90,12 +90,12 @@ func (s *GateServer) PreInit() error {
 	return nil
 }
 
-func (s *GateServer) ServerInit() error {
+func (s *GateServer) PostInit() error {
 
 	// 注册login接口
 	s.RegisterRpcHandler("/api", s.OnHttp)
 
-	interval := time.Duration(conf.GConf().BaseConf().HeartbeatInterval)
+	interval := time.Duration(conf.Base().HeartbeatInterval)
 	// 定时器模块
 
 	s.AddTimer(true, time.Second*interval, s.userMgr.HeartbeatCheck)
@@ -108,7 +108,7 @@ func (s *GateServer) ServerInit() error {
 	s.ch = make(chan *base.ProtoMsg, 10000)
 
 	// 排队处理
-	/*for i := int32(0); i < conf.GConf().BaseConf().GateLoginThreadNum; i++ {
+	/*for i := int32(0); i < conf.Base()Conf().GateLoginThreadNum; i++ {
 		threading.GoSafe(s.pendingUserMgr.Execute)
 	}*/
 	utils.GoSafeRun(s.HandlerSrvMsg, nil)
@@ -149,7 +149,7 @@ func (s *GateServer) OnNetConnect(c *tcpx.Context) {
 func (s *GateServer) OnNetMessage(c *tcpx.Context) {
 	defer func() {
 		if err := recover(); err != any(nil) {
-			logger.Trace("OnNetMessage recover, err: ", err)
+			logger.Error("OnNetMessage recover, err: ", err)
 		}
 	}()
 
@@ -196,7 +196,7 @@ func (s *GateServer) OnNetClose(c *tcpx.Context) {
 func (s *GateServer) EventHandler(ctx context.Context, e *common.TopicEvent) (retry bool, err error) {
 	defer func() {
 		if err := recover(); err != any(nil) {
-			logger.Trace("recover, err: ", err)
+			logger.Error("recover, err: ", err)
 		}
 	}()
 
@@ -234,7 +234,7 @@ func (s *GateServer) EventHandler(ctx context.Context, e *common.TopicEvent) (re
 func (s *GateServer) InvokeHandler(ctx context.Context, in *common.InvocationEvent) (out *common.Content, err error) {
 	defer func() {
 		if err := recover(); err != any(nil) {
-			logger.Trace("InvokeHandler recover, err: ", err)
+			logger.Error("InvokeHandler recover, err: ", err)
 		}
 	}()
 
@@ -266,7 +266,7 @@ func (s *GateServer) InvokeHandler(ctx context.Context, in *common.InvocationEve
 func (s *GateServer) BindingHandler(ctx context.Context, in *common.BindingEvent) (out []byte, err error) {
 	defer func() {
 		if err := recover(); err != any(nil) {
-			logger.Trace("BindingHandler recover, err: ", err)
+			logger.Error("BindingHandler recover, err: ", err)
 		}
 	}()
 

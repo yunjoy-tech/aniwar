@@ -3,15 +3,13 @@ package logic
 import (
 	"fmt"
 	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
+	"gitee.com/aniwar2/aniwar/src/proto/pb"
+	"gitee.com/aniwar2/musae/logger"
+	"gitee.com/aniwar2/musae/metrics"
+	"gitee.com/aniwar2/musae/tcpx"
+	"gitee.com/aniwar2/musae/utils"
 	"sync"
 	"time"
-
-	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	"gitee.com/aniwar2/musae/metrics"
-	"gitee.com/aniwar2/musae/threading"
-
-	"gitee.com/aniwar2/musae/logger"
-	"gitee.com/aniwar2/musae/tcpx"
 )
 
 type UserMgr struct {
@@ -117,10 +115,10 @@ func (m *UserMgr) HeartbeatCheck() error {
 	// m.users.Range(func(key, value any) bool {
 	//	v := value.(*User)
 	//	diff := int32(now - v.lastHeartbeatTs)
-	//	if diff >= conf.GConf().Base.HeartbeatTimout {
+	//	if diff >= conf.Base().HeartbeatTimout {
 	//		v.Logout(key.(string), "heartbeat timeout")
 	//		m.DelUser(key.(string))
-	//		if diff >= conf.GConf().Base.UserCacheTTL {
+	//		if diff >= conf.Base().UserCacheTTL {
 	//			//TODO 断线重连，复用数据，是否有必要？
 	//		}
 	//	}

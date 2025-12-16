@@ -118,7 +118,7 @@ func (s *GateServer) OnTcp(c *tcpx.Context) {
 	metrics.GaugeAdd(metrics.GateUpMsgSize, int64(dataLen))
 
 	// ddos check
-	if conf.GConf().DDos.TimeInterval > 0 && accountId != "" {
+	if conf.DDos().TimeInterval > 0 && accountId != "" {
 		user := s.userMgr.GetUser(accountId)
 		if user.DDosCheck(uint32(dataLen)) {
 			// TODO 处理踢人操作

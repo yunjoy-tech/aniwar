@@ -4,32 +4,26 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"gitee.com/aniwar2/aniwar/src/common/auth"
+	"gitee.com/aniwar2/aniwar/src/common/conf"
+	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
+	"gitee.com/aniwar2/aniwar/src/common/db"
+	"gitee.com/aniwar2/aniwar/src/common/rsa"
+	"gitee.com/aniwar2/aniwar/src/common/sdkconstant"
+	"gitee.com/aniwar2/aniwar/src/proto/pb"
+	"gitee.com/aniwar2/musae/base"
+	"gitee.com/aniwar2/musae/baseconf"
 	"gitee.com/aniwar2/musae/gamelib/guid"
+	"gitee.com/aniwar2/musae/global"
+	"gitee.com/aniwar2/musae/logger"
+	"gitee.com/aniwar2/musae/metrics"
+	"gitee.com/aniwar2/musae/service"
+	"gitee.com/aniwar2/musae/utils"
+	"google.golang.org/protobuf/proto"
 	"strconv"
 	"strings"
 	"time"
 	"unicode"
-
-	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
-
-	"gitee.com/aniwar2/musae/global"
-
-	"gitee.com/aniwar2/musae/base"
-
-	"gitee.com/aniwar2/aniwar/src/common/auth"
-	"gitee.com/aniwar2/aniwar/src/common/rsa"
-	"gitee.com/aniwar2/aniwar/src/common/sdkconstant"
-
-	"gitee.com/aniwar2/aniwar/src/common/conf"
-	"gitee.com/aniwar2/aniwar/src/common/db"
-	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	"gitee.com/aniwar2/musae/baseconf"
-	"gitee.com/aniwar2/musae/logger"
-	"gitee.com/aniwar2/musae/metrics"
-	"gitee.com/aniwar2/musae/service"
-	"gitee.com/aniwar2/musae/threading"
-	"gitee.com/aniwar2/musae/utils"
-	"google.golang.org/protobuf/proto"
 )
 
 func (s *LoginServer) pushMsg(msg *Msg) {
@@ -44,7 +38,7 @@ func (s *LoginServer) pushMsg(msg *Msg) {
 }
 
 func (s *LoginServer) GrantGateTicket() {
-	for i := int32(0); i < conf.GConf().Base.LoginReqRate; i++ {
+	for i := int32(0); i < conf.Base().LoginReqRate; i++ {
 		select {
 		case s.ticket <- struct{}{}:
 			s.ticketAddSum++
@@ -121,7 +115,7 @@ func (s *LoginServer) handleLoginReq(msg *Msg) *pb.LS2C_LoginRes {
 	if res.ErrCode == int32(pb.ErrorCode_Success) {
 		res.AccountId = uid
 		res.GatewayIp = global.TcpAddr
-		res.GatewayPort = uint32(conf.GConf().Base.GatePort)
+		res.GatewayPort = uint32(conf.Base().GatePort)
 		res.SessionId = uint64(sessionId)
 		res.UseRsa = baseconf.GetBaseConf().UseEncrypt // Gate上启动加密通信
 		res.SrvRandomSeed = base64SrvKey
@@ -375,7 +369,7 @@ func (s *LoginServer) DoHandleLoginReq(req *pb.C2LS_LoginReq, res *pb.LS2C_Login
 	}
 
 	// table := &state.KvTable{Id: 0, UID: accountId, Data: []byte(token), UpSecTS: 0, InSecTS: now}
-	// err = s.SaveGlobalRedis(db.KeyAccountToken(accountId), table, map[string]string{"ttlInSeconds": strconv.Itoa(conf.GConf().Base.AccTokenTTL)})
+	// err = s.SaveGlobalRedis(db.KeyAccountToken(accountId), table, map[string]string{"ttlInSeconds": strconv.Itoa(conf.Base().AccTokenTTL)})
 	// lastToken := ""
 	// lastSession, _, _ := s.GetUserSession(account.Account.Uid)
 	// if lastSession != nil {
@@ -390,7 +384,7 @@ func (s *LoginServer) DoHandleLoginReq(req *pb.C2LS_LoginReq, res *pb.LS2C_Login
 		PlayerId:        0,
 		Token:           res.Token,
 		LastToken:       lastToken,
-		LimitTs:         now + int64(conf.GConf().DDos.TimeInterval),
+		LimitTs:         now + int64(conf.DDos().TimeInterval),
 		LimitNum:        0,
 		LimitSize:       0,
 		LastHeartbeatTs: 0,

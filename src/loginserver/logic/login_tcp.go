@@ -45,7 +45,7 @@ func (s *LoginServer) OnTcp(c *tcpx.Context) {
 			ClientIp: c.ClientIP(),
 		}
 		// 配置为0时，不做限制
-		if conf.GConf().BaseConf().LoginReqRate > 0 && conf.GConf().BaseConf().LoginReqQueue > 0 {
+		if conf.Base().LoginReqRate > 0 && conf.Base().LoginReqQueue > 0 {
 			s.pushMsg(req)
 		} else {
 			res := s.handleLoginReq(req)

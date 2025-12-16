@@ -158,7 +158,7 @@ func (u *User) HandleRoomActor(reqMessageID int32, reqData []byte, reqIdx uint32
 	in.UserId = u.uid
 	in.RoleId = u.roleId
 	in.UAID = u.uaid
-	switch conf.GConf().Base.Actor2GateType {
+	switch conf.Base().Actor2GateType {
 	case base.Actor2GateOnRpc:
 		in.AppId = u.s.AppId
 	case base.Actor2GateOnCh:
@@ -181,7 +181,7 @@ func (u *User) UserInvokeByMsg(msgId int32, msg proto.Message) (*base.ProtoMsg, 
 	in.MsgId = msgId
 	in.Data = data
 	in.UserId = u.uid
-	switch conf.GConf().Base.Actor2GateType {
+	switch conf.Base().Actor2GateType {
 	case base.Actor2GateOnRpc:
 		in.AppId = u.s.AppId
 	case base.Actor2GateOnCh:

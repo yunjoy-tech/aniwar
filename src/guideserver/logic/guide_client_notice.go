@@ -13,7 +13,7 @@ import (
 func (s *GuideServer) Notice(ctx context.Context, in *common.InvocationEvent) (out *common.Content, err error) {
 	defer func() {
 		if err := recover(); err != any(nil) {
-			logger.Trace("/api/notice failed, err: ", err)
+			logger.Error("/api/notice failed, err: ", err)
 		}
 	}()
 	startTime := time.Now()

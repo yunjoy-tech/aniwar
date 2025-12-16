@@ -5,26 +5,23 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
-	"gitee.com/aniwar2/musae/utils"
-	"os"
-	"strings"
-	"time"
-
-	"gitee.com/aniwar2/musae/global"
-
 	"gitee.com/aniwar2/aniwar/src/common/actor/stub"
 	"gitee.com/aniwar2/aniwar/src/common/conf"
+	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
 	"gitee.com/aniwar2/aniwar/src/common/db"
 	comn "gitee.com/aniwar2/aniwar/src/common/server"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/base"
+	"gitee.com/aniwar2/musae/global"
 	"gitee.com/aniwar2/musae/logger"
 	"gitee.com/aniwar2/musae/metrics"
 	"gitee.com/aniwar2/musae/tcpx"
-	"gitee.com/aniwar2/musae/threading"
+	"gitee.com/aniwar2/musae/utils"
 	"github.com/dapr/go-sdk/service/common"
 	"google.golang.org/protobuf/proto"
+	"os"
+	"strings"
+	"time"
 )
 
 type Msg struct {
@@ -54,7 +51,7 @@ func NewLoginServer() base.IServer {
 	srv.OutAddr = ":12001"
 	srv.HasPriTopic = true // 开启私有频道订阅
 	srv.OnPreInit = srv.PreInit
-	srv.OnServerInit = srv.ServerInit
+	srv.OnPostInit = srv.PostInit
 	srv.OnConnect = srv.OnNetConnect
 	srv.OnMessage = srv.OnNetMessage
 	srv.OnClose = srv.OnNetClose
@@ -77,7 +74,7 @@ func (s *LoginServer) PreInit() error {
 	return nil
 }
 
-func (s *LoginServer) ServerInit() error {
+func (s *LoginServer) PostInit() error {
 	// 注册login接口
 	s.RegisterRpcHandler("/api", s.OnHttp)
 	//
@@ -108,7 +105,7 @@ func (s *LoginServer) ServerInit() error {
 func (s *LoginServer) OnNetConnect(c *tcpx.Context) {
 	defer func() {
 		if err := recover(); err != any(nil) {
-			logger.Trace("OnNetConnect failed, err: ", err)
+			logger.Error("OnNetConnect failed, err: ", err)
 		}
 	}()
 
@@ -118,7 +115,7 @@ func (s *LoginServer) OnNetConnect(c *tcpx.Context) {
 func (s *LoginServer) OnNetMessage(c *tcpx.Context) {
 	defer func() {
 		if err := recover(); err != any(nil) {
-			logger.Trace("OnNetMessage failed, err: ", err)
+			logger.Error("OnNetMessage failed, err: ", err)
 		}
 	}()
 
@@ -133,7 +130,7 @@ func (s *LoginServer) OnNetClose(c *tcpx.Context) {
 func (s *LoginServer) EventHandler(ctx context.Context, e *common.TopicEvent) (retry bool, err error) {
 	defer func() {
 		if err := recover(); err != any(nil) {
-			logger.Trace("EventHandler failed, err: ", err)
+			logger.Error("EventHandler failed, err: ", err)
 		}
 	}()
 
@@ -154,7 +151,7 @@ func (s *LoginServer) EventHandler(ctx context.Context, e *common.TopicEvent) (r
 func (s *LoginServer) InvokeHandler(ctx context.Context, in *common.InvocationEvent) (out *common.Content, err error) {
 	defer func() {
 		if err := recover(); err != any(nil) {
-			logger.Trace("InvokeHandler failed, err: ", err)
+			logger.Error("InvokeHandler failed, err: ", err)
 		}
 	}()
 

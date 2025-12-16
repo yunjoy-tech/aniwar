@@ -23,7 +23,7 @@ import (
 func (s *GateServer) OnHttp(ctx context.Context, in *common.InvocationEvent) (out *common.Content, err error) {
 	defer func() {
 		if err := recover(); err != any(nil) {
-			logger.Trace("OnGate failed, err: ", err)
+			logger.Error("OnGate failed, err: ", err)
 		}
 	}()
 
@@ -51,7 +51,7 @@ func (s *GateServer) OnHttp(ctx context.Context, in *common.InvocationEvent) (ou
 	platform := in.Request.Header.Get("platform")
 	deviceId := in.Request.Header.Get("device-id")
 	// 客户端版本验证
-	if conf.GConf().Base.VersionCheck {
+	if conf.Base().VersionCheck {
 		logger.Infof("VersionCheck clientVersion:%s", clientVersion)
 		err = s.VersionCheckExt(platform, clientVersion)
 		if err != nil {

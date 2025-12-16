@@ -27,7 +27,7 @@ func TestReqUserInfo(t *testing.T) {
 	}
 	// base64加密
 	baseStr := base64.StdEncoding.EncodeToString(dataStr)
-	tempStr := fmt.Sprintf("%s%s", baseStr, conf.GConf().GMT.ApiSecret)
+	tempStr := fmt.Sprintf("%s%s", baseStr, conf.GMT().ApiSecret)
 	signStr := utils.Md5Str(tempStr)
 	data := []byte(fmt.Sprintf("%s%s", signStr, baseStr))
 

@@ -28,12 +28,12 @@ import (
 func (s *IDIPServer) PreHandle(in *common.InvocationEvent, secretKey string) ([]byte, pb.ErrorCode, string) {
 	// IP校验
 	logger.Debugf("remote addr: %s", in.Request.RemoteAddr)
-	if conf.GConf().GMT.IsIpWhite {
+	if conf.GMT().IsIpWhite {
 		ip, err := utils.GetIP(in.Request)
 		if err != nil {
 			return nil, pb.ErrorCode_IpLimit, IP_LIMIT
 		}
-		if !CheckIp(conf.GConf().GMT.IpWhiteList, ip) {
+		if !CheckIp(conf.GMT().IpWhiteList, ip) {
 			return nil, pb.ErrorCode_IpLimit, IP_LIMIT
 		}
 	}
@@ -89,7 +89,7 @@ func CheckSign(reqData, secretKey string) ([]byte, bool) {
 func CheckIp(whiteIps []string, ip string) bool {
 
 	logger.Debugf("check ip: %v, ---> %s", whiteIps, ip)
-	// whiteList := conf.GConf().GMT.IpWhiteList
+	// whiteList := conf.GMT().IpWhiteList
 	for _, e := range whiteIps {
 		if e == ip {
 			return true
@@ -219,7 +219,7 @@ func (s *IDIPServer) getSysMailData(key string, value proto.Message) error {
 
 // IsValidCmd 合法cmd校验
 func IsValidCmd(cmd string) bool {
-	// if !conf.GConf().Base.IsDebug {
+	// if !conf.Base().IsDebug {
 	//	return strings.HasPrefix(cmd, "user.test")
 	// }
 
@@ -500,7 +500,7 @@ func (s *IDIPServer) ConvertCard(cards map[uint32]*pb.CardData, equip *pb.PEquip
 
 // 下载oss文件到本地指定文件中
 func OssGetObjectToLocalFile(bucketName, objName, localFS string) error {
-	client, err := oss.New(conf.GConf().OSS.Endpoint, conf.GConf().OSS.AccessKey, conf.GConf().OSS.AccessSecret)
+	client, err := oss.New(conf.OSS().Endpoint, conf.OSS().AccessKey, conf.OSS().AccessSecret)
 	if err != nil {
 		return err
 	}

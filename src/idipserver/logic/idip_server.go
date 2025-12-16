@@ -30,7 +30,7 @@ func NewIDIPServer() base.IServer {
 	srv.GRPCPort = "50001"
 	srv.HasPriTopic = true // 开启私有频道订阅
 	srv.OnPreInit = srv.PreInit
-	srv.OnServerInit = srv.ServerInit
+	srv.OnPostInit = srv.PostInit
 	srv.OnEventHandler = srv.EventHandler
 	srv.OnInvokeHandler = srv.InvokeHandler
 	srv.OnBindHandler = srv.BindingHandler
@@ -66,7 +66,7 @@ func (s *IDIPServer) PreInit() error {
 	return nil
 }
 
-func (s *IDIPServer) ServerInit() error {
+func (s *IDIPServer) PostInit() error {
 	s.LiveTime = time.Now().Unix() // 创建server时间戳
 	s.NeedExcel = map[string]int{  // 需要加载的策划表 TODO 后台导入字典元数据
 		// excel.GetPackageMgr().GetDataFileName(): 0,
@@ -97,7 +97,7 @@ func (s *IDIPServer) ServerInit() error {
 func (s *IDIPServer) EventHandler(ctx context.Context, e *common.TopicEvent) (retry bool, err error) {
 	defer func() {
 		if err := recover(); err != any(nil) {
-			logger.Trace("recover failed, err: ", err)
+			logger.Error("recover failed, err: ", err)
 		}
 	}()
 
@@ -122,7 +122,7 @@ func (s *IDIPServer) EventHandler(ctx context.Context, e *common.TopicEvent) (re
 func (s *IDIPServer) InvokeHandler(ctx context.Context, in *common.InvocationEvent) (out *common.Content, err error) {
 	defer func() {
 		if err := recover(); err != any(nil) {
-			logger.Trace("InvokeHandler failed, err: ", err)
+			logger.Error("InvokeHandler failed, err: ", err)
 		}
 	}()
 

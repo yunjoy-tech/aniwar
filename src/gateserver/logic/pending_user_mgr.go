@@ -29,24 +29,24 @@ type PendingUser struct {
 	mgr := &PendingUserMgr{
 		s: srv,
 	}
-	mgr.ticket = make(chan struct{}, int(conf.GConf().Base.GateLoginRateLimit))
-	if conf.GConf().Base.GateLoginRateLimit <= 0 {
-		conf.GConf().Base.GateLoginRateLimit = 1000
+	mgr.ticket = make(chan struct{}, int(conf.Base().GateLoginRateLimit))
+	if conf.Base().GateLoginRateLimit <= 0 {
+		conf.Base().GateLoginRateLimit = 1000
 	}
-	//mgr.pendingCh = make(chan *PendingUser, int(conf.GConf().Base.GateLoginRateLimit*global.SVC_INVOKE_TIMEOUT))
+	//mgr.pendingCh = make(chan *PendingUser, int(conf.Base().GateLoginRateLimit*global.SVC_INVOKE_TIMEOUT))
 	return mgr
 }*/
 
 // GrantLoginToken 每秒钟下发的登录令牌，用于控制登录频率
 // func (m *PendingUserMgr) GrantLoginToken() {
-//	for i := 0; i < int(conf.GConf().Base.GateLoginRateLimit); i++ {
+//	for i := 0; i < int(conf.Base().GateLoginRateLimit); i++ {
 //		select {
 //		case m.ticket <- struct{}{}:
 //		default:
 //			//logger.Debug("do nothing")
 //		}
 //	}
-//	//logger.Debug("grant login token, size:", conf.GConf().Base.GateLoginRateLimit)
+//	//logger.Debug("grant login token, size:", conf.Base().GateLoginRateLimit)
 // }
 
 /*func (m *PendingUserMgr) Push(req *PendingUser) pb.ErrorCode {

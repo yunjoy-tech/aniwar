@@ -184,7 +184,7 @@ func (u *User) ReplyWithBody(downMsgId int32, reqIdx uint32, errCode pb.ErrorCod
 func (u *User) DDosCheck(dataLen uint32) bool {
 	now := time.Now().Unix()
 	// ddos check
-	if now >= u.limitTs+int64(conf.GConf().DDos.TimeInterval) {
+	if now >= u.limitTs+int64(conf.DDos().TimeInterval) {
 		u.limitTs = now
 		u.limitNum = 0
 		u.limitSize = 0
@@ -192,8 +192,8 @@ func (u *User) DDosCheck(dataLen uint32) bool {
 
 	u.limitNum++
 	u.limitSize += dataLen
-	if (conf.GConf().DDos.LimitPktNum > 0 && u.limitNum > conf.GConf().DDos.LimitPktNum) ||
-		(conf.GConf().DDos.LimitByteNum > 0 && u.limitSize > conf.GConf().DDos.LimitByteNum) {
+	if (conf.DDos().LimitPktNum > 0 && u.limitNum > conf.DDos().LimitPktNum) ||
+		(conf.DDos().LimitByteNum > 0 && u.limitSize > conf.DDos().LimitByteNum) {
 		logger.Info("[DDosCheck] user ", u.uid, " net limit and kickoff,time:", u.limitTs, ", pkt num:", u.limitNum, ", byte num:", u.limitSize)
 		u.limitTs = now
 		u.limitNum = 0

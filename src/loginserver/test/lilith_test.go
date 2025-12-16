@@ -15,7 +15,7 @@ import (
 )
 
 func Test_checkLogin(t *testing.T) {
-	params := fmt.Sprintf("app_id=%s&app_uid=%d&app_token=%s", conf.GConf().Sdk.LilithAppId, 10001, "ld3H2ITnI8nRXPeKldKl1jCNPTQDkM9m")
+	params := fmt.Sprintf("app_id=%s&app_uid=%d&app_token=%s", conf.SDK().LilithAppId, 10001, "ld3H2ITnI8nRXPeKldKl1jCNPTQDkM9m")
 	rsp, err := http.Post(sdkconstant.Lilith_login_url, "application/x-www-form-urlencoded", strings.NewReader(url.QueryEscape(params)))
 	defer rsp.Body.Close()
 	if err != nil {
@@ -34,7 +34,7 @@ func Test_checkLogin(t *testing.T) {
 
 func Test_apiFox(t *testing.T) {
 	client := &http.Client{}
-	payload := strings.NewReader(fmt.Sprintf("app_id=%s&app_uid=%d&app_token=%s", conf.GConf().Sdk.LilithAppId, 10001, "ld3H2ITnI8nRXPeKldKl1jCNPTQDkM9m"))
+	payload := strings.NewReader(fmt.Sprintf("app_id=%s&app_uid=%d&app_token=%s", conf.SDK().LilithAppId, 10001, "ld3H2ITnI8nRXPeKldKl1jCNPTQDkM9m"))
 	req, err := http.NewRequest(http.MethodPost, sdkconstant.Lilith_login_url, payload)
 
 	if err != nil {

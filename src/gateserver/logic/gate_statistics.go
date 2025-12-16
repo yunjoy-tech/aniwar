@@ -32,7 +32,7 @@ type MsgStatistics struct {
 }
 
 func handleMsgStatistics(msgId int32, byteSize int64, up bool) {
-	if conf.GConf().Base.IsDebug {
+	if conf.Base().IsDebug {
 		actual, _ := DS.MsgData.LoadOrStore(msgId, &MsgStatistics{
 			Counter:  0,
 			ByteSize: 0,
@@ -46,7 +46,7 @@ func handleMsgStatistics(msgId int32, byteSize int64, up bool) {
 }
 
 func (s *GateServer) printMsgStatistics() {
-	if conf.GConf().Base.IsDebug {
+	if conf.Base().IsDebug {
 		logger.Debug("=====================================================================")
 		logger.Debug("debug模式消息统计结果:")
 		now := time.Now()

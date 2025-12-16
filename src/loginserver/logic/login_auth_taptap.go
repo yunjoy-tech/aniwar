@@ -47,14 +47,14 @@ func (s *LoginServer) handleAuthTaptap(unionId, accessToken, extra string) (int,
 	}
 
 	// 校验token
-	clientId := conf.GConf().TapTap.ClientId
+	clientId := conf.TapTap().ClientId
 
 	// 随机数
 	nonce := utils.RandomStr(24, true, true, true)
 	// 时间戳转换成字符串
 	timestamp := strconv.FormatInt(time.Now().Unix(), 10)
 	// 请求url
-	reqHost := conf.GConf().TapTap.BaseUrl
+	reqHost := conf.TapTap().BaseUrl
 	reqURI := "/account/profile/v1?client_id=" + clientId
 	reqURL := "https://" + reqHost + reqURI
 

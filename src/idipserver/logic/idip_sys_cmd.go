@@ -148,7 +148,7 @@ func (s *IDIPServer) handleConfigCloseFuncAdd(params []string) (string, error) {
 
 func (s *IDIPServer) handleConfigMap(params []string) (string, error) {
 	// 获取所有的配置key
-	keys := conf.GConf().Base.CfgKeys
+	keys := conf.Base().CfgKeys
 
 	ret := make(map[string]string)
 	// 查找配置值

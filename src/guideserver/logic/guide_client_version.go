@@ -20,7 +20,7 @@ import (
 func (s *GuideServer) Version(ctx context.Context, in *common.InvocationEvent) (out *common.Content, err error) {
 	defer func() {
 		if err := recover(); err != any(nil) {
-			logger.Trace("/api/version failed, err: ", err)
+			logger.Error("/api/version failed, err: ", err)
 		}
 	}()
 
@@ -80,11 +80,11 @@ func (s *GuideServer) getVersionInfo(in *common.InvocationEvent) ([]byte, string
 	// channel := strings.ToLower(req.Platform)
 	switch platform {
 	case "android":
-		version.UpdateAddr = conf.GConf().SrvAddr.UpdateAddrARD
+		version.UpdateAddr = conf.SrvAddr().UpdateAddrARD
 	case "ios":
-		version.UpdateAddr = conf.GConf().SrvAddr.UpdateAddrIOS
+		version.UpdateAddr = conf.SrvAddr().UpdateAddrIOS
 	default:
-		version.UpdateAddr = conf.GConf().SrvAddr.UpdateAddrARD
+		version.UpdateAddr = conf.SrvAddr().UpdateAddrARD
 		logger.Warn("platform error: %s", "android" /*req.Platform*/)
 	}
 
@@ -118,9 +118,9 @@ func (s *GuideServer) getVersionInfo(in *common.InvocationEvent) ([]byte, string
 		}
 	}*/
 
-	if global.IsCloud {
-		version.ServerAddr = conf.GConf().SrvAddr.HTTPAddr
-		version.TcpAddr = conf.GConf().SrvAddr.TCPAddr
+	if conf.Base().Cloud {
+		version.ServerAddr = conf.SrvAddr().HTTPAddr
+		version.TcpAddr = conf.SrvAddr().TCPAddr
 	} else {
 		version.ServerAddr = append(version.ServerAddr, global.Gateway)
 		version.TcpAddr = append(version.TcpAddr, global.TcpAddr)
@@ -138,7 +138,7 @@ func (s *GuideServer) getVersionInfo(in *common.InvocationEvent) ([]byte, string
 func (s *GuideServer) test(ctx context.Context, in *common.BindingEvent) (out []byte, err error) {
 	defer func() {
 		if err := recover(); err != any(nil) {
-			logger.Trace("test failed, err: ", err)
+			logger.Error("test failed, err: ", err)
 		}
 	}()
 
@@ -153,7 +153,7 @@ func (s *GuideServer) test(ctx context.Context, in *common.BindingEvent) (out []
 	}
 	logger.Debugf("[guide] test - in:%v", in)
 
-	srvAddr, err = json.Marshal(conf.GConf().SrvAddr)
+	srvAddr, err = json.Marshal(conf.SrvAddr())
 	if err != nil {
 		logger.Errorf("[guide] /api/version, version err: %v,data: %s", err, string(in.Data))
 		return nil, err

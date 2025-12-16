@@ -1,9 +1,9 @@
 package logic
 
-//func (s *IDIPServer) cfgReload(ctx context.Context, in *common.InvocationEvent) (out *common.Content, err error) {
+// func (s *IDIPServer) cfgReload(ctx context.Context, in *common.InvocationEvent) (out *common.Content, err error) {
 //	defer func() {
 //		if err := recover(); err != any(nil) {
-//			logger.Trace("configReload failed, err: ", err)
+//			logger.Error("configReload failed, err: ", err)
 //		}
 //	}()
 //
@@ -41,4 +41,4 @@ package logic
 //	logger.Debugf("[idip] configReload , out: %s", string(out.Data))
 //	return out, nil
 //
-//}
+// }

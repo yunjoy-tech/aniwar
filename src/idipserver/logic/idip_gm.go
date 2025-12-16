@@ -51,7 +51,7 @@ func (s *IDIPServer) InitMap() {
 func (s *IDIPServer) GMTHandler(ctx context.Context, in *common.InvocationEvent) (out *common.Content, err error) {
 	defer func() {
 		if errx := recover(); errx != any(nil) {
-			logger.Trace("GMTHandler failed, err: ", errx)
+			logger.Error("GMTHandler failed, err: ", errx)
 		}
 	}()
 
@@ -66,7 +66,7 @@ func (s *IDIPServer) GMTHandler(ctx context.Context, in *common.InvocationEvent)
 	}
 
 	// 前置处理逻辑
-	reqJson, code, errMsg := s.PreHandle(in, conf.GConf().GMT.ApiSecret)
+	reqJson, code, errMsg := s.PreHandle(in, conf.GMT().ApiSecret)
 	if code != pb.ErrorCode_Success {
 		RetCommonMsg(out, http.StatusInternalServerError, int32(code), errMsg)
 		return
@@ -103,7 +103,7 @@ func (s *IDIPServer) GMTHandler(ctx context.Context, in *common.InvocationEvent)
 func (s *IDIPServer) QuestionRewardHandler(ctx context.Context, in *common.InvocationEvent) (out *common.Content, err error) {
 	defer func() {
 		if errx := recover(); errx != any(nil) {
-			logger.Trace("QuestionRewardHandler failed, err: ", errx)
+			logger.Error("QuestionRewardHandler failed, err: ", errx)
 		}
 	}()
 
@@ -117,7 +117,7 @@ func (s *IDIPServer) QuestionRewardHandler(ctx context.Context, in *common.Invoc
 		DataTypeURL: in.DataTypeURL,
 	}
 
-	reqJson, code, errMsg := s.PreHandle(in, conf.GConf().Question.SecretKey)
+	reqJson, code, errMsg := s.PreHandle(in, conf.Question().SecretKey)
 	if code != pb.ErrorCode_Success {
 		logger.Debugf("QuestionRewardHandler prehandle failed, %s", errMsg)
 		RetCommonMsg(out, http.StatusInternalServerError, int32(code), errMsg)
@@ -197,7 +197,7 @@ func (s *IDIPServer) QuestionRewardHandler(ctx context.Context, in *common.Invoc
 func (s *IDIPServer) DelAccountHandler(ctx context.Context, in *common.InvocationEvent) (out *common.Content, err error) {
 	defer func() {
 		if errx := recover(); errx != any(nil) {
-			logger.Trace("DelAccountHandler failed, err: ", errx)
+			logger.Error("DelAccountHandler failed, err: ", errx)
 		}
 	}()
 

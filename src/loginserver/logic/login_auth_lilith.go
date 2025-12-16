@@ -38,7 +38,7 @@ func (s *LoginServer) handleAuthLilith(appUid int, appToken string) (*LilithLogi
 	}
 
 	client := &http.Client{}
-	reqParam := fmt.Sprintf("app_id=%s&app_uid=%d&app_token=%s", conf.GConf().Sdk.LilithAppId, appUid, appToken)
+	reqParam := fmt.Sprintf("app_id=%s&app_uid=%d&app_token=%s", conf.SDK().LilithAppId, appUid, appToken)
 	logger.Warnf("lilith, 登陆请求验证:" + reqParam)
 	lilithReq, err := http.NewRequest(http.MethodPost, sdkconstant.Lilith_login_url, strings.NewReader(reqParam))
 

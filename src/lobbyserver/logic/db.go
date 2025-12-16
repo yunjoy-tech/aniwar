@@ -27,7 +27,7 @@ func (s *LobbyServer) SaveDB(key string, value proto.Message) error {
 		logger.Debug("lobby server SaveDB failed")
 	}
 
-	logger.Debugf("lobby server SaveDB, %s", kvTable.Str())
+	logger.Debugf("lobby server SaveDB, %s", kvTable.ToString())
 	return nil
 }
 
