@@ -1,7 +1,7 @@
 package event
 
 import (
-	"gitee.com/aniwar2/musae/framework/logger"
+	"gitee.com/aniwar2/musae/logger"
 	"strings"
 	"sync"
 )

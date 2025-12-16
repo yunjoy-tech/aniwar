@@ -11,8 +11,8 @@ import (
 	"github.com/pkg/errors"
 
 	"gitee.com/aniwar2/aniwar/src/common/sdkconstant"
-	myHttp "gitee.com/aniwar2/musae/framework/http"
-	"gitee.com/aniwar2/musae/framework/logger"
+	myHttp "gitee.com/aniwar2/musae/http"
+	"gitee.com/aniwar2/musae/logger"
 )
 
 type TapUrlResp struct {

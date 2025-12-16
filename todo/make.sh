@@ -58,9 +58,9 @@ else
 fi
 
 echo ${GoVersion}
-LDFLAGS=-ldflags="-X gitee.com/aniwar2/musae/framework/global.APP_VERSION=${VERSION}|${DOCKER_TAG}|${BuildVersion}|${BuildTime} -X gitee.com/aniwar2/musae/framework/global.VERSION=${VERSION}"
+LDFLAGS=-ldflags="-X gitee.com/aniwar2/musae/global.APP_VERSION=${VERSION}|${DOCKER_TAG}|${BuildVersion}|${BuildTime} -X gitee.com/aniwar2/musae/global.VERSION=${VERSION}"
 if [[ $2 == "release" ]]; then
-  LDFLAGS=-ldflags="-X gitee.com/aniwar2/musae/framework/global.APP_VERSION=${VERSION}|${DOCKER_TAG}|${BuildVersion}|${BuildTime} -X gitee.com/aniwar2/musae/framework/global.VERSION=${VERSION} -w"
+  LDFLAGS=-ldflags="-X gitee.com/aniwar2/musae/global.APP_VERSION=${VERSION}|${DOCKER_TAG}|${BuildVersion}|${BuildTime} -X gitee.com/aniwar2/musae/global.VERSION=${VERSION} -w"
 fi
 
 echo ${LDFLAGS}

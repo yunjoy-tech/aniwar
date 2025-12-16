@@ -2,8 +2,8 @@ package stub
 
 import (
 	"context"
-	"gitee.com/aniwar2/musae/framework/base"
-	"gitee.com/aniwar2/musae/framework/global"
+	"gitee.com/aniwar2/musae/base"
+	"gitee.com/aniwar2/musae/global"
 )
 
 type CenterStub struct {

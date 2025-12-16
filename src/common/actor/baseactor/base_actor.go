@@ -3,8 +3,8 @@ package baseactor
 //
 // import (
 //	"github.com/dapr/go-sdk/actor"
-//	"gitee.com/aniwar2/musae/framework/base"
-//	"gitee.com/aniwar2/musae/framework/logger"
+//	"gitee.com/aniwar2/musae/base"
+//	"gitee.com/aniwar2/musae/logger"
 //	"google.golang.org/grpc"
 // )
 //

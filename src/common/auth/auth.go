@@ -3,10 +3,10 @@ package auth
 import (
 	"encoding/base64"
 	"encoding/json"
-	"gitee.com/aniwar2/musae/framework/gamelib/guid"
+	"gitee.com/aniwar2/musae/gamelib/guid"
 	"time"
 
-	"gitee.com/aniwar2/musae/framework/global"
+	"gitee.com/aniwar2/musae/global"
 	"github.com/forgoer/openssl"
 )
 

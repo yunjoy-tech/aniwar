@@ -2,14 +2,14 @@ package frame
 
 import (
 	"fmt"
-	"gitee.com/aniwar2/musae/framework/global"
+	"gitee.com/aniwar2/musae/global"
 	"strings"
 	"time"
 
 	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	"gitee.com/aniwar2/musae/framework/base"
-	"gitee.com/aniwar2/musae/framework/logger"
+	"gitee.com/aniwar2/musae/base"
+	"gitee.com/aniwar2/musae/logger"
 	"github.com/dapr/go-sdk/service/common"
 )
 

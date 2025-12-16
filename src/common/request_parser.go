@@ -2,8 +2,8 @@ package common
 
 import (
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	"gitee.com/aniwar2/musae/framework/base"
-	"gitee.com/aniwar2/musae/framework/logger"
+	"gitee.com/aniwar2/musae/base"
+	"gitee.com/aniwar2/musae/logger"
 	"google.golang.org/protobuf/proto"
 )
 

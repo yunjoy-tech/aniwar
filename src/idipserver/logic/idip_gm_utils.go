@@ -18,9 +18,9 @@ import (
 	"gitee.com/aniwar2/aniwar/src/common/db"
 	"gitee.com/aniwar2/aniwar/src/common/utils"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	"gitee.com/aniwar2/musae/framework/logger"
-	"gitee.com/aniwar2/musae/framework/service"
-	"gitee.com/aniwar2/musae/framework/state"
+	"gitee.com/aniwar2/musae/logger"
+	"gitee.com/aniwar2/musae/service"
+	"gitee.com/aniwar2/musae/state"
 	"github.com/dapr/go-sdk/service/common"
 	"google.golang.org/protobuf/proto"
 )

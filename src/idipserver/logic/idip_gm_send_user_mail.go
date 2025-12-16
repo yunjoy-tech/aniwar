@@ -8,9 +8,9 @@ import (
 
 	myCommon "gitee.com/aniwar2/aniwar/src/common"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	"gitee.com/aniwar2/musae/framework/base"
-	"gitee.com/aniwar2/musae/framework/gamelib/guid"
-	"gitee.com/aniwar2/musae/framework/logger"
+	"gitee.com/aniwar2/musae/base"
+	"gitee.com/aniwar2/musae/gamelib/guid"
+	"gitee.com/aniwar2/musae/logger"
 	"github.com/dapr/go-sdk/service/common"
 	"google.golang.org/protobuf/proto"
 )

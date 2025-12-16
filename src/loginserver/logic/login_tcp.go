@@ -5,10 +5,10 @@ import (
 
 	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	"gitee.com/aniwar2/musae/framework/baseconf"
-	"gitee.com/aniwar2/musae/framework/errorx"
-	"gitee.com/aniwar2/musae/framework/logger"
-	"gitee.com/aniwar2/musae/framework/tcpx"
+	"gitee.com/aniwar2/musae/baseconf"
+	"gitee.com/aniwar2/musae/errorx"
+	"gitee.com/aniwar2/musae/logger"
+	"gitee.com/aniwar2/musae/tcpx"
 )
 
 func (s *LoginServer) OnTcp(c *tcpx.Context) {

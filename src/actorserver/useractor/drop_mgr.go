@@ -3,7 +3,7 @@ package useractor
 import (
 	"fmt"
 	"gitee.com/aniwar2/aniwar/src/meta"
-	"gitee.com/aniwar2/musae/framework/gamelib/guid"
+	"gitee.com/aniwar2/musae/gamelib/guid"
 	"time"
 
 	"gitee.com/aniwar2/aniwar/src/actorserver/useractor/event"

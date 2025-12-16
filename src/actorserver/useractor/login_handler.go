@@ -12,11 +12,11 @@ import (
 
 	"gitee.com/aniwar2/aniwar/src/common/server"
 
-	"gitee.com/aniwar2/musae/framework/logger"
+	"gitee.com/aniwar2/musae/logger"
 
 	"github.com/pkg/errors"
 
-	"gitee.com/aniwar2/musae/framework/threading"
+	"gitee.com/aniwar2/musae/threading"
 
 	"gitee.com/aniwar2/aniwar/src/common/clidto"
 	myUtils "gitee.com/aniwar2/aniwar/src/common/utils"
@@ -27,8 +27,8 @@ import (
 	"gitee.com/aniwar2/aniwar/src/common"
 	"gitee.com/aniwar2/aniwar/src/common/db"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	"gitee.com/aniwar2/musae/framework/base"
-	"gitee.com/aniwar2/musae/framework/service"
+	"gitee.com/aniwar2/musae/base"
+	"gitee.com/aniwar2/musae/service"
 	"google.golang.org/protobuf/proto"
 )
 

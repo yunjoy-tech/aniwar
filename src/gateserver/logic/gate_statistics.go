@@ -8,7 +8,7 @@ import (
 	"gitee.com/aniwar2/aniwar/src/common"
 	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	"gitee.com/aniwar2/musae/framework/logger"
+	"gitee.com/aniwar2/musae/logger"
 )
 
 var DS = &DebugStatistics{

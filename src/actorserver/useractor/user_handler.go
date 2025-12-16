@@ -3,8 +3,8 @@ package useractor
 import (
 	"context"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	"gitee.com/aniwar2/musae/framework/base"
-	"gitee.com/aniwar2/musae/framework/service"
+	"gitee.com/aniwar2/musae/base"
+	"gitee.com/aniwar2/musae/service"
 	"google.golang.org/protobuf/proto"
 	"time"
 )

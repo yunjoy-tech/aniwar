@@ -3,8 +3,8 @@ package logic
 import (
 	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
 	"gitee.com/aniwar2/aniwar/src/common/db"
-	"gitee.com/aniwar2/musae/framework/global"
-	"gitee.com/aniwar2/musae/framework/logger"
+	"gitee.com/aniwar2/musae/global"
+	"gitee.com/aniwar2/musae/logger"
 	"github.com/dapr/go-sdk/client"
 	"strings"
 )

@@ -1,7 +1,7 @@
 package mailactor
 
 import (
-	"gitee.com/aniwar2/musae/framework/baseactor"
+	"gitee.com/aniwar2/musae/baseactor"
 )
 
 type UMBaseHandler struct {

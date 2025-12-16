@@ -4,7 +4,7 @@ import (
 	"time"
 
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	"gitee.com/aniwar2/musae/framework/service"
+	"gitee.com/aniwar2/musae/service"
 )
 
 /*

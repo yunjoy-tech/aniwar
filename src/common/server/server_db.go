@@ -5,16 +5,16 @@ import (
 	"encoding/json"
 	"time"
 
-	"gitee.com/aniwar2/musae/framework/baseconf"
-	"gitee.com/aniwar2/musae/framework/global"
-	"gitee.com/aniwar2/musae/framework/logger"
+	"gitee.com/aniwar2/musae/baseconf"
+	"gitee.com/aniwar2/musae/global"
+	"gitee.com/aniwar2/musae/logger"
 	"github.com/go-redis/redis/v8"
 	"github.com/pkg/errors"
 
 	"gitee.com/aniwar2/aniwar/src/common/db"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	"gitee.com/aniwar2/musae/framework/service"
-	"gitee.com/aniwar2/musae/framework/state"
+	"gitee.com/aniwar2/musae/service"
+	"gitee.com/aniwar2/musae/state"
 	"google.golang.org/protobuf/proto"
 )
 

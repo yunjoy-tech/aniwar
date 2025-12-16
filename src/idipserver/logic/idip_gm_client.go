@@ -2,7 +2,7 @@ package logic
 
 import (
 	"encoding/json"
-	"gitee.com/aniwar2/musae/framework/logger"
+	"gitee.com/aniwar2/musae/logger"
 )
 
 func (s *IDIPServer) ClientVersionPublish(apiData []byte) []byte {

@@ -3,7 +3,7 @@ package logic
 import (
 	"context"
 	"fmt"
-	"gitee.com/aniwar2/musae/framework/gamelib/guid"
+	"gitee.com/aniwar2/musae/gamelib/guid"
 	"strconv"
 
 	"gitee.com/aniwar2/aniwar/src/common/sdkconstant/sdksign"
@@ -12,7 +12,7 @@ import (
 	gameUtils "gitee.com/aniwar2/aniwar/src/common/utils"
 	"github.com/dapr/go-sdk/service/common"
 
-	"gitee.com/aniwar2/musae/framework/base"
+	"gitee.com/aniwar2/musae/base"
 	"google.golang.org/protobuf/proto"
 
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
@@ -22,7 +22,7 @@ import (
 
 	"gitee.com/aniwar2/aniwar/src/common/sdkconstant"
 
-	"gitee.com/aniwar2/musae/framework/logger"
+	"gitee.com/aniwar2/musae/logger"
 	"github.com/pkg/errors"
 
 	"gitee.com/aniwar2/aniwar/src/idipserver/logic"

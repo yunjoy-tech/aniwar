@@ -2,7 +2,7 @@ package logic
 
 import (
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	"gitee.com/aniwar2/musae/framework/base"
+	"gitee.com/aniwar2/musae/base"
 )
 
 func (s *BillServer) HandlerSubEvent(msg *base.ProtoMsg) (err error) {

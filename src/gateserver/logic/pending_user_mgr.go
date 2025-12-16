@@ -2,7 +2,7 @@ package logic
 
 import (
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	"gitee.com/aniwar2/musae/framework/tcpx"
+	"gitee.com/aniwar2/musae/tcpx"
 	"google.golang.org/protobuf/proto"
 )
 

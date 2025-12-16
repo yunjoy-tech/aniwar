@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"gitee.com/aniwar2/aniwar/src/common/conf"
-	"gitee.com/aniwar2/musae/framework/global"
+	"gitee.com/aniwar2/musae/global"
 )
 
 // var KeyCacheRedisKeyIdx = func(mongoDbName service.MongoDbType, account string) string {

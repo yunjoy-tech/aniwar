@@ -2,12 +2,12 @@ package logic
 
 import (
 	"errors"
-	"gitee.com/aniwar2/musae/framework/baseconf"
+	"gitee.com/aniwar2/musae/baseconf"
 
 	"gitee.com/aniwar2/aniwar/src/common/db"
-	"gitee.com/aniwar2/musae/framework/logger"
-	"gitee.com/aniwar2/musae/framework/service"
-	"gitee.com/aniwar2/musae/framework/utils"
+	"gitee.com/aniwar2/musae/logger"
+	"gitee.com/aniwar2/musae/service"
+	"gitee.com/aniwar2/musae/utils"
 	"google.golang.org/protobuf/proto"
 )
 

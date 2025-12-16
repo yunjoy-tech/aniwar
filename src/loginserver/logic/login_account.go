@@ -3,7 +3,7 @@ package logic
 import (
 	"gitee.com/aniwar2/aniwar/src/common"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	"gitee.com/aniwar2/musae/framework/gamelib/guid"
+	"gitee.com/aniwar2/musae/gamelib/guid"
 )
 
 // 创建用户用户信息并落库

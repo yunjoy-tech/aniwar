@@ -9,10 +9,10 @@ import (
 	"gitee.com/aniwar2/aniwar/src/actorserver/frame"
 	"gitee.com/aniwar2/aniwar/src/actorserver/roomactor"
 	"gitee.com/aniwar2/aniwar/src/actorserver/useractor"
-	"gitee.com/aniwar2/musae/framework/base"
-	"gitee.com/aniwar2/musae/framework/global"
-	"gitee.com/aniwar2/musae/framework/logger"
-	"gitee.com/aniwar2/musae/framework/process"
+	"gitee.com/aniwar2/musae/base"
+	"gitee.com/aniwar2/musae/global"
+	"gitee.com/aniwar2/musae/logger"
+	"gitee.com/aniwar2/musae/process"
 )
 
 func InitActorFactory(srv base.IServer) error {

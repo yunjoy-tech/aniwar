@@ -9,17 +9,17 @@ import (
 
 	"google.golang.org/protobuf/proto"
 
-	"gitee.com/aniwar2/musae/framework/errorx"
+	"gitee.com/aniwar2/musae/errorx"
 
 	"gitee.com/aniwar2/aniwar/src/common"
 
 	"gitee.com/aniwar2/aniwar/src/common/actor/stub"
 	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	"gitee.com/aniwar2/musae/framework/logger"
-	"gitee.com/aniwar2/musae/framework/metrics"
-	"gitee.com/aniwar2/musae/framework/tcpx"
-	"gitee.com/aniwar2/musae/framework/threading"
+	"gitee.com/aniwar2/musae/logger"
+	"gitee.com/aniwar2/musae/metrics"
+	"gitee.com/aniwar2/musae/tcpx"
+	"gitee.com/aniwar2/musae/threading"
 )
 
 type Msg struct {

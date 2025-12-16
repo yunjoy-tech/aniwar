@@ -5,14 +5,14 @@ package useractor
 //	"context"
 //	"time"
 //
-//	"gitee.com/aniwar2/musae/framework/threading"
+//	"gitee.com/aniwar2/musae/threading"
 //
 //	"gitee.com/aniwar2/aniwar/src/common/datalog"
-//	"gitee.com/aniwar2/musae/framework/global"
+//	"gitee.com/aniwar2/musae/global"
 //
 //	"github.com/dapr/go-sdk/actor"
-//	"gitee.com/aniwar2/musae/framework/base"
-//	"gitee.com/aniwar2/musae/framework/logger"
+//	"gitee.com/aniwar2/musae/base"
+//	"gitee.com/aniwar2/musae/logger"
 // )
 //
 // type UserActorMode struct {

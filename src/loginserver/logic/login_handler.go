@@ -4,7 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"gitee.com/aniwar2/musae/framework/gamelib/guid"
+	"gitee.com/aniwar2/musae/gamelib/guid"
 	"strconv"
 	"strings"
 	"time"
@@ -12,9 +12,9 @@ import (
 
 	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
 
-	"gitee.com/aniwar2/musae/framework/global"
+	"gitee.com/aniwar2/musae/global"
 
-	"gitee.com/aniwar2/musae/framework/base"
+	"gitee.com/aniwar2/musae/base"
 
 	"gitee.com/aniwar2/aniwar/src/common/auth"
 	"gitee.com/aniwar2/aniwar/src/common/rsa"
@@ -23,12 +23,12 @@ import (
 	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/aniwar/src/common/db"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	"gitee.com/aniwar2/musae/framework/baseconf"
-	"gitee.com/aniwar2/musae/framework/logger"
-	"gitee.com/aniwar2/musae/framework/metrics"
-	"gitee.com/aniwar2/musae/framework/service"
-	"gitee.com/aniwar2/musae/framework/threading"
-	"gitee.com/aniwar2/musae/framework/utils"
+	"gitee.com/aniwar2/musae/baseconf"
+	"gitee.com/aniwar2/musae/logger"
+	"gitee.com/aniwar2/musae/metrics"
+	"gitee.com/aniwar2/musae/service"
+	"gitee.com/aniwar2/musae/threading"
+	"gitee.com/aniwar2/musae/utils"
 	"google.golang.org/protobuf/proto"
 )
 

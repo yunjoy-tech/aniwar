@@ -3,15 +3,15 @@ package useractor
 import (
 	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
 	"gitee.com/aniwar2/aniwar/src/meta"
-	"gitee.com/aniwar2/musae/framework/threading"
+	"gitee.com/aniwar2/musae/threading"
 	"github.com/pkg/errors"
 	"strconv"
 
 	"gitee.com/aniwar2/aniwar/src/common"
 	"gitee.com/aniwar2/aniwar/src/common/utils"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	"gitee.com/aniwar2/musae/framework/logger"
-	"gitee.com/aniwar2/musae/framework/safe"
+	"gitee.com/aniwar2/musae/logger"
+	"gitee.com/aniwar2/musae/safe"
 )
 
 func (x *UserData) GetUserItems() *pb.PCommonItemInfos {

@@ -1,7 +1,7 @@
 package auth
 
 import (
-	"gitee.com/aniwar2/musae/framework/gamelib/guid"
+	"gitee.com/aniwar2/musae/gamelib/guid"
 	"testing"
 )
 

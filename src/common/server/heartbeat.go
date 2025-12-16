@@ -6,13 +6,13 @@ import (
 	"strconv"
 	"time"
 
-	"gitee.com/aniwar2/musae/framework/service"
+	"gitee.com/aniwar2/musae/service"
 	"google.golang.org/protobuf/proto"
 
 	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/aniwar/src/common/db"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	"gitee.com/aniwar2/musae/framework/logger"
+	"gitee.com/aniwar2/musae/logger"
 )
 
 func (s *Server) SaveHeartBeat(uid string, gateTopic string) {

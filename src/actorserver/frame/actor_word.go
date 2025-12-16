@@ -8,7 +8,7 @@ import (
 	"errors"
 	"fmt"
 	"gitee.com/aniwar2/aniwar/src/common/db"
-	"gitee.com/aniwar2/musae/framework/wordfilter"
+	"gitee.com/aniwar2/musae/wordfilter"
 	"math/rand"
 	"net/http"
 	"net/url"
@@ -22,7 +22,7 @@ import (
 	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/aniwar/src/common/http/request"
 	myUtils "gitee.com/aniwar2/aniwar/src/common/utils"
-	"gitee.com/aniwar2/musae/framework/logger"
+	"gitee.com/aniwar2/musae/logger"
 )
 
 const (

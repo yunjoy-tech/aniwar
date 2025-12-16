@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"gitee.com/aniwar2/aniwar/src/meta"
-	"gitee.com/aniwar2/musae/framework/gamelib/guid"
+	"gitee.com/aniwar2/musae/gamelib/guid"
 	"strconv"
 	"time"
 
@@ -14,9 +14,9 @@ import (
 
 	"gitee.com/aniwar2/aniwar/src/common/sdkconstant/sdkutil"
 
-	"gitee.com/aniwar2/musae/framework/baseconf"
+	"gitee.com/aniwar2/musae/baseconf"
 
-	"gitee.com/aniwar2/musae/framework/threading"
+	"gitee.com/aniwar2/musae/threading"
 
 	"gitee.com/aniwar2/aniwar/src/common"
 
@@ -25,9 +25,9 @@ import (
 	"gitee.com/aniwar2/aniwar/src/common/com_order"
 
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	"gitee.com/aniwar2/musae/framework/base"
-	"gitee.com/aniwar2/musae/framework/logger"
-	"gitee.com/aniwar2/musae/framework/service"
+	"gitee.com/aniwar2/musae/base"
+	"gitee.com/aniwar2/musae/logger"
+	"gitee.com/aniwar2/musae/service"
 	"google.golang.org/protobuf/proto"
 )
 

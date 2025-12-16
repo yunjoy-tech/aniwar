@@ -4,11 +4,11 @@ import (
 	"encoding/base64"
 	"gitee.com/aniwar2/aniwar/src/common/tls"
 
-	"gitee.com/aniwar2/musae/framework/tcpx"
+	"gitee.com/aniwar2/musae/tcpx"
 
 	myUtils "gitee.com/aniwar2/aniwar/src/common/utils"
-	"gitee.com/aniwar2/musae/framework/errorx"
-	"gitee.com/aniwar2/musae/framework/logger"
+	"gitee.com/aniwar2/musae/errorx"
+	"gitee.com/aniwar2/musae/logger"
 	"github.com/forgoer/openssl"
 )
 

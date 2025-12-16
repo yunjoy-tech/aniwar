@@ -1,14 +1,14 @@
 package allianceactor
 
 import (
-	"gitee.com/aniwar2/musae/framework/threading"
+	"gitee.com/aniwar2/musae/threading"
 	"time"
 
 	"gitee.com/aniwar2/aniwar/src/actorserver/frame"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	"gitee.com/aniwar2/musae/framework/baseactor"
-	"gitee.com/aniwar2/musae/framework/global"
-	"gitee.com/aniwar2/musae/framework/service"
+	"gitee.com/aniwar2/musae/baseactor"
+	"gitee.com/aniwar2/musae/global"
+	"gitee.com/aniwar2/musae/service"
 	"github.com/dapr/go-sdk/actor"
 )
 

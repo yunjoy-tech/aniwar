@@ -3,12 +3,12 @@ package server
 import (
 	"fmt"
 	"gitee.com/aniwar2/aniwar/src/common/db"
-	"gitee.com/aniwar2/musae/framework/global"
+	"gitee.com/aniwar2/musae/global"
 	"github.com/pkg/errors"
 	"strconv"
 	"strings"
 
-	"gitee.com/aniwar2/musae/framework/logger"
+	"gitee.com/aniwar2/musae/logger"
 )
 
 // VerReq 请求json数据结构

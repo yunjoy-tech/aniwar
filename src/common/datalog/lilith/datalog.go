@@ -8,10 +8,10 @@ package lilith
 //	"gitee.com/aniwar2/aniwar/src/common/conf"
 //	myUtils "gitee.com/aniwar2/aniwar/src/common/utils"
 //	"gitee.com/aniwar2/aniwar/src/proto/pb"
-//	"gitee.com/aniwar2/musae/framework/dlog"
-//	"gitee.com/aniwar2/musae/framework/logger"
-//	"gitee.com/aniwar2/musae/framework/threading"
-//	"gitee.com/aniwar2/musae/framework/utils"
+//	"gitee.com/aniwar2/musae/dlog"
+//	"gitee.com/aniwar2/musae/logger"
+//	"gitee.com/aniwar2/musae/threading"
+//	"gitee.com/aniwar2/musae/utils"
 // )
 //
 // const (

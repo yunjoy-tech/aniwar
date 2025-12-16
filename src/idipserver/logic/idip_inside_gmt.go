@@ -14,12 +14,12 @@ import (
 	"strings"
 
 	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
-	"gitee.com/aniwar2/musae/framework/global"
-	"gitee.com/aniwar2/musae/framework/utils"
+	"gitee.com/aniwar2/musae/global"
+	"gitee.com/aniwar2/musae/utils"
 	"github.com/go-redis/redis/v8"
 
 	"gitee.com/aniwar2/aniwar/src/common/server"
-	"gitee.com/aniwar2/musae/framework/service"
+	"gitee.com/aniwar2/musae/service"
 
 	myCommon "gitee.com/aniwar2/aniwar/src/common"
 	"gitee.com/aniwar2/aniwar/src/common/actor/stub"
@@ -28,10 +28,10 @@ import (
 	"gitee.com/aniwar2/aniwar/src/common/sdkconstant"
 	myUtils "gitee.com/aniwar2/aniwar/src/common/utils"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	"gitee.com/aniwar2/musae/framework/base"
-	"gitee.com/aniwar2/musae/framework/gamelib/guid"
-	"gitee.com/aniwar2/musae/framework/logger"
-	"gitee.com/aniwar2/musae/framework/state"
+	"gitee.com/aniwar2/musae/base"
+	"gitee.com/aniwar2/musae/gamelib/guid"
+	"gitee.com/aniwar2/musae/logger"
+	"gitee.com/aniwar2/musae/state"
 	"github.com/dapr/go-sdk/service/common"
 	"google.golang.org/protobuf/proto"
 )

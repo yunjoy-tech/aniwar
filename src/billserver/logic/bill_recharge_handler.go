@@ -5,13 +5,13 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"gitee.com/aniwar2/musae/framework/gamelib/guid"
+	"gitee.com/aniwar2/musae/gamelib/guid"
 	"net/url"
 	"strconv"
 
 	"gitee.com/aniwar2/aniwar/src/common/com_order"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	"gitee.com/aniwar2/musae/framework/base"
+	"gitee.com/aniwar2/musae/base"
 	"google.golang.org/protobuf/proto"
 
 	"gitee.com/aniwar2/aniwar/src/common/sdkconstant/sdksign"
@@ -24,7 +24,7 @@ import (
 	"github.com/dapr/go-sdk/service/common"
 	"github.com/pkg/errors"
 
-	"gitee.com/aniwar2/musae/framework/logger"
+	"gitee.com/aniwar2/musae/logger"
 )
 
 func (s *BillServer) PayHandler(ctx context.Context, in *common.InvocationEvent) (out *common.Content, err error) {

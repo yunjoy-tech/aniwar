@@ -5,16 +5,16 @@ import (
 	"encoding/json"
 	"time"
 
-	"gitee.com/aniwar2/musae/framework/baseconf"
-	"gitee.com/aniwar2/musae/framework/utils"
+	"gitee.com/aniwar2/musae/baseconf"
+	"gitee.com/aniwar2/musae/utils"
 	"github.com/pkg/errors"
 
-	"gitee.com/aniwar2/musae/framework/service"
+	"gitee.com/aniwar2/musae/service"
 
-	"gitee.com/aniwar2/musae/framework/global"
-	"gitee.com/aniwar2/musae/framework/logger"
-	"gitee.com/aniwar2/musae/framework/metrics"
-	"gitee.com/aniwar2/musae/framework/state"
+	"gitee.com/aniwar2/musae/global"
+	"gitee.com/aniwar2/musae/logger"
+	"gitee.com/aniwar2/musae/metrics"
+	"gitee.com/aniwar2/musae/state"
 	dapr "github.com/dapr/go-sdk/client"
 )
 

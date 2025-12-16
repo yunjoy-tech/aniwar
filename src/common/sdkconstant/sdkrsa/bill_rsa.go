@@ -13,7 +13,7 @@ import (
 	"strings"
 	"sync"
 
-	"gitee.com/aniwar2/musae/framework/logger"
+	"gitee.com/aniwar2/musae/logger"
 )
 
 type BillRsa struct {

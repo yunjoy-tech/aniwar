@@ -11,7 +11,7 @@ import (
 
 	"gitee.com/aniwar2/aniwar/src/common/sdkconstant"
 
-	"gitee.com/aniwar2/musae/framework/logger"
+	"gitee.com/aniwar2/musae/logger"
 )
 
 func Test_checkLogin(t *testing.T) {
