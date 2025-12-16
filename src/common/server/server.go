@@ -4,51 +4,41 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"gitee.com/aniwar2/musae/threading"
+	"gitee.com/aniwar2/aniwar/src/common"
+	"gitee.com/aniwar2/aniwar/src/common/conf"
+	"gitee.com/aniwar2/aniwar/src/common/db"
+	"gitee.com/aniwar2/aniwar/src/common/sdkconstant"
+	"gitee.com/aniwar2/aniwar/src/proto/pb"
+	"gitee.com/aniwar2/musae/base"
+	"gitee.com/aniwar2/musae/baseconf"
+	"gitee.com/aniwar2/musae/gamelib/guid"
+	"gitee.com/aniwar2/musae/global"
+	"gitee.com/aniwar2/musae/logger"
+	"gitee.com/aniwar2/musae/metrics"
+	"gitee.com/aniwar2/musae/service"
+	svc "gitee.com/aniwar2/musae/service"
+	"gitee.com/aniwar2/musae/state"
+	"gitee.com/aniwar2/musae/tcpx"
 	"gitee.com/aniwar2/musae/utils"
+	dapr "github.com/dapr/go-sdk/client"
+	daprCommon "github.com/dapr/go-sdk/service/common"
+	"github.com/xuri/excelize/v2"
+	"google.golang.org/protobuf/proto"
+	"google.golang.org/protobuf/types/known/emptypb"
 	"os"
 	"strconv"
 	"strings"
 	"time"
-
-	"gitee.com/aniwar2/musae/metrics"
-
-	"gitee.com/aniwar2/aniwar/src/common/sdkconstant"
-
-	"gitee.com/aniwar2/musae/global"
-	"google.golang.org/protobuf/types/known/emptypb"
-
-	"github.com/xuri/excelize/v2"
-
-	daprCommon "github.com/dapr/go-sdk/service/common"
-
-	"gitee.com/aniwar2/aniwar/src/common"
-	"gitee.com/aniwar2/aniwar/src/common/conf"
-	"gitee.com/aniwar2/musae/baseconf"
-	"gitee.com/aniwar2/musae/gamelib/guid"
-
-	"gitee.com/aniwar2/musae/service"
-	"gitee.com/aniwar2/musae/state"
-
-	"gitee.com/aniwar2/aniwar/src/common/db"
-	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	"gitee.com/aniwar2/musae/base"
-	"gitee.com/aniwar2/musae/logger"
-	svc "gitee.com/aniwar2/musae/service"
-	"gitee.com/aniwar2/musae/tcpx"
-	dapr "github.com/dapr/go-sdk/client"
-	"google.golang.org/protobuf/proto"
 )
 
 type Server struct {
 	svc.Service
 	pack         *tcpx.Packx
-	InvokeFunc   map[uint32]base.FProtoMsgHandler
-	Args         map[string]string
 	version      *VersionSupport
+	Args         map[string]string // 运行参数列表
 	LiveTime     int64             // 生存时间戳
-	NeedExcel    map[string]int    // 需要加载的策划excel表
-	LocalizedStr map[string]string // 国际化文本，只取中文，后台可视化展示使用
+	NeedExcel    map[string]int    // TODO musae提供支持，根据srv类型进行加载 需要加载的策划excel表
+	LocalizedStr map[string]string // TODO 废弃 国际化文本，只取中文，后台可视化展示使用
 }
 
 // IsValidAppId check appid
@@ -60,7 +50,6 @@ func IsValidAppId(appid string) bool {
 	default:
 		return false
 	}
-	return false
 }
 
 func RpcErr(err error, code pb.ErrorCode) base.RpcError {
@@ -98,10 +87,8 @@ func (s *Server) ConvUAID(uaid string) (string, uint64) {
 	return accountId, roleId
 }
 
-func (s *Server) RegisterMsgHandler(msgId uint32, handler base.FProtoMsgHandler) {
-	s.InvokeFunc[msgId] = handler
-}
-
+// 启动流程3: Server
+// Server Start逻辑
 func (s *Server) Start() error {
 	defer func() {
 		if err := recover(); err != any(nil) {
@@ -109,10 +96,12 @@ func (s *Server) Start() error {
 		}
 	}()
 
+	// 启动流程4: 初始化service的http,网络等组件
 	if err := s.InitBase(); err != nil {
 		return err
 	}
 	logger.Info("[server] base init success")
+
 	if err := s.OnPreInit(); err != nil {
 		return err
 	}
@@ -129,26 +118,17 @@ func (s *Server) Start() error {
 
 	logger.Info("[server] pre init success")
 
-	if err := s.Run(); err != nil {
+	// 启动流程5: 核心逻辑, 启动dapr service和dapr client等
+	if err := s.InitCore(); err != nil {
 		return err
 	}
 
 	s.InitConfigCenter()
 
-	// if !global.IsDev {
-	//	//如果配置中心存在server.conf, reload 配置
-	//	szcfg, err := s.GetConfigKeyForStr(db.KeyCfgReloadConf)
-	//	if err == nil && szcfg != "" {
-	//		if s.LoadConf(szcfg) != nil {
-	//			logger.Errorf("service reload cfg err:%s", szcfg)
-	//		}
-	//	}
-	// }
-
-	if err := s.OnServerInit(); err != nil {
+	if err := s.OnPostInit(); err != nil {
 		return err
 	}
-	utils.GoSafeRun(func() {
+	utils.GoSafeRunNoError(func() {
 		t := time.NewTicker(time.Second * time.Duration(conf.Base().ServerHeartbeatInterval))
 		defer t.Stop()
 		for {
@@ -157,14 +137,11 @@ func (s *Server) Start() error {
 				utils.SafeRunNoError(s.OnUpdateStatus)
 			}
 		}
-	}, nil)
+	})
 
 	szLog := fmt.Sprintf("server start success, appid:%s version:%s rolling:%s", global.AppID, global.APP_VERSION, global.ROLLING_VERSION)
 	logger.Info(szLog)
-	if baseconf.GetBaseConf().IsDebug && !global.IsDev &&
-		len(baseconf.GetBaseConf().FeishuNotifyRobot) > 0 {
-		logger.PushLog2Chat(baseconf.GetBaseConf().FeishuNotifyRobot, fmt.Sprintf("ServerStart: %s", global.AppID), szLog)
-	}
+	// todo 服务启动通知
 	return nil
 }
 
@@ -268,7 +245,6 @@ func (s *Server) OnUpdateStatus() {
 			global.GateServices = append(global.GateServices, srv.Name)
 		}
 	}
-	// logger.Debugf("OnUpdateActorCount: %+v", res.Counts)
 }
 
 func (s *Server) OnTimerEventCB(cb base.TimerEventCB) {
@@ -370,7 +346,7 @@ func (s *Server) SaveDbByKvTable(mongoDbName service.MongoDbType, key string, kv
 		logger.Errorf("还未支持该数据库, dbName=%s", mongoDbName)
 	}
 
-	logger.Debugf("UserActor SaveDB,%s, %s, %s", mongoDbName, key, kvTable.Str())
+	logger.Debugf("UserActor SaveDB,%s, %s, %s", mongoDbName, key, kvTable.ToString())
 	return nil
 }
 
@@ -417,7 +393,7 @@ func (s *Server) UpdateUAIDCache(uid string, playerId uint64, savedb ...bool) er
 	kvTableMap := make(map[string]*state.KvTable, 2)
 	kvTableMap[db.KeyPlayerUAID(playerId)] = table
 	kvTableMap[db.KeyAccountUAID(uid)] = table
-	meta := map[string]string{"ttlInSeconds": strconv.Itoa(conf.GConf().Base.AccTokenTTL)} // 过期时间
+	meta := map[string]string{"ttlInSeconds": strconv.Itoa(conf.Base().AccTokenTTL)} // 过期时间
 
 	// 持久化roleId-uaid映射
 	var f bool
@@ -468,7 +444,7 @@ func (s *Server) GetPlayerId(uid string) (uint64, error) {
 					if id == 0 {
 						return 0, fmt.Errorf("guid error")
 					}
-					playerId = uint64(id + common.USER_ID_BASE) // playerId基数从10000开始
+					playerId = uint64(id + common.USER_ID_BASE)
 				}
 			}
 		}
@@ -592,7 +568,7 @@ func (s *Server) CheckToken(session *pb.UserSession, token string) (error, pb.Er
 
 	// 判断当前token是否超时失效
 	nowSec := time.Now().Unix()
-	if conf.GConf().DDos.TimeInterval > 0 && // 配置过期时间为0, 表示不做过期时间检查
+	if conf.DDos().TimeInterval > 0 && // 配置过期时间为0, 表示不做过期时间检查
 		nowSec > session.LimitTs {
 		return errors.New("token失效了"), pb.ErrorCode_TokenTimeout
 	}
@@ -667,7 +643,7 @@ func (s *Server) UpdateTaptapUidCache(unionId string) (int, error) {
 	}
 	uid += common.USER_ID_BASE
 	table := &state.KvTable{Id: uid, UID: strconv.Itoa(int(uid)), Data: []byte(unionId), UpSecTS: now, InSecTS: now, DataSrc: unionId}
-	meta := map[string]string{"ttlInSeconds": strconv.Itoa(conf.GConf().Base.AccTokenTTL)} // 过期时间
+	meta := map[string]string{"ttlInSeconds": strconv.Itoa(conf.Base().AccTokenTTL)} // 过期时间
 
 	err := s.SaveMongoAndRedis(service.MongoDbType_MongoGame, db.KeyTaptapOpenId(unionId), table, meta, ICache(s))
 	if err != nil {

@@ -3,12 +3,11 @@ package server
 import (
 	"fmt"
 	"gitee.com/aniwar2/aniwar/src/common/db"
+	"gitee.com/aniwar2/musae/errorx"
 	"gitee.com/aniwar2/musae/global"
-	"github.com/pkg/errors"
+	"gitee.com/aniwar2/musae/logger"
 	"strconv"
 	"strings"
-
-	"gitee.com/aniwar2/musae/logger"
 )
 
 // VerReq 请求json数据结构
@@ -59,13 +58,13 @@ func ParseVersion(version string) *VersionSupport {
 
 	// tag, err := strconv.ParseUint(forceStr[2], 10, 32)
 	// if err != nil {
-	//	logger.Errorf("parse tag err tag :%v", forceStr[2])
+	//	logger.Newf("parse tag err tag :%v", forceStr[2])
 	//	return nil
 	// }
 	//
 	// latest, err := strconv.ParseUint(forceStr[3], 10, 32)
 	// if err != nil {
-	//	logger.Errorf("parse latest err latest :%v", forceStr[3])
+	//	logger.Newf("parse latest err latest :%v", forceStr[3])
 	//	return nil
 	// }
 
@@ -133,11 +132,11 @@ func (s *Server) VersionCheckExt(platform, clientVersion string) error {
 
 	mini := ParseVersion(miniVersion)
 	if mini == nil {
-		return errors.Errorf("ParseVersion miniVersion err version:%v", miniVersion)
+		return errorx.Newf("ParseVersion miniVersion err version:%v", miniVersion)
 	}
 	client := ParseVersion(clientVersion)
 	if client == nil {
-		return errors.Errorf("ParseVersion clientVersion err version:%v", clientVersion)
+		return errorx.Newf("ParseVersion clientVersion err version:%v", clientVersion)
 	}
 	logger.Debugf("VersionCheckExt,clientVersion:%+v, miniVersion:%+v", client, mini)
 	if mini.Verify(client) {

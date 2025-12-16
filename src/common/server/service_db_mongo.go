@@ -5,20 +5,17 @@ import (
 	"encoding/json"
 	"gitee.com/aniwar2/aniwar/src/common/db"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	"google.golang.org/protobuf/proto"
-	"time"
-
 	"gitee.com/aniwar2/musae/baseconf"
-	"gitee.com/aniwar2/musae/utils"
-	"github.com/pkg/errors"
-
-	"gitee.com/aniwar2/musae/service"
-
+	"gitee.com/aniwar2/musae/errorx"
 	"gitee.com/aniwar2/musae/global"
 	"gitee.com/aniwar2/musae/logger"
 	"gitee.com/aniwar2/musae/metrics"
+	"gitee.com/aniwar2/musae/service"
 	"gitee.com/aniwar2/musae/state"
+	"gitee.com/aniwar2/musae/utils"
 	dapr "github.com/dapr/go-sdk/client"
+	"google.golang.org/protobuf/proto"
+	"time"
 )
 
 // SaveMongoGame save to mongo game
@@ -31,7 +28,7 @@ func (s *Server) SaveMongoGame(key string, table *state.KvTable, meta map[string
 	err = s.Service.SaveMongo(service.MongoDbType_MongoGame, key, table, meta, so...)
 	logger.WarnDelayf(time.Since(startT).Milliseconds(), "")
 
-	return errors.WithStack(err)
+	return errorx.WithStack(err)
 }
 
 // GetMongoGame load from mongo game
@@ -44,7 +41,7 @@ func (s *Server) GetMongoGame(key string, meta map[string]string) (*state.KvTabl
 
 	kvTable, err = s.Service.GetMongo(service.MongoDbType_MongoGame, key, meta)
 	logger.WarnDelayf(time.Since(startT).Milliseconds(), "")
-	return kvTable, errors.WithStack(err)
+	return kvTable, errorx.WithStack(err)
 }
 
 // SaveMongoMail save to mongo mail
@@ -84,7 +81,7 @@ func (s *Server) SaveMongoAccount(key string, table *state.KvTable, meta map[str
 	err = s.Service.SaveMongo(service.MongoDbType_MongoAccount, key, table, meta, so...)
 	logger.WarnDelayf(time.Since(startT).Milliseconds(), "")
 
-	return errors.WithStack(err)
+	return errorx.WithStack(err)
 }
 
 // GetMongoAccount load from mongo account
@@ -98,7 +95,7 @@ func (s *Server) GetMongoAccount(key string, meta map[string]string) (*state.KvT
 	kvTable, err = s.Service.GetMongo(service.MongoDbType_MongoAccount, key, meta)
 	logger.WarnDelayf(time.Since(startT).Milliseconds(), "")
 
-	return kvTable, errors.WithStack(err)
+	return kvTable, errorx.WithStack(err)
 }
 
 // SaveMongoGmt save to mongo gmt
@@ -136,7 +133,7 @@ func (s *Server) GetMongoGmt(key string, meta map[string]string) (*state.KvTable
 //	metrics.HistogramPut(metrics.MongoWDelayHist, time.Since(now).Milliseconds(), metrics.Mongo)
 //	metrics.GaugeInc(metrics.MongoWCount)
 //	metrics.GaugeAdd(metrics.MongoWSize, int64(dataLen))
-//	logger.Debugf("SaveMongo db:[%v], key:[%v], kvTable: %v", db, key, table.Str())
+//	logger.Debugf("SaveMongo db:[%v], key:[%v], kvTable: %v", db, key, table.ToString())
 //	return nil
 // }
 //
@@ -163,7 +160,7 @@ func (s *Server) GetMongoGmt(key string, meta map[string]string) (*state.KvTable
 //	table := &state.KvTable{}
 //	err = json.Unmarshal(item.Value, table)
 //	if err != nil {
-//		logger.Errorf("getMongo Unmarshal KvTable err: %v, %v, %+v", err, key, item)
+//		logger.Newf("getMongo Unmarshal KvTable err: %v, %v, %+v", err, key, item)
 //		return nil, DB_ERROR_UNMARSHAL
 //	}
 //	logger.Debugf("getMongo db:%v, key:%v, dataLen:%v", db, key, len(table.Data))
@@ -270,7 +267,7 @@ func (s *Server) GetSystemMail(systemMail *pb.PSystemMailInfo) error {
 		systemMail.SystemMail = make(map[int64]*pb.PSysMailInfo)
 	}
 	if kvTable, err := s.GetMongoGame(db.KeySystemMail(), nil); err != nil {
-		if errors.Is(err, service.DB_ERROR_NOT_EXIST) {
+		if errorx.Is(err, service.DB_ERROR_NOT_EXIST) {
 			return nil // db中没有数据
 		} else {
 			return err

@@ -4,21 +4,17 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"strconv"
-	"time"
-
-	"gitee.com/aniwar2/musae/utils"
-
-	"gitee.com/aniwar2/musae/global"
-
-	"gitee.com/aniwar2/musae/logger"
-	dapr "github.com/dapr/go-sdk/client"
-
 	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/aniwar/src/common/db"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
+	"gitee.com/aniwar2/musae/errorx"
+	"gitee.com/aniwar2/musae/global"
+	"gitee.com/aniwar2/musae/logger"
 	"gitee.com/aniwar2/musae/service"
-	"github.com/pkg/errors"
+	"gitee.com/aniwar2/musae/utils"
+	dapr "github.com/dapr/go-sdk/client"
+	"strconv"
+	"time"
 )
 
 func (s *Server) GetUserSession(uid string) (*pb.UserSession, error, pb.ErrorCode) {
@@ -28,7 +24,7 @@ func (s *Server) GetUserSession(uid string) (*pb.UserSession, error, pb.ErrorCod
 
 	kvTable, err := s.GetGlobalRedis(db.KeyUserSession(uid), nil)
 	if err != nil {
-		if errors.Is(err, service.DB_ERROR_NOT_EXIST) { // session数据不存在,重新登录
+		if errorx.Is(err, service.DB_ERROR_NOT_EXIST) { // session数据不存在,重新登录
 			return nil, fmt.Errorf("db value not exist"), pb.ErrorCode_ReLogin
 		} else {
 			return nil, fmt.Errorf("internal error"), pb.ErrorCode_InternalError
@@ -46,7 +42,7 @@ func (s *Server) GetUserSession(uid string) (*pb.UserSession, error, pb.ErrorCod
 
 // func (s *Server) SaveUserSession2(session *pb.UserSession) error {
 //	if session.Uid == "" {
-//		return fmt.Errorf("accountId is empty")
+//		return fmt.Newf("accountId is empty")
 //	}
 //
 //	key := db.KeyUserSession(session.Uid)
@@ -57,7 +53,7 @@ func (s *Server) GetUserSession(uid string) (*pb.UserSession, error, pb.ErrorCod
 //
 //	data, err := json.Marshal(kvTable)
 //	if err != nil {
-//		logger.Errorf("SaveUserSession Marshal err: ", kvTable, err)
+//		logger.Newf("SaveUserSession Marshal err: ", kvTable, err)
 //		return err
 //	}
 //
@@ -68,7 +64,7 @@ func (s *Server) GetUserSession(uid string) (*pb.UserSession, error, pb.ErrorCod
 //
 //	item, err := s.Daprc.GetStateWithConsistency(ctx, string(service.RedisGlobal), key, nil, dapr.StateConsistencyStrong)
 //	if err != nil {
-//		logger.Errorf("DBNext GetStateWithConsistency err: %v, %v, %+v", err, key, item)
+//		logger.Newf("DBNext GetStateWithConsistency err: %v, %v, %+v", err, key, item)
 //		return err
 //	}
 //
@@ -92,7 +88,7 @@ func (s *Server) GetUserSession(uid string) (*pb.UserSession, error, pb.ErrorCod
 //	defer cancelFunc2()
 //	err = s.Daprc.ExecuteStateTransaction(ctx2, string(service.RedisGlobal), nil, []*dapr.StateOperation{opt})
 //	if err != nil {
-//		logger.Errorf("DBNext  SaveState err: %v, %v, %+v", err, key, item)
+//		logger.Newf("DBNext  SaveState err: %v, %v, %+v", err, key, item)
 //		return err
 //	}
 //
@@ -129,7 +125,7 @@ func (s *Server) doSaveUserSession(session *pb.UserSession) error {
 		return err
 	}
 
-	ttlMap := map[string]string{"ttlInSeconds": strconv.Itoa(conf.GConf().Base.AccTokenTTL)}
+	ttlMap := map[string]string{"ttlInSeconds": strconv.Itoa(conf.Base().AccTokenTTL)}
 
 	// retryPolicy := backoff.NewExponentialBackOff()
 

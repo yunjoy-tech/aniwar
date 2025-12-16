@@ -3,16 +3,14 @@ package server
 import (
 	"context"
 	"errors"
-	"strconv"
-	"time"
-
-	"gitee.com/aniwar2/musae/service"
-	"google.golang.org/protobuf/proto"
-
 	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/aniwar/src/common/db"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/logger"
+	"gitee.com/aniwar2/musae/service"
+	"google.golang.org/protobuf/proto"
+	"strconv"
+	"time"
 )
 
 func (s *Server) SaveHeartBeat(uid string, gateTopic string) {
@@ -29,7 +27,7 @@ func (s *Server) SaveHeartBeat(uid string, gateTopic string) {
 	}
 
 	logger.Debugf("saveHeartBeat 更新心跳, %+v", rsp)
-	ttlMap := map[string]string{"ttlInSeconds": strconv.Itoa(int(conf.GConf().Base.HeartbeatTimout))}
+	ttlMap := map[string]string{"ttlInSeconds": strconv.Itoa(int(conf.Base().HeartbeatTimout))}
 	err = s.SaveGlobalRedis(key, kvTable, ttlMap)
 	if err != nil {
 		logger.Error(err)
@@ -39,7 +37,7 @@ func (s *Server) SaveHeartBeat(uid string, gateTopic string) {
 // UpdateHeartBeatExpire 更新心跳超时时间
 func (s *Server) UpdateHeartBeatExpire(uid string) {
 	key := db.KeyHeartBeat(uid)
-	_, err := s.RedisExpire(context.Background(), key, time.Duration(conf.GConf().Base.HeartbeatTimout)*time.Second)
+	_, err := s.RedisExpire(context.Background(), key, time.Duration(conf.Base().HeartbeatTimout)*time.Second)
 	if err != nil {
 		logger.Error(err)
 	}

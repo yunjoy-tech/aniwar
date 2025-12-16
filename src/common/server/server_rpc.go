@@ -4,16 +4,10 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"gitee.com/aniwar2/musae/gamelib/guid"
-	"net/http"
-	"strconv"
-	"time"
-
-	"gitee.com/aniwar2/aniwar/src/common/http/request"
-
 	"gitee.com/aniwar2/aniwar/src/common/actor/stub"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/base"
+	"gitee.com/aniwar2/musae/gamelib/guid"
 	"gitee.com/aniwar2/musae/global"
 	"gitee.com/aniwar2/musae/logger"
 	"gitee.com/aniwar2/musae/metrics"
@@ -22,6 +16,8 @@ import (
 	dapr "github.com/dapr/go-sdk/client"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/protobuf/proto"
+	"strconv"
+	"time"
 )
 
 // 全服广播
@@ -128,7 +124,7 @@ OnFail:
 func (s *Server) SvcInvoke(appId, uid string, roleId uint64, uaid string, msg proto.Message) (out []byte, err error) {
 	defer func() {
 		if err := recover(); err != any(nil) {
-			logger.Trace("[SvcInvoke] recover, err: ", err)
+			logger.Error("[SvcInvoke] recover, err: ", err)
 		}
 	}()
 
@@ -154,7 +150,7 @@ func (s *Server) SvcInvoke(appId, uid string, roleId uint64, uaid string, msg pr
 func (s *Server) SvcInvokeByData(appId, uid string, roleId uint64, uaid string, msgId int32, data []byte) (out []byte, err error) {
 	defer func() {
 		if err := recover(); err != any(nil) {
-			logger.Trace("[SvcInvokeByData] recover err: ", err)
+			logger.Error("[SvcInvokeByData] recover err: ", err)
 		}
 	}()
 
@@ -283,15 +279,16 @@ func (s *Server) DeleteActor(actorType, actorId string) error {
 	url := fmt.Sprintf("http://localhost%s/actors/%s/%s", s.InAddr, actorType, actorId)
 	logger.Infof("===>>> request url: %v", url)
 
-	resp, err := request.New().Method(http.MethodDelete).JSONBytesBody(nil).Send(url)
-	if err != nil {
-		return err
-	}
-	defer resp.Body.Close()
-	// 返回值200成功
-	if resp.StatusCode != http.StatusOK {
-		return fmt.Errorf("delete actor failed. status code is %v", resp.StatusCode)
-	}
+	// TODO 增加http工具后再修改
+	// resp, err := httpreq.New().DefaultMethod(http.MethodDelete).JSONBytesBody(nil).Send(http.MethodDelete, url)
+	// if err != nil {
+	// 	return err
+	// }
+	// defer resp.Body.Close()
+	// // 返回值200成功
+	// if resp.StatusCode != http.StatusOK {
+	// 	return fmt.Errorf("delete actor failed. status code is %v", resp.StatusCode)
+	// }
 
 	logger.Infof("===>>> delete actor success. actorType: %v, actorId: %v", actorType, actorId)
 	return nil

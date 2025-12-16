@@ -2,7 +2,6 @@ package server
 
 import (
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	"gitee.com/aniwar2/musae/errorx"
 	"gitee.com/aniwar2/musae/logger"
 	"gitee.com/aniwar2/musae/tcpx"
 	"google.golang.org/protobuf/proto"
@@ -27,11 +26,11 @@ func (s *Server) PackWithBody(cmdId pb.Protocols, errCode pb.ErrorCode, body []b
 func (s *Server) Unpack(allData []byte, dest proto.Message) error {
 	body, err := tcpx.BodyBytesOf(allData)
 	if err != nil {
-		logger.Warn("Unpack BodyBytesOf", errorx.Wrap(err, "").Error())
+		logger.Warn("Unpack BodyBytesOf", err.Error())
 	}
 	err = proto.Unmarshal(body, dest)
 	if err != nil {
-		logger.Warn("Unpack Unmarshal", errorx.Wrap(err, "").Error())
+		logger.Warn("Unpack Unmarshal", err.Error())
 	}
 
 	return nil

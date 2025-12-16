@@ -3,23 +3,20 @@ package server
 import (
 	"context"
 	"encoding/json"
-	"time"
-
 	"gitee.com/aniwar2/musae/baseconf"
-	"gitee.com/aniwar2/musae/utils"
-	"github.com/pkg/errors"
-
-	"gitee.com/aniwar2/musae/service"
-
+	"gitee.com/aniwar2/musae/errorx"
 	"gitee.com/aniwar2/musae/global"
 	"gitee.com/aniwar2/musae/logger"
 	"gitee.com/aniwar2/musae/metrics"
+	"gitee.com/aniwar2/musae/service"
 	"gitee.com/aniwar2/musae/state"
+	"gitee.com/aniwar2/musae/utils"
 	dapr "github.com/dapr/go-sdk/client"
+	"time"
 )
 
 func (s *Server) SaveGlobalRedis(key string, table *state.KvTable, meta map[string]string, so ...dapr.StateOption) error {
-	return errors.WithStack(s.Service.SaveRedis(service.RedisGlobal, key, table, meta, so...))
+	return errorx.WithStack(s.Service.SaveRedis(service.RedisGlobal, key, table, meta, so...))
 }
 
 func (s *Server) GetGlobalRedis(key string, meta map[string]string) (*state.KvTable, error) {
@@ -27,7 +24,7 @@ func (s *Server) GetGlobalRedis(key string, meta map[string]string) (*state.KvTa
 }
 
 func (s *Server) SaveCacheRedis(key string, table *state.KvTable, meta map[string]string, so ...dapr.StateOption) error {
-	return errors.WithStack(s.Service.SaveRedis(service.RedisCache, key, table, meta, so...))
+	return errorx.WithStack(s.Service.SaveRedis(service.RedisCache, key, table, meta, so...))
 }
 
 func (s *Server) GetCacheRedis(key string, meta map[string]string) (*state.KvTable, error) {

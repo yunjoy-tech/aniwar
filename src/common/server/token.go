@@ -1,12 +1,12 @@
 package server
 
 import (
-	"github.com/pkg/errors"
+	"gitee.com/aniwar2/musae/errorx"
 )
 
 func (s *Server) GetToken(uid string) (string, error) {
 	if uid == "" {
-		return "", errors.New("uid is empty")
+		return "", errorx.New("uid is empty")
 	}
 
 	userSession, err, _ := s.GetUserSession(uid)
@@ -16,15 +16,15 @@ func (s *Server) GetToken(uid string) (string, error) {
 
 	return userSession.Token, nil
 
-	//kv, err := s.GetCacheRedis(db.KeyUserToken(uid), nil)
-	//if err != nil {
+	// kv, err := s.GetCacheRedis(db.KeyUserToken(uid), nil)
+	// if err != nil {
 	//	return "", errors.Wrap(err, "GetToken error")
-	//}
+	// }
 	//
-	//return string(kv.Data), nil
+	// return string(kv.Data), nil
 }
 
-//func (s *Server) SaveToken(uid, token string) error {
+// func (s *Server) SaveToken(uid, token string) error {
 //	if uid == "" {
 //		return errors.New("uid is empty")
 //	}
@@ -44,4 +44,4 @@ func (s *Server) GetToken(uid string) (string, error) {
 //	}
 //
 //	return nil
-//}
+// }

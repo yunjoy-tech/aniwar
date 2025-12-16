@@ -3,19 +3,16 @@ package server
 import (
 	"context"
 	"encoding/json"
-	"time"
-
-	"gitee.com/aniwar2/musae/baseconf"
-	"gitee.com/aniwar2/musae/global"
-	"gitee.com/aniwar2/musae/logger"
-	"github.com/go-redis/redis/v8"
-	"github.com/pkg/errors"
-
 	"gitee.com/aniwar2/aniwar/src/common/db"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
+	"gitee.com/aniwar2/musae/baseconf"
+	"gitee.com/aniwar2/musae/errorx"
+	"gitee.com/aniwar2/musae/logger"
 	"gitee.com/aniwar2/musae/service"
 	"gitee.com/aniwar2/musae/state"
+	"github.com/go-redis/redis/v8"
 	"google.golang.org/protobuf/proto"
+	"time"
 )
 
 func (s *Server) SaveAccount(account *pb.UserData) error {
@@ -72,7 +69,7 @@ func (s *Server) SAdd(ctx context.Context, key string, ttl int, vals ...interfac
 		expireRet *redis.BoolCmd
 	)
 	var pipe redis.Pipeliner
-	if global.IsCloud {
+	if baseconf.GetBaseConf().Cloud {
 		pipe = s.RedisCluster.TxPipeline()
 	} else {
 		pipe = s.Redis.TxPipeline()
@@ -86,19 +83,19 @@ func (s *Server) SAdd(ctx context.Context, key string, ttl int, vals ...interfac
 		return err
 	}
 	if addRet.Err() != nil {
-		return errors.Errorf("redis SAdd error:%v,key:%s, vals:%+v", addRet.Err(), key, vals)
+		return errorx.Newf("redis SAdd error:%v,key:%s, vals:%+v", addRet.Err(), key, vals)
 	}
 	if expireRet.Val() == false || expireRet.Err() != nil {
-		return errors.Errorf("redis expire error:%v,key:%s, vals:%+v", expireRet.Err(), key, vals)
+		return errorx.Newf("redis expire error:%v,key:%s, vals:%+v", expireRet.Err(), key, vals)
 	}
 
 	// ret := s.Redis.SAdd(ctx, key, vals...)
 	// if ret.Err() != nil {
-	//	return errors.Errorf("redis SAdd error:%v,key:%s, vals:%+v", ret.Err(), key, vals)
+	//	return errors.Newf("redis SAdd error:%v,key:%s, vals:%+v", ret.Err(), key, vals)
 	// }
 	// if ttl > 0 {
 	//	if ret := s.Redis.RedisExpire(ctx, key, time.Duration(ttl)*time.Second); ret.Val() == false || ret.Err() != nil {
-	//		return errors.Errorf("redis expire error:%v,key:%s, vals:%+v", ret.Err(), key, vals)
+	//		return errors.Newf("redis expire error:%v,key:%s, vals:%+v", ret.Err(), key, vals)
 	//	}
 	// }
 	return nil
@@ -106,7 +103,7 @@ func (s *Server) SAdd(ctx context.Context, key string, ttl int, vals ...interfac
 
 func (s *Server) SPopN(ctx context.Context, key string, num int64) ([]string, error) {
 	var ret *redis.StringSliceCmd
-	if global.IsCloud {
+	if baseconf.GetBaseConf().Cloud {
 		ret = s.RedisCluster.SPopN(ctx, key, num)
 	} else {
 		ret = s.Redis.SPopN(ctx, key, num)
@@ -117,7 +114,7 @@ func (s *Server) SPopN(ctx context.Context, key string, num int64) ([]string, er
 
 func (s *Server) ZAdd(ctx context.Context, key string, members ...*redis.Z) (int64, error) {
 	var ret *redis.IntCmd
-	if global.IsCloud {
+	if baseconf.GetBaseConf().Cloud {
 		ret = s.RedisCluster.ZAdd(ctx, key, members...)
 	} else {
 		ret = s.Redis.ZAdd(ctx, key, members...)
@@ -127,7 +124,7 @@ func (s *Server) ZAdd(ctx context.Context, key string, members ...*redis.Z) (int
 
 func (s *Server) ZCard(ctx context.Context, key string) (int64, error) {
 	var ret *redis.IntCmd
-	if global.IsCloud {
+	if baseconf.GetBaseConf().Cloud {
 		ret = s.RedisCluster.ZCard(ctx, key)
 	} else {
 		ret = s.Redis.ZCard(ctx, key)
@@ -137,7 +134,7 @@ func (s *Server) ZCard(ctx context.Context, key string) (int64, error) {
 
 func (s *Server) ZRemRangeByRank(ctx context.Context, key string, start, stop int64) (int64, error) {
 	var ret *redis.IntCmd
-	if global.IsCloud {
+	if baseconf.GetBaseConf().Cloud {
 		ret = s.RedisCluster.ZRemRangeByRank(ctx, key, start, stop)
 	} else {
 		ret = s.Redis.ZRemRangeByRank(ctx, key, start, stop)
@@ -147,7 +144,7 @@ func (s *Server) ZRemRangeByRank(ctx context.Context, key string, start, stop in
 
 func (s *Server) ZRangeByScore(ctx context.Context, key string, opt *redis.ZRangeBy) ([]string, error) {
 	var ret *redis.StringSliceCmd
-	if global.IsCloud {
+	if baseconf.GetBaseConf().Cloud {
 		ret = s.RedisCluster.ZRangeByScore(ctx, key, opt)
 	} else {
 		ret = s.Redis.ZRangeByScore(ctx, key, opt)
@@ -157,7 +154,7 @@ func (s *Server) ZRangeByScore(ctx context.Context, key string, opt *redis.ZRang
 
 func (s *Server) ZRangeByScoreWithScores(ctx context.Context, key string, opt *redis.ZRangeBy) ([]redis.Z, error) {
 	var ret *redis.ZSliceCmd
-	if global.IsCloud {
+	if baseconf.GetBaseConf().Cloud {
 		ret = s.RedisCluster.ZRangeByScoreWithScores(ctx, key, opt)
 	} else {
 		ret = s.Redis.ZRangeByScoreWithScores(ctx, key, opt)
@@ -168,7 +165,7 @@ func (s *Server) ZRangeByScoreWithScores(ctx context.Context, key string, opt *r
 // RedisExpire 设置key的过期时间
 func (s *Server) RedisExpire(ctx context.Context, key string, expiration time.Duration) (bool, error) {
 	var ret *redis.BoolCmd
-	if global.IsCloud {
+	if baseconf.GetBaseConf().Cloud {
 		ret = s.RedisCluster.Expire(ctx, key, expiration)
 	} else {
 		ret = s.Redis.Expire(ctx, key, expiration)
@@ -180,7 +177,7 @@ func (s *Server) RedisExpire(ctx context.Context, key string, expiration time.Du
 // return 返回删除key的数量
 func (s *Server) RedisDel(ctx context.Context, key ...string) (int64, error) {
 	var ret *redis.IntCmd
-	if global.IsCloud {
+	if baseconf.GetBaseConf().Cloud {
 		ret = s.RedisCluster.Del(ctx, key...)
 	} else {
 		ret = s.Redis.Del(ctx, key...)
@@ -190,7 +187,7 @@ func (s *Server) RedisDel(ctx context.Context, key ...string) (int64, error) {
 
 func (s *Server) RedisSet(ctx context.Context, key, val string, expiration time.Duration) (string, error) {
 	var ret *redis.StatusCmd
-	if global.IsCloud {
+	if baseconf.GetBaseConf().Cloud {
 		ret = s.RedisCluster.Set(ctx, key, val, expiration)
 	} else {
 		ret = s.Redis.Set(ctx, key, val, expiration)
@@ -200,7 +197,7 @@ func (s *Server) RedisSet(ctx context.Context, key, val string, expiration time.
 
 func (s *Server) RedisGet(ctx context.Context, key string) (string, error) {
 	var ret *redis.StringCmd
-	if global.IsCloud {
+	if baseconf.GetBaseConf().Cloud {
 		ret = s.RedisCluster.Get(ctx, key)
 	} else {
 		ret = s.Redis.Get(ctx, key)
@@ -210,7 +207,7 @@ func (s *Server) RedisGet(ctx context.Context, key string) (string, error) {
 
 func (s *Server) RedisBitCount(ctx context.Context, key string, bitCount *redis.BitCount) (int64, error) {
 	var ret *redis.IntCmd
-	if global.IsCloud {
+	if baseconf.GetBaseConf().Cloud {
 		ret = s.RedisCluster.BitCount(ctx, key, bitCount)
 	} else {
 		ret = s.Redis.BitCount(ctx, key, bitCount)
@@ -220,7 +217,7 @@ func (s *Server) RedisBitCount(ctx context.Context, key string, bitCount *redis.
 
 func (s *Server) RedisSetBit(ctx context.Context, key string, offset int64, val int) (int64, error) {
 	var ret *redis.IntCmd
-	if global.IsCloud {
+	if baseconf.GetBaseConf().Cloud {
 		ret = s.RedisCluster.SetBit(ctx, key, offset, val)
 	} else {
 		ret = s.Redis.SetBit(ctx, key, offset, val)

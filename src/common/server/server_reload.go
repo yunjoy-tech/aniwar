@@ -19,20 +19,21 @@ import (
 func (s *Server) HotReload(ctx context.Context, in *common.InvocationEvent) (out *common.Content, err error) {
 	defer func() {
 		if err := recover(); err != any(nil) {
-			logger.Trace("hotreload failed, err: ", err)
+			logger.Error("hotreload failed, err: ", err)
 		}
 	}()
-
-	out = &common.Content{
-		ContentType: in.ContentType,
-		DataTypeURL: in.DataTypeURL,
-	}
 
 	if in == nil {
 		err = fmt.Errorf("nil invocation parameter")
 		logger.Warn("hotreload nil invocation parameter")
 		return out, err
 	}
+
+	out = &common.Content{
+		ContentType: in.ContentType,
+		DataTypeURL: in.DataTypeURL,
+	}
+
 	logger.Debugf("hotreload - ContentType:%s, Verb:%s, QueryString:%s, Data:%v", in.ContentType, in.Verb, in.QueryString, in.Data)
 
 	param := &comn.ReloadParam{}
@@ -60,7 +61,7 @@ func (s *Server) HotReload(ctx context.Context, in *common.InvocationEvent) (out
 		} else {
 			files := strings.Split(param.Files, "|")
 			if s.AppId == "actor" {
-				// TODO
+				// TODO 后面完善
 				// err = data.LoadByFileNames(s.DataDir, files, s.AppId, "actorserver")
 			} else {
 				err = s.LoadNeedExcel(files) // 非actorserver都调用这个加载方法

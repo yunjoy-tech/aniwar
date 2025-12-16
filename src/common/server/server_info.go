@@ -6,13 +6,12 @@ import (
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/base"
 	"gitee.com/aniwar2/musae/gamelib/guid"
-	"google.golang.org/protobuf/proto"
-	"runtime"
-	"time"
-
 	"gitee.com/aniwar2/musae/global"
 	"gitee.com/aniwar2/musae/logger"
 	"gitee.com/aniwar2/musae/utils"
+	"google.golang.org/protobuf/proto"
+	"runtime"
+	"time"
 )
 
 func (s *Server) Info() string {
@@ -25,9 +24,9 @@ func (s *Server) Info() string {
 	szInfo += (fmt.Sprintf("%-13s: %s\n", "Version", global.VERSION))
 	szInfo += (fmt.Sprintf("%-13s: %s\n", "AppVersion", global.APP_VERSION))
 	szInfo += (fmt.Sprintf("%-13s: %s\n", "RollingVersion", global.ROLLING_VERSION))
-	szInfo += (fmt.Sprintf("%-13s: %v\n", "IsCloud", global.IsCloud))
-	szInfo += (fmt.Sprintf("%-13s: %v\n", "IsDev", global.IsDev))
-	szInfo += (fmt.Sprintf("%-13s: %v\n", "Metric", s.IsMetric))
+	szInfo += (fmt.Sprintf("%-13s: %v\n", "IsCloud", conf.Base().Cloud))
+	szInfo += (fmt.Sprintf("%-13s: %v\n", "IsDev", conf.Base().IsDebug))
+	szInfo += (fmt.Sprintf("%-13s: %v\n", "Metric", conf.Base().Metric))
 	szInfo += (fmt.Sprintf("%-13s: %v\n", "DefProcNum", defMaxProcs))
 	szInfo += (fmt.Sprintf("%-13s: %v\n", "NewProcNum", maxProcs))
 	szInfo += (fmt.Sprintf("%-13s: %v\n", "CPU", runtime.NumCPU()))
@@ -46,14 +45,14 @@ func (s *Server) Info() string {
 	szInfo += (fmt.Sprintf("%-13s: %d\n", "UserActor", global.UserActorCount))
 	szInfo += (fmt.Sprintf("%-13s: %d\n", "SceneActor", global.RoomActorCount))
 	szInfo += (fmt.Sprintf("%-13s: %d\n", "AllianceActor", global.AllianceActorCount))
-	szInfo += (fmt.Sprintf("%-13s: %s\n", "ConfFile", s.ConfFile))
+	szInfo += (fmt.Sprintf("%-13s: %s\n", "ConfFile", s.Args["config"]))
 	szInfo += (fmt.Sprintf("%-13s: %s\n", "PrivateTopic", s.PrivateTopicID()))
-	szInfo += (fmt.Sprintf("%-13s: %s\n", "LogDir", s.LogDir))
+	szInfo += (fmt.Sprintf("%-13s: %s\n", "LogDir", conf.Base().LogConf.Dir))
 	szInfo += (fmt.Sprintf("%-13s: %s\n", "PProfAddr", s.PProfAddr))
 	szInfo += (fmt.Sprintf("%-13s: %s\n", "StartTime", time.Unix(global.StartTime, 0).Format("2006-01-02 15:04:05.000 -0700 MST")))
 	szInfo += (fmt.Sprintf("%-13s: %s\n", "updateAddrARD", conf.SrvAddr().UpdateAddrARD))
 	szInfo += (fmt.Sprintf("%-13s: %s\n", "updateAddrIOS", conf.SrvAddr().UpdateAddrIOS))
-	szInfo += (fmt.Sprintf("%-13v: %s\n", "Args", s.Args))
+	// TODO szInfo += (fmt.Sprintf("%-13v: %s\n", "Args", s.Args))
 	// szInfo += (fmt.Sprintf("\n%s\n", "========== server.conf =========="))
 	// szInfo += (fmt.Sprintf("%s\n", utils.PrettyJson(conf.GConf())))
 	return szInfo

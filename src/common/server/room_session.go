@@ -2,14 +2,12 @@ package server
 
 import (
 	"fmt"
-	"strconv"
-
 	"gitee.com/aniwar2/aniwar/src/common/conf"
-	"github.com/pkg/errors"
-
 	"gitee.com/aniwar2/aniwar/src/common/db"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
+	"gitee.com/aniwar2/musae/errorx"
 	"gitee.com/aniwar2/musae/service"
+	"strconv"
 )
 
 func (s *Server) SaveRoomBindingData(uid string, roomId string) error {
@@ -26,7 +24,7 @@ func (s *Server) SaveRoomBindingData(uid string, roomId string) error {
 		return err
 	}
 
-	ttlMap := map[string]string{"ttlInSeconds": strconv.Itoa(conf.GConf().Base.RoomTokenTTL)}
+	ttlMap := map[string]string{"ttlInSeconds": strconv.Itoa(conf.Base().RoomTokenTTL)}
 	return s.SaveGlobalRedis(key, kvTable, ttlMap)
 }
 
@@ -38,7 +36,7 @@ func (s *Server) GetRoomBindingData(uid string) (*pb.RoomBindingData, error, pb.
 
 	kvTable, err := s.GetGlobalRedis(db.KeyPlayerUidAndRoomId(uid), nil)
 	if err != nil {
-		if errors.Is(err, service.DB_ERROR_NOT_EXIST) { // session数据不存在,重新登录
+		if errorx.Is(err, service.DB_ERROR_NOT_EXIST) { // session数据不存在,重新登录
 			return nil, fmt.Errorf("db value not exist"), pb.ErrorCode_Room_player_not_exist
 		} else {
 			return nil, fmt.Errorf("internal error"), pb.ErrorCode_InternalError
@@ -64,15 +62,15 @@ func (s *Server) CheckInRoom(uid string) bool {
 
 // func (s *Server) GetRoomSession(uid string) (*pb.RoomSession, error, pb.ErrorCode) {
 //	if uid == "" {
-//		return nil, fmt.Errorf("accountId is empty"), pb.ErrorCode_Room_player_not_exist
+//		return nil, fmt.Newf("accountId is empty"), pb.ErrorCode_Room_player_not_exist
 //	}
 //
 //	kvTable, err := s.GetGlobalRedis(db.KeyRoomSession(uid), nil)
 //	if err != nil {
 //		if errors.Is(err, service.DB_ERROR_NOT_EXIST) { //session数据不存在,重新登录
-//			return nil, fmt.Errorf("db value not exist"), pb.ErrorCode_Room_player_not_exist
+//			return nil, fmt.Newf("db value not exist"), pb.ErrorCode_Room_player_not_exist
 //		} else {
-//			return nil, fmt.Errorf("internal error"), pb.ErrorCode_InternalError
+//			return nil, fmt.Newf("internal error"), pb.ErrorCode_InternalError
 //		}
 //	}
 //
@@ -87,7 +85,7 @@ func (s *Server) CheckInRoom(uid string) bool {
 
 // func (s *Server) SaveRoomSession(playerUid string, session *pb.RoomSession) error {
 //	if session.RoomId == "" {
-//		return fmt.Errorf("accountId is empty")
+//		return fmt.Newf("accountId is empty")
 //	}
 //
 //	key := db.KeyRoomSession(session.RoomId)
