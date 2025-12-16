@@ -4,31 +4,23 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"gitee.com/aniwar2/aniwar/src/meta"
-	"gitee.com/aniwar2/musae/gamelib/guid"
-	"strconv"
-	"time"
-
+	"gitee.com/aniwar2/aniwar/src/common"
+	"gitee.com/aniwar2/aniwar/src/common/com_order"
 	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
-
 	"gitee.com/aniwar2/aniwar/src/common/sdkconstant/sdkutil"
-
-	"gitee.com/aniwar2/musae/baseconf"
-
-	"gitee.com/aniwar2/musae/threading"
-
-	"gitee.com/aniwar2/aniwar/src/common"
-
-	"github.com/pkg/errors"
-
-	"gitee.com/aniwar2/aniwar/src/common/com_order"
-
+	"gitee.com/aniwar2/aniwar/src/meta"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/base"
+	"gitee.com/aniwar2/musae/baseconf"
+	"gitee.com/aniwar2/musae/gamelib/guid"
 	"gitee.com/aniwar2/musae/logger"
 	"gitee.com/aniwar2/musae/service"
+	"gitee.com/aniwar2/musae/utils"
+	"github.com/pkg/errors"
 	"google.golang.org/protobuf/proto"
+	"strconv"
+	"time"
 )
 
 type OrderHandler struct {
@@ -92,7 +84,7 @@ func (h *OrderHandler) CreateOrderReq(ctx context.Context, in *base.ProtoMsg) (p
 		now = time.Now()
 	)
 
-	if conf.GConf().Base.CanPay == 0 {
+	if conf.Base().CanPay == 0 {
 		// 充值关闭
 		return nil, errors.New("充值功能关闭"), int32(pb.ErrorCode_Order_pay_closed)
 	}

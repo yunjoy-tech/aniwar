@@ -1,15 +1,14 @@
 package allianceactor
 
 import (
-	"gitee.com/aniwar2/musae/threading"
-	"time"
-
 	"gitee.com/aniwar2/aniwar/src/actorserver/frame"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/baseactor"
 	"gitee.com/aniwar2/musae/global"
 	"gitee.com/aniwar2/musae/service"
+	"gitee.com/aniwar2/musae/utils"
 	"github.com/dapr/go-sdk/actor"
+	"time"
 )
 
 type AllianceData struct {
@@ -48,7 +47,7 @@ func (a *AllianceActor) SetID(id string) {
 func (a *AllianceActor) Activate(invokeName string) error {
 	defer func() {
 		if err := recover(); err != any(nil) {
-			a.Trace("AllianceActor.SaveState recover, err: ", err)
+			a.Error("AllianceActor.SaveState recover, err: ", err)
 		}
 	}()
 

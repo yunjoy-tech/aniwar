@@ -3,21 +3,19 @@ package useractor
 import (
 	"context"
 	"fmt"
-	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
-	"gitee.com/aniwar2/aniwar/src/meta"
-	"strconv"
-	"time"
-
-	"gitee.com/aniwar2/musae/threading"
-
 	"gitee.com/aniwar2/aniwar/src/common"
 	"gitee.com/aniwar2/aniwar/src/common/clidto"
+	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
 	"gitee.com/aniwar2/aniwar/src/common/db"
-	"gitee.com/aniwar2/aniwar/src/common/utils"
+	gameutils "gitee.com/aniwar2/aniwar/src/common/utils"
+	"gitee.com/aniwar2/aniwar/src/meta"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/base"
 	"gitee.com/aniwar2/musae/service"
+	"gitee.com/aniwar2/musae/utils"
 	"google.golang.org/protobuf/proto"
+	"strconv"
+	"time"
 )
 
 type CurrencyHandler struct {
@@ -110,7 +108,7 @@ func (h *CurrencyHandler) CurrencyExchangeReq(ctx context.Context, in *base.Prot
 	}
 
 	// 道具检查
-	costs := utils.ConvertItem4(req.GetCosts())
+	costs := gameutils.ConvertItem4(req.GetCosts())
 	sum, errorCode := h.exchangeCheck(cfg, costs)
 	if errorCode != pb.ErrorCode_Success {
 		return nil, fmt.Errorf("param check failed"), int32(errorCode)
@@ -139,14 +137,6 @@ func (h *CurrencyHandler) CurrencyExchangeReq(ctx context.Context, in *base.Prot
 	}
 
 	// 埋点log
-	// utils.SafeRunNoError(func() {
-	//	lilith.WriteDataLog(&lilith.CurrencyExchange{
-	//		CustomHeadInfo: lilith.BuildCustomHeadInfo(lilith.LogType_CurrencyExchange, h.actor.uid, h.actor.Account.CliDeviceInfo),
-	//		MoneyType:      req.CurrencyType,
-	//		Cost:           lilith.ConvertMap2Str(costs),
-	//		ExchangeNum:    uint64(sum),
-	//	})
-	// })
 	utils.SafeRunNoError(func() {
 		e := &taptap.CurrencyExchange{
 			PropertyFieldInfo: taptap.BuildPropertyFieldInfo(h.actor.Account.CliDeviceInfo),

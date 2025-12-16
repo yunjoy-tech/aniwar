@@ -3,6 +3,7 @@ package useractor
 import (
 	"context"
 	"fmt"
+	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
 	"gitee.com/aniwar2/musae/utils"
 	"strconv"
@@ -163,7 +164,7 @@ func (u *UserActor) Str() string {
 func (u *UserActor) Activate(invokeName string) error {
 	defer func() {
 		if err := recover(); err != any(nil) {
-			u.Trace("UserActor.SaveState recover, err: ", err)
+			u.Error("UserActor.SaveState recover, err: ", err)
 		}
 	}()
 
@@ -251,7 +252,7 @@ func (u *UserActor) Activate(invokeName string) error {
 func (u *UserActor) deactivate() error {
 	// 用户下线，同步actor生命周期内修改的数据
 	startTime := time.Now()
-	if global.IsCloud { // 内网研发环境不开启，防止在不同私服先后登录，旧UserActor数据覆盖新数据的问题
+	if conf.Base().Cloud { // 内网研发环境不开启，防止在不同私服先后登录，旧UserActor数据覆盖新数据的问题
 		utils.SafeRunNoError(func() {
 			u.OfflineSync2DB()
 		})
@@ -440,7 +441,7 @@ func (u *UserActor) commit2Redis() error {
 func (u *UserActor) SaveState() error {
 	defer func() {
 		if err := recover(); err != any(nil) {
-			u.Trace("UserActor.SaveState recover, err: ", err)
+			u.Error("UserActor.SaveState recover, err: ", err)
 		}
 	}()
 
@@ -458,7 +459,7 @@ func (u *UserActor) PushMsg2Gate(msg proto.Message) error {
 	}
 	return nil
 	/*var err error
-	switch conf.GConf().Base.Actor2GateType {
+	switch conf.Base().Actor2GateType {
 	case base.Actor2GateOnRpc:
 		_, err = u.Srv.SvcInvoke(u.UserInfo, u.uid, u.roleId, u.ID(), msg)
 	case base.Actor2GateOnCh:

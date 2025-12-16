@@ -5,10 +5,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"gitee.com/aniwar2/musae/threading"
-	"strconv"
-	"time"
-
 	"gitee.com/aniwar2/aniwar/src/actorserver/frame"
 	"gitee.com/aniwar2/aniwar/src/common/db"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
@@ -19,8 +15,11 @@ import (
 	"gitee.com/aniwar2/musae/service"
 	svc "gitee.com/aniwar2/musae/service"
 	"gitee.com/aniwar2/musae/state"
+	"gitee.com/aniwar2/musae/utils"
 	"github.com/dapr/go-sdk/actor"
 	_ "github.com/dapr/go-sdk/actor"
+	"strconv"
+	"time"
 )
 
 type MailData struct {
@@ -57,7 +56,7 @@ func (s *MailActor) SetID(id string) {
 func (s *MailActor) Activate(invokeName string) error {
 	defer func() {
 		if err := recover(); err != any(nil) {
-			s.Trace("MailActor.SaveState recover, err: ", err)
+			s.Error("MailActor.SaveState recover, err: ", err)
 		}
 	}()
 

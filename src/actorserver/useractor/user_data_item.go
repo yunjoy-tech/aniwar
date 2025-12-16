@@ -2,16 +2,14 @@ package useractor
 
 import (
 	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
+	"gitee.com/aniwar2/aniwar/src/common/utils"
 	"gitee.com/aniwar2/aniwar/src/meta"
-	"gitee.com/aniwar2/musae/threading"
 	"github.com/pkg/errors"
 	"strconv"
 
 	"gitee.com/aniwar2/aniwar/src/common"
-	"gitee.com/aniwar2/aniwar/src/common/utils"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/logger"
-	"gitee.com/aniwar2/musae/safe"
 )
 
 func (x *UserData) GetUserItems() *pb.PCommonItemInfos {
@@ -46,7 +44,10 @@ func (x *UserData) AddItems(uid string, reason common.ChangeReason, itemInfos ..
 		if exist && target != nil {
 			beforeNum = target.ItemNum
 			// 防止越界
-			addedNum, err := safe.AddUint(beforeNum, item.ItemNum)
+			var addedNum uint32
+			var err error
+			// todo
+			// addedNum, err := utils.AddUint(beforeNum, item.ItemNum)
 			if err != nil {
 				return changeItems, finalItems, limitItems, errors.WithStack(err)
 			}
@@ -64,37 +65,20 @@ func (x *UserData) AddItems(uid string, reason common.ChangeReason, itemInfos ..
 			finalItems = append(finalItems, item)
 		}
 
-		// utils.SafeRunNoError(func() {
-		//	lilith.WriteDataLog(&lilith.ItemFlow{
-		//		HeadInfo:   lilith.BuildHeadInfo(lilith.LogType_ItemFlow, uid, device),
-		//		RoleId:     strconv.FormatUint(x.Data.Base.Common.RoleId, 10),
-		//		ItemFlow:   "in",
-		//		ItemId:     strconv.FormatUint(item.UniqueId, 10),
-		//		ItemCount:  int32(item.ItemNum),
-		//		Level:      int32(x.Data.Base.Common.RoleLevel),
-		//		VipLevel:   0,
-		//		Action:     strconv.Itoa(int(reason)),
-		//		ItemBefore: int64(beforeNum),
-		//		ItemAfter:  int64(afterNum),
-		//		Recharge:   0,
-		//	})
-		// })
-		utils.SafeRunNoError(func() {
-			e := &taptap.ItemFlow{
-				PropertyFieldInfo: taptap.BuildPropertyFieldInfo(x.Account.CliDeviceInfo),
-				RoleId:            strconv.FormatUint(x.Data.Base.Common.RoleId, 10),
-				ItemFlow:          "in",
-				ItemId:            strconv.FormatUint(item.UniqueId, 10),
-				ItemCount:         int32(item.ItemNum),
-				Level:             int32(x.Data.Base.Common.RoleLevel),
-				VipLevel:          0,
-				Action:            strconv.Itoa(int(reason)),
-				ItemBefore:        int64(beforeNum),
-				ItemAfter:         int64(afterNum),
-				Recharge:          0,
-			}
-			taptap.WriteDataLog(taptap.LogType_ItemFlow, uid, x.Account.TapUserInfo, e)
-		})
+		e := &taptap.ItemFlow{
+			PropertyFieldInfo: taptap.BuildPropertyFieldInfo(x.Account.CliDeviceInfo),
+			RoleId:            strconv.FormatUint(x.Data.Base.Common.RoleId, 10),
+			ItemFlow:          "in",
+			ItemId:            strconv.FormatUint(item.UniqueId, 10),
+			ItemCount:         int32(item.ItemNum),
+			Level:             int32(x.Data.Base.Common.RoleLevel),
+			VipLevel:          0,
+			Action:            strconv.Itoa(int(reason)),
+			ItemBefore:        int64(beforeNum),
+			ItemAfter:         int64(afterNum),
+			Recharge:          0,
+		}
+		taptap.WriteDataLog(taptap.LogType_ItemFlow, uid, x.Account.TapUserInfo, e)
 
 		changeItems = append(changeItems, &pb.ItemReward{ItemId: item.BaseId, Num: item.ItemNum})
 		if limitNum > 0 {
@@ -134,60 +118,32 @@ func (x *UserData) SubItems(costItemUniqueId uint64, costNum uint32, uid string,
 		// 	})
 		// }
 
-		// utils.SafeRunNoError(func() {
-		//	lilith.WriteDataLog(&lilith.ItemFlow{
-		//		HeadInfo:   lilith.BuildHeadInfo(lilith.LogType_ItemFlow, uid, device),
-		//		RoleId:     strconv.FormatUint(x.Data.Base.Common.RoleId, 10),
-		//		ItemFlow:   "out",
-		//		ItemId:     strconv.FormatUint(costItemUniqueId, 10),
-		//		ItemCount:  int32(costNum),
-		//		Level:      int32(x.Data.Base.Common.RoleLevel),
-		//		VipLevel:   0,
-		//		Action:     strconv.Itoa(int(reason)),
-		//		ItemBefore: int64(beforeNum),
-		//		ItemAfter:  int64(target.GetItemNum()),
-		//		Recharge:   0,
-		//	})
-		// })
-		utils.SafeRunNoError(func() {
-			e := &taptap.ItemFlow{
-				PropertyFieldInfo: taptap.BuildPropertyFieldInfo(x.Account.CliDeviceInfo),
-				RoleId:            strconv.FormatUint(x.Data.Base.Common.RoleId, 10),
-				ItemFlow:          "out",
-				ItemId:            strconv.FormatUint(costItemUniqueId, 10),
-				ItemCount:         int32(costNum),
-				Level:             int32(x.Data.Base.Common.RoleLevel),
-				VipLevel:          0,
-				Action:            strconv.Itoa(int(reason)),
-				ItemBefore:        int64(beforeNum),
-				ItemAfter:         int64(target.GetItemNum()),
-				Recharge:          0,
-			}
-			taptap.WriteDataLog(taptap.LogType_ItemFlow, uid, x.Account.TapUserInfo, e)
-		})
+		e := &taptap.ItemFlow{
+			PropertyFieldInfo: taptap.BuildPropertyFieldInfo(x.Account.CliDeviceInfo),
+			RoleId:            strconv.FormatUint(x.Data.Base.Common.RoleId, 10),
+			ItemFlow:          "out",
+			ItemId:            strconv.FormatUint(costItemUniqueId, 10),
+			ItemCount:         int32(costNum),
+			Level:             int32(x.Data.Base.Common.RoleLevel),
+			VipLevel:          0,
+			Action:            strconv.Itoa(int(reason)),
+			ItemBefore:        int64(beforeNum),
+			ItemAfter:         int64(target.GetItemNum()),
+			Recharge:          0,
+		}
+		taptap.WriteDataLog(taptap.LogType_ItemFlow, uid, x.Account.TapUserInfo, e)
+
 		// 埋点log
 		if reason == common.CR_Destroy_EXP_ITEM {
-			// utils.SafeRunNoError(func() {
-			//	lilith.WriteDataLog(&lilith.DestroyExpireItem{
-			//		CustomHeadInfo: lilith.BuildCustomHeadInfo(lilith.LogType_DestroyExpireItem, uid, x.Account.CliDeviceInfo),
-			//		Id:             int64(costItemUniqueId),
-			//		ItemId:         int32(target.BaseId),
-			//		ItemNum:        int32(costNum),
-			//		Expire:         int64(target.ExpirationTimestamp),
-			//		Exchange:       lilith.ConvertMap2Str(map[int32]int32{itemCfg.Change.ItemId: itemCfg.Change.Num * int32(costNum)}),
-			//	})
-			// })
-			utils.SafeRunNoError(func() {
-				e := &taptap.DestroyExpireItem{
-					PropertyFieldInfo: taptap.BuildPropertyFieldInfo(x.Account.CliDeviceInfo),
-					Id:                int64(costItemUniqueId),
-					ItemId:            int32(target.BaseId),
-					ItemNum:           int32(costNum),
-					Expire:            target.ExpirationTimestamp,
-					// Exchange:          taptap.ConvertMap2Str(map[int32]int32{itemCfg.Change.ItemId: itemCfg.Change.Num * int32(costNum)}),
-				}
-				taptap.WriteDataLog(taptap.LogType_DestroyExpireItem, uid, x.Account.TapUserInfo, e)
-			})
+			e := &taptap.DestroyExpireItem{
+				PropertyFieldInfo: taptap.BuildPropertyFieldInfo(x.Account.CliDeviceInfo),
+				Id:                int64(costItemUniqueId),
+				ItemId:            int32(target.BaseId),
+				ItemNum:           int32(costNum),
+				Expire:            target.ExpirationTimestamp,
+				// Exchange:          taptap.ConvertMap2Str(map[int32]int32{itemCfg.Change.ItemId: itemCfg.Change.Num * int32(costNum)}),
+			}
+			taptap.WriteDataLog(taptap.LogType_DestroyExpireItem, uid, x.Account.TapUserInfo, e)
 		}
 	} else {
 		return ret, exchangeRewards, errors.New("扣除失败")

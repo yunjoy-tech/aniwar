@@ -13,12 +13,12 @@ import (
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/base"
 	"gitee.com/aniwar2/musae/gamelib/guid"
+	"gitee.com/aniwar2/musae/gamelib/sensitive"
 	"gitee.com/aniwar2/musae/global"
 	"gitee.com/aniwar2/musae/logger"
 	"gitee.com/aniwar2/musae/service"
 	svc "gitee.com/aniwar2/musae/service"
-	"gitee.com/aniwar2/musae/threading"
-	"gitee.com/aniwar2/musae/wordfilter"
+	"gitee.com/aniwar2/musae/utils"
 	dapr "github.com/dapr/go-sdk/client"
 	"github.com/xuri/excelize/v2"
 	"google.golang.org/protobuf/proto"
@@ -423,7 +423,7 @@ func (h *GmHandler) GmTestCmd(param []string, comdata *clidto.Comdata) error {
 }
 
 func (h *GmHandler) GmTestSensitive(param []string, commonData *clidto.Comdata) error {
-	ok, str := wordfilter.GetSensitiveWordMgr().FindIn(param[0])
+	ok, str := sensitive.GetSensitiveWordMgr().FindIn(param[0])
 	h.Debugf("屏蔽词校验 result: %v, find: %s", ok, str)
 	return nil
 }
@@ -1032,9 +1032,9 @@ func (h *GmHandler) GMCloseBattleCheck(param []string, commonData *clidto.Comdat
 		if err != nil {
 			return err
 		}
-		conf.GConf().Base.OpenCheckBattle = int32(v)
+		conf.Base().OpenCheckBattle = int32(v)
 	} else {
-		conf.GConf().Base.OpenCheckBattle = 0
+		conf.Base().OpenCheckBattle = 0
 	}
 
 	return nil

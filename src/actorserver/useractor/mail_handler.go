@@ -3,27 +3,24 @@ package useractor
 import (
 	"context"
 	"fmt"
+	"gitee.com/aniwar2/aniwar/src/common"
+	"gitee.com/aniwar2/aniwar/src/common/clidto"
+	"gitee.com/aniwar2/aniwar/src/common/conf"
+	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
+	"gitee.com/aniwar2/aniwar/src/common/db"
+	myUtils "gitee.com/aniwar2/aniwar/src/common/utils"
 	"gitee.com/aniwar2/aniwar/src/meta"
+	"gitee.com/aniwar2/aniwar/src/proto/pb"
+	"gitee.com/aniwar2/musae/base"
+	"gitee.com/aniwar2/musae/baseconf"
+	"gitee.com/aniwar2/musae/gamelib/guid"
+	"gitee.com/aniwar2/musae/global"
+	"gitee.com/aniwar2/musae/service"
+	"gitee.com/aniwar2/musae/utils"
+	"google.golang.org/protobuf/proto"
 	"math"
 	"sort"
 	"time"
-
-	"gitee.com/aniwar2/aniwar/src/common/conf"
-	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
-	"gitee.com/aniwar2/musae/baseconf"
-	"gitee.com/aniwar2/musae/global"
-	"gitee.com/aniwar2/musae/threading"
-
-	"gitee.com/aniwar2/aniwar/src/common/clidto"
-	"gitee.com/aniwar2/aniwar/src/common/db"
-	"gitee.com/aniwar2/musae/service"
-
-	"gitee.com/aniwar2/aniwar/src/common"
-	myUtils "gitee.com/aniwar2/aniwar/src/common/utils"
-	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	"gitee.com/aniwar2/musae/base"
-	"gitee.com/aniwar2/musae/gamelib/guid"
-	"google.golang.org/protobuf/proto"
 )
 
 type MailHandler struct {
@@ -770,9 +767,9 @@ func (h *MailHandler) genQuestionUrl(uid string, roleId uint64, questionType int
 	// role_key="open_id:user_id" ID格式应与数仓ID格式保持一致：问卷user_id = 数仓role_id，问卷open_id = 数仓open_id
 
 	var url string
-	var baseUrl = conf.GConf().Question.BaseUrl
-	var region = conf.GConf().Sdk.ServerRegion
-	var clientKey = conf.GConf().Question.ClientKey
+	var baseUrl = conf.Question().BaseUrl
+	var region = conf.SDK().ServerRegion
+	var clientKey = conf.Question().ClientKey
 	var roleKey = fmt.Sprintf("%s;%d", uid /* fixme 废弃 lilith.GetOpenId(uid)*/, roleId)
 
 	if questionType == common.QUESTION_LANG_TYPE_SINGLE {

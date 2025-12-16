@@ -2,7 +2,7 @@ package roomactor
 
 import (
 	"gitee.com/aniwar2/musae/baseconf"
-	"gitee.com/aniwar2/musae/threading"
+	"gitee.com/aniwar2/musae/utils"
 	"strconv"
 	"time"
 
@@ -59,7 +59,7 @@ func (s *RoomActor) SetID(id string) {
 func (s *RoomActor) Activate(invokeName string) error {
 	defer func() {
 		if err := recover(); err != any(nil) {
-			s.Trace("RoomActor.SaveState recover, err: ", err)
+			s.Error("RoomActor.SaveState recover, err: ", err)
 		}
 	}()
 

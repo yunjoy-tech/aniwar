@@ -4,25 +4,22 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"gitee.com/aniwar2/musae/mtime"
-	"strconv"
-	"time"
-
-	"gitee.com/aniwar2/musae/baseactor"
-
 	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/aniwar/src/common/db"
 	"gitee.com/aniwar2/aniwar/src/common/server"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/base"
+	"gitee.com/aniwar2/musae/baseactor"
 	"gitee.com/aniwar2/musae/baseconf"
 	"gitee.com/aniwar2/musae/logger"
+	"gitee.com/aniwar2/musae/mtime"
 	"gitee.com/aniwar2/musae/service"
 	"gitee.com/aniwar2/musae/state"
-	"gitee.com/aniwar2/musae/threading"
 	"gitee.com/aniwar2/musae/utils"
 	"github.com/pkg/errors"
 	"google.golang.org/protobuf/proto"
+	"strconv"
+	"time"
 )
 
 type CommonActor struct {
@@ -148,7 +145,7 @@ func (s *CommonActor) Invoke(ctx context.Context, in *base.ProtoMsg) (msg *base.
 		if e := recover(); e != any(nil) {
 			eStr := fmt.Sprintf("UserInvoke recover Msg:%+v %s %s err:%v", pb.Protocols(msgId), s.Str(), in.Str(), e)
 			msg.Data = []byte(eStr)
-			s.Tracef(eStr)
+			s.Error(eStr)
 		}
 		delay := time.Since(now).Milliseconds()
 		logStr := fmt.Sprintf("===>>>UserInvoke Msg:%v Delay:%d UAID:%s MSG-RET:%s", pb.Protocols(msg.MsgId), delay, s.ID(), msg.Str())
@@ -169,7 +166,7 @@ func (s *CommonActor) Invoke(ctx context.Context, in *base.ProtoMsg) (msg *base.
 
 	// 线上关闭gm指令
 	if msgId == int32(pb.Protocols_PC2LS_UseGameCommandReq) {
-		if !conf.GConf().Base.IsDebug && in.AppId != "idip" { // idip部分指令可以使用
+		if !conf.Base().IsDebug && in.AppId != "idip" { // idip部分指令可以使用
 			msg.Data = []byte("illegal message id")
 			msg.ErrCode = int32(pb.ErrorCode_IllegalOperationError)
 			return msg, nil

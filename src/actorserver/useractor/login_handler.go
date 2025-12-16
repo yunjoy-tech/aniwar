@@ -3,33 +3,25 @@ package useractor
 import (
 	"context"
 	"fmt"
+	"gitee.com/aniwar2/aniwar/src/actorserver/useractor/event"
+	"gitee.com/aniwar2/aniwar/src/common"
 	"gitee.com/aniwar2/aniwar/src/common/builder"
+	"gitee.com/aniwar2/aniwar/src/common/clidto"
+	"gitee.com/aniwar2/aniwar/src/common/conf"
+	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
+	"gitee.com/aniwar2/aniwar/src/common/db"
+	"gitee.com/aniwar2/aniwar/src/common/server"
+	myUtils "gitee.com/aniwar2/aniwar/src/common/utils"
+	"gitee.com/aniwar2/aniwar/src/proto/pb"
+	"gitee.com/aniwar2/musae/base"
+	"gitee.com/aniwar2/musae/logger"
+	"gitee.com/aniwar2/musae/service"
+	"gitee.com/aniwar2/musae/utils"
+	"github.com/pkg/errors"
+	"google.golang.org/protobuf/proto"
 	"strconv"
 	"time"
 	"unicode/utf8"
-
-	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
-
-	"gitee.com/aniwar2/aniwar/src/common/server"
-
-	"gitee.com/aniwar2/musae/logger"
-
-	"github.com/pkg/errors"
-
-	"gitee.com/aniwar2/musae/threading"
-
-	"gitee.com/aniwar2/aniwar/src/common/clidto"
-	myUtils "gitee.com/aniwar2/aniwar/src/common/utils"
-
-	"gitee.com/aniwar2/aniwar/src/common/conf"
-
-	"gitee.com/aniwar2/aniwar/src/actorserver/useractor/event"
-	"gitee.com/aniwar2/aniwar/src/common"
-	"gitee.com/aniwar2/aniwar/src/common/db"
-	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	"gitee.com/aniwar2/musae/base"
-	"gitee.com/aniwar2/musae/service"
-	"google.golang.org/protobuf/proto"
 )
 
 const UidBase = 10000000000
@@ -68,16 +60,6 @@ func (h *LoginHandler) EnterGame() error {
 
 func (h *LoginHandler) DailyRefresh() error {
 	// 跨天在线玩家自动上报一次
-	// utils.SafeRunNoError(func() {
-	//	lilith.WriteDataLog(&lilith.RoleLogin{
-	//		HeadInfo: lilith.BuildHeadInfo(lilith.LogType_RoleLogin, h.actor.uid, h.actor.Account.CliDeviceInfo),
-	//		RoleId:   h.actor.ID(),
-	//		Level:    int32(h.getRoleLevel()),
-	//		VipLevel: 0,
-	//		Recharge: 0,
-	//		Language: h.actor.Data.Base.Common.Language,
-	//	})
-	// })
 	utils.SafeRunNoError(func() {
 		e := &taptap.RoleLogin{
 			PropertyFieldInfo: taptap.BuildPropertyFieldInfo(h.actor.Account.CliDeviceInfo),
@@ -614,7 +596,7 @@ func (h *LoginHandler) CreatePlayer(playerId uint64, ts int64, language string) 
 	// TODO 增加配置选项查询role
 
 	// 查询 role:uaid
-	if conf.GConf().BaseConf().RoleIdCheck {
+	if conf.Base().RoleIdCheck {
 		_, err := h.actor.Srv.GetCache(service.MongoDbType_MongoGame, db.KeyPlayerUAID(playerId), server.ICache(h.actor.Srv))
 		if err == nil || err != nil && !errors.Is(err, service.DB_ERROR_NOT_EXIST) {
 			h.Error("[GateServer] CreatePlayer playerId check failed,", err)

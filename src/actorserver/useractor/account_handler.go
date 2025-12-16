@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
-	"gitee.com/aniwar2/musae/threading"
+	"gitee.com/aniwar2/musae/utils"
 	"strconv"
 	"time"
 
@@ -176,22 +176,6 @@ func (h *AccountHandler) Banned(bannedMsg string, bannedSec int64) error {
 			taptap.WriteDataLog(taptap.LogType_UnBanRole, h.actor.uid, h.actor.Account.TapUserInfo, e)
 		})
 	}
-
-	// utils.SafeRunNoError(func() {
-	//	lilith.WriteDataLog(&lilith.BanRole{
-	//		LogType:    lilith.LogType_BanRole,
-	//		Version:    "1",
-	//		EventTime:  time.Now().Format(lilith.FORMAT_DATETIME_LOG),
-	//		GameId:     conf.GConf().Sdk.GameId,
-	//		OpenId:     lilith.GetOpenId(h.actor.GetUID()),
-	//		ServerId:   "0",
-	//		RoleId:     strconv.FormatUint(h.actor.roleId, 10),
-	//		UnlockTime: strconv.FormatUint(uint64(time.Second*time.Duration(bannedSec)), 10),
-	//		Reason:     "0",
-	//		BanSource:  "0",
-	//		BanReason:  "0",
-	//	})
-	// })
 
 	err := h.SaveDB(true)
 	if err != nil {

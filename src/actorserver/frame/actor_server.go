@@ -61,7 +61,7 @@ func NewActorServer() base.IServer {
 	srv.GRPCPort = "50001"
 	srv.HasPriTopic = true // 开启私有频道订阅
 	srv.OnPreInit = srv.PreInit
-	srv.OnServerInit = srv.ServerInit
+	srv.OnPostInit = srv.PostInit
 	srv.OnEventHandler = srv.EventHandler
 	srv.OnInvokeHandler = srv.InvokeHandler
 	srv.OnBindHandler = srv.BindingHandler
@@ -172,8 +172,7 @@ func (s *ActorServer) PreInit() error {
 	return nil
 }
 
-func (s *ActorServer) ServerInit() error {
-
+func (s *ActorServer) PostInit() error {
 	logger.Debug("ActorServer Init")
 
 	s.LiveTime = time.Now().Unix() // 创建server时间戳
@@ -219,7 +218,7 @@ func (s *ActorServer) OnHeartBeat(c *tcpx.Context) {
 func (s *ActorServer) EventHandler(ctx context.Context, e *common.TopicEvent) (retry bool, err error) {
 	defer func() {
 		if err := recover(); err != any(nil) {
-			logger.Tracef("recover failed err:%v", err)
+			logger.Errorf("recover failed err:%v", err)
 		}
 	}()
 
@@ -244,7 +243,7 @@ func (s *ActorServer) EventHandler(ctx context.Context, e *common.TopicEvent) (r
 func (s *ActorServer) InvokeHandler(ctx context.Context, in *common.InvocationEvent) (out *common.Content, err error) {
 	defer func() {
 		if err := recover(); err != any(nil) {
-			logger.Trace("failed, err: ", err)
+			logger.Error("failed, err: ", err)
 		}
 	}()
 
@@ -324,7 +323,7 @@ func (s *ActorServer) GetUserGMList(msg *base.ProtoMsg) (*common.Content, error)
 func (s *ActorServer) BindingHandler(ctx context.Context, in *common.BindingEvent) (out []byte, err error) {
 	defer func() {
 		if err := recover(); err != any(nil) {
-			logger.Trace("BindingHandler failed, err: ", err)
+			logger.Error("BindingHandler failed, err: ", err)
 		}
 	}()
 

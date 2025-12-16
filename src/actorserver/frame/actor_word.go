@@ -7,8 +7,13 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	myCommon "gitee.com/aniwar2/aniwar/src/common"
+	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/aniwar/src/common/db"
-	"gitee.com/aniwar2/musae/wordfilter"
+	"gitee.com/aniwar2/aniwar/src/common/http/request"
+	myUtils "gitee.com/aniwar2/aniwar/src/common/utils"
+	"gitee.com/aniwar2/musae/gamelib/sensitive"
+	"gitee.com/aniwar2/musae/logger"
 	"math/rand"
 	"net/http"
 	"net/url"
@@ -17,12 +22,6 @@ import (
 	"strings"
 	"time"
 	"unicode"
-
-	myCommon "gitee.com/aniwar2/aniwar/src/common"
-	"gitee.com/aniwar2/aniwar/src/common/conf"
-	"gitee.com/aniwar2/aniwar/src/common/http/request"
-	myUtils "gitee.com/aniwar2/aniwar/src/common/utils"
-	"gitee.com/aniwar2/musae/logger"
 )
 
 const (
@@ -36,7 +35,7 @@ const (
 )
 
 // 动态屏蔽词
-var dynamicWordMgr = wordfilter.New()
+var dynamicWordMgr = sensitive.New()
 
 // InitDynamicWord 初始化
 func (s *ActorServer) InitDynamicWord() {
@@ -130,7 +129,7 @@ func (s *ActorServer) CheckSensitiveWord(ctype int32, content string) (bool, err
 	}
 
 	// 远程和本地双重校验，任一接口返回false，则最终结果为false
-	if conf.GConf().UGC.Switch > 0 {
+	if conf.UGC().Switch > 0 {
 		ok, err := CheckRemote(ctype, content)
 		if err != nil || !ok {
 			logger.Debugf("CheckRemote 判定非法 %s", content)
@@ -147,7 +146,7 @@ func (s *ActorServer) CheckSensitiveWord(ctype int32, content string) (bool, err
 
 // 本地屏蔽词接口
 func CheckLocal(content string) bool {
-	ok, _ := wordfilter.GetSensitiveWordMgr().FindIn(content)
+	ok, _ := sensitive.GetSensitiveWordMgr().FindIn(content)
 	return ok
 }
 
@@ -165,7 +164,7 @@ func CheckRemote(ctype int32, content string) (bool, error) {
 		return false, fmt.Errorf("unrealized biz type %d", ctype)
 	}
 
-	body["project_access_key"] = conf.GConf().UGC.AccessKey
+	body["project_access_key"] = conf.UGC().AccessKey
 	body["content"] = content
 	body["uid"] = 0
 	body["ext"] = ""
@@ -183,10 +182,10 @@ func CheckRemote(ctype int32, content string) (bool, error) {
 	}
 
 	// 构造机审req
-	baseUrl := conf.GConf().UGC.BaseUrl
-	apiPath := conf.GConf().UGC.ApiPath
-	secretId := conf.GConf().UGC.SecretId
-	secretKey := conf.GConf().UGC.SecretKey
+	baseUrl := conf.UGC().BaseUrl
+	apiPath := conf.UGC().ApiPath
+	secretId := conf.UGC().SecretId
+	secretKey := conf.UGC().SecretKey
 
 	// 签名
 	now := time.Now()
