@@ -3,13 +3,13 @@ package taptap
 import (
 	"encoding/json"
 	"gitee.com/aniwar2/musae/statistics"
+	"gitee.com/aniwar2/musae/utils"
 	"strconv"
 	"time"
 
 	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/logger"
-	"gitee.com/aniwar2/musae/threading"
 )
 
 const (
@@ -80,7 +80,7 @@ func BuildSystemFieldInfo(logName, uid string, tapUser *pb.TaptapUserInfo, event
 
 // 新增全局邮件
 func GlobalMailAdd(appId, appVersion, clientVersion, rollingVersion, serverName string, mailId int64) {
-	threading.RunSafe(func() {
+	utils.SafeRunNoError(func() {
 		e := &GlobalMailAddInfo{
 			PropertyFieldInfo: BuildPropertyFieldInfo(nil),
 			AppId:             appId,          // 服务类型标识
@@ -95,7 +95,7 @@ func GlobalMailAdd(appId, appVersion, clientVersion, rollingVersion, serverName 
 
 // 删除全局邮件
 func GlobalMailDel(appId, appVersion, clientVersion, rollingVersion, serverName string, mailId int64) {
-	threading.RunSafe(func() {
+	utils.SafeRunNoError(func() {
 		e := &GlobalMailDelInfo{
 			PropertyFieldInfo: BuildPropertyFieldInfo(nil),
 			AppId:             appId,          // 服务类型标识
@@ -119,7 +119,7 @@ func AddGlobalMail(appId, appVersion, clientVersion, rollingVersion, serverName 
 
 // 服务启动
 func ServiceStart(appId, appVersion, clientVersion, rollingVersion, serverName string) {
-	threading.RunSafe(func() {
+	utils.SafeRunNoError(func() {
 		e := &ServerStart{
 			PropertyFieldInfo: BuildPropertyFieldInfo(nil),
 			AppId:             appId,          // 服务类型标识
@@ -133,7 +133,7 @@ func ServiceStart(appId, appVersion, clientVersion, rollingVersion, serverName s
 
 // 服务退出
 func ServiceStop(appId, appVersion, clientVersion, rollingVersion, serverName string, liveTime int64) {
-	threading.RunSafe(func() {
+	utils.SafeRunNoError(func() {
 		e := &ServerStop{
 			PropertyFieldInfo: BuildPropertyFieldInfo(nil),
 			AppId:             appId,          // 服务类型标识
@@ -148,7 +148,7 @@ func ServiceStop(appId, appVersion, clientVersion, rollingVersion, serverName st
 
 // 服务定时器
 func ServerHourComm(appId, appVersion, clientVersion, rollingVersion, serverName string, liveTime int64) {
-	threading.RunSafe(func() {
+	utils.SafeRunNoError(func() {
 		e := &ServerHour{
 			PropertyFieldInfo: BuildPropertyFieldInfo(nil),
 			AppId:             appId,          // 服务类型标识
@@ -163,7 +163,7 @@ func ServerHourComm(appId, appVersion, clientVersion, rollingVersion, serverName
 
 // 服务器配置事件
 func ConfeventComm(appId, appVersion, clientVersion, rollingVersion, serverName, eventId, eventData string) {
-	threading.RunSafe(func() {
+	utils.SafeRunNoError(func() {
 		e := &Confevent{
 			PropertyFieldInfo: BuildPropertyFieldInfo(nil),
 			AppId:             appId,          // 服务类型标识
@@ -179,7 +179,7 @@ func ConfeventComm(appId, appVersion, clientVersion, rollingVersion, serverName,
 
 // 服务热更新
 func ServeReloadComm(appId, appVersion, clientVersion, rollingVersion, serverName, files, fails string) {
-	threading.RunSafe(func() {
+	utils.SafeRunNoError(func() {
 		e := &ServeReload{
 			PropertyFieldInfo: BuildPropertyFieldInfo(nil),
 			AppId:             appId,          // 服务类型标识
@@ -195,7 +195,7 @@ func ServeReloadComm(appId, appVersion, clientVersion, rollingVersion, serverNam
 
 // GM指令
 func GmCmdComm(cmd, param, gmuser string, user int, ip, serverName, result string, resultStatus int) {
-	threading.RunSafe(func() {
+	utils.SafeRunNoError(func() {
 		e := &GmCmd{
 			PropertyFieldInfo: BuildPropertyFieldInfo(nil),
 			Cmd:               cmd,          // 命令字符串
@@ -212,7 +212,7 @@ func GmCmdComm(cmd, param, gmuser string, user int, ip, serverName, result strin
 
 // 用户容器上线下线
 func UserActorComm(id, serverName string, typeC, liveTime int64) {
-	threading.RunSafe(func() {
+	utils.SafeRunNoError(func() {
 		e := &UserActor{
 			PropertyFieldInfo: BuildPropertyFieldInfo(nil),
 			Id:                id,       // id
@@ -225,7 +225,7 @@ func UserActorComm(id, serverName string, typeC, liveTime int64) {
 
 // DB读写失效
 func DbFailComm(key, db, typeC, serverName string) {
-	threading.RunSafe(func() {
+	utils.SafeRunNoError(func() {
 		e := &DbFail{
 			PropertyFieldInfo: BuildPropertyFieldInfo(nil),
 			Key:               key,   // 数据key
@@ -241,7 +241,7 @@ func LoginDelayComm(uid string, tapUser *pb.TaptapUserInfo, device *pb.CliDevice
 	if delay < conf.Base().DelayLogLimit {
 		return
 	}
-	threading.RunSafe(func() {
+	utils.SafeRunNoError(func() {
 		e := &LoginDelay{
 			PropertyFieldInfo: BuildPropertyFieldInfo(device),
 			MsgId:             msgId,
@@ -256,7 +256,7 @@ func GateDelayComm(uid string, tapUser *pb.TaptapUserInfo, device *pb.CliDeviceI
 	if delay < conf.Base().DelayLogLimit {
 		return
 	}
-	threading.RunSafe(func() {
+	utils.SafeRunNoError(func() {
 		e := &GateDelay{
 			PropertyFieldInfo: BuildPropertyFieldInfo(device),
 			MsgId:             msgId,
@@ -268,7 +268,7 @@ func GateDelayComm(uid string, tapUser *pb.TaptapUserInfo, device *pb.CliDeviceI
 
 // 版本获取
 func GetVersionComm(uid string, tapUser *pb.TaptapUserInfo, device *pb.CliDeviceInfo, version string, platform string) {
-	threading.RunSafe(func() {
+	utils.SafeRunNoError(func() {
 		e := &GetVersion{
 			PropertyFieldInfo: BuildPropertyFieldInfo(device),
 			Version:           version,
@@ -280,7 +280,7 @@ func GetVersionComm(uid string, tapUser *pb.TaptapUserInfo, device *pb.CliDevice
 
 // loginserver登录
 func AccountLoginComm(uid string, tapUser *pb.TaptapUserInfo, device *pb.CliDeviceInfo, channel int32, extra string) {
-	threading.RunSafe(func() {
+	utils.SafeRunNoError(func() {
 		e := &AccountLogin{
 			PropertyFieldInfo: BuildPropertyFieldInfo(device),
 			Channel:           channel,
@@ -292,7 +292,7 @@ func AccountLoginComm(uid string, tapUser *pb.TaptapUserInfo, device *pb.CliDevi
 
 // 长链进入
 func TcpEnterComm(uid string, tapUser *pb.TaptapUserInfo, device *pb.CliDeviceInfo) {
-	threading.RunSafe(func() {
+	utils.SafeRunNoError(func() {
 		e := &TcpEnter{
 			PropertyFieldInfo: BuildPropertyFieldInfo(device),
 		}
@@ -302,7 +302,7 @@ func TcpEnterComm(uid string, tapUser *pb.TaptapUserInfo, device *pb.CliDeviceIn
 
 // 断线重连
 func ReconnectComm(uid string, tapUser *pb.TaptapUserInfo, device *pb.CliDeviceInfo) {
-	threading.RunSafe(func() {
+	utils.SafeRunNoError(func() {
 		e := &Reconnect{
 			PropertyFieldInfo: BuildPropertyFieldInfo(device),
 		}
@@ -312,7 +312,7 @@ func ReconnectComm(uid string, tapUser *pb.TaptapUserInfo, device *pb.CliDeviceI
 
 // 重复登录
 func RepeatedLoginComm(uid string, tapUser *pb.TaptapUserInfo, device *pb.CliDeviceInfo) {
-	threading.RunSafe(func() {
+	utils.SafeRunNoError(func() {
 		e := &RepeatedLogin{
 			PropertyFieldInfo: BuildPropertyFieldInfo(device),
 		}

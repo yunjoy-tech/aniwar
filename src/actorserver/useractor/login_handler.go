@@ -68,7 +68,7 @@ func (h *LoginHandler) EnterGame() error {
 
 func (h *LoginHandler) DailyRefresh() error {
 	// 跨天在线玩家自动上报一次
-	// threading.RunSafe(func() {
+	// utils.SafeRunNoError(func() {
 	//	lilith.WriteDataLog(&lilith.RoleLogin{
 	//		HeadInfo: lilith.BuildHeadInfo(lilith.LogType_RoleLogin, h.actor.uid, h.actor.Account.CliDeviceInfo),
 	//		RoleId:   h.actor.ID(),
@@ -78,7 +78,7 @@ func (h *LoginHandler) DailyRefresh() error {
 	//		Language: h.actor.Data.Base.Common.Language,
 	//	})
 	// })
-	threading.RunSafe(func() {
+	utils.SafeRunNoError(func() {
 		e := &taptap.RoleLogin{
 			PropertyFieldInfo: taptap.BuildPropertyFieldInfo(h.actor.Account.CliDeviceInfo),
 			RoleId:            h.actor.ID(),
@@ -511,19 +511,19 @@ func (h *LoginHandler) LoginEnterGame(ctx context.Context, in *base.ProtoMsg) (p
 			}
 		}
 
-		// threading.RunSafe(func() {
+		// utils.SafeRunNoError(func() {
 		//	lilith.WriteDataLog(&lilith.UserCreate{
 		//		HeadInfo: lilith.BuildHeadInfo(lilith.LogType_UserCreate, h.actor.uid, h.actor.Account.CliDeviceInfo),
 		//	})
 		// })
 
-		// threading.RunSafe(func() {
+		// utils.SafeRunNoError(func() {
 		//	lilith.WriteDataLog(&lilith.RoleCreate{
 		//		HeadInfo: lilith.BuildHeadInfo(lilith.LogType_RoleCreate, h.actor.uid, h.actor.Account.CliDeviceInfo),
 		//		RoleId:   strconv.FormatUint(h.actor.roleId, 10),
 		//	})
 		// })
-		threading.RunSafe(func() {
+		utils.SafeRunNoError(func() {
 			e := &taptap.RoleCreate{
 				PropertyFieldInfo: taptap.BuildPropertyFieldInfo(h.actor.Account.CliDeviceInfo),
 				RoleId:            strconv.FormatUint(h.actor.roleId, 10),
@@ -701,12 +701,12 @@ func (h *LoginHandler) DoEnterGame(bNewPlayer bool) (proto.Message, error, int32
 	// 尝试同步es
 	h.actor.RoleDetailHandler.tryUploadRoleInfoToES()
 
-	// threading.RunSafe(func() {
+	// utils.SafeRunNoError(func() {
 	//	lilith.WriteDataLog(&lilith.UserLogin{
 	//		HeadInfo: lilith.BuildHeadInfo(lilith.LogType_UserLogin, h.actor.uid, h.actor.Account.CliDeviceInfo),
 	//	})
 	// })
-	threading.RunSafe(func() {
+	utils.SafeRunNoError(func() {
 		e := &taptap.RoleLogin{
 			PropertyFieldInfo: taptap.BuildPropertyFieldInfo(h.actor.Account.CliDeviceInfo),
 			RoleId:            h.actor.ID(),
@@ -804,7 +804,7 @@ func (h *LoginHandler) AddRoleExp(expValue uint64, commonData *clidto.Comdata) (
 		}
 
 		if newLevel != oldLevel {
-			// threading.RunSafe(func() {
+			// utils.SafeRunNoError(func() {
 			//	lilith.WriteDataLog(&lilith.LevelUp{
 			//		HeadInfo: lilith.BuildHeadInfo(lilith.LogType_LevelUp, h.actor.uid, h.actor.Account.CliDeviceInfo),
 			//		RoleId:   strconv.FormatUint(h.actor.roleId, 10),
@@ -813,7 +813,7 @@ func (h *LoginHandler) AddRoleExp(expValue uint64, commonData *clidto.Comdata) (
 			//		Recharge: 0,
 			//	})
 			// })
-			threading.RunSafe(func() {
+			utils.SafeRunNoError(func() {
 				e := &taptap.LevelUp{
 					PropertyFieldInfo: taptap.BuildPropertyFieldInfo(h.actor.Account.CliDeviceInfo),
 					RoleId:            strconv.FormatUint(h.actor.roleId, 10),

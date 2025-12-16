@@ -90,7 +90,7 @@ func (s *RoomActor) Activate(invokeName string) error {
 }
 
 func (s *RoomActor) Deactivate() error {
-	threading.RunSafe(func() {
+	utils.SafeRunNoError(func() {
 		s.SaveActor2Redis(global.RoomActorType)
 		// 判定是否超时deactivate
 		now := time.Now()

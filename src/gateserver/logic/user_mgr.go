@@ -142,7 +142,7 @@ func (m *UserMgr) ReportDataMinute() error {
 func reportOnlineUser(m *UserMgr) error {
 	userNum := m.UserNum()
 
-	// threading.RunSafe(func() {
+	// utils.SafeRunNoError(func() {
 	//	lilith.WriteDataLog(&lilith.Online{
 	//		LogType:     lilith.LogType_Online,
 	//		Version:     strconv.Itoa(lilith.VERSION),
@@ -152,7 +152,7 @@ func reportOnlineUser(m *UserMgr) error {
 	//		ServerTag:   m.s.AppId,
 	//	})
 	// })
-	threading.RunSafe(func() {
+	utils.SafeRunNoError(func() {
 		e := &taptap.Online{
 			PropertyFieldInfo: taptap.BuildPropertyFieldInfo(nil),
 			OnlineCount:       int64(userNum),

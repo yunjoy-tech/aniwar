@@ -152,7 +152,7 @@ func (h *AccountHandler) Banned(bannedMsg string, bannedSec int64) error {
 		account.BannedTs = time.Now().Add(time.Second * time.Duration(bannedSec)).Unix()
 		account.BannedMsg = bannedMsg
 
-		threading.RunSafe(func() {
+		utils.SafeRunNoError(func() {
 			e := &taptap.BanRole{
 				PropertyFieldInfo: taptap.BuildPropertyFieldInfo(h.actor.Account.CliDeviceInfo),
 				RoleId:            strconv.FormatUint(h.actor.roleId, 10),
@@ -167,7 +167,7 @@ func (h *AccountHandler) Banned(bannedMsg string, bannedSec int64) error {
 		account.BannedTs = bannedSec
 		account.BannedMsg = bannedMsg
 
-		threading.RunSafe(func() {
+		utils.SafeRunNoError(func() {
 			e := &taptap.UnBanRole{
 				PropertyFieldInfo: taptap.BuildPropertyFieldInfo(h.actor.Account.CliDeviceInfo),
 				RoleId:            strconv.FormatUint(h.actor.roleId, 10),
@@ -177,7 +177,7 @@ func (h *AccountHandler) Banned(bannedMsg string, bannedSec int64) error {
 		})
 	}
 
-	// threading.RunSafe(func() {
+	// utils.SafeRunNoError(func() {
 	//	lilith.WriteDataLog(&lilith.BanRole{
 	//		LogType:    lilith.LogType_BanRole,
 	//		Version:    "1",

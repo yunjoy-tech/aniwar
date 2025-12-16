@@ -279,14 +279,14 @@ func (h *DutyHandler) ChangeDutyCardReq(ctx context.Context, in *base.ProtoMsg) 
 	}
 
 	// 埋点log
-	// threading.RunSafe(func() {
+	// utils.SafeRunNoError(func() {
 	//	lilith.WriteDataLog(&lilith.ChangeDutyCard{
 	//		CustomHeadInfo: lilith.BuildCustomHeadInfo(lilith.LogType_ChangeDutyCard, h.actor.uid, h.actor.Account.CliDeviceInfo),
 	//		BeforeCard:     old,
 	//		AfterCard:      req.CardId,
 	//	})
 	// })
-	threading.RunSafe(func() {
+	utils.SafeRunNoError(func() {
 		e := &taptap.ChangeDutyCard{
 			PropertyFieldInfo: taptap.BuildPropertyFieldInfo(h.actor.Account.CliDeviceInfo),
 			BeforeCard:        old,
@@ -377,7 +377,7 @@ func (h *DutyHandler) ReceiveDailyTaskRewardReq(ctx context.Context, in *base.Pr
 		cfgReward = append(cfgReward, cfg.Rewards...)
 		res.TaskId = append(res.TaskId, task.Id)
 		// 埋点log
-		// threading.RunSafe(func() {
+		// utils.SafeRunNoError(func() {
 		//	lilith.WriteDataLog(&lilith.ReceiveDailyReward{
 		//		CustomHeadInfo: lilith.BuildCustomHeadInfo(lilith.LogType_ReceiveDailyReward, h.actor.uid, h.actor.Account.CliDeviceInfo),
 		//		TaskId:         task.Id,
@@ -388,7 +388,7 @@ func (h *DutyHandler) ReceiveDailyTaskRewardReq(ctx context.Context, in *base.Pr
 		//		Reward:         lilith.ConvertMap2Str(datahelper.ConvertItem3(cfg.Rewards)),
 		//	})
 		// })
-		threading.RunSafe(func() {
+		utils.SafeRunNoError(func() {
 			e := &taptap.ReceiveDailyReward{
 				PropertyFieldInfo: taptap.BuildPropertyFieldInfo(h.actor.Account.CliDeviceInfo),
 				TaskId:            task.Id,
@@ -482,7 +482,7 @@ func (h *DutyHandler) ReceiveActiveRewardReq(ctx context.Context, in *base.Proto
 	}
 
 	// 埋点log
-	// threading.RunSafe(func() {
+	// utils.SafeRunNoError(func() {
 	//	lilith.WriteDataLog(&lilith.ReceiveActiveReward{
 	//		CustomHeadInfo: lilith.BuildCustomHeadInfo(lilith.LogType_ReceiveActiveReward, h.actor.uid, h.actor.Account.CliDeviceInfo),
 	//		ActiveNode:     req.ActiveNode,
@@ -490,7 +490,7 @@ func (h *DutyHandler) ReceiveActiveRewardReq(ctx context.Context, in *base.Proto
 	//		Reward:         lilith.ConvertMap2Str(reward),
 	//	})
 	// })
-	threading.RunSafe(func() {
+	utils.SafeRunNoError(func() {
 		e := &taptap.ReceiveActiveReward{
 			PropertyFieldInfo: taptap.BuildPropertyFieldInfo(h.actor.Account.CliDeviceInfo),
 			ActiveNode:        req.ActiveNode,

@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
+	"gitee.com/aniwar2/musae/utils"
 	"strconv"
 
 	"gitee.com/aniwar2/aniwar/src/actorserver/frame"
@@ -27,7 +28,6 @@ import (
 	"gitee.com/aniwar2/musae/base"
 	"gitee.com/aniwar2/musae/baseactor"
 	svc "gitee.com/aniwar2/musae/service"
-	"gitee.com/aniwar2/musae/threading"
 	"google.golang.org/protobuf/proto"
 )
 
@@ -121,7 +121,7 @@ func New() actor.Server {
 	// delay save db timer
 	// actor.Srv.AddTimer(true, time.Second*DELAY_SAVE_DB_TIME, actor.Delay2DB)
 
-	threading.GoSafeWithParam(func(ua interface{}) {
+	utils.GoSafeRunWithParam(func(ua interface{}) {
 		t := time.NewTicker(time.Second * common.FIXED_SAVE_DB_TIME)
 		defer t.Stop()
 		for {
@@ -130,15 +130,15 @@ func New() actor.Server {
 				ua.(*UserActor).Info("UserActor closed")
 				return
 			case <-t.C:
-				threading.RunSafe(ua.(*UserActor).FixedTime2DB)
+				utils.SafeRunNoError(ua.(*UserActor).FixedTime2DB)
 			}
 		}
-	}, a)
+	}, a, nil)
 
 	// 启动timer定时器
-	threading.GoSafeWithParam(func(ua interface{}) {
+	utils.GoSafeRunWithParam(func(ua interface{}) {
 		ua.(*UserActor).Timer.Run()
-	}, a)
+	}, a, nil)
 
 	a.Debugf("UserActorFactory create UserActor, %s", a.ID())
 	return a
@@ -184,7 +184,7 @@ func (u *UserActor) Activate(invokeName string) error {
 		return fmt.Errorf("server is unavailable")
 	}
 
-	threading.RunSafe(func() {
+	utils.SafeRunNoError(func() {
 		err = u.SyncCache2Mongo(u.ID())
 		if err != nil {
 			u.Errorf("Activate syncCache2Mongo err, %s, %+v", u.ID(), err)
@@ -252,12 +252,12 @@ func (u *UserActor) deactivate() error {
 	// 用户下线，同步actor生命周期内修改的数据
 	startTime := time.Now()
 	if global.IsCloud { // 内网研发环境不开启，防止在不同私服先后登录，旧UserActor数据覆盖新数据的问题
-		threading.RunSafe(func() {
+		utils.SafeRunNoError(func() {
 			u.OfflineSync2DB()
 		})
 	}
 
-	threading.RunSafe(func() {
+	utils.SafeRunNoError(func() {
 		err := u.SyncCache2Mongo(u.ID())
 		if err != nil {
 			u.Errorf("Deactivate syncCache2Mongo err, %s, %+v", u.ID(), err)
@@ -283,7 +283,7 @@ func (u *UserActor) deactivate() error {
 }
 
 func (u *UserActor) Deactivate() error {
-	threading.RunSafe(func() {
+	utils.SafeRunNoError(func() {
 		err := u.deactivate()
 		if err != nil {
 			u.Errorf("UserActor Deactivate got err: %v", err)
@@ -323,14 +323,14 @@ func (u *UserActor) FixedTime2DB() {
 		return
 	}
 
-	threading.RunSafe(func() {
+	utils.SafeRunNoError(func() {
 		err := u.commit2Redis()
 		if err != nil {
 			u.Errorf("FixedTime2DB commit2Redis UserActor got err, %s, %+v", u.ID(), err)
 		}
 	})
 
-	threading.RunSafe(func() {
+	utils.SafeRunNoError(func() {
 		err := u.SyncCache2Mongo(u.ID())
 		if err != nil {
 			u.Errorf("FixedTime2DB syncCache2Mongo UserActor got err, %s, %+v", u.ID(), err)
@@ -339,7 +339,7 @@ func (u *UserActor) FixedTime2DB() {
 
 	// 离线判断
 	if u.GetState() == State_Online {
-		threading.RunSafe(func() {
+		utils.SafeRunNoError(func() {
 			if u.IsHeartbeatTimeout() {
 				u.SetState(State_Offline)
 
@@ -353,7 +353,7 @@ func (u *UserActor) FixedTime2DB() {
 				u.UserAllianceHandler.PushTopic2Alliance(pb.GateTopicOperator_GTO_unbound, "")
 
 				// 下线埋点
-				// threading.RunSafe(func() {
+				// utils.SafeRunNoError(func() {
 				//	lilith.WriteDataLog(&lilith.RoleLogout{
 				//		HeadInfo: lilith.BuildHeadInfo(lilith.LogType_RoleLogout, u.uid, u.Account.CliDeviceInfo),
 				//		RoleId:   u.ID(),
@@ -362,7 +362,7 @@ func (u *UserActor) FixedTime2DB() {
 				//		Recharge: 0,
 				//	})
 				// })
-				threading.RunSafe(func() {
+				utils.SafeRunNoError(func() {
 					loginDate := time.Unix(u.Data.Base.Common.OnlineTime, 0)
 					times := time.Now().Sub(loginDate).Seconds()
 					e := &taptap.RoleLogout{
@@ -641,7 +641,7 @@ func (u *UserActor) Hour0Handler(ctx context.Context, params []byte) error {
 		return nil
 	}
 
-	// threading.RunSafe(func() {
+	// utils.SafeRunNoError(func() {
 	//	lilith.WriteDataLog(&lilith.UserLogin{
 	//		HeadInfo: lilith.BuildHeadInfo(lilith.LogType_UserLogin, u.uid, u.Account.CliDeviceInfo),
 	//	})

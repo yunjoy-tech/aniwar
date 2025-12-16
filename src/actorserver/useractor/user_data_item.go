@@ -64,7 +64,7 @@ func (x *UserData) AddItems(uid string, reason common.ChangeReason, itemInfos ..
 			finalItems = append(finalItems, item)
 		}
 
-		// threading.RunSafe(func() {
+		// utils.SafeRunNoError(func() {
 		//	lilith.WriteDataLog(&lilith.ItemFlow{
 		//		HeadInfo:   lilith.BuildHeadInfo(lilith.LogType_ItemFlow, uid, device),
 		//		RoleId:     strconv.FormatUint(x.Data.Base.Common.RoleId, 10),
@@ -79,7 +79,7 @@ func (x *UserData) AddItems(uid string, reason common.ChangeReason, itemInfos ..
 		//		Recharge:   0,
 		//	})
 		// })
-		threading.RunSafe(func() {
+		utils.SafeRunNoError(func() {
 			e := &taptap.ItemFlow{
 				PropertyFieldInfo: taptap.BuildPropertyFieldInfo(x.Account.CliDeviceInfo),
 				RoleId:            strconv.FormatUint(x.Data.Base.Common.RoleId, 10),
@@ -134,7 +134,7 @@ func (x *UserData) SubItems(costItemUniqueId uint64, costNum uint32, uid string,
 		// 	})
 		// }
 
-		// threading.RunSafe(func() {
+		// utils.SafeRunNoError(func() {
 		//	lilith.WriteDataLog(&lilith.ItemFlow{
 		//		HeadInfo:   lilith.BuildHeadInfo(lilith.LogType_ItemFlow, uid, device),
 		//		RoleId:     strconv.FormatUint(x.Data.Base.Common.RoleId, 10),
@@ -149,7 +149,7 @@ func (x *UserData) SubItems(costItemUniqueId uint64, costNum uint32, uid string,
 		//		Recharge:   0,
 		//	})
 		// })
-		threading.RunSafe(func() {
+		utils.SafeRunNoError(func() {
 			e := &taptap.ItemFlow{
 				PropertyFieldInfo: taptap.BuildPropertyFieldInfo(x.Account.CliDeviceInfo),
 				RoleId:            strconv.FormatUint(x.Data.Base.Common.RoleId, 10),
@@ -167,7 +167,7 @@ func (x *UserData) SubItems(costItemUniqueId uint64, costNum uint32, uid string,
 		})
 		// 埋点log
 		if reason == common.CR_Destroy_EXP_ITEM {
-			// threading.RunSafe(func() {
+			// utils.SafeRunNoError(func() {
 			//	lilith.WriteDataLog(&lilith.DestroyExpireItem{
 			//		CustomHeadInfo: lilith.BuildCustomHeadInfo(lilith.LogType_DestroyExpireItem, uid, x.Account.CliDeviceInfo),
 			//		Id:             int64(costItemUniqueId),
@@ -177,7 +177,7 @@ func (x *UserData) SubItems(costItemUniqueId uint64, costNum uint32, uid string,
 			//		Exchange:       lilith.ConvertMap2Str(map[int32]int32{itemCfg.Change.ItemId: itemCfg.Change.Num * int32(costNum)}),
 			//	})
 			// })
-			threading.RunSafe(func() {
+			utils.SafeRunNoError(func() {
 				e := &taptap.DestroyExpireItem{
 					PropertyFieldInfo: taptap.BuildPropertyFieldInfo(x.Account.CliDeviceInfo),
 					Id:                int64(costItemUniqueId),

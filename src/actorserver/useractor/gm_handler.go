@@ -780,7 +780,7 @@ func (h *GmHandler) GmTestDB(param []string, commonData *clidto.Comdata) error {
 	var wg sync.WaitGroup
 	for i := 1; i <= threadNum; i++ {
 		wg.Add(1)
-		threading.RunSafe(func() {
+		utils.SafeRunNoError(func() {
 			for x := 1; x <= opNum; x++ {
 				// 随机10毫秒内延迟执行
 				time.Sleep(time.Millisecond * time.Duration(rand.Int31n(10)))
@@ -876,7 +876,7 @@ func (h *GmHandler) GmTestGUID(param []string, commonData *clidto.Comdata) error
 	// var wg sync.WaitGroup
 	// for i := 1; i <= threadNum; i++ {
 	// 	wg.Add(1)
-	// 	threading.RunSafe(func() {
+	// 	utils.SafeRunNoError(func() {
 	// 		for i := 1; i <= idNum; i++ {
 	// 			time.Sleep(time.Millisecond * time.Duration(rand.Int()%30+10))
 	// 			id := h.actor.Srv.GenGUID(guid.GUID_PLAYER)

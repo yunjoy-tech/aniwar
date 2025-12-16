@@ -59,7 +59,7 @@ func (s *LoginServer) doHandleMsg() {
 	for {
 		select {
 		case <-s.ticket:
-			threading.RunSafe(func() {
+			utils.SafeRunNoError(func() {
 				msg := <-s.ch
 				s.ticketDecSum++
 				res := s.handleLoginReq(msg)
@@ -336,7 +336,7 @@ func (s *LoginServer) DoHandleLoginReq(req *pb.C2LS_LoginReq, res *pb.LS2C_Login
 
 	// 预先拉启UserActor
 	if conf.Login().UserActorAhead {
-		threading.GoSafe(func() {
+		utils.GoSafeRun(func() {
 			player, ok := account.PlayerList.Players[1]
 			if ok && player != nil && player.Id > 0 {
 				uaid := s.UAID(uid, player.Id)
@@ -352,7 +352,7 @@ func (s *LoginServer) DoHandleLoginReq(req *pb.C2LS_LoginReq, res *pb.LS2C_Login
 					ServerReqIdx: guid.GenIntUuid(),
 				})
 			}
-		})
+		}, nil)
 	}
 
 	// 通知客户端被踢下线

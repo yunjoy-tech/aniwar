@@ -144,14 +144,14 @@ func (h *BagHandler) UseItemReq(_ context.Context, in *base.ProtoMsg) (proto.Mes
 	}
 
 	// 埋点log
-	// threading.RunSafe(func() {
+	// utils.SafeRunNoError(func() {
 	//	lilith.WriteDataLog(&lilith.UseItem{
 	//		CustomHeadInfo: lilith.BuildCustomHeadInfo(lilith.LogType_UseItem, h.actor.uid, h.actor.Account.CliDeviceInfo),
 	//		ItemId:         int32(req.ItemId),
 	//		ItemNum:        int32(req.ItemNum),
 	//	})
 	// })
-	threading.RunSafe(func() {
+	utils.SafeRunNoError(func() {
 		e := &taptap.UseItem{
 			PropertyFieldInfo: taptap.BuildPropertyFieldInfo(h.actor.Account.CliDeviceInfo),
 			ItemId:            int32(req.ItemId),
@@ -238,7 +238,7 @@ func (h *BagHandler) ItemBuyReq(ctx context.Context, in *base.ProtoMsg) (proto.M
 		var cfg *meta.ShopPkgDirectPurchaseMeta
 		// cfg := excel.GetDirectPurchaseMgr().GetById(v.Key)
 		// 埋点log
-		// threading.RunSafe(func() {
+		// utils.SafeRunNoError(func() {
 		//	lilith.WriteDataLog(&lilith.ItemBuy{
 		//		CustomHeadInfo: lilith.BuildCustomHeadInfo(lilith.LogType_ItemBuy, h.actor.uid, h.actor.Account.CliDeviceInfo),
 		//		ItemId:         v.Key,
@@ -247,7 +247,7 @@ func (h *BagHandler) ItemBuyReq(ctx context.Context, in *base.ProtoMsg) (proto.M
 		//		MoneyNum:       cfg.Price.Val * v.Value,
 		//	})
 		// })
-		threading.RunSafe(func() {
+		utils.SafeRunNoError(func() {
 			e := &taptap.ItemBuy{
 				PropertyFieldInfo: taptap.BuildPropertyFieldInfo(h.actor.Account.CliDeviceInfo),
 				ItemId:            v.Key,

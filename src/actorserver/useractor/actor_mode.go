@@ -115,7 +115,7 @@ package useractor
 //		return nil
 //	}
 //
-//	threading.RunSafe(func() {
+//	utils.SafeRunNoError(func() {
 //		datalog.Write(&datalog.UserLogin{
 //			SystemFieldInfo: datalog.BuildHeadInfo(datalog.LogType_UserLogin, s.Player.uid, s.Player.Account.CliDeviceInfo),
 //		})

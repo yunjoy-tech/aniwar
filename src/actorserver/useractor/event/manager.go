@@ -49,7 +49,7 @@ func NewManager(name string) *Manager {
 	//		for {
 	//			select {
 	//			case e := <-em.eventCh:
-	//				threading.RunSafeWithParam(func(param interface{}) {
+	//				utils.SafeRunNoErrorWithParam(func(param interface{}) {
 	//					err := em.publish(e)
 	//					if err != nil {
 	//						logger.Error(err)

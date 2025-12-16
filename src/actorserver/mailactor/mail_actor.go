@@ -79,7 +79,7 @@ func (s *MailActor) Activate(invokeName string) error {
 func (s *MailActor) Deactivate() error {
 	s.Infof("=================>MailActor Deactivate [%s]<=================", s.ID())
 
-	threading.RunSafe(func() {
+	utils.SafeRunNoError(func() {
 		s.SaveActor2Redis(global.MailActorType)
 	})
 

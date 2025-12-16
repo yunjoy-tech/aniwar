@@ -187,14 +187,14 @@ func (h *MailHandler) MailReceiveReq(ctx context.Context, in *base.ProtoMsg) (pr
 			tempIds = append(tempIds, v.Id)
 		}
 
-		// threading.RunSafe(func() {
+		// utils.SafeRunNoError(func() {
 		//	lilith.WriteDataLog(&lilith.MailReceive{
 		//		CustomHeadInfo: lilith.BuildCustomHeadInfo(lilith.LogType_MailReceive, h.actor.uid, h.actor.Account.CliDeviceInfo),
 		//		MailIds:        lilith.ConvertList2Str(tempIds),
 		//		Reward:         lilith.ConvertListStruct2Str(rewards),
 		//	})
 		// })
-		threading.RunSafe(func() {
+		utils.SafeRunNoError(func() {
 			e := &taptap.MailReceive{
 				PropertyFieldInfo: taptap.BuildPropertyFieldInfo(h.actor.Account.CliDeviceInfo),
 				MailIds:           taptap.ConvertList2Str(tempIds),
@@ -302,13 +302,13 @@ func (h *MailHandler) MailDeleteReq(ctx context.Context, in *base.ProtoMsg) (pro
 	}
 
 	// 埋点log
-	// threading.RunSafe(func() {
+	// utils.SafeRunNoError(func() {
 	//	lilith.WriteDataLog(&lilith.MailDelete{
 	//		CustomHeadInfo: lilith.BuildCustomHeadInfo(lilith.LogType_MailDelete, h.actor.uid, h.actor.Account.CliDeviceInfo),
 	//		MailIds:        lilith.ConvertList2Str(mailIds),
 	//	})
 	// })
-	threading.RunSafe(func() {
+	utils.SafeRunNoError(func() {
 		e := &taptap.MailDelete{
 			PropertyFieldInfo: taptap.BuildPropertyFieldInfo(h.actor.Account.CliDeviceInfo),
 			MailIds:           taptap.ConvertList2Str(mailIds),
@@ -670,7 +670,7 @@ func (h *MailHandler) checkSystemMail() (*pb.PUserMailInfo, []int64, error) {
 	}
 
 	// 玩家领取到系统邮件的埋点
-	threading.RunSafe(func() {
+	utils.SafeRunNoError(func() {
 		e := &taptap.GlobalToPersonalMail{
 			PropertyFieldInfo: taptap.BuildPropertyFieldInfo(h.actor.Account.CliDeviceInfo),
 			MailIds:           taptap.ConvertList2Str(addIds), // 新增邮件id列表

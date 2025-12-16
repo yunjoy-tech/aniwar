@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
 	"gitee.com/aniwar2/musae/gamelib/guid"
+	"gitee.com/aniwar2/musae/utils"
 	"os"
 	"sync"
 	"time"
@@ -26,7 +27,6 @@ import (
 	"gitee.com/aniwar2/musae/metrics"
 	svc "gitee.com/aniwar2/musae/service"
 	"gitee.com/aniwar2/musae/tcpx"
-	"gitee.com/aniwar2/musae/threading"
 	"github.com/dapr/go-sdk/service/common"
 )
 
@@ -111,14 +111,14 @@ func (s *GateServer) ServerInit() error {
 	/*for i := int32(0); i < conf.GConf().BaseConf().GateLoginThreadNum; i++ {
 		threading.GoSafe(s.pendingUserMgr.Execute)
 	}*/
-	threading.GoSafe(s.HandlerSrvMsg)
+	utils.GoSafeRun(s.HandlerSrvMsg, nil)
 	// threading.GoSafe(func() {
 	//	t := time.NewTicker(time.Second * 1)
 	//	defer t.Stop()
 	//	for {
 	//		select {
 	//		case <-t.C:
-	//			threading.RunSafe(s.pendingUserMgr.GrantLoginToken)
+	//			utils.SafeRunNoError(s.pendingUserMgr.GrantLoginToken)
 	//		}
 	//	}
 	// })

@@ -3,6 +3,7 @@ package logic
 import (
 	"errors"
 	"fmt"
+	"gitee.com/aniwar2/musae/utils"
 	"strconv"
 	"sync/atomic"
 	"time"
@@ -19,7 +20,6 @@ import (
 	"gitee.com/aniwar2/musae/logger"
 	"gitee.com/aniwar2/musae/metrics"
 	"gitee.com/aniwar2/musae/tcpx"
-	"gitee.com/aniwar2/musae/threading"
 )
 
 type Msg struct {
@@ -62,7 +62,7 @@ func NewUser(uid string, roleId uint64, c *tcpx.Context, s *GateServer) *User {
 	u.actor = stub.NewUserStub(u.uaid)
 	u.s.ImpActorStub(u.actor)
 	u.lastHeartbeatTs = time.Now().Unix()
-	threading.GoSafe(u.GoHandleClientMsg)
+	utils.GoSafeRun(u.GoHandleClientMsg, nil)
 	return u
 }
 

@@ -99,7 +99,7 @@ func (h *OfflineEventHandler) ExecOfflineEvent() {
 			h.Warnf("OfflineEventHandler OperateType 还未支持该类型操作, msg: %+v", evt.Msg.Str())
 			continue
 		}
-		threading.RunSafe(func() {
+		utils.SafeRunNoError(func() {
 			_, err, _ = handler(context.Background(), evt.Msg)
 		})
 		// 处理出错，跳过后续

@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"gitee.com/aniwar2/musae/gamelib/guid"
+	"gitee.com/aniwar2/musae/utils"
 	"time"
 
 	"gitee.com/aniwar2/aniwar/src/common/datahelper"
@@ -11,8 +12,6 @@ import (
 	myUtils "gitee.com/aniwar2/aniwar/src/common/utils"
 
 	"gitee.com/aniwar2/musae/base"
-
-	"gitee.com/aniwar2/musae/threading"
 
 	"gitee.com/aniwar2/aniwar/src/common/db"
 
@@ -166,7 +165,7 @@ func (h *TugHandler) tugGameOver() {
 
 func (h *TugHandler) tugCreateTick() {
 	h.Debugf("开始房间内的定时器")
-	threading.GoSafeWithParam(func(hh interface{}) {
+	utils.GoSafeRunWithParam(func(hh interface{}) {
 		_h := hh.(*TugHandler)
 
 		t := time.NewTicker(time.Second * 1)
@@ -180,7 +179,7 @@ func (h *TugHandler) tugCreateTick() {
 				_h.tugExecTick()
 			}
 		}
-	}, h)
+	}, h, nil)
 }
 
 func (h *TugHandler) tugExecTick() {

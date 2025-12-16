@@ -447,7 +447,7 @@ func (h *OrderHandler) paySendReward(order *pb.Order, paymentType pb.PaymentType
 	h.Infof("发放奖励成功, %+v", order)
 
 	// 埋点
-	// threading.RunSafe(func() {
+	// utils.SafeRunNoError(func() {
 	//	lilith.WriteDataLog(&lilith.Purchase{
 	//		HeadInfo: lilith.BuildHeadInfo(lilith.LogType_Purchase, h.actor.uid, &pb.CliDeviceInfo{}),
 	//		RoleId:   h.actor.ID(),
@@ -463,7 +463,7 @@ func (h *OrderHandler) paySendReward(order *pb.Order, paymentType pb.PaymentType
 	//		PayType:  payType,
 	//	})
 	// })
-	threading.RunSafe(func() {
+	utils.SafeRunNoError(func() {
 		e := &taptap.Purchase{
 			PropertyFieldInfo: taptap.BuildPropertyFieldInfo(h.actor.Account.CliDeviceInfo),
 			RoleId:            h.actor.ID(),

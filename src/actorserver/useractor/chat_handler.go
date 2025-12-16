@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"gitee.com/aniwar2/aniwar/src/common"
 	"gitee.com/aniwar2/musae/gamelib/guid"
-	"gitee.com/aniwar2/musae/threading"
+	"gitee.com/aniwar2/musae/utils"
 	"strconv"
 	"strings"
 	"time"
@@ -93,7 +93,7 @@ func (h *UserChatHandler) DBTable() (service.MongoDbType, string, proto.Message)
 func (h *UserChatHandler) ProcessMessage() {
 
 	h.wChan = make(chan interface{}, 1024)
-	threading.GoSafe(func() {
+	utils.GoSafeRun(func() {
 		for {
 			select {
 			case tmpMessage, _ := <-h.wChan:
@@ -106,7 +106,7 @@ func (h *UserChatHandler) ProcessMessage() {
 				}
 			}
 		}
-	})
+	}, nil)
 }
 
 func (h *UserChatHandler) MessageWrite2Channel(fromRoleId, toRoleId uint64, message *pb.BroadMessage) {

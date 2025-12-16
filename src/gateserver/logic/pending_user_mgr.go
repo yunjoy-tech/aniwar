@@ -62,7 +62,7 @@ type PendingUser struct {
 
 /*func (m *PendingUserMgr) Execute() {
 	for {
-		threading.RunSafe(func() {
+		utils.SafeRunNoError(func() {
 			user := <-m.pendingCh
 			err := m.s.ExecuteLoginGame(user)
 			if err != nil {

@@ -5,6 +5,7 @@ import (
 	"errors"
 	"fmt"
 	"gitee.com/aniwar2/musae/threading"
+	"gitee.com/aniwar2/musae/utils"
 	"os"
 	"strconv"
 	"strings"
@@ -147,16 +148,16 @@ func (s *Server) Start() error {
 	if err := s.OnServerInit(); err != nil {
 		return err
 	}
-	threading.GoSafe(func() {
+	utils.GoSafeRun(func() {
 		t := time.NewTicker(time.Second * time.Duration(conf.Base().ServerHeartbeatInterval))
 		defer t.Stop()
 		for {
 			select {
 			case <-t.C:
-				threading.RunSafe(s.OnUpdateStatus)
+				utils.SafeRunNoError(s.OnUpdateStatus)
 			}
 		}
-	})
+	}, nil)
 
 	szLog := fmt.Sprintf("server start success, appid:%s version:%s rolling:%s", global.AppID, global.APP_VERSION, global.ROLLING_VERSION)
 	logger.Info(szLog)

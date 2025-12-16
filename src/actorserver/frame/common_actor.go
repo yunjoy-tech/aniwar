@@ -189,7 +189,7 @@ func (s *CommonActor) Invoke(ctx context.Context, in *base.ProtoMsg) (msg *base.
 
 	if errCode == int32(pb.ErrorCode_Success) {
 		// commit 写入redis
-		threading.RunSafe(func() {
+		utils.SafeRunNoError(func() {
 			err = s.commit2Redis()
 			if err != nil {
 				s.Errorf(err.Error())

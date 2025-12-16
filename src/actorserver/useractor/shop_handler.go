@@ -103,13 +103,13 @@ func (h *ShopHandler) GetShopListReq(ctx context.Context, in *base.ProtoMsg) (pr
 	resp.ShopInfos = getShopIds(req.ShowType)
 
 	// 埋点
-	// threading.RunSafe(func() {
+	// utils.SafeRunNoError(func() {
 	//	lilith.WriteDataLog(&lilith.ShopList{
 	//		CustomHeadInfo: lilith.BuildCustomHeadInfo(lilith.LogType_shop_list, h.actor.uid, h.actor.Account.CliDeviceInfo),
 	//		ShopIds:        lilith.ConvertList2Str(resp.ShopInfos),
 	//	})
 	// })
-	threading.RunSafe(func() {
+	utils.SafeRunNoError(func() {
 		e := &taptap.ShopList{
 			PropertyFieldInfo: taptap.BuildPropertyFieldInfo(h.actor.Account.CliDeviceInfo),
 			ShopIds:           taptap.ConvertList2Str(resp.ShopInfos),
@@ -164,7 +164,7 @@ func (h *ShopHandler) GetShopInfoReq(ctx context.Context, in *base.ProtoMsg) (pr
 	h.Debugf("商店信息请求结果:%+v", rsp)
 
 	// 埋点
-	// threading.RunSafe(func() {
+	// utils.SafeRunNoError(func() {
 	//	lilith.WriteDataLog(&lilith.ShopInfo{
 	//		CustomHeadInfo: lilith.BuildCustomHeadInfo(lilith.LogType_shop_info, h.actor.uid, h.actor.Account.CliDeviceInfo),
 	//		ShopId:         rsp.ShopInfo.ShopId,                                 // id
@@ -173,7 +173,7 @@ func (h *ShopHandler) GetShopInfoReq(ctx context.Context, in *base.ProtoMsg) (pr
 	//		ExpireTimeSec:  rsp.ShopInfo.ExpireTimeSec,                          // 过期时间戳
 	//	})
 	// })
-	threading.RunSafe(func() {
+	utils.SafeRunNoError(func() {
 		e := &taptap.ShopInfo{
 			PropertyFieldInfo: taptap.BuildPropertyFieldInfo(h.actor.Account.CliDeviceInfo),
 			ShopId:            rsp.ShopInfo.ShopId,                                 // id
@@ -261,7 +261,7 @@ func (h *ShopHandler) ShopBuyReq(ctx context.Context, in *base.ProtoMsg) (proto.
 	rsp.CommonData = h.actor.comData.FixDownComData()
 
 	// 埋点
-	// threading.RunSafe(func() {
+	// utils.SafeRunNoError(func() {
 	//	lilith.WriteDataLog(&lilith.ShopBuy{
 	//		CustomHeadInfo: lilith.BuildCustomHeadInfo(lilith.LogType_shop_buy, h.actor.uid, h.actor.Account.CliDeviceInfo),
 	//		ShopId:         rsp.ShopId,
@@ -269,7 +269,7 @@ func (h *ShopHandler) ShopBuyReq(ctx context.Context, in *base.ProtoMsg) (proto.
 	//		GoodsInfo:      lilith.ConvertStruct2Str(rsp.GoodsInfo),
 	//	})
 	// })
-	threading.RunSafe(func() {
+	utils.SafeRunNoError(func() {
 		e := &taptap.ShopBuy{
 			PropertyFieldInfo: taptap.BuildPropertyFieldInfo(h.actor.Account.CliDeviceInfo),
 			ShopId:            rsp.ShopId,

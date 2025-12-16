@@ -6,7 +6,7 @@ import (
 	"gitee.com/aniwar2/musae/global"
 	"gitee.com/aniwar2/musae/service"
 	"gitee.com/aniwar2/musae/state"
-	"gitee.com/aniwar2/musae/threading"
+	"gitee.com/aniwar2/musae/utils"
 	"github.com/dapr/go-sdk/actor"
 	"google.golang.org/protobuf/proto"
 	"sync"
@@ -77,7 +77,7 @@ func (c *CenterActor) Activate(invokeName string) error {
 
 func (c *CenterActor) Deactivate() error {
 
-	threading.RunSafe(func() {
+	utils.SafeRunNoError(func() {
 		c.SaveActor2Redis(global.CenterActorType)
 	})
 

@@ -5,7 +5,7 @@ import (
 	"gitee.com/aniwar2/musae/base"
 	"gitee.com/aniwar2/musae/logger"
 	"gitee.com/aniwar2/musae/process"
-	"gitee.com/aniwar2/musae/threading"
+	"gitee.com/aniwar2/musae/utils"
 	"google.golang.org/protobuf/proto"
 	"time"
 )
@@ -25,9 +25,9 @@ func (s *ActorServer) HandlerSubEvent(msg *base.ProtoMsg) (err error) {
 			err = s.HandlerHotEvent(msg)
 		}
 	case int32(pb.Protocols_PS2S_SvcRestartReq):
-		threading.GoSafe(func() {
+		utils.GoSafeRun(func() {
 			process.Exit()
-		})
+		}, nil)
 	default:
 	}
 	if err != nil {

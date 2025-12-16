@@ -10,7 +10,7 @@ import (
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/base"
 	"gitee.com/aniwar2/musae/service"
-	"gitee.com/aniwar2/musae/threading"
+	"gitee.com/aniwar2/musae/utils"
 	"github.com/pkg/errors"
 	"google.golang.org/protobuf/proto"
 	"strconv"
@@ -96,7 +96,7 @@ func (h *AllianceHandler) MessageWrite2Channel(allianceId int64, message *pb.Bro
 func (h *AllianceHandler) ProcessMessage() {
 
 	h.wChan = make(chan interface{}, 2048)
-	threading.GoSafe(func() {
+	utils.GoSafeRun(func() {
 		for {
 			select {
 			case tmpMessage, _ := <-h.wChan:
@@ -109,7 +109,7 @@ func (h *AllianceHandler) ProcessMessage() {
 				}
 			}
 		}
-	})
+	}, nil)
 }
 
 func (h *AllianceHandler) AddContributeReq(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {

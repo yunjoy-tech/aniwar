@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
+	"gitee.com/aniwar2/musae/utils"
 	"os"
 	"strings"
 	"time"
@@ -80,20 +81,20 @@ func (s *LoginServer) ServerInit() error {
 	// 注册login接口
 	s.RegisterRpcHandler("/api", s.OnHttp)
 	//
-	if conf.GConf().BaseConf().LoginReqRate > 0 && conf.GConf().BaseConf().LoginReqQueue > 0 {
-		s.ch = make(chan *Msg, conf.GConf().BaseConf().LoginReqQueue)
-		threading.GoSafe(s.doHandleMsg)
-		s.ticket = make(chan struct{}, conf.GConf().BaseConf().LoginReqRate)
-		threading.GoSafe(func() {
+	if conf.Base().LoginReqRate > 0 && conf.Base().LoginReqQueue > 0 {
+		s.ch = make(chan *Msg, conf.Base().LoginReqQueue)
+		utils.GoSafeRun(s.doHandleMsg, nil)
+		s.ticket = make(chan struct{}, conf.Base().LoginReqRate)
+		utils.GoSafeRun(func() {
 			t := time.NewTicker(time.Second)
 			defer t.Stop()
 			for {
 				select {
 				case <-t.C:
-					threading.RunSafe(s.GrantGateTicket)
+					utils.SafeRunNoError(s.GrantGateTicket)
 				}
 			}
-		})
+		}, nil)
 	}
 
 	s.LiveTime = time.Now().Unix() // 创建server时间戳

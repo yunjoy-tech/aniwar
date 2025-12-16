@@ -74,7 +74,7 @@ func (a *AllianceActor) Activate(invokeName string) error {
 func (a *AllianceActor) Deactivate() error {
 	a.Infof("=================>AllianceActor Deactivate [%s]<=================", a.ID())
 
-	threading.RunSafe(func() {
+	utils.SafeRunNoError(func() {
 		a.SaveActor2Redis(global.AllianceActorType)
 	})
 
