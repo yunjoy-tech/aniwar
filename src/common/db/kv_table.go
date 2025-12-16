@@ -44,7 +44,7 @@ func BuildKvTable(value proto.Message, key string) (*state.KvTable, error) {
 		DataSrc: string(dataSrc),
 	}
 
-	logger.Debug("===>>>kvTable: ", kvTable.Str())
+	logger.Debug("===>>>kvTable: ", kvTable.ToString())
 	return kvTable, nil
 }
 
@@ -60,6 +60,6 @@ func ParseKvTable(kvTable *state.KvTable, value proto.Message) error {
 	if baseconf.GetBaseConf().IsDebug {
 		kvTable.DataSrc = utils.PrettyJson(value)
 	}
-	logger.Debug("===>>>kvTable: ", kvTable.Str())
+	logger.Debug("===>>>kvTable: ", kvTable.ToString())
 	return nil
 }

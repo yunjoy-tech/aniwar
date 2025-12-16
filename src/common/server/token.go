@@ -37,7 +37,7 @@ func (s *Server) GetToken(uid string) (string, error) {
 //		DataSrc: token,
 //	}
 //
-//	ttlMap := map[string]string{"ttlInSeconds": strconv.Itoa(conf.GConf().Base.AccTokenTTL)}
+//	ttlMap := map[string]string{"ttlInSeconds": strconv.Itoa(conf.Base().AccTokenTTL)}
 //	err := s.SaveCacheRedis(db.KeyUserToken(uid), kvTable, ttlMap)
 //	if err != nil {
 //		return errors.Wrap(err, "SaveToken error")

@@ -57,7 +57,7 @@ func (s *Server) GetUserSession(uid string) (*pb.UserSession, error, pb.ErrorCod
 //		return err
 //	}
 //
-//	ttlMap := map[string]string{"ttlInSeconds": strconv.Itoa(conf.GConf().Base.AccTokenTTL)}
+//	ttlMap := map[string]string{"ttlInSeconds": strconv.Itoa(conf.Base().AccTokenTTL)}
 //
 //	ctx, cancelFunc := context.WithTimeout(context.Background(), global.DB_INVOKE_TIMEOUT*time.Second)
 //	defer cancelFunc()

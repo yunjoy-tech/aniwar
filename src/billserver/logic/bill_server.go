@@ -32,7 +32,7 @@ func NewBillServer() base.IServer {
 	srv.GRPCPort = "50001"
 	srv.HasPriTopic = true // 开启私有频道订阅
 	srv.OnPreInit = srv.PreInit
-	srv.OnServerInit = srv.ServerInit
+	srv.OnPostInit = srv.PostInit
 	srv.OnEventHandler = srv.EventHandler
 	srv.OnInvokeHandler = srv.InvokeHandler
 	srv.OnBindHandler = srv.BindingHandler
@@ -60,7 +60,7 @@ func (s *BillServer) PreInit() error {
 	return nil
 }
 
-func (s *BillServer) ServerInit() error {
+func (s *BillServer) PostInit() error {
 
 	s.LiveTime = time.Now().Unix() // 创建server时间戳
 	// 服务启动埋点
@@ -81,7 +81,7 @@ func (s *BillServer) test(c *gin.Context) {
 func (s *BillServer) EventHandler(ctx context.Context, e *common.TopicEvent) (retry bool, err error) {
 	defer func() {
 		if err := recover(); err != any(nil) {
-			logger.Trace("EventHandler failed, err: ", err)
+			logger.Error("EventHandler failed, err: ", err)
 		}
 	}()
 
@@ -102,7 +102,7 @@ func (s *BillServer) EventHandler(ctx context.Context, e *common.TopicEvent) (re
 func (s *BillServer) InvokeHandler(ctx context.Context, in *common.InvocationEvent) (out *common.Content, err error) {
 	defer func() {
 		if err := recover(); err != any(nil) {
-			logger.Trace("[InvokeHandler] failed, err: ", err)
+			logger.Error("[InvokeHandler] failed, err: ", err)
 		}
 	}()
 

@@ -17,7 +17,7 @@ const (
 //	@param uid 原uid
 //	@return string 莉莉丝专用uid
 func GenLilithUid(uid int) string {
-	return fmt.Sprintf("%s_%s_%d", Lilith_channel, conf.GConf().Sdk.LilithAppId, uid)
+	return fmt.Sprintf("%s_%s_%d", Lilith_channel, conf.SDK().LilithAppId, uid)
 }
 
 // GetLilithChannel
@@ -25,5 +25,5 @@ func GenLilithUid(uid int) string {
 //	@Description:  生成莉莉丝渠道
 //	@return string
 func GenLilithChannel() string {
-	return fmt.Sprintf("%s_%s", Lilith_channel, conf.GConf().Sdk.LilithAppId)
+	return fmt.Sprintf("%s_%s", Lilith_channel, conf.SDK().LilithAppId)
 }

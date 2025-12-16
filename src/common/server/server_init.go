@@ -230,7 +230,7 @@ func (s *Server) GetAllExcelFileName() []string {
 func (s *Server) LoadWordCfg() error {
 	logger.Info("===>>> LoadDirtyWords begin")
 
-	count, err := sensitive.LoadSensitiveWordCfg(baseconf.GetBaseConf().DirtyWords)
+	count, err := sensitive.LoadSensitiveWord(baseconf.GetBaseConf().DirtyWords)
 	if err != nil {
 		logger.Errorf("LoadDirtyWords err:%v", err)
 		return err

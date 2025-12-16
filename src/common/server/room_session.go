@@ -94,7 +94,7 @@ func (s *Server) CheckInRoom(uid string) bool {
 //		return err
 //	}
 //
-//	ttlMap := map[string]string{"ttlInSeconds": strconv.Itoa(conf.GConf().Base.RoomTokenTTL)}
+//	ttlMap := map[string]string{"ttlInSeconds": strconv.Itoa(conf.Base().RoomTokenTTL)}
 //
 //	err = s.SaveGlobalRedis(key, kvTable, ttlMap)
 //	if err != nil {
@@ -130,7 +130,7 @@ func (s *Server) CheckInRoom(uid string) bool {
 //		DataSrc: token,
 //	}
 //
-//	ttlMap := map[string]string{"ttlInSeconds": strconv.Itoa(conf.GConf().Base.AccTokenTTL)}
+//	ttlMap := map[string]string{"ttlInSeconds": strconv.Itoa(conf.Base().AccTokenTTL)}
 //	err := s.SaveCacheRedis(db.KeyUserToken(uid), kvTable, ttlMap)
 //	if err != nil {
 //		return errors.Wrap(err, "SaveToken error")

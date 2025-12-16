@@ -30,7 +30,7 @@ import (
 func (s *BillServer) PayHandler(ctx context.Context, in *common.InvocationEvent) (out *common.Content, err error) {
 	defer func() {
 		if err := recover(); err != any(nil) {
-			logger.Trace("PayHandler failed, err: ", err)
+			logger.Error("PayHandler failed, err: ", err)
 		}
 	}()
 
@@ -47,13 +47,13 @@ func (s *BillServer) PayHandler(ctx context.Context, in *common.InvocationEvent)
 	*/
 	// IP校验
 	logger.Infof("remote addr: %s", in.Request.RemoteAddr)
-	if conf.GConf().Bill.IsIpWhite {
+	if conf.Bill().IsIpWhite {
 		ip, err := gameUtils.GetIP(in.Request)
 		if err != nil {
 			logger.Errorf(err.Error())
 			return reply2Lilith(in, logic.FAIL), err
 		}
-		if !logic.CheckIp(conf.GConf().Bill.IpWhiteList, ip) {
+		if !logic.CheckIp(conf.Bill().IpWhiteList, ip) {
 			return reply2Lilith(in, logic.FAIL), errors.New("ip NOT in white list")
 		}
 	}
@@ -85,8 +85,8 @@ func (s *BillServer) PayHandler(ctx context.Context, in *common.InvocationEvent)
 	logger.Infof("充值回调参数:%+v", apiReq)
 
 	// 校验应用id
-	if strconv.Itoa(int(apiReq.AppId)) != conf.GConf().Sdk.LilithAppId {
-		err = errors.New(fmt.Sprintf("应用id不匹配, req.appId=%d, conf.AppId=%s", apiReq.AppId, conf.GConf().Sdk.LilithAppId))
+	if strconv.Itoa(int(apiReq.AppId)) != conf.SDK().LilithAppId {
+		err = errors.New(fmt.Sprintf("应用id不匹配, req.appId=%d, conf.AppId=%s", apiReq.AppId, conf.SDK().LilithAppId))
 		logger.Errorf(err.Error())
 		return reply2Lilith(in, logic.FAIL), err
 	}

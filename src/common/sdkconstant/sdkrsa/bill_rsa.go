@@ -34,7 +34,7 @@ var billRsaOnce sync.Once
 
 func GetBillRsa() *BillRsa {
 	billRsaOnce.Do(func() {
-		billRsa, err := NewBillRsa(conf.GConf().Bill.ApiSecret, "")
+		billRsa, err := NewBillRsa(conf.Bill().ApiSecret, "")
 		if err != nil {
 			logger.Errorf(err.Error())
 			return
