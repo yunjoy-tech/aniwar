@@ -6,12 +6,8 @@ import (
 
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 
-	"gitee.com/aniwar2/aniwar/src/common/conf"
-
 	"github.com/pkg/errors"
 
-	"gitee.com/aniwar2/aniwar/src/common/sdkconstant"
-	myHttp "gitee.com/aniwar2/musae/http"
 	"gitee.com/aniwar2/musae/logger"
 )
 
@@ -93,16 +89,17 @@ func TapCheckPayLimit(tapUserInfo *pb.TaptapUserInfo, tapToken, userIdentifier s
 	headMap["Authorization"] = tapToken
 
 	resp := &TapUrlResp{}
-	params := fmt.Sprintf("{\"amount\":%d}", amount)
-	err := myHttp.Post2(
-		sdkconstant.GetCheckPayLimitUrl(conf.GConf().TapTap.ClientId, sdkconstant.GetTapUserIdentifier(userIdentifier)),
-		params,
-		resp,
-		headMap)
-	if err != nil {
-		logger.Errorf(err.Error())
-		return false, pb.ErrorCode_Tap_pay_limit_code_unknown_err
-	}
+	var err error
+	// params := fmt.Sprintf("{\"amount\":%d}", amount)
+	// err := myHttp.Post2(
+	// 	sdkconstant.GetCheckPayLimitUrl(conf.GConf().TapTap.ClientId, sdkconstant.GetTapUserIdentifier(userIdentifier)),
+	// 	params,
+	// 	resp,
+	// 	headMap)
+	// if err != nil {
+	// 	logger.Errorf(err.Error())
+	// 	return false, pb.ErrorCode_Tap_pay_limit_code_unknown_err
+	// }
 
 	respBytes, _ := json.Marshal(resp)
 	logger.Warnf("tap 检查玩家消费是否受限:%s", string(respBytes))
@@ -167,12 +164,13 @@ func TapUploadPayAmount(tapToken, userIdentifier string, amount int32) bool {
 	headMap["Authorization"] = tapToken
 
 	resp := &TapUrlResp{}
-	params := fmt.Sprintf("{\"amount\":%d}", amount)
-	err := myHttp.Post2(
-		sdkconstant.GetUploadPayAmountUrl(conf.GConf().TapTap.ClientId, sdkconstant.GetTapUserIdentifier(userIdentifier)),
-		params,
-		resp,
-		headMap)
+	var err error
+	// params := fmt.Sprintf("{\"amount\":%d}", amount)
+	// err := myHttp.Post2(
+	// 	sdkconstant.GetUploadPayAmountUrl(conf.GConf().TapTap.ClientId, sdkconstant.GetTapUserIdentifier(userIdentifier)),
+	// 	params,
+	// 	resp,
+	// 	headMap)
 	if err != nil {
 		logger.Errorf(err.Error())
 		return false

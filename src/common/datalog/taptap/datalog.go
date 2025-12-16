@@ -2,12 +2,12 @@ package taptap
 
 import (
 	"encoding/json"
+	"gitee.com/aniwar2/musae/statistics"
 	"strconv"
 	"time"
 
 	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	"gitee.com/aniwar2/musae/dlog"
 	"gitee.com/aniwar2/musae/logger"
 	"gitee.com/aniwar2/musae/threading"
 )
@@ -32,7 +32,7 @@ func WriteDataLog(eventName, uid string, tapUser *pb.TaptapUserInfo, event any) 
 		logger.Warnf("[datalog] json marshal failed! err: %v , data: %+v", err, data)
 		return
 	}
-	dlog.Write(string(b))
+	statistics.Log(string(b))
 	logger.WarnDelayf(time.Since(startT).Milliseconds(), "")
 }
 
@@ -47,8 +47,8 @@ func BuildPropertyFieldInfo(device *pb.CliDeviceInfo) *PropertyFieldInfo {
 		Channel:     device.GetChannel(),
 		AppVersion:  device.GetAppVersion(),
 		SdkVersion:  SDK_VERSION,
-		ServerId:    conf.GConf().Base.ServerId,
-		ServerName:  conf.GConf().Base.ServerName,
+		ServerId:    conf.Base().ServerId,
+		ServerName:  conf.Base().ServerName,
 		CreateTS:    time.Now().Unix(),
 	}
 
@@ -238,7 +238,7 @@ func DbFailComm(key, db, typeC, serverName string) {
 
 // login网络延迟
 func LoginDelayComm(uid string, tapUser *pb.TaptapUserInfo, device *pb.CliDeviceInfo, msgId int32, delay int64) {
-	if delay < conf.GConf().Base.DelayLogLimit {
+	if delay < conf.Base().DelayLogLimit {
 		return
 	}
 	threading.RunSafe(func() {
@@ -253,7 +253,7 @@ func LoginDelayComm(uid string, tapUser *pb.TaptapUserInfo, device *pb.CliDevice
 
 // gate网络延迟
 func GateDelayComm(uid string, tapUser *pb.TaptapUserInfo, device *pb.CliDeviceInfo, msgId int32, delay int64) {
-	if delay < conf.GConf().Base.DelayLogLimit {
+	if delay < conf.Base().DelayLogLimit {
 		return
 	}
 	threading.RunSafe(func() {
