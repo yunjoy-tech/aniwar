@@ -112,7 +112,7 @@ BaseConf:
   # redis配置
   RedisConf:
     addr: 'r-uf66fe7d84f75854pi.redis.rds.aliyuncs.com:6379'
-    addrDev: '127.0.0.1:16379'
+    addrDev: '127.0.0.1:6379'
     userName: ''
     password: ''
     db: 0
