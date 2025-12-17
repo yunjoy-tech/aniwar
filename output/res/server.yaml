@@ -6,7 +6,7 @@ BaseConf:
   # 是否云环境部署
   cloud: false
   # 策划表路径
-  dataDir: output/res/data/
+  metaDir: output/res/meta/
   # 存储db key添加ns:group:前缀,正式环境必须false【支持热重载】
   dbPrefix: false
   # app-protocol: http or grpc

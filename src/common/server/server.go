@@ -487,7 +487,7 @@ func (s *Server) LoadNeedExcel(assign []string) error {
 		}
 		files = append(files, f)
 	}
-	// return data.LoadByFileNames(s.DataDir, files, s.AppId, s.AppId)
+	// return data.LoadByFileNames(s.MetaDir, files, s.AppId, s.AppId)
 	return nil
 }
 

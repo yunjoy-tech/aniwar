@@ -138,7 +138,7 @@ func (s *Server) LoadExcelData() (err error) {
 func (s *Server) LoadExcelDataByFiles(files []string) (err error) {
 	if baseconf.GetBaseConf().IsDebug || s.RedisCenter == nil {
 		// TODO
-		// err = data.LoadByFileNames(baseconf.GetBaseConf().DataDir, files, s.AppId, "actorserver")
+		// err = data.LoadByFileNames(baseconf.GetBaseConf().MetaDir, files, s.AppId, "actorserver")
 	} else {
 		err = s.LoadExcelFromRedisByFile(files, s.AppId, "actorserver")
 	}

@@ -68,7 +68,7 @@ func (s *BillServer) PostInit() error {
 	// if err := s.Server.LoadExcel(); err != nil {
 	//	return err
 	// }
-	// if err := excel.GetShopGiftMgr().LoadByFileName(s.DataDir, excel.GetShopGiftMgr().GetDataFileName()); err != nil {
+	// if err := excel.GetShopGiftMgr().LoadByFileName(s.MetaDir, excel.GetShopGiftMgr().GetDataFileName()); err != nil {
 	//	return err
 	// }
 	return nil

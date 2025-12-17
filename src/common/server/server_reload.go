@@ -62,7 +62,7 @@ func (s *Server) HotReload(ctx context.Context, in *common.InvocationEvent) (out
 			files := strings.Split(param.Files, "|")
 			if s.AppId == "actor" {
 				// TODO 后面完善
-				// err = data.LoadByFileNames(s.DataDir, files, s.AppId, "actorserver")
+				// err = data.LoadByFileNames(s.MetaDir, files, s.AppId, "actorserver")
 			} else {
 				err = s.LoadNeedExcel(files) // 非actorserver都调用这个加载方法
 			}

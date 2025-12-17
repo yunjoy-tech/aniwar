@@ -43,7 +43,7 @@ func (s *ActorServer) HandlerConfEvent(id string, items map[string]*client.Confi
 		//	} else {
 		//		files := strings.Split(v.Value, "|")
 		//		if global.IsDev { // 开发模式
-		//			err = data.LoadByFileNames(s.DataDir, files, s.AppId, "actorserver")
+		//			err = data.LoadByFileNames(s.MetaDir, files, s.AppId, "actorserver")
 		//		} else {
 		//			err = s.LoadExcelFromRedisByFile(files, s.AppId, "actorserver")
 		//		}
