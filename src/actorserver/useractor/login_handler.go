@@ -17,6 +17,7 @@ import (
 	"gitee.com/aniwar2/musae/logger"
 	"gitee.com/aniwar2/musae/service"
 	"gitee.com/aniwar2/musae/utils"
+	timeutil "gitee.com/aniwar2/musae/utils/time"
 	"github.com/pkg/errors"
 	"google.golang.org/protobuf/proto"
 	"strconv"
@@ -414,7 +415,7 @@ func (h *LoginHandler) TryUpdateLastLoginDate() (bool, error) {
 	// h.UpdateOfflineTS(-1)
 
 	// 判断是否跨天
-	if !common.IsSameDayByOffset(oldLastLoginDate, time.Now(), common.GAME_DAILY_REFRESH_HOUR) {
+	if !timeutil.IsSameDay(oldLastLoginDate, time.Now()) {
 		// 隔天登陆
 		h.actor.GetUserData().Common.LoginDay++
 		h.actor.RoleDetailHandler.ChangeLoginDay()
@@ -528,7 +529,7 @@ func (h *LoginHandler) LoginEnterGame(ctx context.Context, in *base.ProtoMsg) (p
 	h.actor.comData.Data = &pb.CliComData{
 		ServerTimestamp:     time.Now().UnixMilli(),
 		OpenServerTimestamp: time.Now().Unix() - 60*60*12, // TODO 临时数据
-		NextRefreshTime:     common.GetNextDailyRefreshTime(),
+		NextRefreshTime:     timeutil.NextNDayResetTime(time.Now(), 1).Unix(),
 		NewMails:            h.actor.MailHandler.getNewMailsCount(),
 		Base:                h.buildRoleBaseInfo(),
 		Items:               h.actor.BagHandler.buildItemList(),

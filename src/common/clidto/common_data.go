@@ -1,11 +1,9 @@
 package clidto
 
 import (
-	"time"
-
-	"gitee.com/aniwar2/aniwar/src/common"
-
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
+	timeutil "gitee.com/aniwar2/musae/utils/time"
+	"time"
 )
 
 type Comdata struct {
@@ -18,7 +16,7 @@ func (c *Comdata) FixDownComData() *pb.CliComData {
 	// 补全全局字段
 	c.Data.ServerTimestamp = time.Now().UnixMilli()
 	c.Data.OpenServerTimestamp = time.Now().UnixMilli() // todo 临时值
-	c.Data.NextRefreshTime = common.GetNextDailyRefreshTime()
+	c.Data.NextRefreshTime = timeutil.NextNDayResetTime(time.Now(), 1).Unix()
 	c.Flag = true
 	return c.Data
 }

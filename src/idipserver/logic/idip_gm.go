@@ -238,7 +238,7 @@ func (s *IDIPServer) DelAccountHandler(ctx context.Context, in *common.Invocatio
 	// 游戏方不删除数据，进行永久封号处理
 	data, err := proto.Marshal(&pb.S2AS_ExcuteGMReq{
 		CmdName: myCommon.GM_BANNED,
-		OptVal:  fmt.Sprintf("%v %s", myCommon.TIME_SEC_1_YEAR*10, "账号数据删除"),
+		OptVal:  fmt.Sprintf("%v %s", 365*24*3600*10, "账号数据删除"),
 	})
 	if err != nil {
 		RetCommonMsg(out, http.StatusInternalServerError, int32(pb.ErrorCode_InternalError), err)

@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"gitee.com/aniwar2/aniwar/src/meta"
+	timeutil "gitee.com/aniwar2/musae/utils/time"
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
 	"io"
 	"os"
@@ -265,8 +266,8 @@ func (s *IDIPServer) ConvertMail(mails map[int64]*pb.PMailInfo) []*TempMail {
 			Content:     s.GetLocalizedStr(v.Content),
 			Sender:      s.GetLocalizedStr(v.Sender),
 			MailType:    v.MailType,
-			CreateTime:  myCommon.FormatDateByUnix(v.CreateTime),
-			ExpireTime:  myCommon.FormatDateByUnix(v.ExpireTime),
+			CreateTime:  timeutil.FormatStr(v.CreateTime),
+			ExpireTime:  timeutil.FormatStr(v.ExpireTime),
 			Attachments: s.ConvertItem(v.Attachments),
 		}
 		if v.IsReceived == myCommon.MAIL_STATUS_UNRECEIVE {
@@ -297,10 +298,10 @@ func (s *IDIPServer) ConvertSysMail(mails map[int64]*pb.PSysMailInfo) []*TempMai
 			ReceiveUserList: ConvertItem2(v.ReceiveUserIds),
 		}
 		if v.CreateTime != 0 {
-			t.CreateTime = myCommon.FormatDateByUnix(v.CreateTime)
+			t.CreateTime = timeutil.FormatStr(v.CreateTime)
 		}
 		if v.ExpireTime != 0 {
-			t.ExpireTime = myCommon.FormatDateByUnix(v.ExpireTime)
+			t.ExpireTime = timeutil.FormatStr(v.ExpireTime)
 		}
 
 		ret = append(ret, t)

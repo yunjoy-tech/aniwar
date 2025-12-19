@@ -3,25 +3,12 @@ package common
 //go:generate stringer -type=ChangeReason
 type ChangeReason int
 
-const (
-	LanguageDefault = "zh_CN"
-)
-
 // 游戏常量
 const (
-	GAME_DAILY_REFRESH_HOUR = 5  // 游戏刷新时间点
-	FIXED_SAVE_DB_TIME      = 10 // 数据延迟写库时间
-
-	USER_ID_BASE = 10000 // 用户ID基数
-
-	ExcelDataVersionLen = 27 // excel-data的版本信息数据长度
-
-	RoomIdSecret = "63c163@00e730387"
-)
-
-const (
-	ACCOUNT_BANED       = "account_baned"       // 账号已被封禁
-	ACCOUNT_MULTI_LOGIN = "account_multi_login" // 账号异地登陆
+	FIXED_SAVE_DB_TIME  = 10    // 数据延迟写库时间
+	USER_ID_BASE        = 10000 // 用户ID基数
+	ExcelDataVersionLen = 27    // excel-data的版本信息数据长度
+	RoomIdSecret        = "63c163@00e730387"
 )
 
 // es索引名称

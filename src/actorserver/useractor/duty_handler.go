@@ -13,6 +13,7 @@ import (
 	"gitee.com/aniwar2/musae/base"
 	"gitee.com/aniwar2/musae/service"
 	"gitee.com/aniwar2/musae/utils"
+	timeutil "gitee.com/aniwar2/musae/utils/time"
 	"google.golang.org/protobuf/proto"
 	"time"
 )
@@ -198,7 +199,7 @@ func (h *DutyHandler) buildDutyInfo(refresh bool) *pb.PCommonDutyInfo {
 	isShow := true
 	if refresh {
 		now := time.Now()
-		if !common.IsSameDayByOffset(time.Unix(dutyData.ShowTime, 0), now, common.GAME_DAILY_REFRESH_HOUR) {
+		if !timeutil.IsSameDay(time.Unix(dutyData.ShowTime, 0), now) {
 			isShow = false
 			dutyData.ShowTime = now.Unix()
 		}
@@ -226,8 +227,8 @@ func (h *DutyHandler) buildDutyInfo(refresh bool) *pb.PCommonDutyInfo {
 		Info: &pb.DutyBaseInfo{
 			CardId:    dutyData.CardId,
 			IsShow:    isShow,
-			NextTime:  common.GetNextDailyRefreshTime(),
-			IsFirst:   common.IsSameDayByOffset(time.Unix(dutyData.Createtime, 0), time.Now(), common.GAME_DAILY_REFRESH_HOUR),
+			NextTime:  timeutil.NextNDayResetTime(time.Now(), 1).Unix(),
+			IsFirst:   timeutil.IsSameDay(time.Unix(dutyData.Createtime, 0), time.Now()),
 			OldCardId: dutyData.OldCardId,
 		},
 	}
@@ -519,7 +520,7 @@ func (h *DutyHandler) tryClearDutyInfo(dutyData *pb.PDutyData) error {
 
 	// 刷新每日数据
 	refreshTime := time.Unix(dutyData.RefreshTime, 0)
-	if !common.IsSameDayByOffset(refreshTime, now, common.GAME_DAILY_REFRESH_HOUR) {
+	if !timeutil.IsSameDay(refreshTime, now) {
 		// 自动领取奖励
 		h.tryAutoReceiveReward(dutyData.DailyTask)
 		h.tryAutoReceiveActive(dutyData.Active[TASK_TYPE_DAILY])
@@ -536,7 +537,7 @@ func (h *DutyHandler) tryClearDutyInfo(dutyData *pb.PDutyData) error {
 	}
 
 	// 刷新每周数据
-	if !common.IsSameWeekByOffset(refreshTime, now, common.GAME_DAILY_REFRESH_HOUR) {
+	if !timeutil.IsSameWeek(refreshTime, now) {
 		// 自动领取奖励
 		h.tryAutoReceiveReward(dutyData.WeeklyTask)
 		h.tryAutoReceiveActive(dutyData.Active[TASK_TYPE_WEEKLY])

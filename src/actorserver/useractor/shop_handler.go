@@ -12,6 +12,7 @@ import (
 	"gitee.com/aniwar2/musae/base"
 	"gitee.com/aniwar2/musae/service"
 	"gitee.com/aniwar2/musae/utils"
+	timeutil "gitee.com/aniwar2/musae/utils/time"
 	"github.com/pkg/errors"
 	"google.golang.org/protobuf/proto"
 	"time"
@@ -459,29 +460,23 @@ func (h *ShopHandler) getShopNextRefreshTime(shopId int32, lastExpireTimeSec int
 	case 0: // 不刷新
 		return MAX_REFRESH_SEC, nil
 	case 1: // 每月一号刷新
-		next1MonthTime, err := common.GetNextNMonth1RefreshTime(now, 1)
-		if err != nil {
-			return 0, err
-		}
+		next1MonthTime := timeutil.NextNMonthsResetTime(now, 1)
 		return next1MonthTime.Unix(), nil
 
 	case 2: // 每周一刷新
-		next1WeekTime, err := common.GetNextNWeekMonday(now, 1)
-		if err != nil {
-			return 0, err
-		}
+		next1WeekTime := timeutil.NextNWeeksResetTime(now, 1)
 		return next1WeekTime.Unix(), nil
 
 	case 3: // 每日刷新
-		nextDailyRefreshTime := common.GetNextDailyRefreshTime()
-		return nextDailyRefreshTime, nil
+		nextDayTime := timeutil.NextNDayResetTime(now, 1)
+		return nextDayTime.Unix(), nil
 
 	case 10: // 按照配置周期刷新
 		var lastRefreshTimeSec int64 = 0 // 上次刷新时间戳
 
 		if lastExpireTimeSec == 0 {
 			// 没有上次过期时间, 以当天5点开始
-			lastRefreshTimeSec = common.GetTodayRefreshTime(now).Unix()
+			lastRefreshTimeSec = timeutil.NextNDayResetTime(now, 0).Unix()
 
 		} else {
 			// 上次过期时间开始算

@@ -10,6 +10,7 @@ import (
 	"gitee.com/aniwar2/musae/base"
 	"gitee.com/aniwar2/musae/logger"
 	"gitee.com/aniwar2/musae/service"
+	timeutil "gitee.com/aniwar2/musae/utils/time"
 	"github.com/elastic/go-elasticsearch/v8/typedapi/types/enums/sortorder"
 	"github.com/pkg/errors"
 	"strconv"
@@ -28,7 +29,7 @@ func (h *AllianceHandler) GetAllianceData() *pb.PServerAllianceInfo {
 	// 尝试清空每周活跃度
 	refreshTime := time.Unix(data.Base.WeekTs, 0)
 	now := time.Now()
-	if !common.IsSameWeekByOffset(refreshTime, now, common.GAME_DAILY_REFRESH_HOUR) {
+	if !timeutil.IsSameDay(refreshTime, now) {
 		data.Base.WeekContribute = 0
 		data.Base.WeekTs = now.Unix()
 		// 清空每个成员的记录
@@ -40,7 +41,7 @@ func (h *AllianceHandler) GetAllianceData() *pb.PServerAllianceInfo {
 
 	// 尝试清空每日签到奖励记录
 	refreshTime = time.Unix(data.Base.SignTs, 0)
-	if !common.IsSameDayByOffset(refreshTime, now, common.GAME_DAILY_REFRESH_HOUR) {
+	if !timeutil.IsSameDay(refreshTime, now) {
 		data.Base.SignLog = make(map[uint64]int32)
 		data.Base.SignTs = now.Unix()
 		h.Infof("联盟每日签到奖励记录清理了...")
