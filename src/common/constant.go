@@ -12,7 +12,7 @@ const (
 	GAME_DAILY_REFRESH_HOUR = 5  // 游戏刷新时间点
 	FIXED_SAVE_DB_TIME      = 10 // 数据延迟写库时间
 
-	USER_ID_BASE = 10000 //用户ID基数
+	USER_ID_BASE = 10000 // 用户ID基数
 
 	ExcelDataVersionLen = 27 // excel-data的版本信息数据长度
 
@@ -363,7 +363,7 @@ const (
 )
 
 const (
-	Camp_Building_Type_Food int32 = 90075 //食品加工厂
+	Camp_Building_Type_Food int32 = 90075 // 食品加工厂
 )
 
 // 增加羁绊值的类型
@@ -374,8 +374,8 @@ const (
 
 // 营地技能效果
 const (
-	Building_Product_Add   int32 = 1 //建筑产量提升
-	Produce_Power_Cost_Sub int32 = 2 //生产消耗电力减少
+	Building_Product_Add   int32 = 1 // 建筑产量提升
+	Produce_Power_Cost_Sub int32 = 2 // 生产消耗电力减少
 	Produce_Time_Cost_Sub  int32 = 3 // 生产耗时减少
-	Produce_Double         int32 = 4 //生产双倍产出
+	Produce_Double         int32 = 4 // 生产双倍产出
 )
