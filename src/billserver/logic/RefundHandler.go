@@ -118,8 +118,8 @@ func (s *BillServer) RefundHandler(ctx context.Context, in *common.InvocationEve
 		// 封号
 		// 通知下发奖励
 		actorData, err := proto.Marshal(&pb.S2AS_ExcuteGMReq{
-			CmdName: gameCommon.GM_BANNED,                                        // 封禁
-			OptVal:  fmt.Sprintf("%v %s", gameCommon.TIME_SEC_1_YEAR*10, "异常退款"), // 封禁时长(秒)+封禁原因
+			CmdName: gameCommon.GM_BANNED,                         // 封禁
+			OptVal:  fmt.Sprintf("%v %s", 365*24*3600*10, "异常退款"), // 封禁时长(秒)+封禁原因
 		})
 		if err != nil {
 			err = errors.Wrap(err, fmt.Sprintf("proto.Marshal got error"))

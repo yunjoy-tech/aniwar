@@ -17,6 +17,7 @@ import (
 	"gitee.com/aniwar2/musae/logger"
 	"gitee.com/aniwar2/musae/service"
 	"gitee.com/aniwar2/musae/utils"
+	timeutil "gitee.com/aniwar2/musae/utils/time"
 	"github.com/pkg/errors"
 	"google.golang.org/protobuf/proto"
 	"strconv"
@@ -580,7 +581,7 @@ func (h *OrderHandler) extraHandle(productId int32) {
 		var monthcardCfg *meta.GameShopPkgMonthCardMeta
 		// monthcardCfg := excel.GetMonthcardMgr().GetById(cfg.PeriodReward)
 		target := time.Unix(info.MonthExpire, 0).AddDate(0, 0, int(monthcardCfg.Day))
-		info.MonthExpire = common.GetTodayRefreshTime(target).Unix()
+		info.MonthExpire = timeutil.NextNDayResetTime(target, 0).Unix()
 		info.MonthNodeExpire = append(info.MonthNodeExpire, info.MonthExpire)
 
 		// 每日奖励邮件

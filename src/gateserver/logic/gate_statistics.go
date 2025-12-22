@@ -5,7 +5,6 @@ import (
 	"sync/atomic"
 	"time"
 
-	"gitee.com/aniwar2/aniwar/src/common"
 	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/logger"
@@ -72,7 +71,7 @@ func (s *GateServer) printMsgStatistics() {
 		downT := down / int32(second)
 		downS := int32(downSize / second)
 
-		logger.Debug("统计时长:", common.FormatStr(DS.StatisticsStart, now))
+		// logger.Debug("统计时长:", timeutil.FormatStr(DS.StatisticsStart, now))
 		logger.Debug("在线人数:", num)
 		logger.Debugf("总消息数: %d, up: %d, down: %d", up+down, up, down)
 		logger.Debugf("总字节数: %d, up: %d, down: %d", upSize+downSize, upSize, downSize)

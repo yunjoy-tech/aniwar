@@ -9,6 +9,7 @@ import (
 	"gitee.com/aniwar2/aniwar/src/common/db"
 	"gitee.com/aniwar2/musae/gamelib/guid"
 	"gitee.com/aniwar2/musae/global"
+	timeutil "gitee.com/aniwar2/musae/utils/time"
 	"strconv"
 	"time"
 	"unicode/utf8"
@@ -116,7 +117,7 @@ func (h *UserAllianceHandler) tryRefreshWeekDay() error {
 	// 尝试刷新每周登录天数计数
 	refreshTime := time.Unix(data.WeekTs, 0)
 	now := time.Now()
-	if !common.IsSameWeekByOffset(refreshTime, now, common.GAME_DAILY_REFRESH_HOUR) {
+	if !timeutil.IsCurrentWeek(refreshTime) {
 		data.WeekDay = 0
 		data.WeekTs = now.Unix()
 		return h.SaveDB()
