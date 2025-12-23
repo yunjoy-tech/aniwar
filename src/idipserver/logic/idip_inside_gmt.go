@@ -26,7 +26,6 @@ import (
 	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/aniwar/src/common/db"
 	"gitee.com/aniwar2/aniwar/src/common/sdkconstant"
-	myUtils "gitee.com/aniwar2/aniwar/src/common/utils"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/base"
 	"gitee.com/aniwar2/musae/gamelib/guid"
@@ -1586,7 +1585,7 @@ func (s *IDIPServer) SrvPushExcel(files []*pb.ExcelFile) []byte {
 		temp[3] = global.ROLLING_VERSION
 		key := strings.Join(temp, ":")
 		hashKey := strings.Join(temp[:3], ":") + ":" + global.ROLLING_VERSION + ":" + "versionList"
-		md5 := myUtils.Md5Str2(v.Data)
+		md5 := utils.MD5(v.Data)
 		pipline.HSet(cont, hashKey, temp[4], strings.Join([]string{v.Name, md5}, "|"))
 		srcMD5[key] = md5
 		pipline.Set(cont, key, string(v.Data), -1)
@@ -1617,7 +1616,7 @@ func (s *IDIPServer) SrvPushExcel(files []*pb.ExcelFile) []byte {
 		key := item.Args()[1].(string)
 		if m, ok := srcMD5[key]; ok {
 			tempByte, _ := cmdRes.Bytes()
-			if myUtils.Md5Str2(tempByte) != m {
+			if utils.MD5(tempByte) != m {
 				ret.Code = 1 // 失败
 				logger.Infof("SrvPushExcel  update redis file:%s", key)
 			}

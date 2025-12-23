@@ -5,26 +5,25 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	myCommon "gitee.com/aniwar2/aniwar/src/common"
+	"gitee.com/aniwar2/aniwar/src/common/conf"
+	"gitee.com/aniwar2/aniwar/src/common/db"
 	"gitee.com/aniwar2/aniwar/src/meta"
+	"gitee.com/aniwar2/aniwar/src/proto/pb"
+	"gitee.com/aniwar2/musae/logger"
+	"gitee.com/aniwar2/musae/service"
+	"gitee.com/aniwar2/musae/state"
+	"gitee.com/aniwar2/musae/utils"
 	netutil "gitee.com/aniwar2/musae/utils/net"
 	timeutil "gitee.com/aniwar2/musae/utils/time"
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
+	"github.com/dapr/go-sdk/service/common"
+	"google.golang.org/protobuf/proto"
 	"io"
 	"os"
 	"strconv"
 	"strings"
 	"time"
-
-	myCommon "gitee.com/aniwar2/aniwar/src/common"
-	"gitee.com/aniwar2/aniwar/src/common/conf"
-	"gitee.com/aniwar2/aniwar/src/common/db"
-	"gitee.com/aniwar2/aniwar/src/common/utils"
-	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	"gitee.com/aniwar2/musae/logger"
-	"gitee.com/aniwar2/musae/service"
-	"gitee.com/aniwar2/musae/state"
-	"github.com/dapr/go-sdk/service/common"
-	"google.golang.org/protobuf/proto"
 )
 
 func (s *IDIPServer) PreHandle(in *common.InvocationEvent, secretKey string) ([]byte, pb.ErrorCode, string) {
@@ -69,7 +68,7 @@ func CheckSign(reqData, secretKey string) ([]byte, bool) {
 	dataStr := string([]rune(reqData)[32:])
 
 	tempStr := fmt.Sprintf("%s%s", dataStr, secretKey)
-	md5Str := utils.Md5Str(tempStr)
+	md5Str := utils.MD5Str(tempStr)
 	logger.Debugf("signStr: %s  dataStr: %s  md5Str: %s ", signStr, dataStr, md5Str)
 	if md5Str == signStr {
 		// 解析数据

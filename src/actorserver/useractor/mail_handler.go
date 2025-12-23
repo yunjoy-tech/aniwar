@@ -775,12 +775,12 @@ func (h *MailHandler) genQuestionUrl(uid string, roleId uint64, questionType int
 
 	if questionType == common.QUESTION_LANG_TYPE_SINGLE {
 		signUrl := fmt.Sprintf("%s%s?sid=%s&region=%s&role_key=%s&key=%s", baseUrl, "deliver", questionId, region, roleKey, clientKey)
-		sign := myUtils.Md5Str(signUrl)
+		sign := utils.MD5Str(signUrl)
 		url = fmt.Sprintf("%s%s?sid=%s&region=%s&role_key=%s&sign=%s", baseUrl, "deliver", questionId, region, roleKey, sign)
 		h.Debugf("signUrl: %s , url: %s", signUrl, url)
 	} else if questionType == common.QUESTION_LANG_TYPE_MULTI {
 		signUrl := fmt.Sprintf("%s%s/%s?region=%s&role_key=%s&value_url_key=%s&key=%s", baseUrl, "temporary", questionId, region, roleKey, lang, clientKey)
-		sign := myUtils.Md5Str(signUrl)
+		sign := utils.MD5Str(signUrl)
 		url = fmt.Sprintf("%s%s/%s?region=%s&role_key=%s&value_url_key=%s&sign=%s", baseUrl, "temporary", questionId, region, roleKey, lang, sign)
 		h.Debugf("signUrl: %s , url: %s", signUrl, url)
 	} else {

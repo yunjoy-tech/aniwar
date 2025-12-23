@@ -2,23 +2,9 @@ package utils
 
 import (
 	"crypto/hmac"
-	"crypto/md5"
 	"crypto/sha1"
 	"encoding/base64"
-	"encoding/hex"
 )
-
-func Md5Str(str string) string {
-	m := md5.New()
-	m.Write([]byte(str))
-	return hex.EncodeToString(m.Sum(nil))
-}
-
-func Md5Str2(bytes []byte) string {
-	m := md5.New()
-	m.Write(bytes)
-	return hex.EncodeToString(m.Sum(nil))
-}
 
 // 注意：带base64编码
 func HmacSha1(valStr, keyStr string) string {
