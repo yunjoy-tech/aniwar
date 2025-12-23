@@ -17,6 +17,7 @@ import (
 	"gitee.com/aniwar2/musae/global"
 	"gitee.com/aniwar2/musae/service"
 	"gitee.com/aniwar2/musae/utils"
+	randutil "gitee.com/aniwar2/musae/utils/rand"
 	"google.golang.org/protobuf/proto"
 	"math"
 	"sort"
@@ -333,7 +334,7 @@ func (h *MailHandler) receiveMailAttachment(mails []*pb.PMailInfo, commonData *c
 	limitMap := make(map[int32]int32)      // 道具计数
 	campItems := make([]*pb.ItemReward, 0) // 营地道具特殊处理
 	for _, v := range mails {
-		items := myUtils.ConvertItem2(v.Attachments)
+		items := make(map[int32]int32)
 		// 构造新道具数量
 		newItems := make(map[int32]int32)
 		for id, num := range items {
@@ -378,7 +379,7 @@ func (h *MailHandler) receiveMailAttachment(mails []*pb.PMailInfo, commonData *c
 	// }
 
 	// 附件下发
-	rewards, err := GetDropMgr(h.actor).DropList2(myUtils.ConvertItem2(total), true, nil, commonData, common.CR_Mail_Attachment)
+	rewards, err := GetDropMgr(h.actor).DropList2(map[int32]int32{}, true, nil, commonData, common.CR_Mail_Attachment)
 	if err != nil {
 		return fmt.Errorf("internal error"), pb.ErrorCode_InternalError, nil, nil
 	}
@@ -798,9 +799,6 @@ func randMailActorId() string {
 		need = min
 	}
 	// 随机一个id
-	id, err := myUtils.RandomInt(0, need)
-	if err != nil {
-		id = 0
-	}
+	id := randutil.RangeInt32(0, need)
 	return fmt.Sprint("mailactor:", id)
 }

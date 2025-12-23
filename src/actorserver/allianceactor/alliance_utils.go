@@ -5,11 +5,11 @@ import (
 	"fmt"
 	"gitee.com/aniwar2/aniwar/src/common"
 	"gitee.com/aniwar2/aniwar/src/common/db"
-	"gitee.com/aniwar2/aniwar/src/common/utils"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/base"
 	"gitee.com/aniwar2/musae/logger"
 	"gitee.com/aniwar2/musae/service"
+	randutil "gitee.com/aniwar2/musae/utils/rand"
 	timeutil "gitee.com/aniwar2/musae/utils/time"
 	"github.com/elastic/go-elasticsearch/v8/typedapi/types/enums/sortorder"
 	"github.com/pkg/errors"
@@ -155,7 +155,8 @@ func (h *AllianceHandler) handleLeaderExit(targetId uint64) bool {
 			}
 		}
 		// 随机一个
-		newLeader := utils.RandomList(newLeaders)
+		r := randutil.RangeInt(0, len(newLeaders))
+		newLeader := newLeaders[r]
 		h.Infof("盟主自动选举结果 new: %v, old: %v", newLeader.RoleId, targetId)
 
 		// 修正新数据

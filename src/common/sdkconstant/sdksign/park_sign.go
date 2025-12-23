@@ -4,17 +4,13 @@ import (
 	"crypto"
 	"encoding/base64"
 	"fmt"
+	"gitee.com/aniwar2/aniwar/src/common/sdkconstant/sdkrsa"
+	"gitee.com/aniwar2/musae/logger"
+	"gitee.com/aniwar2/musae/utils"
+	"github.com/samber/lo"
 	"net/url"
 	"sort"
 	"strings"
-
-	"gitee.com/aniwar2/aniwar/src/common/sdkconstant/sdkrsa"
-
-	"github.com/samber/lo"
-
-	"gitee.com/aniwar2/aniwar/src/common/utils"
-
-	"gitee.com/aniwar2/musae/logger"
 )
 
 // ParkSignVerify 验证签名
@@ -69,7 +65,7 @@ func buildSignArgsStr(argsMap map[string]interface{}, excludeSignKeys []string) 
 	// 过滤不参与签名的字段(sign和pay_env不参与验签)
 	signDataMap := make(map[string]interface{})
 	for key, val := range argsMap {
-		if utils.ArrayContain(excludeSignKeys, key) {
+		if utils.SliceContain(excludeSignKeys, key) {
 			// 过滤不参与签名的子弹
 			continue
 		}

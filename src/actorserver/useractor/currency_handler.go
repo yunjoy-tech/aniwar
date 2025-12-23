@@ -7,7 +7,6 @@ import (
 	"gitee.com/aniwar2/aniwar/src/common/clidto"
 	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
 	"gitee.com/aniwar2/aniwar/src/common/db"
-	gameutils "gitee.com/aniwar2/aniwar/src/common/utils"
 	"gitee.com/aniwar2/aniwar/src/meta"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/base"
@@ -108,7 +107,7 @@ func (h *CurrencyHandler) CurrencyExchangeReq(ctx context.Context, in *base.Prot
 	}
 
 	// 道具检查
-	costs := gameutils.ConvertItem4(req.GetCosts())
+	costs := make(map[uint64]uint32)
 	sum, errorCode := h.exchangeCheck(cfg, costs)
 	if errorCode != pb.ErrorCode_Success {
 		return nil, fmt.Errorf("param check failed"), int32(errorCode)

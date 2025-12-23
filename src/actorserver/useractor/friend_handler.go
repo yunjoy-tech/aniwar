@@ -9,7 +9,6 @@ import (
 
 	"gitee.com/aniwar2/aniwar/src/common"
 	"gitee.com/aniwar2/aniwar/src/common/db"
-	myUtils "gitee.com/aniwar2/aniwar/src/common/utils"
 	"gitee.com/aniwar2/musae/service"
 
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
@@ -722,7 +721,7 @@ func (h *FriendHandler) handleSendGift(data *pb.PFriendData, targetIds []uint64)
 			}
 		}
 		// 排序
-		targetIds = myUtils.SortMapValByKeys(temp, myUtils.SORT_ORDER_DESC)
+		// targetIds = myUtils.SortMapValByKeys(temp, myUtils.SORT_ORDER_DESC)
 		targetIds = append(onlines, targetIds...)
 	}
 

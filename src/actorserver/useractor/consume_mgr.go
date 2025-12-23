@@ -3,7 +3,6 @@ package useractor
 import (
 	"errors"
 	"fmt"
-	"gitee.com/aniwar2/aniwar/src/common/utils"
 	"gitee.com/aniwar2/aniwar/src/meta"
 	"time"
 
@@ -102,10 +101,10 @@ func (m *ConsumeMgr) doConsumeByUniqueId(uniqueId uint64, costNum uint32, common
 	return err
 }
 
-func (m *ConsumeMgr) ConsumeKeyValItemList(items []*pb.KeyValueItem, commonData *clidto.Comdata, reason common.ChangeReason) error {
-	itemList := utils.ConvertItem(items)
-	return m.ConsumeList(itemList, commonData, reason)
-}
+// func (m *ConsumeMgr) ConsumeKeyValItemList(items []*pb.KeyValueItem, commonData *clidto.Comdata, reason common.ChangeReason) error {
+// 	itemList := utils.ConvertItem(items)
+// 	return m.ConsumeList(itemList, commonData, reason)
+// }
 
 func (m *ConsumeMgr) ConsumeKeyValList(items []*meta.KeyVal, commonData *clidto.Comdata, reason common.ChangeReason) error {
 	// itemList := datahelper.ConvertItem3(items)

@@ -3,17 +3,16 @@ package logic
 import (
 	"encoding/json"
 	"errors"
+	"gitee.com/aniwar2/aniwar/src/common/conf"
+	"gitee.com/aniwar2/aniwar/src/common/utils"
+	"gitee.com/aniwar2/aniwar/src/proto/pb"
+	"gitee.com/aniwar2/musae/logger"
+	"gitee.com/aniwar2/musae/service"
+	randutil "gitee.com/aniwar2/musae/utils/rand"
 	"io"
 	"net/http"
 	"strconv"
 	"time"
-
-	"gitee.com/aniwar2/aniwar/src/common/conf"
-	"gitee.com/aniwar2/aniwar/src/common/utils"
-	"gitee.com/aniwar2/musae/logger"
-	"gitee.com/aniwar2/musae/service"
-
-	"gitee.com/aniwar2/aniwar/src/proto/pb"
 )
 
 // TaptapLoginResp taptap登陆请求结果
@@ -50,7 +49,7 @@ func (s *LoginServer) handleAuthTaptap(unionId, accessToken, extra string) (int,
 	clientId := conf.TapTap().ClientId
 
 	// 随机数
-	nonce := utils.RandomStr(24, true, true, true)
+	nonce := randutil.RandomStr(24, true, true, true)
 	// 时间戳转换成字符串
 	timestamp := strconv.FormatInt(time.Now().Unix(), 10)
 	// 请求url

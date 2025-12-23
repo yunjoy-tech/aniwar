@@ -4,8 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
-	"gitee.com/aniwar2/aniwar/src/common/http/request"
-	myUtils "gitee.com/aniwar2/aniwar/src/common/utils"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/base"
 	"gitee.com/aniwar2/musae/baseactor"
@@ -14,8 +12,8 @@ import (
 	"gitee.com/aniwar2/musae/logger"
 	"gitee.com/aniwar2/musae/metrics"
 	"gitee.com/aniwar2/musae/service"
+	"gitee.com/aniwar2/musae/utils/net/httpreq"
 	"google.golang.org/protobuf/proto"
-	"net/http"
 	"strings"
 	"time"
 )
@@ -184,8 +182,7 @@ func (h *SvcStatusHandler) reportOnlineToTap(total int32) {
 		logger.Error(err)
 		return
 	}
-	req := request.New("https://se.tapdb.net/tapdb/online")
-	resp, err := req.Method(http.MethodPost).JSONBytesBody(bytes).Send("")
+	resp, err := httpreq.New("https://se.tapdb.net/tapdb/online").PostJSON("", bytes)
 	if err != nil {
 		return
 	}
@@ -194,7 +191,7 @@ func (h *SvcStatusHandler) reportOnlineToTap(total int32) {
 		Code int    `json:"code"`
 		Msg  string `json:"msg"`
 	}{}
-	err = myUtils.DecodeReader(resp.Body, &ret)
+	err = json.NewDecoder(resp.Body).Decode(&ret)
 	if err != nil {
 		logger.Error(err)
 		return

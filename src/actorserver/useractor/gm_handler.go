@@ -8,7 +8,6 @@ import (
 	"gitee.com/aniwar2/aniwar/src/common"
 	"gitee.com/aniwar2/aniwar/src/common/clidto"
 	"gitee.com/aniwar2/aniwar/src/common/conf"
-	myUtils "gitee.com/aniwar2/aniwar/src/common/utils"
 	"gitee.com/aniwar2/aniwar/src/idipserver/logic"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/base"
@@ -490,7 +489,7 @@ func (h *GmHandler) GmTestUgc(param []string, commonData *clidto.Comdata) error 
 		}
 
 		// 输出到文件中
-		myUtils.SaveLogToFile("./output/res/invalidName.txt", fmt.Sprintf("本次校验总数：%d 个\n非法昵称：%v", total, invalidNameList))
+		// myUtils.SaveLogToFile("./output/res/invalidName.txt", fmt.Sprintf("本次校验总数：%d 个\n非法昵称：%v", total, invalidNameList))
 		return nil
 	}
 }
@@ -715,12 +714,12 @@ func (h *GmHandler) GmTestDrop(param []string, commonData *clidto.Comdata) error
 		return err
 	}
 
-	var builder strings.Builder
+	// var builder strings.Builder
 	for i := 1; i <= num; i++ {
 		// itemRewards := datahelper.GetRewardsByDropId(int32(dropId))
 		// builder.WriteString(fmt.Sprintf("dropId: %d, num: %d, reward: %v \n", dropId, i, datahelper.ConvertItem2ByTpl(itemRewards)))
 	}
-	myUtils.SaveLogToFile("./log/plog/testdrop.txt", builder.String())
+	// myUtils.SaveLogToFile("./log/plog/testdrop.txt", builder.String())
 	return nil
 }
 
@@ -814,7 +813,7 @@ func (h *GmHandler) GmTestDB(param []string, commonData *clidto.Comdata) error {
 		return true
 	})
 	str := fmt.Sprintf("数据库: %s, 操作: %s, 并发: %d, 次数: %d\n %s %s", param[0], param[1], threadNum, opNum, errStr.String(), delayStr.String())
-	myUtils.SaveLogToFile("./log/testdb.txt", str)
+	// myUtils.SaveLogToFile("./log/testdb.txt", str)
 	logger.Error(str)
 	return nil
 }

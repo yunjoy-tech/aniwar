@@ -19,39 +19,3 @@ func GetIntWithIndexes[T int | int32](origin T, indexes []T) (T, []T) {
 
 	return result, digits
 }
-
-//func GetIntWithIndexes(origin int32, indexes []int32) (int32, []int32) {
-//	multipliers := []int32{1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000} // 避免使用int32(math.Pow(10, float64(pos)))
-//	digits := make([]int32, len(indexes))
-//	var result int32
-//
-//	for i, pos := range indexes {
-//		multiplier := multipliers[pos]
-//		digit := (origin / multiplier) % 10
-//		digits[i] = digit
-//		result = result*10 + digit
-//	}
-//
-//	return result, digits
-//}
-
-//func GetIntWithIndexes(origin int32, indexes []int32) (int32, []int32) {
-//	digits := make([]int32, len(indexes))
-//	var result int32
-//	var multiplier int32 = 1
-//
-//	for i, pos := range indexes {
-//		multiplier = int32(math.Pow(10, float64(pos)))
-//
-//		digit := (origin / multiplier) % 10
-//		digits[i] = digit
-//		//result += digit * int32(math.Pow(10, float64(i)))
-//	}
-//
-//	for i := len(digits) - 1; i >= 0; i-- {
-//		digit := digits[i]
-//		result += digit * int32(math.Pow(10, float64(len(digits)-i-1)))
-//	}
-//
-//	return result, digits
-//}

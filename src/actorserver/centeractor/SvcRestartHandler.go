@@ -2,7 +2,6 @@ package centeractor
 
 import (
 	"context"
-	myUtils "gitee.com/aniwar2/aniwar/src/common/utils"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/base"
 	"gitee.com/aniwar2/musae/baseactor"
@@ -91,7 +90,7 @@ func (h *SvcRestartHandler) Send2PubTopic(req *pb.S2S_SvcRestartReq, svcMap *syn
 		svcName := key.(string)
 		if now < svcData.ReportTS+int64(baseconf.GetBaseConf().ServerHeartbeatTimout) {
 			if len(req.Services) > 0 {
-				if myUtils.ArrayContain(req.Services, svcName) {
+				if utils.SliceContain(req.Services, svcName) {
 					h.actor.Data.SvcRestartMap.Store(svcName, "0")
 					err = h.actor.Srv.PubTopicEvent(svc.EVENT_PRIVATE, svcName, h.actor.ID(), nil, req)
 				}

@@ -11,7 +11,6 @@ import (
 	"gitee.com/aniwar2/aniwar/src/common/clidto"
 
 	"gitee.com/aniwar2/aniwar/src/common"
-	myUtils "gitee.com/aniwar2/aniwar/src/common/utils"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 )
 
@@ -47,9 +46,7 @@ func mergeDropChange(source, newChange *pb.DropChange, overlying ...bool) {
 
 	if len(newChange.Items) > 0 {
 		source.Items = append(source.Items, newChange.Items...)
-		if myUtils.GotBoolParam(overlying...) {
-			source.Items = mergeItems(source.Items)
-		}
+		source.Items = mergeItems(source.Items)
 	}
 	// TODO 根据id merge 数量
 	if len(newChange.CardExpInfos) > 0 {
@@ -188,12 +185,12 @@ func (m *DropMgr) doDrop(itemCfg *meta.ItemPkgItemMeta, itemNum uint32, params [
 		pb.ItemType_Food,
 		pb.ItemType_Gift,
 		pb.ItemType_Quest:
-		eachChangeItems, eachFinalItems, limitItems, errx := m.handleItemTypeBag(itemCfg, itemNum, reason)
+		eachChangeItems, eachFinalItems, _, errx := m.handleItemTypeBag(itemCfg, itemNum, reason)
 		err = errx
 		if errx == nil {
 			dropChange.Items = append(dropChange.Items, eachChangeItems...)
 			commonData.Data.Items = append(commonData.Data.Items, eachFinalItems...)
-			myUtils.MergeItems(m.limitItems, limitItems)
+			// myUtils.MergeItems(m.limitItems, limitItems)
 		}
 
 	case pb.ItemType_Card:

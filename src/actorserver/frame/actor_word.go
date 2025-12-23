@@ -10,11 +10,10 @@ import (
 	myCommon "gitee.com/aniwar2/aniwar/src/common"
 	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/aniwar/src/common/db"
-	"gitee.com/aniwar2/aniwar/src/common/http/request"
-	myUtils "gitee.com/aniwar2/aniwar/src/common/utils"
 	"gitee.com/aniwar2/musae/gamelib/sensitive"
 	"gitee.com/aniwar2/musae/logger"
 	"gitee.com/aniwar2/musae/utils"
+	"gitee.com/aniwar2/musae/utils/net/httpreq"
 	"math/rand"
 	"net/http"
 	"net/url"
@@ -199,8 +198,7 @@ func CheckRemote(ctype int32, content string) (bool, error) {
 	queryStr := fmt.Sprintf("Nonce=%s&SecretId=%s&Timestamp=%d&Version=%s&Signature=%s", nonce, secretId, now.Unix(), SIGN_VERSION, encStr)
 	urlPath := fmt.Sprintf("%s?%s", apiPath, queryStr)
 
-	req := request.New(baseUrl)
-	resp, err := req.Method(http.MethodPost).JSONBytesBody(b).Send(urlPath)
+	resp, err := httpreq.New(baseUrl).PostJSON(urlPath, b)
 	if err != nil {
 		return false, err
 	}
@@ -209,10 +207,11 @@ func CheckRemote(ctype int32, content string) (bool, error) {
 	logger.Debugf("request urlPath: %s , resp: %+v", urlPath, resp)
 
 	// 判定莉莉丝接口返回
-	if request.IsOK(resp.StatusCode) {
+	if httpreq.IsOK(resp.StatusCode) {
 		// 解析返回数据
 		retData := UGCResult{}
-		if err = myUtils.DecodeReader(resp.Body, &retData); err != nil {
+		err = json.NewDecoder(resp.Body).Decode(&retData)
+		if err != nil {
 			return false, err
 		}
 		logger.Debugf("retData: %+v", retData)

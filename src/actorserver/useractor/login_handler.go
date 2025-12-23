@@ -11,7 +11,6 @@ import (
 	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
 	"gitee.com/aniwar2/aniwar/src/common/db"
 	"gitee.com/aniwar2/aniwar/src/common/server"
-	myUtils "gitee.com/aniwar2/aniwar/src/common/utils"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/base"
 	"gitee.com/aniwar2/musae/logger"
@@ -312,15 +311,6 @@ func (h *LoginHandler) ChangeHeadReq(ctx context.Context, in *base.ProtoMsg) (pr
 	h.actor.RoleDetailHandler.ChangeHeadId(req.HeadId)
 	h.Debug("修改头像成功")
 	return &pb.LS2C_ChangeHeadRes{HeadId: req.HeadId}, nil, 0
-}
-
-// 处理头像红点标识
-func (h *LoginHandler) handleRedPoint(commonData *clidto.Comdata, ids []int64) error {
-	userData := h.actor.GetUserData()
-	for _, id := range ids {
-		userData.NewHeads = myUtils.DeleteAllByElement(userData.NewHeads, int32(id))
-	}
-	return h.SaveDB()
 }
 
 func (h *LoginHandler) buildRoleBaseInfo() *pb.PClientRoleBaseInfo {

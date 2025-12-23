@@ -3,7 +3,6 @@ package centeractor
 import (
 	"context"
 	"fmt"
-	myUtils "gitee.com/aniwar2/aniwar/src/common/utils"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/base"
 	"gitee.com/aniwar2/musae/baseactor"
@@ -12,6 +11,7 @@ import (
 	"gitee.com/aniwar2/musae/logger"
 	"gitee.com/aniwar2/musae/service"
 	svc "gitee.com/aniwar2/musae/service"
+	"gitee.com/aniwar2/musae/utils"
 	"google.golang.org/protobuf/proto"
 	"strconv"
 	"sync"
@@ -99,7 +99,7 @@ func (h *HotReloadHandler) Send2PubTopic(req *pb.S2S_HotReloadReq, svcMap *sync.
 		svcName := key.(string)
 		if now < svcData.ReportTS+int64(baseconf.GetBaseConf().ServerHeartbeatTimout) {
 			if len(req.Services) > 0 {
-				if myUtils.ArrayContain(req.Services, svcName) {
+				if utils.SliceContain(req.Services, svcName) {
 					h.actor.Data.HotReloadMap.Store(svcName, "0")
 					err = h.actor.Srv.PubTopicEvent(svc.EVENT_PRIVATE, svcName, h.actor.ID(), nil, req)
 				}
