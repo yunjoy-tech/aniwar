@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"gitee.com/aniwar2/aniwar/src/meta"
+	netutil "gitee.com/aniwar2/musae/utils/net"
 	timeutil "gitee.com/aniwar2/musae/utils/time"
 	"github.com/aliyun/aliyun-oss-go-sdk/oss"
 	"io"
@@ -30,7 +31,7 @@ func (s *IDIPServer) PreHandle(in *common.InvocationEvent, secretKey string) ([]
 	// IP校验
 	logger.Debugf("remote addr: %s", in.Request.RemoteAddr)
 	if conf.GMT().IsIpWhite {
-		ip, err := utils.GetIP(in.Request)
+		ip, err := netutil.GetClientIP(in.Request)
 		if err != nil {
 			return nil, pb.ErrorCode_IpLimit, IP_LIMIT
 		}

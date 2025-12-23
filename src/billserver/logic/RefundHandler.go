@@ -4,12 +4,12 @@ import (
 	"context"
 	"fmt"
 	"gitee.com/aniwar2/musae/gamelib/guid"
+	netutil "gitee.com/aniwar2/musae/utils/net"
 	"strconv"
 
 	"gitee.com/aniwar2/aniwar/src/common/sdkconstant/sdksign"
 
 	gameCommon "gitee.com/aniwar2/aniwar/src/common"
-	gameUtils "gitee.com/aniwar2/aniwar/src/common/utils"
 	"github.com/dapr/go-sdk/service/common"
 
 	"gitee.com/aniwar2/musae/base"
@@ -38,7 +38,7 @@ func (s *BillServer) RefundHandler(ctx context.Context, in *common.InvocationEve
 	// IP校验
 	logger.Debugf("remote addr: %s", in.Request.RemoteAddr)
 	if conf.Bill().IsIpWhite {
-		ip, err := gameUtils.GetIP(in.Request)
+		ip, err := netutil.GetClientIP(in.Request)
 		if err != nil {
 			logger.Errorf(err.Error())
 			return reply2Lilith(in, logic.FAIL), err

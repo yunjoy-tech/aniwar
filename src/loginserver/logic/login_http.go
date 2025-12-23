@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
+	netutil "gitee.com/aniwar2/musae/utils/net"
 	"strconv"
 	"time"
 
-	"gitee.com/aniwar2/aniwar/src/common/utils"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/baseconf"
 	"gitee.com/aniwar2/musae/errorx"
@@ -32,7 +32,7 @@ func (s *LoginServer) OnHttp(ctx context.Context, in *common.InvocationEvent) (o
 
 	curTime := time.Now()
 	// 白名单校验 TODO
-	ip, err := utils.GetIP(in.Request)
+	ip, err := netutil.GetClientIP(in.Request)
 	if err != nil {
 		logger.Warn("OnLogin get ip failed. ", err.Error())
 	}
