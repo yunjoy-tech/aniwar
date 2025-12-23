@@ -1,7 +1,5 @@
 package utils
 
-import "strconv"
-
 type ArrayNumberType interface {
 	int | int32 | int64 | uint | uint32 | uint64
 }
@@ -43,7 +41,7 @@ func DeleteLastByElement[T ArrayNumberType](arr []T, delVal T) []T {
 }
 
 func deleteByElement[T ArrayNumberType](arr []T, delVal T, deleteAll bool) []T {
-	//for idx, val := range arr {
+	// for idx, val := range arr {
 	for i := len(arr) - 1; i >= 0; i-- {
 		val := arr[i]
 
@@ -103,43 +101,4 @@ func ArrayContain[T comparable](arr []T, val T) bool {
 	}
 
 	return false
-}
-
-func Convert2StrList(arr []int32) []string {
-	strList := make([]string, 0)
-	for _, each := range arr {
-		strList = append(strList, strconv.Itoa(int(each)))
-	}
-	return strList
-}
-
-func GetArrayMinElement(arr []int32) int32 {
-	var min int32
-	for index, v := range arr {
-		if index == 0 || v < min {
-			min = v
-		}
-	}
-
-	return min
-}
-
-// DiffArray 求两个切片的差集
-func DiffArray(a []int32, b []int32) []int32 {
-	var diffArray []int32
-	temp := map[int32]struct{}{}
-
-	for _, val := range a {
-		if _, ok := temp[val]; !ok {
-			temp[val] = struct{}{}
-		}
-	}
-
-	for _, val := range b {
-		if _, ok := temp[val]; !ok {
-			diffArray = append(diffArray, val)
-		}
-	}
-
-	return diffArray
 }

@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"gitee.com/aniwar2/musae/gamelib/guid"
+	"gitee.com/aniwar2/musae/utils"
 	"strconv"
 	"time"
 
@@ -14,8 +15,6 @@ import (
 	"gitee.com/aniwar2/musae/global"
 
 	"gitee.com/aniwar2/musae/logger"
-
-	myUtils "gitee.com/aniwar2/aniwar/src/common/utils"
 
 	"github.com/forgoer/openssl"
 
@@ -750,12 +749,7 @@ func (h *RoomHandler) doExitRoom(playerUid string, reason pb.ExitRoomReason) {
 }
 
 func (h *RoomHandler) GetClientRoom() *pb.Room {
-	clientRoom := &pb.Room{}
-
-	err := myUtils.DeepCopyByJson(h.actor.Data, clientRoom)
-	if err != nil {
-		return nil
-	}
+	clientRoom := utils.ClonePb[*pb.Room](h.actor.Data)
 
 	// 所有卡牌不下发给客户端
 	for _, player := range clientRoom.Players {

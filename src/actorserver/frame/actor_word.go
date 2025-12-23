@@ -14,6 +14,7 @@ import (
 	myUtils "gitee.com/aniwar2/aniwar/src/common/utils"
 	"gitee.com/aniwar2/musae/gamelib/sensitive"
 	"gitee.com/aniwar2/musae/logger"
+	"gitee.com/aniwar2/musae/utils"
 	"math/rand"
 	"net/http"
 	"net/url"
@@ -175,8 +176,7 @@ func CheckRemote(ctype int32, content string) (bool, error) {
 		return false, err
 	}
 
-	bodyCopy := make(map[string]interface{})
-	err = myUtils.DeepCopyByJson(&body, &bodyCopy)
+	bodyCopy, err := utils.CloneAny[map[string]interface{}](body)
 	if err != nil {
 		return false, err
 	}
