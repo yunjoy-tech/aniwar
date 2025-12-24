@@ -2,7 +2,6 @@ package useractor
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"gitee.com/aniwar2/aniwar/src/common"
 	"gitee.com/aniwar2/aniwar/src/common/db"
@@ -252,26 +251,27 @@ func (h *UserAllianceHandler) GetAllianceRecommendReq(ctx context.Context, in *b
 }
 
 func (h *UserAllianceHandler) getRecommendList() []*pb.PCommonAllianceBaseInfo {
-	hitSize := int(0)
-	infos := make([]*pb.PCommonAllianceBaseInfo, 0)
-
-	err, hitData := h.actor.Srv.ESMultiSearch(common.ES_ALLIANCE_BASE_KEY, nil, nil, nil, hitSize, true)
-	if err != nil {
-		h.Errorf("es查询出错了: %v", err)
-		return infos
-	}
-	for _, hit := range hitData.Hits {
-		temp := &pb.PServerAllianceBaseInfo{}
-		if err = json.Unmarshal(hit.Source_, temp); err != nil {
-			continue
-		}
-		baseInfo, err := h.toAllianceBaseInfo(temp)
-		if err != nil {
-			continue
-		}
-		infos = append(infos, baseInfo)
-	}
-	return infos
+	// hitSize := int(0)
+	// infos := make([]*pb.PCommonAllianceBaseInfo, 0)
+	//
+	// err, hitData := h.actor.Srv.ESMultiSearch(common.ES_ALLIANCE_BASE_KEY, nil, nil, nil, hitSize, true)
+	// if err != nil {
+	// 	h.Errorf("es查询出错了: %v", err)
+	// 	return infos
+	// }
+	// for _, hit := range hitData.Hits {
+	// 	temp := &pb.PServerAllianceBaseInfo{}
+	// 	if err = json.Unmarshal(hit.Source_, temp); err != nil {
+	// 		continue
+	// 	}
+	// 	baseInfo, err := h.toAllianceBaseInfo(temp)
+	// 	if err != nil {
+	// 		continue
+	// 	}
+	// 	infos = append(infos, baseInfo)
+	// }
+	// return infos
+	return nil
 }
 
 func (h *UserAllianceHandler) SearchAllianceReq(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
@@ -684,16 +684,17 @@ func (h *UserAllianceHandler) CreateAllianceReq(ctx context.Context, in *base.Pr
 
 // 检查给定联盟id是否存在
 func (h *UserAllianceHandler) checkAllianceId(allianceId int64) (*pb.PServerAllianceBaseInfo, error) {
-	err, info := h.actor.Srv.ESGet(common.ES_ALLIANCE_BASE_KEY, strconv.Itoa(int(allianceId)))
-	if err != nil {
-		return nil, err
-	}
+	// err, info := h.actor.Srv.ESGet(common.ES_ALLIANCE_BASE_KEY, strconv.Itoa(int(allianceId)))
+	// if err != nil {
+	// 	return nil, err
+	// }
 
-	data := &pb.PServerAllianceBaseInfo{}
-	if err = json.Unmarshal(info, data); err != nil {
-		return nil, err
-	}
-	return data, nil
+	// data := &pb.PServerAllianceBaseInfo{}
+	// if err = json.Unmarshal(info, data); err != nil {
+	// 	return nil, err
+	// }
+	// return data, nil
+	return nil, nil
 }
 
 // 检查给定联盟名称是否使用
@@ -707,30 +708,31 @@ func (h *UserAllianceHandler) checkAllianceName(name string) bool {
 
 func (h *UserAllianceHandler) getAllianceByName(name string) (*pb.PCommonAllianceBaseInfo, error) {
 	// 索引不存在
-	if !h.actor.Srv.ESCheckIndex(common.ES_ALLIANCE_BASE_KEY) {
-		return nil, nil
-	}
+	// if !h.actor.Srv.ESCheckIndex(common.ES_ALLIANCE_BASE_KEY) {
+	// 	return nil, nil
+	// }
 
-	matchMap := map[string]string{"name.keyword": name}
-	err, hitData := h.actor.Srv.ESMultiSearch(common.ES_ALLIANCE_BASE_KEY, matchMap, nil, nil, 1, false)
-	if err != nil {
-		h.Errorf("es查询出错了: %v", err)
-		return nil, err
-	}
-	var baseInfo *pb.PCommonAllianceBaseInfo
-	for _, hit := range hitData.Hits {
-		temp := &pb.PServerAllianceBaseInfo{}
-		if err = json.Unmarshal(hit.Source_, temp); err != nil {
-			h.Error(err)
-			continue
-		}
-		baseInfo, err = h.toAllianceBaseInfo(temp)
-		if err != nil {
-			h.Error(err)
-		}
-	}
-	h.Debugf("联盟名称查询结果: %+v", baseInfo)
-	return baseInfo, nil
+	// matchMap := map[string]string{"name.keyword": name}
+	// err, hitData := h.actor.Srv.ESMultiSearch(common.ES_ALLIANCE_BASE_KEY, matchMap, nil, nil, 1, false)
+	// if err != nil {
+	// 	h.Errorf("es查询出错了: %v", err)
+	// 	return nil, err
+	// }
+	// var baseInfo *pb.PCommonAllianceBaseInfo
+	// for _, hit := range hitData.Hits {
+	// 	temp := &pb.PServerAllianceBaseInfo{}
+	// 	if err = json.Unmarshal(hit.Source_, temp); err != nil {
+	// 		h.Error(err)
+	// 		continue
+	// 	}
+	// 	baseInfo, err = h.toAllianceBaseInfo(temp)
+	// 	if err != nil {
+	// 		h.Error(err)
+	// 	}
+	// }
+	// h.Debugf("联盟名称查询结果: %+v", baseInfo)
+	// return baseInfo, nil
+	return nil, nil
 }
 
 func (h *UserAllianceHandler) getAllianceId() int64 {

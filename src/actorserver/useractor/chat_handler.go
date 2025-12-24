@@ -2,7 +2,6 @@ package useractor
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"gitee.com/aniwar2/aniwar/src/common"
 	"gitee.com/aniwar2/musae/gamelib/guid"
@@ -16,7 +15,6 @@ import (
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/base"
 	"gitee.com/aniwar2/musae/service"
-	"github.com/elastic/go-elasticsearch/v8/typedapi/types/enums/sortorder"
 	"github.com/pkg/errors"
 	"google.golang.org/protobuf/proto"
 )
@@ -433,55 +431,55 @@ func (h *UserChatHandler) NotifyPrivateMessage(fromRoleId, toRoleId uint64, mess
 
 // GetMessageFromES 从ES中获取聊天记录
 func (h *UserChatHandler) GetMessageFromES(myRoleId, roleId uint64, endTime int64, form, size int32) []*pb.BroadMessage {
-
-	esIndex := h.GetChatIndex(myRoleId, roleId)
-	if esIndex == "" {
-		return nil
-	}
-	// hitSize := 30
-	infos := make([]*pb.BroadMessage, 0)
-	rangeMap := map[string]service.RangeItem{
-		"timeStamp": {
-			Min: float64(0),
-			Max: float64(endTime),
-		},
-	}
-
-	err, hitData := h.actor.Srv.ESMultiSearchPage(esIndex, rangeMap, int(size), &sortorder.Desc, int(form))
-	if err != nil {
-		h.Warnf("es查询出错了: %v", err.Error())
-		return infos
-	}
-	for _, hit := range hitData.Hits {
-		temp := &pb.BroadMessage{}
-		if err = json.Unmarshal(hit.Source_, temp); err != nil {
-			continue
-		}
-		infos = append(infos, temp)
-	}
-	return infos
+	return nil
+	// esIndex := h.GetChatIndex(myRoleId, roleId)
+	// if esIndex == "" {
+	// 	return nil
+	// }
+	// // hitSize := 30
+	// infos := make([]*pb.BroadMessage, 0)
+	// rangeMap := map[string]service.RangeItem{
+	// 	"timeStamp": {
+	// 		Min: float64(0),
+	// 		Max: float64(endTime),
+	// 	},
+	// }
+	//
+	// err, hitData := h.actor.Srv.ESMultiSearchPage(esIndex, rangeMap, int(size), &sortorder.Desc, int(form))
+	// if err != nil {
+	// 	h.Warnf("es查询出错了: %v", err.Error())
+	// 	return infos
+	// }
+	// for _, hit := range hitData.Hits {
+	// 	temp := &pb.BroadMessage{}
+	// 	if err = json.Unmarshal(hit.Source_, temp); err != nil {
+	// 		continue
+	// 	}
+	// 	infos = append(infos, temp)
+	// }
+	// return infos
 }
 
 // SaveMessage2ES 聊天消息 存储到es
 func (h *UserChatHandler) SaveMessage2ES(myRoleId, roleId uint64, message *pb.BroadMessage) error {
-	esIndex := h.GetChatIndex(myRoleId, roleId)
-	if esIndex == "" {
-		return errors.New("获取索引失败")
-	}
-	if err := h.actor.Srv.ESPutNoId(esIndex, message); err != nil {
-		h.Error(err)
-		return err
-	}
+	// esIndex := h.GetChatIndex(myRoleId, roleId)
+	// if esIndex == "" {
+	// 	return errors.New("获取索引失败")
+	// }
+	// if err := h.actor.Srv.ESPutNoId(esIndex, message); err != nil {
+	// 	h.Error(err)
+	// 	return err
+	// }
 	return nil
 }
 
-// GetChatIndex 按照roleId 大的在前面
-func (h *UserChatHandler) GetChatIndex(myRoleId, roleId uint64) string {
-	if myRoleId > roleId {
-		return fmt.Sprintf("%s_%s", strconv.Itoa(int(myRoleId)), strconv.Itoa(int(roleId)))
-	}
-	return fmt.Sprintf("%s_%s", strconv.Itoa(int(roleId)), strconv.Itoa(int(myRoleId)))
-}
+// // GetChatIndex 按照roleId 大的在前面
+// func (h *UserChatHandler) GetChatIndex(myRoleId, roleId uint64) string {
+// 	if myRoleId > roleId {
+// 		return fmt.Sprintf("%s_%s", strconv.Itoa(int(myRoleId)), strconv.Itoa(int(roleId)))
+// 	}
+// 	return fmt.Sprintf("%s_%s", strconv.Itoa(int(roleId)), strconv.Itoa(int(myRoleId)))
+// }
 
 // SetHasMessage 设计最后阅读时间
 func (h *UserChatHandler) SetHasMessage(roleId uint64, value bool) error {
@@ -516,13 +514,13 @@ func (h *UserChatHandler) HasMessage(roleId uint64) bool {
 
 // DeleteFriendChatMessage 删除好友聊天
 func (h *UserChatHandler) DeleteFriendChatMessage(myRoleId, friendRoleId uint64) error {
-	esIndex := h.GetChatIndex(myRoleId, friendRoleId)
-	if esIndex == "" {
-		return nil
-	}
-	if err := h.actor.Srv.ESDelIndex(esIndex); err != nil {
-		h.Debug("delete friend chat message err:", myRoleId, friendRoleId, err)
-		return err
-	}
+	// esIndex := h.GetChatIndex(myRoleId, friendRoleId)
+	// if esIndex == "" {
+	// 	return nil
+	// }
+	// if err := h.actor.Srv.ESDelIndex(esIndex); err != nil {
+	// 	h.Debug("delete friend chat message err:", myRoleId, friendRoleId, err)
+	// 	return err
+	// }
 	return nil
 }

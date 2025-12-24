@@ -1,9 +1,7 @@
 package allianceactor
 
 import (
-	"encoding/json"
 	"fmt"
-	"gitee.com/aniwar2/aniwar/src/common"
 	"gitee.com/aniwar2/aniwar/src/common/db"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/base"
@@ -11,9 +9,6 @@ import (
 	"gitee.com/aniwar2/musae/service"
 	randutil "gitee.com/aniwar2/musae/utils/rand"
 	timeutil "gitee.com/aniwar2/musae/utils/time"
-	"github.com/elastic/go-elasticsearch/v8/typedapi/types/enums/sortorder"
-	"github.com/pkg/errors"
-	"strconv"
 	"time"
 )
 
@@ -164,11 +159,11 @@ func (h *AllianceHandler) handleLeaderExit(targetId uint64) bool {
 		return false
 	} else {
 		// 没有成员了,解散联盟,暂不删除db数据
-		// 删除ES数据
-		err := h.actor.Srv.ESDel(common.ES_ALLIANCE_BASE_KEY, strconv.Itoa(int(data.Base.Id)))
-		if err != nil {
-			h.Error(err)
-		}
+		// // 删除ES数据
+		// err := h.actor.Srv.ESDel(common.ES_ALLIANCE_BASE_KEY, strconv.Itoa(int(data.Base.Id)))
+		// if err != nil {
+		// 	h.Error(err)
+		// }
 		h.Infof("联盟解散了 id: %v", data.Base.Id)
 		return true
 	}
@@ -236,11 +231,11 @@ func (h *AllianceHandler) checkPermission(roleId uint64, typ PermissionType) boo
 func (h *AllianceHandler) tryUploadToES() {
 	data := h.GetAllianceData()
 	// 同步
-	err := h.actor.Srv.ESPut(common.ES_ALLIANCE_BASE_KEY, strconv.Itoa(int(data.Base.Id)), data.Base)
-	if err != nil {
-		h.Error(err)
-		return
-	}
+	// err := h.actor.Srv.ESPut(common.ES_ALLIANCE_BASE_KEY, strconv.Itoa(int(data.Base.Id)), data.Base)
+	// if err != nil {
+	// 	h.Error(err)
+	// 	return
+	// }
 	h.Infof("同步联盟到es中... allianceId: %d", data.Base.Id)
 }
 
@@ -356,45 +351,46 @@ func (h *AllianceHandler) IsOnline(roleId uint64) bool {
 	return info.Common.OfflineTime == -1
 }
 
-func (h *AllianceHandler) GetAllianceMessageKey(allianceId int64) string {
-	return fmt.Sprintf("alliance_chat_%d", allianceId)
-}
+// func (h *AllianceHandler) GetAllianceMessageKey(allianceId int64) string {
+// 	return fmt.Sprintf("alliance_chat_%d", allianceId)
+// }
 
 // SaveAllianceChatMessage 存储联盟聊天消息到es
 func (h *AllianceHandler) SaveAllianceChatMessage(allianceId int64, message *pb.BroadMessage) error {
-	esIndex := h.GetAllianceMessageKey(allianceId)
-	if esIndex == "" {
-		return errors.New("获取索引失败")
-	}
-	if err := h.actor.Srv.ESPutNoId(esIndex, message); err != nil {
-		h.Error(err)
-		return err
-	}
+	// esIndex := h.GetAllianceMessageKey(allianceId)
+	// if esIndex == "" {
+	// 	return errors.New("获取索引失败")
+	// }
+	// if err := h.actor.Srv.ESPutNoId(esIndex, message); err != nil {
+	// 	h.Error(err)
+	// 	return err
+	// }
 	return nil
 }
 
 // GetAllianceChatMessage 获取联盟消息
 func (h *AllianceHandler) GetAllianceChatMessage(allianceId int64, endTime int64, form, size int32) []*pb.BroadMessage {
-	esIndex := h.GetAllianceMessageKey(allianceId)
-	infos := make([]*pb.BroadMessage, 0)
-	rangeMap := map[string]service.RangeItem{
-		"timeStamp": {
-			Min: float64(0),
-			Max: float64(endTime),
-		},
-	}
-
-	err, hitData := h.actor.Srv.ESMultiSearchPage(esIndex, rangeMap, int(size), &sortorder.Desc, int(form))
-	if err != nil {
-		h.Warnf("es查询出错了: %v", err.Error())
-		return infos
-	}
-	for _, hit := range hitData.Hits {
-		temp := &pb.BroadMessage{}
-		if err = json.Unmarshal(hit.Source_, temp); err != nil {
-			continue
-		}
-		infos = append(infos, temp)
-	}
-	return infos
+	// esIndex := h.GetAllianceMessageKey(allianceId)
+	// infos := make([]*pb.BroadMessage, 0)
+	// rangeMap := map[string]service.RangeItem{
+	// 	"timeStamp": {
+	// 		Min: float64(0),
+	// 		Max: float64(endTime),
+	// 	},
+	// }
+	//
+	// err, hitData := h.actor.Srv.ESMultiSearchPage(esIndex, rangeMap, int(size), &sortorder.Desc, int(form))
+	// if err != nil {
+	// 	h.Warnf("es查询出错了: %v", err.Error())
+	// 	return infos
+	// }
+	// for _, hit := range hitData.Hits {
+	// 	temp := &pb.BroadMessage{}
+	// 	if err = json.Unmarshal(hit.Source_, temp); err != nil {
+	// 		continue
+	// 	}
+	// 	infos = append(infos, temp)
+	// }
+	// return infos
+	return nil
 }

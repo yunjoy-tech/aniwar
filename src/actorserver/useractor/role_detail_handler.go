@@ -3,8 +3,6 @@ package useractor
 import (
 	"context"
 	"fmt"
-	"gitee.com/aniwar2/aniwar/src/common"
-	"strconv"
 	"time"
 
 	"gitee.com/aniwar2/aniwar/src/common/db"
@@ -144,14 +142,14 @@ func (h *RoleDetailHandler) tryUploadRoleInfoToES() error {
 	}
 	// 同步
 	data := h.actor.GetRoleDetailData()
-	err := h.actor.Srv.ESPut(common.ES_ROLE_DETAIL_KEY, strconv.Itoa(int(h.actor.roleId)), data)
-	if err != nil {
-		h.Error(err)
-		return err
-	}
+	// err := h.actor.Srv.ESPut(common.ES_ROLE_DETAIL_KEY, strconv.Itoa(int(h.actor.roleId)), data)
+	// if err != nil {
+	// 	h.Error(err)
+	// 	return err
+	// }
 
 	h.Infof("同步玩家到es中... roleId: %d, level: %d", data.Common.RoleId, data.Common.RoleLevel)
-	return err
+	return nil
 }
 
 func (h *RoleDetailHandler) ChangeNickname(nickname string) {

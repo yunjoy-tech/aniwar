@@ -127,14 +127,6 @@ BaseConf:
     maxRetryBackoff: 100
     poolSize: 15
     minIdleConns: 1
-  # es数据库配置
-  ESConf:
-    addr:
-      - 'http://es-cn-zsk3dhkcs000kyxfe.elasticsearch.aliyuncs.com:9200'
-    addrDev: 'http://47.97.254.188:9200'
-    userName: ''
-    password: ''
-    timeout: 5
   LogConf:
     # 日志输出等级[debug/info/warn/error/panic/fatal]
     level: debug

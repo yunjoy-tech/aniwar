@@ -2,9 +2,7 @@ package useractor
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
-	"strconv"
 	"time"
 
 	"gitee.com/aniwar2/aniwar/src/common"
@@ -476,74 +474,75 @@ func (h *FriendHandler) GetFriendRecommendReq(ctx context.Context, in *base.Prot
 
 // 尝试拉取当前在线的，足够了直接返回，否则尝试拉取今日在线的
 func (h *FriendHandler) getRecommendList() []*pb.PCommonRoleBaseInfo {
-	userData := h.actor.GetUserData()
-	hitSize := 0
-	infos := make([]*pb.PCommonRoleBaseInfo, 0)
+	// userData := h.actor.GetUserData()
+	// hitSize := 0
+	// infos := make([]*pb.PCommonRoleBaseInfo, 0)
 
-	minLv := uint32(1)
-	if userData.Common.RoleLevel > 5 {
-		minLv = userData.Common.RoleLevel - 5
-	}
+	// minLv := uint32(1)
+	// if userData.Common.RoleLevel > 5 {
+	// 	minLv = userData.Common.RoleLevel - 5
+	// }
 
-	// 范围条件
-	rangeMap := map[string]service.RangeItem{
-		"common.offline_time": {
-			Min: float64(-1),
-			Max: float64(0),
-		},
-		"common.role_level": {
-			Min: float64(minLv),
-			Max: float64(userData.Common.RoleLevel + 5),
-		},
-	}
+	// // 范围条件
+	// rangeMap := map[string]service.RangeItem{
+	// 	"common.offline_time": {
+	// 		Min: float64(-1),
+	// 		Max: float64(0),
+	// 	},
+	// 	"common.role_level": {
+	// 		Min: float64(minLv),
+	// 		Max: float64(userData.Common.RoleLevel + 5),
+	// 	},
+	// }
 	// 排除条件
-	ids := make([]string, 0)
-	ids = append(ids, strconv.Itoa(int(h.actor.roleId))) // 排除自己
-	friendData := h.actor.GetFriendData()
-	for id := range friendData.Blacks {
-		ids = append(ids, strconv.Itoa(int(id))) // 排除黑名单
-	}
-	for id := range friendData.Friends {
-		ids = append(ids, strconv.Itoa(int(id))) // 排除好友
-	}
-	filterMap := map[string][]string{
-		"common.role_id": ids,
-	}
-
-	err, hitData := h.actor.Srv.ESMultiSearch(common.ES_ROLE_DETAIL_KEY, nil, rangeMap, filterMap, hitSize, true)
-	if err != nil {
-		h.Errorf("es查询出错了: %v", err)
-		return infos
-	}
-	for _, hit := range hitData.Hits {
-		temp := &pb.PServerRoleDetailInfo{}
-		if err = json.Unmarshal(hit.Source_, temp); err != nil {
-			continue
-		}
-		infos = append(infos, temp.Common)
-	}
-
-	// 尝试拉取今日在线
-	if len(infos) < hitSize {
-		now := time.Now().Unix()
-		rangeMap["common.offline_time"] = service.RangeItem{
-			Min: float64(now - 24*60*60),
-			Max: float64(now),
-		}
-		err, hitData = h.actor.Srv.ESMultiSearch(common.ES_ROLE_DETAIL_KEY, nil, rangeMap, filterMap, hitSize, true)
-		if err != nil {
-			h.Errorf("es查询出错了: %v", err)
-			return infos
-		}
-		for _, hit := range hitData.Hits {
-			temp := &pb.PServerRoleDetailInfo{}
-			if err = json.Unmarshal(hit.Source_, temp); err != nil {
-				continue
-			}
-			infos = append(infos, temp.Common)
-		}
-	}
-	return infos
+	// ids := make([]string, 0)
+	// ids = append(ids, strconv.Itoa(int(h.actor.roleId))) // 排除自己
+	// friendData := h.actor.GetFriendData()
+	// for id := range friendData.Blacks {
+	// 	ids = append(ids, strconv.Itoa(int(id))) // 排除黑名单
+	// }
+	// for id := range friendData.Friends {
+	// 	ids = append(ids, strconv.Itoa(int(id))) // 排除好友
+	// }
+	// filterMap := map[string][]string{
+	// 	"common.role_id": ids,
+	// }
+	//
+	// err, hitData := h.actor.Srv.ESMultiSearch(common.ES_ROLE_DETAIL_KEY, nil, rangeMap, filterMap, hitSize, true)
+	// if err != nil {
+	// 	h.Errorf("es查询出错了: %v", err)
+	// 	return infos
+	// }
+	// for _, hit := range hitData.Hits {
+	// 	temp := &pb.PServerRoleDetailInfo{}
+	// 	if err = json.Unmarshal(hit.Source_, temp); err != nil {
+	// 		continue
+	// 	}
+	// 	infos = append(infos, temp.Common)
+	// }
+	//
+	// // 尝试拉取今日在线
+	// if len(infos) < hitSize {
+	// 	now := time.Now().Unix()
+	// 	rangeMap["common.offline_time"] = service.RangeItem{
+	// 		Min: float64(now - 24*60*60),
+	// 		Max: float64(now),
+	// 	}
+	// 	err, hitData = h.actor.Srv.ESMultiSearch(common.ES_ROLE_DETAIL_KEY, nil, rangeMap, filterMap, hitSize, true)
+	// 	if err != nil {
+	// 		h.Errorf("es查询出错了: %v", err)
+	// 		return infos
+	// 	}
+	// 	for _, hit := range hitData.Hits {
+	// 		temp := &pb.PServerRoleDetailInfo{}
+	// 		if err = json.Unmarshal(hit.Source_, temp); err != nil {
+	// 			continue
+	// 		}
+	// 		infos = append(infos, temp.Common)
+	// 	}
+	// }
+	// return infos
+	return nil
 }
 
 func (h *FriendHandler) BlackOperateReq(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
