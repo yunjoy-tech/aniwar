@@ -3,7 +3,6 @@ package useractor
 import (
 	"context"
 	"fmt"
-	"gitee.com/aniwar2/aniwar/src/actorserver/useractor/event"
 	"gitee.com/aniwar2/aniwar/src/common"
 	"gitee.com/aniwar2/aniwar/src/common/clidto"
 	"gitee.com/aniwar2/aniwar/src/common/conf"
@@ -32,7 +31,7 @@ type LoginHandler struct {
 func NewLoginHandler(actor *UserActor) *LoginHandler {
 	h := &LoginHandler{UABaseHandler: NewUABaseHandler(actor, "LoginHandler")}
 	h.ChildHandler = h
-	actor.RegisterProtoHandler(int32(pb.Protocols_PS2S_KickoutPlayerNtf), h.KickoutPlayer)
+	actor.RegisterProtoHandler(int32(pb.Protocols_PS2S_KickoutPlayerNtf), h.KickOutPlayer)
 	actor.RegisterProtoHandler(int32(pb.Protocols_PC2LS_ChangeNicknameReq), h.ChangeNicknameReq)
 	actor.RegisterProtoHandler(int32(pb.Protocols_PC2LS_ChangeHeadReq), h.ChangeHeadReq)
 	actor.RegisterProtoHandler(int32(pb.Protocols_PC2LS_CreateRoleInfoReq), h.CreateRoleInfoReq)
@@ -53,8 +52,7 @@ func (h *LoginHandler) Init() error {
 }
 
 func (h *LoginHandler) EnterGame() error {
-	// 尝试解锁头像
-	return h.tryUnlockHeads(common.HEAD_UNLOCK_TYPE_3, 0)
+	return nil
 }
 
 func (h *LoginHandler) DailyRefresh() error {
@@ -87,75 +85,7 @@ func (h *LoginHandler) DBTable() (service.MongoDbType, string, proto.Message) {
 	return service.MongoDbType_MongoGame, db.KeyUserBaseInfo(h.actor.ID()), h.actor.Data.Base
 }
 
-// 尝试解锁玩家头像
-func (h *LoginHandler) tryUnlockHeadsEvent(e event.IEvent) error {
-	var err error
-
-	name := e.Name()
-	if name == TASK_EVENT_CARD_CREATE {
-		cardId := e.Get("cardId").(int32)
-		err = h.tryUnlockHeads(common.HEAD_UNLOCK_TYPE_1, cardId)
-	} else if name == TASK_EVENT_BREAKTHROUGH {
-		cardId := e.Get("card_id").(int32)
-		isAwaken := e.Get("is_awaken").(bool)
-		if isAwaken {
-			err = h.tryUnlockHeads(common.HEAD_UNLOCK_TYPE_2, cardId)
-		}
-	} else {
-		h.Warnf("unrealized event type %s", name)
-	}
-	if err != nil {
-		h.Errorf("tryUnlockHeadsEvent got err: %v", err)
-	}
-	return nil
-}
-
-func (h *LoginHandler) tryUnlockHeads(unlockType, param int32) error {
-	newHeads := make([]int32, 0)
-	tempMap := make(map[int32]int32)
-	// excel.GetPlayerInfoMgr().Foreach(func(cfg *excel.PlayerInfoCfg) bool {
-	// 	if cfg.Type != common.PLAYER_HEAD {
-	// 		return true
-	// 	}
-	// 	if cfg.UnlockWay != unlockType {
-	// 		return true
-	// 	}
-	// 	// 尝试解锁
-	// 	if cfg.WayId == param {
-	// 		newHeads = append(newHeads, cfg.Id)
-	// 	}
-	//
-	// 	return true
-	// }, true)
-
-	data := h.actor.GetUserData()
-	if len(newHeads) > 0 {
-		for _, id := range data.Heads {
-			tempMap[id] = id
-		}
-		for _, id := range newHeads {
-			if _, ok := tempMap[id]; !ok {
-				data.Heads = append(data.Heads, id)
-				data.NewHeads = append(data.NewHeads, id)
-				h.actor.comData.GetBaseData().Heads = append(h.actor.comData.GetBaseData().Heads, id)
-				h.actor.comData.GetBaseData().NewHeads = append(h.actor.comData.GetBaseData().NewHeads, id)
-			}
-		}
-	}
-	// 默认头像容错
-	if unlockType == common.HEAD_UNLOCK_TYPE_3 && data.Common.RoleHead == 0 && len(data.Heads) > 0 {
-		data.Common.RoleHead = data.Heads[0]
-		h.actor.RoleDetailHandler.ChangeHeadId(data.Common.RoleHead)
-	}
-	// 自动佩戴
-	if unlockType == common.HEAD_UNLOCK_TYPE_4 {
-		data.Common.RoleHead = newHeads[0]
-		h.actor.RoleDetailHandler.ChangeHeadId(data.Common.RoleHead)
-	}
-	return h.SaveDB()
-}
-
-func (h *LoginHandler) KickoutPlayer(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
+func (h *LoginHandler) KickOutPlayer(ctx context.Context, in *base.ProtoMsg) (proto.Message, error, int32) {
 	var req pb.S2S_KickoutPlayerNtf
 	err := in.UnmarshalData(&req)
 	if err != nil {
@@ -277,7 +207,6 @@ func (h *LoginHandler) CreateRoleInfoReq(ctx context.Context, in *base.ProtoMsg)
 func (h *LoginHandler) changeSex(sex int32) {
 	data := h.actor.GetUserData()
 	data.Common.RoleSex = uint32(sex)
-	h.tryUnlockHeads(common.HEAD_UNLOCK_TYPE_4, sex)
 	h.actor.RoleDetailHandler.ChangeRoleSex(sex)
 }
 
@@ -401,21 +330,12 @@ func (h *LoginHandler) TryUpdateLastLoginDate() (bool, error) {
 
 	// 更新本次登陆时间戳
 	h.UpdateOnlineTS(time.Now().Unix())
-	// h.UpdateOfflineTS(-1)
 
 	// 判断是否跨天
 	if !timeutil.IsSameDay(oldLastLoginDate, time.Now()) {
 		// 隔天登陆
 		h.actor.GetUserData().Common.LoginDay++
 		h.actor.RoleDetailHandler.ChangeLoginDay()
-		// 发布事件
-		err := h.actor.eventManager.SyncPublish(event.NewBasicEvent(TASK_EVENT_PLAYER_LOGIN, []int32{TASK_TYPE_501, TASK_TYPE_503}, map[string]interface{}{
-			"login_day": h.actor.GetUserData().Common.LoginDay,
-		}))
-		if err != nil {
-			h.Error(err)
-		}
-
 		return true, nil
 	}
 
@@ -523,13 +443,8 @@ func (h *LoginHandler) LoginEnterGame(ctx context.Context, in *base.ProtoMsg) (p
 		Base:                h.buildRoleBaseInfo(),
 		Items:               h.actor.BagHandler.buildItemList(),
 		Currency:            h.actor.CurrencyHandler.buildCurrencyList(),
-		// Troop:               builder.BuildTroopList(h.actor.GetTroopData()),
-		Duty: h.actor.DutyHandler.buildDutyInfo(false),
-		// Flags:     h.getStoryFlags(),
-		Friends:   h.actor.FriendHandler.buildFriendData(true),
-		Alliance:  h.actor.UserAllianceHandler.buildAllianceData(true),
-		GuideTask: h.actor.GuideTaskHandler.buildGuideTask(),
-		// ActivityData:        h.actor.ActivityHandler.formatActivity2Client(),
+		Friends:             h.actor.FriendHandler.buildFriendData(true),
+		Alliance:            h.actor.UserAllianceHandler.buildAllianceData(true),
 	}
 
 	res := &pb.G2C_LoginGameRes{
@@ -657,22 +572,11 @@ func (h *LoginHandler) DoEnterGame(bNewPlayer bool) (proto.Message, error, int32
 		}
 	}
 
-	// 发布事件
-	err := h.actor.eventManager.SyncPublish(event.NewBasicEvent(TASK_EVENT_ENTER_GAME, []int32{}, nil))
-	if err != nil {
-		h.Error(err)
-	}
-
 	h.UpdateOfflineTS(-1)
 
 	// 尝试同步es
 	h.actor.RoleDetailHandler.tryUploadRoleInfoToES()
 
-	// utils.SafeRunNoError(func() {
-	//	lilith.WriteDataLog(&lilith.UserLogin{
-	//		HeadInfo: lilith.BuildHeadInfo(lilith.LogType_UserLogin, h.actor.uid, h.actor.Account.CliDeviceInfo),
-	//	})
-	// })
 	utils.SafeRunNoError(func() {
 		e := &taptap.RoleLogin{
 			PropertyFieldInfo: taptap.BuildPropertyFieldInfo(h.actor.Account.CliDeviceInfo),
@@ -702,13 +606,6 @@ func (h *LoginHandler) updateRoleBase(newLevel uint32, newExp uint64, commonData
 		return err
 	}
 	h.actor.RoleDetailHandler.ChangeRoleLevel(newExp, newLevel)
-	// 刷新剧情任务
-	errx := h.actor.eventManager.SyncPublish(event.NewBasicEvent(TASK_EVENT_ROLE_LEVEL_CHANGE, []int32{TASK_TYPE_504}, map[string]interface{}{
-		"level": int32(newLevel),
-	}))
-	if errx != nil {
-		h.Error(errx)
-	}
 
 	commonData.Data.Base = h.actor.LoginHandler.buildRoleBaseInfo()
 	return nil

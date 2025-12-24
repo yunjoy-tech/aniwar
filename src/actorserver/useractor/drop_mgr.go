@@ -6,8 +6,6 @@ import (
 	"gitee.com/aniwar2/musae/gamelib/guid"
 	"time"
 
-	"gitee.com/aniwar2/aniwar/src/actorserver/useractor/event"
-
 	"gitee.com/aniwar2/aniwar/src/common/clidto"
 
 	"gitee.com/aniwar2/aniwar/src/common"
@@ -145,11 +143,6 @@ func (m *DropMgr) DropList(items map[uint32]uint32, isFullMail bool, params []in
 	// 发送上限邮件
 	if isFullMail && len(m.limitItems) > 0 {
 		m.actor.MailHandler.AddUserMail(common.MAIL_TEMPLATE_2, m.limitItems, commonData)
-	}
-	// 发布道具掉落事件
-	errx := m.actor.eventManager.SyncPublish(event.NewBasicEvent(TASK_EVENT_ITEM_DROP, []int32{}, nil))
-	if errx != nil {
-		m.actor.Error(errx)
 	}
 
 	return dropChange, nil

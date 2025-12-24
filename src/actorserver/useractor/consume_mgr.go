@@ -6,8 +6,6 @@ import (
 	"gitee.com/aniwar2/aniwar/src/meta"
 	"time"
 
-	"gitee.com/aniwar2/aniwar/src/actorserver/useractor/event"
-
 	"gitee.com/aniwar2/aniwar/src/common/clidto"
 
 	"gitee.com/aniwar2/aniwar/src/common"
@@ -129,14 +127,6 @@ func (m *ConsumeMgr) ConsumeList(items map[int32]int32, commonData *clidto.Comda
 		}
 	}
 
-	// 发布道具消耗事件
-	errx := m.actor.eventManager.SyncPublish(event.NewBasicEvent(TASK_EVENT_ITEM_CONSUME, []int32{TASK_TYPE_113}, map[string]interface{}{
-		"items": items,
-	}))
-	if errx != nil {
-		m.actor.Error(errx)
-	}
-
 	return nil
 }
 
@@ -167,16 +157,6 @@ func (m *ConsumeMgr) doConsume(itemCfg *meta.ItemPkgItemMeta, costNum uint32, co
 
 	default:
 		m.actor.Warnf("doConsume ===>>> 未支持的itemType=%d\n", itemCfg.Type)
-	}
-
-	// 特殊道具消耗
-	if itemCfg.Type == int32(pb.ItemType_Food) {
-		errx := m.actor.eventManager.SyncPublish(event.NewBasicEvent(TASK_EVENT_USE_FOOD, []int32{TASK_TYPE_111}, map[string]interface{}{
-			"count": int32(costNum),
-		}))
-		if errx != nil {
-			m.actor.Error(errx)
-		}
 	}
 
 	return err

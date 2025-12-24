@@ -23,7 +23,6 @@ import (
 
 	"time"
 
-	"gitee.com/aniwar2/aniwar/src/actorserver/useractor/event"
 	"gitee.com/aniwar2/aniwar/src/common"
 	"gitee.com/aniwar2/aniwar/src/common/db"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
@@ -57,10 +56,7 @@ type UserActor struct {
 
 	// Srv *frame.ActorServer
 
-	eventManager   *event.Manager
-	TaskTypeMgr    *TaskTypeMgr
-	TaskTriggerMgr *TaskTriggerMgr
-	comData        *clidto.Comdata
+	comData *clidto.Comdata
 
 	// 延迟落库
 	// handlersMap map[svc.MongoDbType][]baseactor.IBaseHandler
@@ -68,15 +64,12 @@ type UserActor struct {
 	AccountHandler      *AccountHandler
 	UserHandler         *UserHandler
 	OrderHandler        *OrderHandler
-	BattleHandler       *BattleHandler
 	LoginHandler        *LoginHandler
 	BagHandler          *BagHandler
 	GmHandler           *GmHandler
 	CurrencyHandler     *CurrencyHandler
 	ShopHandler         *ShopHandler
 	MailHandler         *MailHandler
-	DutyHandler         *DutyHandler
-	GuideTaskHandler    *GuideTaskHandler
 	FriendHandler       *FriendHandler
 	RoleDetailHandler   *RoleDetailHandler
 	UserRoomHandler     *UserRoomHandler
@@ -84,7 +77,6 @@ type UserActor struct {
 	UserChatHandler     *UserChatHandler
 	OfflineEventHandler *OfflineEventHandler
 	UserAllianceHandler *UserAllianceHandler
-	// ActivityHandler     *ActivityHandler
 }
 
 func New() actor.Server {
@@ -109,16 +101,11 @@ func New() actor.Server {
 	a.RpcMethods = make(map[string]*baseactor.RpcMethod)
 	a.Data = &pb.PlayerData{}
 
-	a.eventManager = event.NewManager(a.ID())
-	a.TaskTypeMgr = NewTaskTypeMgr(a)
-	a.TaskTriggerMgr = NewTaskTriggerMgr(a)
 	a.liveTime = time.Now().Unix() // 创建server时间戳
 	a.comData = clidto.BuildComData()
 
 	// 协议注册
 	a.initHandlers()
-	// 异步函数注册
-	a.initAsyncFunc()
 
 	// delay save db timer
 	// actor.Srv.AddTimer(true, time.Second*DELAY_SAVE_DB_TIME, actor.Delay2DB)
@@ -528,9 +515,6 @@ func (u *UserActor) initHandlers() {
 	u.OrderHandler = NewOrderHandler(u)
 	u.KeepHandler(u.OrderHandler)
 
-	u.BattleHandler = NewBattleHandler(u)
-	u.KeepHandler(u.BattleHandler)
-
 	u.LoginHandler = NewLoginHandler(u)
 	u.KeepHandler(u.LoginHandler)
 
@@ -569,37 +553,6 @@ func (u *UserActor) initHandlers() {
 
 	u.UserAllianceHandler = NewUserUserAllianceHandler(u)
 	u.KeepHandler(u.UserAllianceHandler)
-
-	// u.ActivityHandler = NewActivityHandler(u)
-	// u.KeepHandler(u.ActivityHandler)
-
-	// ------------------任务数据初始化，必须放置在最后处理，否则导致任务初始化异常-------------------
-	u.DutyHandler = NewDutyHandler(u)
-	u.KeepHandler(u.DutyHandler)
-
-	u.GuideTaskHandler = NewGuideTaskHandler(u)
-	u.KeepHandler(u.GuideTaskHandler)
-}
-
-func (u *UserActor) initAsyncFunc() {
-	// 异步事件监听
-	u.eventManager.Listen(TASK_EVENT_ROLE_LEVEL_CHANGE, event.ListenerFunc(u.DutyHandler.tryInitData))
-	u.eventManager.Listen(TASK_EVENT_QUEST_COMPLETE, event.ListenerFunc(u.DutyHandler.tryInitData))
-	u.eventManager.Listen(TASK_EVENT_CARD_CREATE, event.ListenerFunc(u.LoginHandler.tryUnlockHeadsEvent))
-	u.eventManager.Listen(TASK_EVENT_BREAKTHROUGH, event.ListenerFunc(u.LoginHandler.tryUnlockHeadsEvent))
-	u.eventManager.Listen(TASK_EVENT_CARD_CREATE, event.ListenerFunc(u.RoleDetailHandler.tryHandleRoleLife))
-	u.eventManager.Listen(TASK_EVENT_PLAYER_LOGIN, event.ListenerFunc(u.RoleDetailHandler.tryHandleRoleLife))
-	u.eventManager.Listen(TASK_EVENT_ACHIEVE_COMPLETE, event.ListenerFunc(u.RoleDetailHandler.tryHandleRoleLife))
-	u.eventManager.Listen(TASK_EVENT_ENTER_GAME, event.ListenerFunc(u.UserAllianceHandler.tryAddAllianceContribution))
-	u.eventManager.Listen(TASK_EVENT_DUTY_ACTIVE_CHANGE, event.ListenerFunc(u.UserAllianceHandler.tryAddAllianceContribution))
-
-	// 任务监听
-	u.TaskTypeMgr.RegisterTaskTypeHandler(event.ListenerFunc(u.GuideTaskHandler.handleTaskType))
-	u.TaskTypeMgr.RegisterTaskTypeHandler(event.ListenerFunc(u.DutyHandler.handleTaskType))
-	// u.TaskTypeMgr.RegisterTaskTypeHandler(event.ListenerFunc(u.ActivityHandler.handleTaskType))
-	// 触发器监听
-	// u.TaskTriggerMgr.RegisterTaskTriggerHandler(event.ListenerFunc(u.ActivityHandler.handleTaskTrigger))
-	u.TaskTriggerMgr.RegisterTaskTriggerHandler(event.ListenerFunc(u.GuideTaskHandler.handleTaskTrigger))
 }
 
 func (u *UserActor) DailyRefreshAll() error {

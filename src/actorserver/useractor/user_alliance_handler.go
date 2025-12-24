@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"gitee.com/aniwar2/aniwar/src/actorserver/useractor/event"
 	"gitee.com/aniwar2/aniwar/src/common"
 	"gitee.com/aniwar2/aniwar/src/common/db"
 	"gitee.com/aniwar2/musae/gamelib/guid"
@@ -80,35 +79,6 @@ func (h *UserAllianceHandler) SetDBData(dbData proto.Message) error {
 
 func (h *UserAllianceHandler) DBTable() (service.MongoDbType, string, proto.Message) {
 	return service.MongoDbType_MongoGame, db.KeyUserAlliance(h.actor.ID()), h.actor.Data.UserAlliance
-}
-
-// 成员贡献度增加
-func (h *UserAllianceHandler) tryAddAllianceContribution(e event.IEvent) error {
-	if h.getAllianceId() == 0 {
-		return nil
-	}
-	h.Infof("尝试增加联盟贡献度 event: %+v", e)
-	// 有联盟，尝试加贡献度
-	var err error
-	name := e.Name()
-	if name == TASK_EVENT_ENTER_GAME {
-		err = h.tryRefreshWeekDay()
-		// 登录贡献度统计
-		err = h.handleAddContribution(common.ALLIANCE_CONTRIBUTION_1, []int32{})
-	} else if name == TASK_EVENT_DUTY_ACTIVE_CHANGE {
-		typ := e.Get("type").(int32)
-		beforeParam := e.Get("before_active").(int32)
-		afterParam := e.Get("after_active").(int32)
-		if typ == 1 {
-			err = h.handleAddContribution(common.ALLIANCE_CONTRIBUTION_2, []int32{beforeParam, afterParam})
-		}
-	}
-
-	if err != nil {
-		h.Errorf("tryAddAllianceContribution got err: %s", err.Error())
-	}
-
-	return nil
 }
 
 func (h *UserAllianceHandler) tryRefreshWeekDay() error {

@@ -58,7 +58,6 @@ func NewGmHandler(actor *UserActor) *GmHandler {
 	h.RegisterCmdHandler(common.GM_ADD_ITEM, h.GMAddItem)
 	h.RegisterCmdHandler(common.GM_CLEAN_ITEM, h.GMCleanItem)
 	h.RegisterCmdHandler(common.GM_ADD_ITEM_ALL, h.GMAddItemAll)
-	h.RegisterCmdHandler(common.GM_ADD_ITEM_BY_TYPE, h.GMAddItemByType)
 	h.RegisterCmdHandler(common.GM_DEL_ITEM_BY_ID, h.GMDelItemById)
 	h.RegisterCmdHandler(common.GM_KICKOUT, h.GmKickout)
 	h.RegisterCmdHandler(common.GM_BANNED, h.GmBanned)
@@ -70,14 +69,9 @@ func NewGmHandler(actor *UserActor) *GmHandler {
 	h.RegisterCmdHandler(common.GM_TEST_PROTO, h.GmTestCmd)
 	h.RegisterCmdHandler(common.GM_TEST_UGC, h.GmTestUgc)
 	h.RegisterCmdHandler(common.GM_TEST_SENSITIVE, h.GmTestSensitive)
-	h.RegisterCmdHandler(common.GM_TEST_Battle_chapter, h.GmTestBattleChapter)
 	h.RegisterCmdHandler(common.GM_CHECKBATTLE_RELOAD_EXCEL, h.GmTestCheckBattleReloadExcel)
-	h.RegisterCmdHandler(common.GM_TEST_DROP, h.GmTestDrop)
 	h.RegisterCmdHandler(common.GM_TEST_GUID, h.GmTestGUID)
 	h.RegisterCmdHandler(common.GM_TEST_DB, h.GmTestDB)
-	h.RegisterCmdHandler(common.GM_RESET_DUTY_TASK, h.GMResetDutyTask)
-	h.RegisterCmdHandler(common.GM_DIRECT_COMPLETE_DUTY_TASK, h.GMDirectCompleteDutyTask)
-	h.RegisterCmdHandler(common.GM_ERR_CODE, h.GMTestErrCode)
 	h.RegisterCmdHandler(common.GM_TEST_ACHIEVE, h.GMTestAchieve)
 	h.RegisterCmdHandler(common.GM_TEST_PVP_ROOM, h.GMTestRoom)
 	h.RegisterCmdHandler(common.GM_CLOSE_BATTKE_CHECK, h.GMCloseBattleCheck)
@@ -494,80 +488,6 @@ func (h *GmHandler) GmTestUgc(param []string, commonData *clidto.Comdata) error 
 	}
 }
 
-func (h *GmHandler) GmTestBattleChapter(param []string, commonData *clidto.Comdata) error {
-	var operateType = 0
-
-	if len(param) > 0 {
-		operateType, _ = strconv.Atoi(param[0])
-	}
-
-	if operateType == 1 { // 从battleserver获取json数据
-		var Id = "73"
-		if len(param) > 1 {
-			Id = param[1]
-		}
-
-		err := h.testExcelBattleEventReq(Id)
-		if err != nil {
-			return err
-		}
-	} else {
-		err := h.testCheckBattle()
-		if err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
-func (h *GmHandler) testCheckBattle() error {
-	SelfTeam := &pb.BattleTeam{
-		CardList: []*pb.BattleCard{
-			{
-				Pos: 1,
-				CardInfo: &pb.PClientCardInfo{Common: &pb.PCommonCardInfo{
-					CardId:            2,
-					CardLevel:         5,
-					CardExp:           45,
-					Hp:                966,
-					CreateTimestamp:   1683598892,
-					SkillId:           []uint32{21001, 22001, 23001},
-					SkinId:            2,
-					BreakthroughLevel: 0,
-					AwakenCfgId:       60200,
-					CharacterLevel:    0,
-					EquipId:           []uint64{0, 0, 0},
-					FavoriteLevel:     0,
-					FavoriteExp:       0,
-					Skins: []*pb.PCommonSkinInfo{
-						{
-							SkinId:     2,
-							IsNew:      false,
-							CreateTime: 1683598892,
-						},
-					},
-					IsNew:          false,
-					Character:      []int32{1},
-					CurCharacter:   1,
-					FavoriteReward: nil,
-				}},
-				CardHp:   924,
-				CardEner: 0,
-				Equips:   nil,
-			}},
-		FoodList: nil,
-	}
-
-	_, err, _ := h.actor.BattleHandler.CheckBattle(1, 1, pb.BattleResult_BattleResult_Winer, SelfTeam, 73, nil, nil)
-	if err != nil {
-		h.Errorf(err.Error())
-		return err
-	}
-
-	return nil
-}
-
 func (h *GmHandler) GMDelItemById(param []string, commonData *clidto.Comdata) error {
 	delItems := make(map[int32]int32)
 	for i := 0; i < len(param); {
@@ -605,32 +525,6 @@ func (h *GmHandler) GMDirectLevelUp(param []string, commonData *clidto.Comdata) 
 		return err
 	}
 	return h.actor.LoginHandler.DirectLevelUpByGM(uint32(value), commonData)
-}
-
-func (h *GmHandler) GMResetDutyTask(param []string, commonData *clidto.Comdata) error {
-	return h.actor.DutyHandler.ResetTaskByGM(commonData)
-}
-
-func (h *GmHandler) GMDirectCompleteDutyTask(param []string, commonData *clidto.Comdata) error {
-	taskId, err := strconv.Atoi(param[0])
-	if err != nil {
-		return err
-	}
-	return h.actor.DutyHandler.DirectCompleteTaskByGM(int32(taskId), commonData)
-}
-
-func (h *GmHandler) GMTestErrCode(param []string, commonData *clidto.Comdata) error {
-	// var (
-	//	err        error
-	//	errCodeVal = 0
-	// )
-	// if len(param) > 0 {
-	//	errCodeVal, err = strconv.Atoi(param[0])
-	//	if err != nil {
-	//		return err
-	//	}
-	// }
-	return fmt.Errorf("GM : user-defined error")
 }
 
 // GMCleanItem 清空道具数据
@@ -674,64 +568,7 @@ func (h *GmHandler) GMAddItem(param []string, commonData *clidto.Comdata) error 
 	return err
 }
 
-func (h *GmHandler) GMAddItemByType(param []string, commonData *clidto.Comdata) error {
-	addItems := make(map[uint32]uint32)
-	for i := 0; i < len(param); {
-		// typeId, err := strconv.ParseInt(param[i], 10, 32)
-		// if err != nil {
-		// 	h.Debugf("gm 命令解析错误, err=%+v", err)
-		// }
-		// itemNum, err := strconv.ParseInt(param[i+1], 10, 32)
-		// if err != nil {
-		// 	h.Debugf("gm 命令解析错误, err=%+v", err)
-		// }
-
-		// 根据typeId查找道具id
-		// excel.GetItemMgr().Foreach(func(cfg *excel.ItemCfg) bool {
-		// 	if typeId == int64(cfg.GetType()) {
-		// 		addItems[uint32(cfg.GetId())] = uint32(itemNum)
-		// 	}
-		// 	return true
-		// }, true)
-
-		i += 2
-	}
-
-	_, err := GetDropMgr(h.actor).DropList(addItems, true, nil, commonData, common.CR_GM)
-	return err
-}
-
-func (h *GmHandler) GmTestDrop(param []string, commonData *clidto.Comdata) error {
-	if len(param) < 2 {
-		return fmt.Errorf("param error")
-	}
-	// dropId, err := strconv.Atoi(param[0])
-	// if err != nil {
-	// 	return err
-	// }
-	num, err := strconv.Atoi(param[1])
-	if err != nil {
-		return err
-	}
-
-	// var builder strings.Builder
-	for i := 1; i <= num; i++ {
-		// itemRewards := datahelper.GetRewardsByDropId(int32(dropId))
-		// builder.WriteString(fmt.Sprintf("dropId: %d, num: %d, reward: %v \n", dropId, i, datahelper.ConvertItem2ByTpl(itemRewards)))
-	}
-	// myUtils.SaveLogToFile("./log/plog/testdrop.txt", builder.String())
-	return nil
-}
-
 func (h *GmHandler) test_UGCStringCheck(str string, cType int32, f bool) (bool, error) {
-	// if f {
-	//	reqMsg := &pb.C2LS_HeartBeatReq{}
-	//	_, err := h.actor.Srv.SvcInvoke(global.IDIP_SVC, h.actor.GetUID(), h.actor.roleId, h.actor.ID(), reqMsg)
-	//	if err != nil {
-	//		h.Error(err)
-	//	}
-	// }
-
 	// 校验合法性
 	h.Debugf("数据校验: %s %d", str, cType)
 	result, err := h.actor.Srv.CheckSensitiveWord(cType, str)

@@ -3,7 +3,6 @@ package useractor
 import (
 	"context"
 	"fmt"
-	"gitee.com/aniwar2/aniwar/src/actorserver/useractor/event"
 	"gitee.com/aniwar2/aniwar/src/common"
 	"strconv"
 	"time"
@@ -130,33 +129,6 @@ func (h *RoleDetailHandler) tryRefreshRoleDetail() error {
 	data.Lifex[2] = h.actor.LoginHandler.getLoginDay()
 	if err := h.SaveDB(); err != nil {
 		return err
-	}
-	return nil
-}
-
-// 处理角色生涯数据更新
-func (h *RoleDetailHandler) tryHandleRoleLife(e event.IEvent) error {
-	data := h.actor.GetRoleDetailData()
-	name := e.Name()
-	// 更新生涯数据
-	switch name {
-	case TASK_EVENT_CARD_CREATE:
-		data.Lifex[0] = e.Get("total").(int32)
-	case TASK_EVENT_ACHIEVE_COMPLETE:
-		data.Lifex[1] = e.Get("complete_num").(int32)
-	case TASK_EVENT_PLAYER_LOGIN:
-		data.Lifex[2] = e.Get("login_day").(int32)
-	default:
-		h.Warnf("tryHandleRoleLife unrealized event type %s", name)
-		return nil
-	}
-	if err := h.SaveDB(); err != nil {
-		h.Errorf("tryHandleRoleLife got err: %v", err)
-	}
-
-	// 尝试同步es
-	if err := h.tryUploadRoleInfoToES(); err != nil {
-		h.Errorf("tryHandleRoleLife got err: %v", err)
 	}
 	return nil
 }
