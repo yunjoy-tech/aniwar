@@ -11,6 +11,7 @@ import (
 	"gitee.com/aniwar2/musae/base"
 	"gitee.com/aniwar2/musae/baseactor"
 	"gitee.com/aniwar2/musae/baseconf"
+	"gitee.com/aniwar2/musae/errorx"
 	"gitee.com/aniwar2/musae/logger"
 	"gitee.com/aniwar2/musae/mtime"
 	"gitee.com/aniwar2/musae/service"
@@ -142,10 +143,10 @@ func (s *CommonActor) Invoke(ctx context.Context, in *base.ProtoMsg) (msg *base.
 
 	msgId, uid, data := in.MsgId, in.UserId, in.Data
 	defer func() (*base.ProtoMsg, error) {
-		if e := recover(); e != any(nil) {
-			eStr := fmt.Sprintf("UserInvoke recover Msg:%+v %s %s err:%v", pb.Protocols(msgId), s.Str(), in.Str(), e)
+		if err := recover(); err != nil {
+			eStr := fmt.Sprintf("UserInvoke recover Msg:%+v %s %s err:%v", pb.Protocols(msgId), s.Str(), in.Str(), err)
 			msg.Data = []byte(eStr)
-			s.Error(eStr)
+			s.Error(errorx.Newf("UserInvoke recover error: %v", err))
 		}
 		delay := time.Since(now).Milliseconds()
 		logStr := fmt.Sprintf("===>>>UserInvoke Msg:%v Delay:%d UAID:%s MSG-RET:%s", pb.Protocols(msg.MsgId), delay, s.ID(), msg.Str())

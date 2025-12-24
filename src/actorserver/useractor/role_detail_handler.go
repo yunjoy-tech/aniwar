@@ -163,6 +163,9 @@ func (h *RoleDetailHandler) tryHandleRoleLife(e event.IEvent) error {
 
 // 同步数据到es中
 func (h *RoleDetailHandler) tryUploadRoleInfoToES() error {
+	if true {
+		return nil
+	}
 	// 判断是否开启相关的功能
 	if !h.actor.FuncUnlockHandler.CheckFuncsUnlock([]int32{FUNC_ID_Friend}) {
 		return nil

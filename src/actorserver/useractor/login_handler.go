@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"gitee.com/aniwar2/aniwar/src/actorserver/useractor/event"
 	"gitee.com/aniwar2/aniwar/src/common"
-	"gitee.com/aniwar2/aniwar/src/common/builder"
 	"gitee.com/aniwar2/aniwar/src/common/clidto"
 	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
@@ -524,12 +523,12 @@ func (h *LoginHandler) LoginEnterGame(ctx context.Context, in *base.ProtoMsg) (p
 		Base:                h.buildRoleBaseInfo(),
 		Items:               h.actor.BagHandler.buildItemList(),
 		Currency:            h.actor.CurrencyHandler.buildCurrencyList(),
-		Troop:               builder.BuildTroopList(h.actor.GetTroopData()),
-		Duty:                h.actor.DutyHandler.buildDutyInfo(false),
-		Flags:               h.getStoryFlags(),
-		Friends:             h.actor.FriendHandler.buildFriendData(true),
-		Alliance:            h.actor.UserAllianceHandler.buildAllianceData(true),
-		GuideTask:           h.actor.GuideTaskHandler.buildGuideTask(),
+		// Troop:               builder.BuildTroopList(h.actor.GetTroopData()),
+		Duty: h.actor.DutyHandler.buildDutyInfo(false),
+		// Flags:     h.getStoryFlags(),
+		Friends:   h.actor.FriendHandler.buildFriendData(true),
+		Alliance:  h.actor.UserAllianceHandler.buildAllianceData(true),
+		GuideTask: h.actor.GuideTaskHandler.buildGuideTask(),
 		// ActivityData:        h.actor.ActivityHandler.formatActivity2Client(),
 	}
 
@@ -540,11 +539,6 @@ func (h *LoginHandler) LoginEnterGame(ctx context.Context, in *base.ProtoMsg) (p
 		ServerTimestamp: time.Now().UnixMilli(),
 		CommonData:      h.actor.comData.FixDownComData(),
 		OrderInfo:       h.actor.OrderHandler.buildOrderInfo(),
-	}
-
-	// 下发副本id
-	if h.actor.GetLevelsData().InSubLevel == pb.InSubLevelType_yes {
-		res.LevelId = h.actor.GetLevelsData().CurrLevelId
 	}
 
 	// 重连

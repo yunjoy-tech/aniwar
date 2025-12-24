@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
+	"gitee.com/aniwar2/musae/logger"
 	"gitee.com/aniwar2/musae/utils"
 	"strconv"
 
@@ -495,6 +496,8 @@ func (u *UserActor) UserInvoke(ctx context.Context, in *base.ProtoMsg) (msg *bas
 	}
 
 	if in.MsgId == int32(pb.Protocols_PS2S_SvcInvokeReq) {
+		logger.Infof("UserInvoke SvcInvokeReq, %v", msg == nil)
+		msg = &base.ProtoMsg{}
 		msg.MsgId = int32(pb.Protocols_PS2S_SvcInvokeRes)
 		msg.ErrCode = int32(pb.ErrorCode_Success)
 		msg.Data = nil
