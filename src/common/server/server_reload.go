@@ -84,7 +84,6 @@ func (s *Server) HotReload(ctx context.Context, in *common.InvocationEvent) (out
 	}
 	logger.Infof("hotreload param:[%+v], out: %s", param, string(out.Data))
 	return out, nil
-
 }
 
 func (s *Server) HandlerHotEvent(in *base.ProtoMsg) (err error) {

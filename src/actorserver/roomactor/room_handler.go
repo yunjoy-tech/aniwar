@@ -5,12 +5,11 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"gitee.com/aniwar2/aniwar/src/common/gmeta"
 	"gitee.com/aniwar2/musae/gamelib/guid"
 	"gitee.com/aniwar2/musae/utils"
 	"strconv"
 	"time"
-
-	"gitee.com/aniwar2/aniwar/src/common/datahelper"
 
 	"gitee.com/aniwar2/musae/global"
 
@@ -175,7 +174,7 @@ func (h *RoomHandler) JoinRoomReq(ctx context.Context, in *base.ProtoMsg) (proto
 	}
 
 	hadPlayerCount := len(h.actor.Data.Players)
-	if int32(hadPlayerCount) >= datahelper.GetMiniGamePlayerNum(h.actor.Data.PlayType) {
+	if int32(hadPlayerCount) >= gmeta.GetMiniGamePlayerNum(h.actor.Data.PlayType) {
 		return nil, errors.New(fmt.Sprintf("房间人数已满, count=%d", hadPlayerCount)), int32(pb.ErrorCode_Room_player_num_full)
 	}
 
@@ -261,7 +260,7 @@ func (h *RoomHandler) UpdateLineupReq(ctx context.Context, in *base.ProtoMsg) (p
 		}
 	}
 
-	maxCardNum := datahelper.GetMiniGameHeroNum(h.actor.Data.PlayType)
+	maxCardNum := gmeta.GetMiniGameHeroNum(h.actor.Data.PlayType)
 	if cardNum > maxCardNum {
 		return nil, err, int32(pb.ErrorCode_Room_player_card_num_invalid)
 	}
@@ -323,7 +322,7 @@ func (h *RoomHandler) PlayerReadyReq(ctx context.Context, in *base.ProtoMsg) (pr
 		return nil, err, int32(code)
 	}
 
-	needCardNum := datahelper.GetMiniGameHeroNum(h.actor.Data.PlayType)
+	needCardNum := gmeta.GetMiniGameHeroNum(h.actor.Data.PlayType)
 
 	var lineupCardNum int32 = 0
 	for _, player := range h.actor.Data.Players {

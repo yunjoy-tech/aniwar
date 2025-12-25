@@ -1,4 +1,4 @@
-package datahelper
+package gmeta
 
 import (
 	"gitee.com/aniwar2/aniwar/src/proto/pb"

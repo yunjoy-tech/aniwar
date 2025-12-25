@@ -33,3 +33,4 @@ err日志堆栈
 musae优化mongo和redis的方法封装，抽象为db和cache，支持无缝切换组件
 增加model层，迁移service_mongo到model层
 移除动态屏蔽词逻辑，临时新增屏蔽词需求，修改nacos的远程txt配置，重载mgr
+commondata每个协议临时构建，不挂载actor上

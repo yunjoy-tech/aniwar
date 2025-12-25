@@ -7,7 +7,6 @@ import (
 	"gitee.com/aniwar2/aniwar/src/common/clidto"
 	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
 	"gitee.com/aniwar2/aniwar/src/common/db"
-	myUtils "gitee.com/aniwar2/aniwar/src/common/utils"
 	"gitee.com/aniwar2/aniwar/src/meta"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/base"
@@ -749,11 +748,11 @@ func (h *MailHandler) tryDelMail(mails map[int64]*pb.PMailInfo) []int64 {
 
 // 随机一个MailActor进行调用
 func randMailActorId() string {
-	min := baseconf.GetBaseConf().MailActorMin
+	minCount := baseconf.GetBaseConf().MailActorMin
 	percent := baseconf.GetBaseConf().MailActorPercent
-	need := myUtils.CalTenThousand(global.UserActorCount, percent)
-	if need < min {
-		need = min
+	need := int32(math.Ceil(float64(percent) / 10000 * float64(global.UserActorCount)))
+	if need < minCount {
+		need = minCount
 	}
 	// 随机一个id
 	id := randutil.RangeInt32(0, need)

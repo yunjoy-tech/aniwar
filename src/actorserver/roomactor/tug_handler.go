@@ -3,13 +3,10 @@ package roomactor
 import (
 	"context"
 	"fmt"
+	"gitee.com/aniwar2/aniwar/src/common/gmeta"
 	"gitee.com/aniwar2/musae/gamelib/guid"
 	"gitee.com/aniwar2/musae/utils"
 	"time"
-
-	"gitee.com/aniwar2/aniwar/src/common/datahelper"
-
-	myUtils "gitee.com/aniwar2/aniwar/src/common/utils"
 
 	"gitee.com/aniwar2/musae/base"
 
@@ -191,7 +188,7 @@ func (h *TugHandler) tugExecTick() {
 	}
 
 	h.actor.Tug.TugTick++
-	if h.actor.Tug.TugTick == datahelper.GetMiniGameCountdown(h.actor.Tug.RoomModel) {
+	if h.actor.Tug.TugTick == gmeta.GetMiniGameCountdown(h.actor.Tug.RoomModel) {
 		// 3秒倒计时结束，游戏开始
 		h.actor.Tug.TugState = pb.TugState_ts_playing
 		err := h.Cache2Redis()
@@ -215,13 +212,13 @@ func (h *TugHandler) tryGameOver() bool {
 		diff int32 = 0
 	)
 
-	if h.actor.Tug.TugTick == datahelper.GetMiniGameTotalSec(h.actor.Tug.RoomModel) {
+	if h.actor.Tug.TugTick == gmeta.GetMiniGameTotalSec(h.actor.Tug.RoomModel) {
 		h.Infof("时间到了，游戏结束")
 		goto OnGameOver
 	}
 
 	diff = getMaxDiff(h.actor.Tug.Scores)
-	if diff > datahelper.GetMiniGameWinCondition(h.actor.Tug.RoomModel, datahelper.MiniGameWinTypeClick) {
+	if diff > gmeta.GetMiniGameWinCondition(h.actor.Tug.RoomModel, gmeta.MiniGameWinTypeClick) {
 		h.Infof("分差到了，游戏结束")
 		goto OnGameOver
 	}
@@ -236,7 +233,7 @@ func getMaxDiff(scores []*pb.TugScore) int32 {
 	var maxDiff int32 = 0
 	for i := 0; i < len(scores); i++ {
 		for j := i + 1; j < len(scores); j++ {
-			eachDiff := myUtils.Abs(scores[i].Score - scores[j].Score)
+			eachDiff := scores[i].Score - scores[j].Score
 			if eachDiff > maxDiff {
 				maxDiff = eachDiff
 			}
