@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"gitee.com/aniwar2/aniwar/src/common"
 	"gitee.com/aniwar2/aniwar/src/common/clidto"
-	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
 	"gitee.com/aniwar2/aniwar/src/common/db"
 	myUtils "gitee.com/aniwar2/aniwar/src/common/utils"
@@ -436,7 +435,7 @@ func (h *MailHandler) GMTAddUserMail(req *pb.S2S_SendGMAddUserMailReq, commonDat
 
 	// 问卷处理
 	if req.QuestionId != "" {
-		newMail.QuestionUrl = h.genQuestionUrl(h.actor.uid, h.actor.Data.Base.Common.RoleId, req.QuestionType, req.QuestionId, lang)
+		// newMail.QuestionUrl = h.genQuestionUrl(h.actor.uid, h.actor.Data.Base.Common.RoleId, req.QuestionType, req.QuestionId, lang)
 		// 问卷数据处理
 		// err := h.actor.QuestionHandler.AddQuestion(req.QuestionId, newMail.Attachments)
 		// if err != nil {
@@ -601,7 +600,7 @@ func (h *MailHandler) convertMail(uid string, roleId uint64, lang string, mail *
 	// 问卷处理
 	var questionUrl string
 	if mail.QuestionId != "" {
-		questionUrl = h.genQuestionUrl(uid, roleId, mail.QuestionType, mail.QuestionId, lang)
+		// questionUrl = h.genQuestionUrl(uid, roleId, mail.QuestionType, mail.QuestionId, lang)
 		// 问卷数据处理
 		// err := h.actor.QuestionHandler.AddQuestion(mail.QuestionId, mail.Attachments)
 		// if err != nil {
@@ -746,48 +745,6 @@ func (h *MailHandler) tryDelMail(mails map[int64]*pb.PMailInfo) []int64 {
 	}
 
 	return target
-}
-
-// genQuestionUrl
-//
-//	@Description: 生成问卷完整url
-//	@param uid 玩家id
-//	@param questionType 问卷类型 1=单语言 2=多语言
-//	@param questionId 问卷id
-//	@param lang
-//	@return string 返回问卷url
-func (h *MailHandler) genQuestionUrl(uid string, roleId uint64, questionType int32, questionId string, lang string) string {
-
-	// url生成规则:
-	// 基础url由问卷系统生成，可自行创建或询问用研获取；
-	// 签名url由三个部分组成：基础url + 信息参数(参数顺序固定，如下) + clientKey，基础url包含协议+域名+路径；
-	// 问卷url由三个部分组成：基础url + 信息参数(参数无顺序要求) + 签名，基础url包含协议+域名+路径。
-	// 其中问卷url中的签名是由签名url进行MD5（32位小写）加密得来
-	// 注: 单语言path: deliver 多语言path: temporary
-
-	// role_key="open_id:user_id" ID格式应与数仓ID格式保持一致：问卷user_id = 数仓role_id，问卷open_id = 数仓open_id
-
-	var url string
-	var baseUrl = conf.Question().BaseUrl
-	var region = conf.SDK().ServerRegion
-	var clientKey = conf.Question().ClientKey
-	var roleKey = fmt.Sprintf("%s;%d", uid /* fixme 废弃 lilith.GetOpenId(uid)*/, roleId)
-
-	if questionType == common.QUESTION_LANG_TYPE_SINGLE {
-		signUrl := fmt.Sprintf("%s%s?sid=%s&region=%s&role_key=%s&key=%s", baseUrl, "deliver", questionId, region, roleKey, clientKey)
-		sign := utils.MD5Str(signUrl)
-		url = fmt.Sprintf("%s%s?sid=%s&region=%s&role_key=%s&sign=%s", baseUrl, "deliver", questionId, region, roleKey, sign)
-		h.Debugf("signUrl: %s , url: %s", signUrl, url)
-	} else if questionType == common.QUESTION_LANG_TYPE_MULTI {
-		signUrl := fmt.Sprintf("%s%s/%s?region=%s&role_key=%s&value_url_key=%s&key=%s", baseUrl, "temporary", questionId, region, roleKey, lang, clientKey)
-		sign := utils.MD5Str(signUrl)
-		url = fmt.Sprintf("%s%s/%s?region=%s&role_key=%s&value_url_key=%s&sign=%s", baseUrl, "temporary", questionId, region, roleKey, lang, sign)
-		h.Debugf("signUrl: %s , url: %s", signUrl, url)
-	} else {
-		h.Warnf("unrealized question type %d", questionType)
-	}
-
-	return url
 }
 
 // 随机一个MailActor进行调用

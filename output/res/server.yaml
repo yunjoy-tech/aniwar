@@ -239,34 +239,6 @@ BillConf:
     - 54.151.206.237
     - 127.0.0.1
 
-# 问卷调查配置信息
-QuestionConf:
-  baseUrl: 'https://q.farlightgames.com/'
-  # url签名key
-  clientKey: Y8e6bWHvRENT6tsH
-  # 发奖接口签名key
-  secretKey: Cg5HmKT8Loa9c4H7
-
-# sdk配置信息
-SdkConf:
-  # 游戏id
-  gameId: '10083'
-  # 游戏应用id [国际10006697][版署10011375]
-  lilithAppId: '10006697'
-  # 发行渠道主体 lilith主体/farlight主体(含日韩台)/channel国内渠道
-  platName: farlight
-  # 研发服务器大区 official国际官服/channel国服渠道服/global国际服/ptr海外灰度服/cnptr国内灰度服
-  serverRegion: test
-  # 产品阶段 ce[x]内测/cbt[x]删档测试/obt不删档及正式
-  phase: ce1
-
-# taptap配置信息
-TaptapConf:
-  # 国际服用openapi.taptap.io
-  baseUrl: openapi.taptap.com
-  # 应用id
-  clientId: queizhcadav89gshoq
-
 # oss配置信息
 OSSConf:
   # oss地址

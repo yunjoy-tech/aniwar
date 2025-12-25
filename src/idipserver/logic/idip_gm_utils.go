@@ -153,16 +153,6 @@ func RetCommonMsg(out *common.Content, httpCode int, ret int32, info interface{}
 	logger.Debugf("RetCommonMsg httpCode: %d, errCode: %d, info: %+v", httpCode, ret, info)
 }
 
-// 注册gmt接口处理函数
-func registerGmtHandler(typ string, f GmtHandlerFunc) {
-	if _, ok := GmtHandlerMap[typ]; !ok {
-		GmtHandlerMap[typ] = f
-		logger.Debugf("register gmt handler: %s", typ)
-	} else if ok {
-		logger.Errorf("Duplicate gmt handler are registered: %s", typ)
-	}
-}
-
 func buildRetItem(svrId, uid, ret int32, info string) *RetItems {
 	return &RetItems{
 		SvrId:  svrId,

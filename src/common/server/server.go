@@ -609,14 +609,6 @@ func (s *Server) IsPCChannel(channel string) bool {
 	return false
 }
 
-func (s *Server) IsLilithChannel(channel string) bool {
-	if channel == sdkconstant.GenLilithChannel() {
-		return true
-	}
-
-	return false
-}
-
 func (s *Server) IsTapChannel(channel string) bool {
 	if channel == sdkconstant.GenTaptapChannel() {
 		return true

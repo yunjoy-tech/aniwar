@@ -163,31 +163,17 @@ func (s *LoginServer) DoHandleLoginReq(req *pb.C2LS_LoginReq, res *pb.LS2C_Login
 		// 还未开通
 		return fmt.Sprintf("%v_%v", "ssgame", req.AccountId), pb.ErrorCode_Account_auth_fail
 	case pb.LoginChannelType_Lilith_Game:
-		appUidStr := req.AccountId
-		appToken := req.AccountPasswd
-
-		appUid, err := strconv.Atoi(appUidStr)
-		if err != nil {
-			logger.Warnf("lilith, 登陆请求验证, 无效的请求参数 appUidStr=%s, err:%v", appUidStr, err.Error())
-			return "", pb.ErrorCode_Account_auth_fail
-		}
-
-		if _, errCode := s.handleAuthLilith(appUid, appToken); errCode != pb.ErrorCode_Success {
-			return "", errCode
-		} else {
-			uid = sdkconstant.GenLilithUid(appUid)
-			channel = sdkconstant.GenLilithChannel()
-		}
+		//
 
 	case pb.LoginChannelType_Taptap_Game:
-		if id, _tapUserInfo, errCode := s.handleAuthTaptap(req.AccountId, req.AccountPasswd, req.Extra); errCode != pb.ErrorCode_Success {
-			return "", errCode
-		} else {
-			uid = sdkconstant.GenTaptapUid(id)
-			channel = sdkconstant.GenTaptapChannel()
-			tapUserInfo = _tapUserInfo
-			taptapOpenId = req.AccountId
-		}
+		// if id, _tapUserInfo, errCode := s.handleAuthTaptap(req.AccountId, req.AccountPasswd, req.Extra); errCode != pb.ErrorCode_Success {
+		// 	return "", errCode
+		// } else {
+		// 	uid = sdkconstant.GenTaptapUid(id)
+		// 	channel = sdkconstant.GenTaptapChannel()
+		// 	tapUserInfo = _tapUserInfo
+		// 	taptapOpenId = req.AccountId
+		// }
 	case pb.LoginChannelType_KuaiBao_Game:
 		if errCode := s.handleAuthKuaiBao(req.AccountId, req.AccountPasswd); errCode != pb.ErrorCode_Success {
 			return "", errCode

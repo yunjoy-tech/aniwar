@@ -32,6 +32,7 @@ type ExcuteGlobalGMReq struct {
 	SvrIDMin int    `json:"svr_id_min"` // 服务器最大值
 }
 
+// 执行个人cmd
 func (s *IDIPServer) ExcuteUserGM(out *common.Content, reqJson []byte) {
 	req := &ExcuteUserGMReq{}
 	if err := json.Unmarshal(reqJson, req); err != nil {
@@ -79,7 +80,7 @@ func (s *IDIPServer) ExcuteUserGM(out *common.Content, reqJson []byte) {
 	RetCommonMsg(out, http.StatusOK, int32(RET_CODE_SUCCESS), rsp.Data)
 }
 
-// GM指令
+// 执行全服cmd
 func (s *IDIPServer) ExcuteGlobalGM(out *common.Content, reqJson []byte) {
 	req := &ExcuteGlobalGMReq{}
 	if err := json.Unmarshal(reqJson, req); err != nil {

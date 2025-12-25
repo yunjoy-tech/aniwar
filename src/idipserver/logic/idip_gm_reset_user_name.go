@@ -4,10 +4,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"gitee.com/aniwar2/aniwar/src/common/db"
-	"gitee.com/aniwar2/aniwar/src/common/sdkconstant"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"github.com/dapr/go-sdk/service/common"
 	"net/http"
+	"strconv"
 )
 
 // 请求参数结构
@@ -31,7 +31,8 @@ func (s *IDIPServer) ResetUserName(out *common.Content, reqJson []byte) {
 	items := make([]*RetBaseItems, 0)
 	for _, uid := range req.Uids {
 		// 拿玩家的账号数据
-		uaid := s.GetUAID(sdkconstant.GenLilithUid(uid), 0)
+		// uaid := s.GetUAID(sdkconstant.GenLilithUid(uid), 0)
+		uaid := strconv.Itoa(uid)
 		roleInfo := &pb.PServerRoleBaseInfo{}
 		if err := s.getUserGameData(db.KeyUserBaseInfo(uaid), roleInfo); err != nil {
 			items = append(items, &RetBaseItems{Ret: int32(pb.ErrorCode_InternalError), Info: Internal_Error})

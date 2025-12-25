@@ -84,11 +84,11 @@ func (s *BillServer) PayHandler(ctx context.Context, in *common.InvocationEvent)
 	logger.Infof("充值回调参数:%+v", apiReq)
 
 	// 校验应用id
-	if strconv.Itoa(int(apiReq.AppId)) != conf.SDK().LilithAppId {
-		err = errors.New(fmt.Sprintf("应用id不匹配, req.appId=%d, conf.AppId=%s", apiReq.AppId, conf.SDK().LilithAppId))
-		logger.Errorf(err.Error())
-		return reply2Lilith(in, logic.FAIL), err
-	}
+	// if strconv.Itoa(int(apiReq.AppId)) != conf.SDK().LilithAppId {
+	// 	err = errors.New(fmt.Sprintf("应用id不匹配, req.appId=%d, conf.AppId=%s", apiReq.AppId, conf.SDK().LilithAppId))
+	// 	logger.Errorf(err.Error())
+	// 	return reply2Lilith(in, logic.FAIL), err
+	// }
 
 	// 透传参数
 	cbiObj, err := com_order.ParsePayCbi(apiReq.Ext)

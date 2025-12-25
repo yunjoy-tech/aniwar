@@ -17,17 +17,14 @@ func (s *ServerConf) BaseConf() *baseconf.BaseConf {
 
 // 整个server的配置项，包含了musae的baseconf和业务层自定义的conf
 type ServerConf struct {
-	Base     *baseconf.BaseConf `yaml:"BaseConf"`     // 基础配置
-	DDos     *DDosConf          `yaml:"DDosConf"`     // 负载配置
-	UGC      *UGCConf           `yaml:"UGCConf"`      // ugc机器审核配置
-	Login    *LoginConf         `yaml:"LoginConf"`    // 版本校验
-	GMT      *GMTConf           `yaml:"GMTConf"`      // gmt配置
-	Bill     *BillConf          `yaml:"BillConf"`     // bill配置
-	Question *QuestionConf      `yaml:"QuestionConf"` // 问卷配置
-	SrvAddr  *SrvAddrConf       `yaml:"SrvAddrConf"`  // 服务地址
-	Sdk      *SdkConf           `yaml:"SdkConf"`      // sdk配置
-	TapTap   *TapTapConf        `yaml:"TapTapConf"`   // taptap配置
-	OSS      *OSSConf           `yaml:"OSSConf"`      // OSS配置
+	Base    *baseconf.BaseConf `yaml:"BaseConf"`    // 基础配置
+	DDos    *DDosConf          `yaml:"DDosConf"`    // 负载配置
+	UGC     *UGCConf           `yaml:"UGCConf"`     // ugc机器审核配置
+	Login   *LoginConf         `yaml:"LoginConf"`   // 版本校验
+	GMT     *GMTConf           `yaml:"GMTConf"`     // gmt配置
+	Bill    *BillConf          `yaml:"BillConf"`    // bill配置
+	SrvAddr *SrvAddrConf       `yaml:"SrvAddrConf"` // 服务地址
+	OSS     *OSSConf           `yaml:"OSSConf"`     // OSS配置
 }
 
 // 加载配置文件
@@ -118,17 +115,6 @@ func Bill() *BillConf {
 	return gConf.Bill
 }
 
-// QuestionConf 问卷系统相关配置
-type QuestionConf struct {
-	BaseUrl   string `yaml:"baseUrl"`   // 基础url
-	ClientKey string `yaml:"clientKey"` // url签名key
-	SecretKey string `yaml:"secretKey"` // 发奖接口签名key
-}
-
-func Question() *QuestionConf {
-	return gConf.Question
-}
-
 // SrvAddrConf 客户端更新地址配置
 type SrvAddrConf struct {
 	UpdateAddrARD []string `yaml:"updateAddrARD"`
@@ -139,29 +125,6 @@ type SrvAddrConf struct {
 
 func SrvAddr() *SrvAddrConf {
 	return gConf.SrvAddr
-}
-
-// SdkConf Lilith SDK配置
-type SdkConf struct {
-	GameId       string `yaml:"gameId"`       // 游戏id
-	LilithAppId  string `yaml:"lilithAppId"`  // 游戏应用id
-	PlatName     string `yaml:"platName"`     // 发行渠道
-	ServerRegion string `yaml:"serverRegion"` // 研发服务器大区
-	Phase        string `yaml:"phase"`        // 产品阶段
-}
-
-func SDK() *SdkConf {
-	return gConf.Sdk
-}
-
-// TapTapConf TapTap配置
-type TapTapConf struct {
-	BaseUrl  string `yaml:"baseUrl"`  // url
-	ClientId string `yaml:"clientId"` // 应用id
-}
-
-func TapTap() *TapTapConf {
-	return gConf.TapTap
 }
 
 // OSSConf oss相关配置

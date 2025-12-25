@@ -44,17 +44,7 @@ func (s *IDIPServer) RegisterMetrics() {
 }
 
 func (s *IDIPServer) PreInit() error {
-	s.InitMap()
 	s.InitCmdHandler()
-	// lilith gmt数据接口
-	// s.RegisterRpcHandler("/api/gmt", s.GMTHandler)
-
-	// lilith 问卷系统奖励发放接口
-	// s.RegisterRpcHandler("/api/survey/reward", s.QuestionRewardHandler)
-
-	// lilith ParkSDK账号删除接口
-	s.RegisterRpcHandler("/api/account/delete", s.DelAccountHandler)
-
 	// 内部gmt调用
 	s.InitInsideGmtHandlerMap()
 	s.RegisterRpcHandler("/api/insideGMT", s.InsideGMT)

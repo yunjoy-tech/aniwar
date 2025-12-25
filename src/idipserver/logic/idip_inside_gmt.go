@@ -10,7 +10,6 @@ import (
 	"io"
 	"io/ioutil"
 	"os"
-	"strconv"
 	"strings"
 
 	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
@@ -111,22 +110,23 @@ func (s *IDIPServer) GetUAID(uid string, roleId uint64) string {
 }
 
 func (s *IDIPServer) GetUidFromOpenId(id string) (string, error) {
-	openId, _ := strconv.Atoi(id)
-	kvTable, err := s.GetMongoAccount(db.KeyAccountInfo(sdkconstant.GenLilithUid(openId)), nil)
-	if err != nil {
-		return "", err
-	}
-	account := &pb.UserData{}
-	err = proto.Unmarshal(kvTable.Data, account)
-	if err != nil {
-		logger.Warn("proto unmarshal err: ", err)
-		return "", err
-	}
-	player, ok := account.PlayerList.Players[1]
-	if !ok {
-		return "", fmt.Errorf("account not have player")
-	}
-	return sdkconstant.GenLilithUid(openId) + "_" + strconv.Itoa(int(player.Id)), nil
+	return "", nil
+	// openId, _ := strconv.Atoi(id)
+	// kvTable, err := s.GetMongoAccount(db.KeyAccountInfo(sdkconstant.GenLilithUid(openId)), nil)
+	// if err != nil {
+	// 	return "", err
+	// }
+	// account := &pb.UserData{}
+	// err = proto.Unmarshal(kvTable.Data, account)
+	// if err != nil {
+	// 	logger.Warn("proto unmarshal err: ", err)
+	// 	return "", err
+	// }
+	// player, ok := account.PlayerList.Players[1]
+	// if !ok {
+	// 	return "", fmt.Errorf("account not have player")
+	// }
+	// return sdkconstant.GenLilithUid(openId) + "_" + strconv.Itoa(int(player.Id)), nil
 }
 
 func (s *IDIPServer) GenJsonRet(message proto.Message) []byte {
@@ -935,11 +935,12 @@ func (s *IDIPServer) CopyUserInfo(uaid string, start, copyNum int32) []byte {
 func GetChannelUid(uid, channel string) string {
 	switch channel {
 	case "lilith":
-		uidx, err := strconv.Atoi(uid)
-		if err != nil {
-			return ""
-		}
-		return sdkconstant.GenLilithUid(uidx)
+		// uidx, err := strconv.Atoi(uid)
+		// if err != nil {
+		// 	return ""
+		// }
+		// return sdkconstant.GenLilithUid(uidx)
+		return ""
 	case "pc":
 		return sdkconstant.GenPCUid(uid)
 	}

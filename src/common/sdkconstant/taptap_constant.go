@@ -13,14 +13,14 @@ const (
 	Tap_url_upload_pay_amount = Tap_url_prefix + "%s/users/%s/payments"
 )
 
-//type TaptapUserInfo struct {
+// type TaptapUserInfo struct {
 //	AppUid   string `json:"appUid"`
 //	AppToken string `json:"appToken"`
 //	Token    string `json:"token"`
 //	MacKey   string `json:"macKey"`
 //	Result   int    `json:"result"`
 //	Age      int    `json:"age"`
-//}
+// }
 
 // GenTaptapUid
 //

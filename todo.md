@@ -30,3 +30,5 @@ err日志堆栈
 - 配置文件业务删除
 
 日志输出方法中增加ctx，进行日志的串联查询，避免手动维护actorId
+musae优化mongo和redis的方法封装，抽象为db和cache，支持无缝切换组件
+增加model层，迁移service_mongo到model层

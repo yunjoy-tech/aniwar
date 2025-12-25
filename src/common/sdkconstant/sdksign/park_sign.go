@@ -28,7 +28,6 @@ func ParkSignVerify(argsMap map[string]interface{}, excludeSignKeys []string) bo
 	return sdkrsa.GetBillRsa().Verify([]byte(signStr), signBytes, crypto.SHA1)
 }
 
-// ParseUrlArgs 解析url参数
 func ParseUrlArgs(argsStr string) map[string]interface{} {
 	var (
 		err     error

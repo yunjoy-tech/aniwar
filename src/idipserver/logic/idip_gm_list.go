@@ -19,6 +19,7 @@ type GmHelpRsp struct {
 	Help    string `json:"help"`
 }
 
+// 获取玩家个人cmd
 func (s *IDIPServer) GetUserGMList(out *common.Content, reqJson []byte) {
 	rpcCall := &pb.S2AS_GetGmListReq{GetGlobalGM: false}
 	rspData, err := s.SvcInvoke(global.ACTOR_SVC, "", 0, "", rpcCall)
@@ -35,6 +36,7 @@ func (s *IDIPServer) GetUserGMList(out *common.Content, reqJson []byte) {
 	RetCommonMsg(out, http.StatusOK, int32(RET_CODE_SUCCESS), gmList)
 }
 
+// 获取全服cmd
 func (s *IDIPServer) GetGlobalGMList(out *common.Content, reqJson []byte) {
 	// rpcCall := &pb.S2AS_GetGmListReq{GetGlobalGM: true}
 	// rspData, err := s.SvcInvoke(server.ACTOR_SVC, "", 0, "", rpcCall)

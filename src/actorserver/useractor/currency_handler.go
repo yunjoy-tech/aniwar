@@ -272,21 +272,6 @@ func (h *CurrencyHandler) AddValue(typ int32, value int64, commonData *clidto.Co
 
 	// 一级货币才输出
 	if typ == common.CURRENCY_ITEM_ID_2006 {
-		// utils.SafeRunNoError(func() {
-		//	lilith.WriteDataLog(&lilith.MoneyFlow{
-		//		HeadInfo:    lilith.BuildHeadInfo(lilith.LogType_MoneyFlow, h.actor.uid, h.actor.Account.CliDeviceInfo),
-		//		RoleId:      h.actor.ID(),
-		//		MoneyBefore: beforeNum,
-		//		MoneyAfter:  afterNum,
-		//		Flow:        "in",
-		//		Action:      strconv.Itoa(int(reason)),
-		//		Level:       int32(h.actor.LoginHandler.getRoleLevel()),
-		//		VipLevel:    0,
-		//		MoneyType:   strconv.Itoa(int(typ)),
-		//		Item:        "",
-		//		Recharge:    0,
-		//	})
-		// })
 		utils.SafeRunNoError(func() {
 			e := &taptap.MoneyFlow{
 				PropertyFieldInfo: taptap.BuildPropertyFieldInfo(h.actor.Account.CliDeviceInfo),
@@ -304,21 +289,6 @@ func (h *CurrencyHandler) AddValue(typ int32, value int64, commonData *clidto.Co
 			taptap.WriteDataLog(taptap.LogType_MoneyFlow, h.actor.uid, h.actor.Account.TapUserInfo, e)
 		})
 	} else {
-		// 其他货币输出
-		// utils.SafeRunNoError(func() {
-		//	lilith.WriteDataLog(&lilith.ResourceFlow{
-		//		HeadInfo:       lilith.BuildHeadInfo(lilith.LogType_ResourceFlow, h.actor.uid, h.actor.Account.CliDeviceInfo),
-		//		RoleId:         strconv.FormatUint(h.actor.roleId, 10),
-		//		ResourceId:     strconv.FormatUint(uint64(typ), 10),
-		//		ResourceBefore: beforeNum,
-		//		ResourceAfter:  afterNum,
-		//		Flow:           "in",
-		//		Action:         strconv.Itoa(int(reason)),
-		//		Level:          int32(h.actor.LoginHandler.getRoleLevel()),
-		//		VipLevel:       0,
-		//		Recharge:       0,
-		//	})
-		// })
 		utils.SafeRunNoError(func() {
 			e := &taptap.ResourceFlow{
 				PropertyFieldInfo: taptap.BuildPropertyFieldInfo(h.actor.Account.CliDeviceInfo),

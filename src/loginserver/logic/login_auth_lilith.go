@@ -9,12 +9,10 @@ import (
 
 	"github.com/pkg/errors"
 
-	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/aniwar/src/idipserver/logic"
 
 	"gitee.com/aniwar2/musae/logger"
 
-	"gitee.com/aniwar2/aniwar/src/common/sdkconstant"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 )
 
@@ -38,9 +36,9 @@ func (s *LoginServer) handleAuthLilith(appUid int, appToken string) (*LilithLogi
 	}
 
 	client := &http.Client{}
-	reqParam := fmt.Sprintf("app_id=%s&app_uid=%d&app_token=%s", conf.SDK().LilithAppId, appUid, appToken)
+	reqParam := fmt.Sprintf("app_uid=%d&app_token=%s", appUid, appToken)
 	logger.Warnf("lilith, 登陆请求验证:" + reqParam)
-	lilithReq, err := http.NewRequest(http.MethodPost, sdkconstant.Lilith_login_url, strings.NewReader(reqParam))
+	lilithReq, err := http.NewRequest(http.MethodPost, "", strings.NewReader(reqParam))
 
 	if err != nil {
 		logger.Errorf(err.Error())

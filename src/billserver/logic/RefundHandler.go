@@ -3,11 +3,9 @@ package logic
 import (
 	"context"
 	"fmt"
+	"gitee.com/aniwar2/aniwar/src/common/sdkconstant/sdksign"
 	"gitee.com/aniwar2/musae/gamelib/guid"
 	netutil "gitee.com/aniwar2/musae/utils/net"
-	"strconv"
-
-	"gitee.com/aniwar2/aniwar/src/common/sdkconstant/sdksign"
 
 	gameCommon "gitee.com/aniwar2/aniwar/src/common"
 	"github.com/dapr/go-sdk/service/common"
@@ -19,8 +17,6 @@ import (
 
 	"gitee.com/aniwar2/aniwar/src/common/com_order"
 	"gitee.com/aniwar2/aniwar/src/common/conf"
-
-	"gitee.com/aniwar2/aniwar/src/common/sdkconstant"
 
 	"gitee.com/aniwar2/musae/logger"
 	"github.com/pkg/errors"
@@ -74,11 +70,11 @@ func (s *BillServer) RefundHandler(ctx context.Context, in *common.InvocationEve
 	}
 	logger.Infof("退单回调参数:%+v", apiReq)
 
-	if strconv.Itoa(int(apiReq.AppId)) != conf.SDK().LilithAppId {
-		err = errors.New(fmt.Sprintf("应用id不匹配, req.appId=%d, conf.AppId=%s", apiReq.AppId, conf.SDK().LilithAppId))
-		logger.Errorf(err.Error())
-		return reply2Lilith(in, logic.FAIL), err
-	}
+	// if strconv.Itoa(int(apiReq.AppId)) != conf.SDK().LilithAppId {
+	// 	err = errors.New(fmt.Sprintf("应用id不匹配, req.appId=%d, conf.AppId=%s", apiReq.AppId, conf.SDK().LilithAppId))
+	// 	logger.Errorf(err.Error())
+	// 	return reply2Lilith(in, logic.FAIL), err
+	// }
 
 	// 透传参数
 	// cbiObj, err := com_order.ParsePayCbi(apiReq.Ext)
@@ -96,7 +92,8 @@ func (s *BillServer) RefundHandler(ctx context.Context, in *common.InvocationEve
 	// }
 
 	// 转为自己的uid
-	myUid := sdkconstant.GenLilithUid(int(apiReq.AppUid))
+	// myUid := sdkconstant.GenLilithUid(int(apiReq.AppUid))
+	myUid := ""
 	// 订单信息db配置
 	dbMongoType, dbKey := com_order.OrderDBTable(myUid)
 
