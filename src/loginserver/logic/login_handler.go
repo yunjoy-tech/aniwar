@@ -12,7 +12,6 @@ import (
 	"gitee.com/aniwar2/aniwar/src/common/sdkconstant"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/base"
-	"gitee.com/aniwar2/musae/baseconf"
 	"gitee.com/aniwar2/musae/gamelib/guid"
 	"gitee.com/aniwar2/musae/global"
 	"gitee.com/aniwar2/musae/logger"
@@ -38,7 +37,7 @@ func (s *LoginServer) pushMsg(msg *Msg) {
 }
 
 func (s *LoginServer) GrantGateTicket() {
-	for i := int32(0); i < conf.Base().LoginReqRate; i++ {
+	for i := int32(0); i < conf.Login().LoginReqRate; i++ {
 		select {
 		case s.ticket <- struct{}{}:
 			s.ticketAddSum++
@@ -105,7 +104,7 @@ func (s *LoginServer) handleLoginReq(msg *Msg) *pb.LS2C_LoginRes {
 		rsaKey       string
 	)
 	// 交换rsa随机值
-	if baseconf.GetBaseConf().UseEncrypt == 1 {
+	if conf.Base().UseEncrypt == 1 {
 		_, base64SrvKey, rsaKey = rsa.CreateSrvRsaKey(nil, req.CliRandomSeed)
 	}
 
@@ -117,7 +116,7 @@ func (s *LoginServer) handleLoginReq(msg *Msg) *pb.LS2C_LoginRes {
 		res.GatewayIp = global.TcpAddr
 		res.GatewayPort = uint32(conf.Base().GatePort)
 		res.SessionId = uint64(sessionId)
-		res.UseRsa = baseconf.GetBaseConf().UseEncrypt // Gate上启动加密通信
+		res.UseRsa = conf.Base().UseEncrypt // Gate上启动加密通信
 		res.SrvRandomSeed = base64SrvKey
 
 		/*if !global.IsCloud && conf.Base().AutoGateIp {
@@ -216,7 +215,7 @@ func (s *LoginServer) DoHandleLoginReq(req *pb.C2LS_LoginReq, res *pb.LS2C_Login
 
 	now := time.Now().Unix()
 
-	res.Token, err = auth.EncodeAuthToken(uid, channel, guid.GenStrUuid(), int64(baseconf.GetBaseConf().AccTokenTTL))
+	res.Token, err = auth.EncodeAuthToken(uid, channel, guid.GenStrUuid(), int64(conf.Base().AccTokenTTL))
 	if err != nil {
 		res.ErrCode = int32(pb.ErrorCode_InternalError)
 		logger.Warnf("create token error, account=%s", req.AccountId)

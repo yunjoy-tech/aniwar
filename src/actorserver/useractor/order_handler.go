@@ -12,7 +12,6 @@ import (
 	"gitee.com/aniwar2/aniwar/src/meta"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/base"
-	"gitee.com/aniwar2/musae/baseconf"
 	"gitee.com/aniwar2/musae/gamelib/guid"
 	"gitee.com/aniwar2/musae/logger"
 	"gitee.com/aniwar2/musae/service"
@@ -492,8 +491,8 @@ func (h *OrderHandler) paySendReward(order *pb.Order, paymentType pb.PaymentType
 
 // VirtualPay 虚拟充值
 func (h *OrderHandler) VirtualPay(cpOrderId string) {
-	if baseconf.GetBaseConf().CanVirtualPay != 1 {
-		h.Debugf("不支持模拟充值, CanVirtualPay:%d", baseconf.GetBaseConf().CanVirtualPay)
+	if conf.Base().CanVirtualPay != 1 {
+		h.Debugf("不支持模拟充值, CanVirtualPay:%d", conf.Base().CanVirtualPay)
 		return
 	}
 

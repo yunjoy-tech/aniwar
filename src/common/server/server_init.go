@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/aniwar/src/common/gmeta"
-	"gitee.com/aniwar2/musae/baseconf"
 	"gitee.com/aniwar2/musae/gamelib/sensitive"
 	"gitee.com/aniwar2/musae/global"
 	"gitee.com/aniwar2/musae/logger"
@@ -38,7 +37,7 @@ func (s *Server) Init() error {
 		return err
 	}
 
-	if baseconf.GetBaseConf().Cloud {
+	if conf.Base().Cloud {
 		if len(conf.SrvAddr().HTTPAddr) > 0 {
 			global.Gateway = conf.SrvAddr().HTTPAddr[0]
 			global.TcpAddr = conf.SrvAddr().TCPAddr[0]
@@ -85,20 +84,20 @@ func (s *Server) initRedisCenter() {
 	}
 }
 
-func (s *Server) LoadConf(params ...string) error {
+func (s *Server) LoadConf() error {
 	// TODO 从配置中心读取
 	if /*!global.IsDev &&*/ s.RedisCenter != nil {
 		key := fmt.Sprintf("%s:%s:%s:%s:%s", global.RdsCfgNameSpace, global.RdsCfgGroup, "aniwar", global.ROLLING_VERSION, "server.conf")
 		fmt.Println("配置中心server.conf key: ", key)
 		stringCmd := s.RedisCenter.Get(context.Background(), key)
 		if stringCmd.Val() != "" {
-			params = append(params, stringCmd.Val())
-			fmt.Println("拉取到配置中心server.conf val: ", params)
+			// params = append(params, stringCmd.Val())
+			// fmt.Println("拉取到配置中心server.conf val: ", params)
 		}
 	}
 
 	// 运行参数配置会覆盖默认配置
-	err := conf.LoadConf(s.Args["config"], params...)
+	err := conf.LoadConf(s.Args["config"])
 	if err != nil {
 		return fmt.Errorf("LoadConf: %+v", err)
 	}
@@ -124,7 +123,7 @@ func (s *Server) ReloadConf() error {
 
 // 加载excel配置表数据
 func (s *Server) LoadExcelData() (err error) {
-	if baseconf.GetBaseConf().IsDebug || s.RedisCenter == nil {
+	if conf.Base().IsDebug || s.RedisCenter == nil {
 		// 加载本地配置表
 		err = s.LoadExcel()
 	} else {
@@ -136,9 +135,9 @@ func (s *Server) LoadExcelData() (err error) {
 
 // 按需加载excel配置表数据
 func (s *Server) LoadExcelDataByFiles(files []string) (err error) {
-	if baseconf.GetBaseConf().IsDebug || s.RedisCenter == nil {
+	if conf.Base().IsDebug || s.RedisCenter == nil {
 		// TODO
-		// err = data.LoadByFileNames(baseconf.GetBaseConf().MetaDir, files, s.AppId, "actorserver")
+		// err = data.LoadByFileNames(conf.Base().MetaDir, files, s.AppId, "actorserver")
 	} else {
 		err = s.LoadExcelFromRedisByFile(files, s.AppId, "actorserver")
 	}
@@ -149,7 +148,7 @@ func (s *Server) LoadExcelDataByFiles(files []string) (err error) {
 func (s *Server) LoadExcel() error {
 	logger.Info("\n===>>> LoadExcel begin")
 
-	logger.Infof("===>>> 加载模式为: %d, (1:读取压缩文件, 0:读取json源文件)", baseconf.GetBaseConf().ExcelDataZip)
+	logger.Infof("===>>> 加载模式为: %d, (1:读取压缩文件, 0:读取json源文件)", conf.Base().ExcelDataZip)
 
 	err := gmeta.GetMetaMgr().LoadAllMeta()
 	if err != nil {
@@ -218,9 +217,9 @@ func (s *Server) LoadExcelFromRedisByFile(fileNames []string, appId, serverName 
 
 // 获取策划配置文件名
 func (s *Server) GetAllExcelFileName() []string {
-	// if baseconf.GetBaseConf().ExcelDataZip == 1 {
+	// if conf.Base().ExcelDataZip == 1 {
 	// 	return data.GetAllJsonBinaryFileNames()
-	// } else if baseconf.GetBaseConf().ExcelDataZip == 0 {
+	// } else if conf.Base().ExcelDataZip == 0 {
 	// 	return data.GetAllJsonFileNames()
 	// }
 	return []string{}
@@ -230,7 +229,7 @@ func (s *Server) GetAllExcelFileName() []string {
 func (s *Server) LoadWordCfg() error {
 	logger.Info("===>>> LoadDirtyWords begin")
 
-	count, err := sensitive.LoadSensitiveWord(baseconf.GetBaseConf().DirtyWords)
+	count, err := sensitive.LoadSensitiveWord(conf.Actor().DirtyWords)
 	if err != nil {
 		logger.Errorf("LoadDirtyWords err:%v", err)
 		return err

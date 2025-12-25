@@ -2,7 +2,7 @@ package db
 
 import (
 	"encoding/json"
-	"gitee.com/aniwar2/musae/baseconf"
+	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/musae/logger"
 	"gitee.com/aniwar2/musae/utils"
 	"github.com/pkg/errors"
@@ -27,7 +27,7 @@ func BuildKvTable(value proto.Message, key string) (*state.KvTable, error) {
 	}
 
 	var dataSrc []byte
-	if baseconf.GetBaseConf().IsDebug {
+	if conf.Base().IsDebug {
 		dataSrc, err = json.Marshal(value)
 		if err != nil {
 			logger.Warnf("SaveDB DataSrc Marshal err:%+v", err.Error())
@@ -57,7 +57,7 @@ func ParseKvTable(kvTable *state.KvTable, value proto.Message) error {
 	if err != nil {
 		return errors.WithStack(err)
 	}
-	if baseconf.GetBaseConf().IsDebug {
+	if conf.Base().IsDebug {
 		kvTable.DataSrc = utils.PrettyJson(value)
 	}
 	logger.Debug("===>>>kvTable: ", kvTable.ToString())

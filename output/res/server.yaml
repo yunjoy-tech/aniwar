@@ -33,8 +33,6 @@ BaseConf:
   versionAndroid: 1.0.1
   # IOS版本 [渠道].[大版本号].[小版本号]【支持热重载】
   versionIOS: 1.0.1
-  # 自动获取本机IP作为GateIP,IsDebug为true是有效
-  autoGateIp: true
   # 服务器网关IP
   gateIP: 192.168.2.8
   # 服务器网关端口
@@ -58,18 +56,6 @@ BaseConf:
   # 是否开启指标输出【支持热重载】
   metric: true
   metricPort: ":9999" # todo
-  # loginReq这条协议的请求频率限制【支持热重载】
-  loginReqRate: 100
-  # loginReq这条协议的请求频率限制【支持热重载】
-  loginReqQueue: 3000
-  # gate上排队人数限制
-  gatePendingNumLimit: 1000
-  # gate登录频率限制
-  gateLoginRateLimit: 200
-  # gate登录线程数量
-  gateLoginThreadNum: 100
-  # 每个gate上的登录用户上限
-  gateUserNumLimit: 3000
   # 创建角色时检测重复ID【支持热重载】
   roleIdCheck: true
   # 心跳间隔，单位秒
@@ -80,10 +66,6 @@ BaseConf:
   userCacheTTL: 900
   # 推送actor消息到gate的模式, 1: rpc; 2: gate private topics
   actor2GateType: 1
-  # UserActor 空闲超时gc, 单位:秒【支持热重载】
-  userActorGCTime: '600'
-  # UserActor gc扫描间隔, m:分钟, s:秒
-  userActorGCScan: 10s
   # 1:开启加密, 0:关闭【支持热重载】
   useEncrypt: 0
   # 不做数据加密的协议号【支持热重载】
@@ -97,18 +79,14 @@ BaseConf:
   canPay: 0
   # 是否支持模拟充值, 1:是, 0:否【支持热重载】
   canVirtualPay: 1
-  # 1:开启战斗校验, 0:关闭【支持热重载】
-  openCheckBattle: 1
   # 配置表数据是否使用压缩 1:是, 0:否
   excelDataZip: 0
-  # 屏蔽字库
-  dirtyWords: ./output/res/dirtyWord.txt
   # 耗时收集日志阈值【支持热重载】
   delayLogLimit: 100
-  # 邮件actor最小启用数量
-  mailActorMin: 100
-  # 邮件Actor启用数量万分比
-  mailActorPercent: 10
+  # UserActor gc扫描间隔, m:分钟, s:秒
+  userActorGCScan: 10s
+  # UserActor 空闲超时gc, 单位:秒【支持热重载】
+  userActorGCTime: '600'
   # redis配置
   RedisConf:
     addr: 'r-uf66fe7d84f75854pi.redis.rds.aliyuncs.com:6379'
@@ -177,6 +155,60 @@ BaseConf:
     - 'cfg:global:deprecatedmsg'
     - 'cfg:global:sysmail'
 
+# GuideServer配置
+GuideConf:
+
+# LoginServer配置
+LoginConf:
+  # loginReq这条协议的请求频率限制【支持热重载】
+  loginReqRate: 100
+  # loginReq这条协议的请求频率限制【支持热重载】
+  loginReqQueue: 3000
+  gateUrl: 'http://gate.aniwar.com:22001/gate'
+  gateUrlDev: 'http://%s:22001/gate'
+  userActorAhead: true
+
+# GateServer配置
+GateConf:
+  # gate上排队人数限制
+  gatePendingNumLimit: 1000
+  # gate登录频率限制
+  gateLoginRateLimit: 200
+  # gate登录线程数量
+  gateLoginThreadNum: 100
+  # 每个gate上的登录用户上限
+  gateUserNumLimit: 3000
+
+# ActorServer配置
+ActorConf:
+  # 邮件actor最小启用数量
+  mailActorMin: 100
+  # 邮件Actor启用数量万分比
+  mailActorPercent: 10
+  # 屏蔽字库
+  dirtyWords: ./output/res/dirtyWord.txt
+
+# IdipServer配置
+IdipConf:
+
+# BillServer配置
+BillConf:
+  # api调用验签密钥【支持热重载】
+  apiSecret: |-
+    -----BEGIN RSA PUBLIC KEY-----
+    MIGHAoGBANAjokXH83tyut4zkRGdn6bFvTBymg0cNRBe7DrXrqeyC190Df15jYG3
+    +t47q/+3CENg8cXx7Df+s9Wq7KtcOJW33+/J8Rs+whdHQQ97W9YEzxRlA0EEH76Q
+    EFx6+rs9X7o/NJVABlt0LsVyGAfSM7tSV4t3NqIJTcsgYdCtzkwbAgED
+    -----END RSA PUBLIC KEY-----
+  # 是否开启IP白名单【支持热重载】
+  isIpWhite: false
+  # IP白名单【支持热重载】
+  ipWhiteList:
+    - 106.14.169.58
+    - 106.14.195.109
+    - 54.151.206.237
+    - 127.0.0.1
+
 # DDos配置
 DDosConf:
   # 检测时间间隔, 单位秒  0表示不检测【支持热重载】
@@ -190,12 +222,6 @@ DDosConf:
   # 用户消息流量上限,0表示无限制【支持热重载】
   limitByteNum: 1024000
 
-# 登录配置
-LoginConf:
-  gateUrl: 'http://gate.aniwar.com:22001/gate'
-  gateUrlDev: 'http://%s:22001/gate'
-  userActorAhead: true
-
 # gm后台配置
 GMTConf:
   # api调用验签密钥
@@ -203,24 +229,6 @@ GMTConf:
   # 是否开启IP白名单
   isIpWhite: false
   # IP白名单列表
-  ipWhiteList:
-    - 106.14.169.58
-    - 106.14.195.109
-    - 54.151.206.237
-    - 127.0.0.1
-
-# 支付配置
-BillConf:
-  # api调用验签密钥【支持热重载】
-  apiSecret: |-
-    -----BEGIN RSA PUBLIC KEY-----
-    MIGHAoGBANAjokXH83tyut4zkRGdn6bFvTBymg0cNRBe7DrXrqeyC190Df15jYG3
-    +t47q/+3CENg8cXx7Df+s9Wq7KtcOJW33+/J8Rs+whdHQQ97W9YEzxRlA0EEH76Q
-    EFx6+rs9X7o/NJVABlt0LsVyGAfSM7tSV4t3NqIJTcsgYdCtzkwbAgED
-    -----END RSA PUBLIC KEY-----
-  # 是否开启IP白名单【支持热重载】
-  isIpWhite: false
-  # IP白名单【支持热重载】
   ipWhiteList:
     - 106.14.169.58
     - 106.14.195.109

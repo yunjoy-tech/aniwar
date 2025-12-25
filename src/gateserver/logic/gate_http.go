@@ -12,7 +12,6 @@ import (
 	"gitee.com/aniwar2/aniwar/src/common/auth"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/base"
-	"gitee.com/aniwar2/musae/baseconf"
 	"gitee.com/aniwar2/musae/errorx"
 	"gitee.com/aniwar2/musae/logger"
 	"gitee.com/aniwar2/musae/metrics"
@@ -35,7 +34,7 @@ func (s *GateServer) OnHttp(ctx context.Context, in *common.InvocationEvent) (ou
 	}
 	// logger.Debugf("[GateServer] [LoginStep] OnLogin ContentType:%s, Verb:%s, QueryString:%s, len:%d", in.ContentType, in.Verb, in.QueryString, upMsgLen)
 
-	if upMsgLen > baseconf.GetBaseConf().GateMsgMaxSize {
+	if upMsgLen > conf.Base().GateMsgMaxSize {
 		return nil, fmt.Errorf("invalid error")
 	}
 
@@ -149,7 +148,7 @@ func (s *GateServer) HandlerGate(in *common.InvocationEvent, session *pb.UserSes
 		return nil, pb.Protocols_Protocols_None, pb.ErrorCode_UnKnownMsg
 	}
 	// 包体大小限制
-	if len(data) > baseconf.GetBaseConf().GateMsgMaxSize {
+	if len(data) > conf.Base().GateMsgMaxSize {
 		logger.Warn("OnNetMessage msg body too big")
 		return nil, pb.Protocols_Protocols_None, pb.ErrorCode_MsgBodyLimit
 	}
@@ -165,8 +164,8 @@ func (s *GateServer) HandlerGate(in *common.InvocationEvent, session *pb.UserSes
 		messageId = pb.Protocols_PG2C_LoginGateRes
 	case pb.Protocols_PC2G_LoginGameReq:
 		// 判断秘钥是否生成
-		if baseconf.GetBaseConf().UseEncrypt == 1 && session.CryptKey == "" { // 默认秘钥为空
-			logger.Warnf("服务器配置:%d, 秘钥没有重新生成, 当前秘钥:%s", baseconf.GetBaseConf().UseEncrypt, session.CryptKey)
+		if conf.Base().UseEncrypt == 1 && session.CryptKey == "" { // 默认秘钥为空
+			logger.Warnf("服务器配置:%d, 秘钥没有重新生成, 当前秘钥:%s", conf.Base().UseEncrypt, session.CryptKey)
 			metrics.GaugeInc(metrics.EnterFailedCount)
 			return nil, pb.Protocols_Protocols_None, pb.ErrorCode_ReLogin
 		}
@@ -182,8 +181,8 @@ func (s *GateServer) HandlerGate(in *common.InvocationEvent, session *pb.UserSes
 		messageId = pb.Protocols_PG2C_LoginGameRes
 	default:
 		// 判断秘钥是否生成
-		if baseconf.GetBaseConf().UseEncrypt == 1 && session.CryptKey == "" { // 默认秘钥为空
-			logger.Warnf("服务器配置:%d, 秘钥没有重新生成, 当前秘钥:%s", baseconf.GetBaseConf().UseEncrypt, session.CryptKey)
+		if conf.Base().UseEncrypt == 1 && session.CryptKey == "" { // 默认秘钥为空
+			logger.Warnf("服务器配置:%d, 秘钥没有重新生成, 当前秘钥:%s", conf.Base().UseEncrypt, session.CryptKey)
 			metrics.GaugeInc(metrics.GateAuthFailCount)
 			return nil, pb.Protocols_Protocols_None, pb.ErrorCode_ReLogin
 		}

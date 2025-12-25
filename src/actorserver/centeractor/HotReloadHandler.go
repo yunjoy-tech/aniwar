@@ -3,10 +3,10 @@ package centeractor
 import (
 	"context"
 	"fmt"
+	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/base"
 	"gitee.com/aniwar2/musae/baseactor"
-	"gitee.com/aniwar2/musae/baseconf"
 	"gitee.com/aniwar2/musae/global"
 	"gitee.com/aniwar2/musae/logger"
 	"gitee.com/aniwar2/musae/service"
@@ -97,7 +97,7 @@ func (h *HotReloadHandler) Send2PubTopic(req *pb.S2S_HotReloadReq, svcMap *sync.
 	svcMap.Range(func(key, value any) bool {
 		svcData := value.(*pb.ServiceData)
 		svcName := key.(string)
-		if now < svcData.ReportTS+int64(baseconf.GetBaseConf().ServerHeartbeatTimout) {
+		if now < svcData.ReportTS+int64(conf.Base().ServerHeartbeatTimout) {
 			if len(req.Services) > 0 {
 				if utils.SliceContain(req.Services, svcName) {
 					h.actor.Data.HotReloadMap.Store(svcName, "0")

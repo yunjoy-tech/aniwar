@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"gitee.com/aniwar2/aniwar/src/common"
 	"gitee.com/aniwar2/aniwar/src/common/clidto"
-	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/aniwar/src/common/sensitive"
 	"gitee.com/aniwar2/aniwar/src/idipserver/logic"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
@@ -73,7 +72,6 @@ func NewGmHandler(actor *UserActor) *GmHandler {
 	h.RegisterCmdHandler(common.GM_TEST_DB, h.GmTestDB)
 	h.RegisterCmdHandler(common.GM_TEST_ACHIEVE, h.GMTestAchieve)
 	h.RegisterCmdHandler(common.GM_TEST_PVP_ROOM, h.GMTestRoom)
-	h.RegisterCmdHandler(common.GM_CLOSE_BATTKE_CHECK, h.GMCloseBattleCheck)
 	h.RegisterCmdHandler(common.GM_TEST_RECOMMEND, h.GMTestRecommend)
 	h.RegisterCmdHandler(common.GM_TEST_Test_Cfg_Hot, h.TestCfgHot)
 
@@ -851,21 +849,6 @@ func (h *GmHandler) GMTestRoom(param []string, commonData *clidto.Comdata) error
 	default:
 		return errors.New(fmt.Sprintf("还未支持的操作类型, %d", operate))
 	}
-	return nil
-}
-
-func (h *GmHandler) GMCloseBattleCheck(param []string, commonData *clidto.Comdata) error {
-	// 战斗校验开关
-	if len(param) > 0 {
-		v, err := strconv.Atoi(param[0])
-		if err != nil {
-			return err
-		}
-		conf.Base().OpenCheckBattle = int32(v)
-	} else {
-		conf.Base().OpenCheckBattle = 0
-	}
-
 	return nil
 }
 

@@ -3,8 +3,8 @@ package server
 import (
 	"context"
 	"encoding/json"
+	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/aniwar/src/common/db"
-	"gitee.com/aniwar2/musae/baseconf"
 	"gitee.com/aniwar2/musae/logger"
 	"gitee.com/aniwar2/musae/service"
 	"gitee.com/aniwar2/musae/state"
@@ -42,7 +42,7 @@ func (s *Server) SaveMongoAndRedis(mongoDbType service.MongoDbType, key string, 
 
 	// 过期时间
 	if _, ok := meta[service.REDIS_TTL_NAME]; !ok {
-		meta[service.REDIS_TTL_NAME] = baseconf.GetBaseConf().UserActorGCTime
+		meta[service.REDIS_TTL_NAME] = conf.Base().UserActorGCTime
 	}
 
 	err = s.SaveRedis(service.RedisCache, key, table, meta, so...)

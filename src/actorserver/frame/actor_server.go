@@ -5,9 +5,9 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
 	"gitee.com/aniwar2/aniwar/src/idipserver/logic"
-	"gitee.com/aniwar2/musae/baseconf"
 	"os"
 	"strconv"
 	"strings"
@@ -165,7 +165,7 @@ func (s *ActorServer) InitCmd() {
 }
 
 func (s *ActorServer) PreInit() error {
-	if baseconf.GetBaseConf().IsDebug {
+	if conf.Base().IsDebug {
 		s.RegisterRpcHandler("/api/hotReload", s.HotReload)
 	}
 	return nil

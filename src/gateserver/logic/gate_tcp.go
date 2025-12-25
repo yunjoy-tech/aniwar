@@ -14,7 +14,6 @@ import (
 	"gitee.com/aniwar2/aniwar/src/common/db"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/base"
-	"gitee.com/aniwar2/musae/baseconf"
 	"gitee.com/aniwar2/musae/errorx"
 	"gitee.com/aniwar2/musae/logger"
 	"gitee.com/aniwar2/musae/metrics"
@@ -49,7 +48,7 @@ func (s *GateServer) OnTcp(c *tcpx.Context) {
 	}
 
 	// 判断协议秘钥
-	if baseconf.GetBaseConf().UseEncrypt == 1 && accountId != "" {
+	if conf.Base().UseEncrypt == 1 && accountId != "" {
 		// 赋值协议秘钥
 		if c.GetEncryptKey() == "" {
 			c.SetEncryptKey(session.CryptKey)
@@ -57,7 +56,7 @@ func (s *GateServer) OnTcp(c *tcpx.Context) {
 
 		// 判断秘钥是否生成
 		if c.GetEncryptKey() == "" {
-			logger.Warnf("服务器配置:%d, 协议秘钥为nil", baseconf.GetBaseConf().UseEncrypt)
+			logger.Warnf("服务器配置:%d, 协议秘钥为nil", conf.Base().UseEncrypt)
 			c.CloseConn()
 			metrics.GaugeInc(metrics.GateAuthFailCount)
 			return
@@ -107,7 +106,7 @@ func (s *GateServer) OnTcp(c *tcpx.Context) {
 
 	dataLen := len(data)
 	// 包体大小限制
-	if dataLen > baseconf.GetBaseConf().GateMsgMaxSize {
+	if dataLen > conf.Base().GateMsgMaxSize {
 		logger.Warn("OnNetMessage BodyBytesOf", errorx.Wrap(err, "").Error())
 
 		// TODO 处理踢人操作

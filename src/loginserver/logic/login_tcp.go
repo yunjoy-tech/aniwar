@@ -5,7 +5,6 @@ import (
 
 	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	"gitee.com/aniwar2/musae/baseconf"
 	"gitee.com/aniwar2/musae/errorx"
 	"gitee.com/aniwar2/musae/logger"
 	"gitee.com/aniwar2/musae/tcpx"
@@ -28,7 +27,7 @@ func (s *LoginServer) OnTcp(c *tcpx.Context) {
 
 	dataLen := len(data)
 	// 包体大小限制
-	if dataLen > baseconf.GetBaseConf().GateMsgMaxSize {
+	if dataLen > conf.Base().GateMsgMaxSize {
 		logger.Warn("OnTcp BodyBytesOf", errorx.Wrap(err, "").Error())
 		return
 	}
@@ -45,7 +44,7 @@ func (s *LoginServer) OnTcp(c *tcpx.Context) {
 			ClientIp: c.ClientIP(),
 		}
 		// 配置为0时，不做限制
-		if conf.Base().LoginReqRate > 0 && conf.Base().LoginReqQueue > 0 {
+		if conf.Login().LoginReqRate > 0 && conf.Login().LoginReqQueue > 0 {
 			s.pushMsg(req)
 		} else {
 			res := s.handleLoginReq(req)

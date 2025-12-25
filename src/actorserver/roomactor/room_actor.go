@@ -1,7 +1,7 @@
 package roomactor
 
 import (
-	"gitee.com/aniwar2/musae/baseconf"
+	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/musae/utils"
 	"strconv"
 	"time"
@@ -95,7 +95,7 @@ func (s *RoomActor) Deactivate() error {
 		// 判定是否超时deactivate
 		now := time.Now()
 		update := time.Unix(s.Data.UpdateTs, 0)
-		gcTime, err := strconv.Atoi(baseconf.GetBaseConf().UserActorGCTime)
+		gcTime, err := strconv.Atoi(conf.Base().UserActorGCTime)
 		if err != nil {
 			gcTime = 600 // 默认600s秒
 		}

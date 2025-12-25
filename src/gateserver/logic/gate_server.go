@@ -22,7 +22,6 @@ import (
 	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/base"
-	"gitee.com/aniwar2/musae/baseconf"
 	"gitee.com/aniwar2/musae/logger"
 	"gitee.com/aniwar2/musae/metrics"
 	svc "gitee.com/aniwar2/musae/service"
@@ -316,7 +315,7 @@ func (s *GateServer) Main() {
 
 // 防重放
 func (s *GateServer) reqRepeated(c *tcpx.Context, messageID int32, reqIdx uint32, session *pb.UserSession) ([]byte, int32) {
-	if baseconf.GetBaseConf() == nil || baseconf.GetBaseConf().UseReqIdx == 0 {
+	if conf.Base() == nil || conf.Base().UseReqIdx == 0 {
 		// 未开启
 		return nil, int32(pb.Protocols_Protocols_None)
 	}

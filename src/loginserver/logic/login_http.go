@@ -10,7 +10,6 @@ import (
 	"time"
 
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	"gitee.com/aniwar2/musae/baseconf"
 	"gitee.com/aniwar2/musae/errorx"
 	"gitee.com/aniwar2/musae/logger"
 	"gitee.com/aniwar2/musae/metrics"
@@ -37,7 +36,7 @@ func (s *LoginServer) OnHttp(ctx context.Context, in *common.InvocationEvent) (o
 		logger.Warn("OnLogin get ip failed. ", err.Error())
 	}
 
-	if len(in.Data) > baseconf.GetBaseConf().GateMsgMaxSize {
+	if len(in.Data) > conf.Base().GateMsgMaxSize {
 		return nil, fmt.Errorf("invalid error")
 	}
 	out = &common.Content{

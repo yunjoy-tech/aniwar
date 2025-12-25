@@ -6,10 +6,10 @@ import (
 	"errors"
 	"fmt"
 	"gitee.com/aniwar2/aniwar/src/actorserver/frame"
+	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/aniwar/src/common/db"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/baseactor"
-	"gitee.com/aniwar2/musae/baseconf"
 	"gitee.com/aniwar2/musae/global"
 	"gitee.com/aniwar2/musae/logger"
 	"gitee.com/aniwar2/musae/service"
@@ -155,7 +155,7 @@ func (s *MailActor) commit2Redis() error {
 
 func (s *MailActor) getCacheTTL() int {
 	// 设置延迟同步的key
-	gcTime, err := strconv.Atoi(baseconf.GetBaseConf().UserActorGCTime)
+	gcTime, err := strconv.Atoi(conf.Base().UserActorGCTime)
 	if err != nil {
 		gcTime = 600 // 默认600s秒
 	}

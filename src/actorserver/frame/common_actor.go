@@ -10,7 +10,6 @@ import (
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/base"
 	"gitee.com/aniwar2/musae/baseactor"
-	"gitee.com/aniwar2/musae/baseconf"
 	"gitee.com/aniwar2/musae/errorx"
 	"gitee.com/aniwar2/musae/logger"
 	"gitee.com/aniwar2/musae/mtime"
@@ -81,7 +80,7 @@ func (s *CommonActor) SaveActor2Redis(actorType string) {
 	_, err := s.Srv.RedisSet(context.Background(),
 		db.KeyUserActor(actorType, s.ID()),
 		s.ToJsonString(),
-		time.Duration(baseconf.GetBaseConf().AccTokenTTL)*time.Second)
+		time.Duration(conf.Base().AccTokenTTL)*time.Second)
 	if err != nil {
 		return
 	}
@@ -292,7 +291,7 @@ func (s *CommonActor) Cache2Redis(mongoDbType service.MongoDbType, uaid string, 
 
 func (s *CommonActor) GetCacheTTL() int {
 	// 设置延迟同步的key
-	gcTime, err := strconv.Atoi(baseconf.GetBaseConf().UserActorGCTime)
+	gcTime, err := strconv.Atoi(conf.Base().UserActorGCTime)
 	if err != nil {
 		gcTime = 600 // 默认600s秒
 	}
@@ -482,7 +481,7 @@ func (s *CommonActor) commit2Redis() error {
 
 func (s *CommonActor) getCacheTTL() int {
 	// 设置延迟同步的key
-	gcTime, err := strconv.Atoi(baseconf.GetBaseConf().UserActorGCTime)
+	gcTime, err := strconv.Atoi(conf.Base().UserActorGCTime)
 	if err != nil {
 		gcTime = 600 // 默认600s秒
 	}

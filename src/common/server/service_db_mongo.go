@@ -3,9 +3,9 @@ package server
 import (
 	"context"
 	"encoding/json"
+	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/aniwar/src/common/db"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	"gitee.com/aniwar2/musae/baseconf"
 	"gitee.com/aniwar2/musae/errorx"
 	"gitee.com/aniwar2/musae/global"
 	"gitee.com/aniwar2/musae/logger"
@@ -224,8 +224,8 @@ func (s *Server) SaveMongoTransaction(db service.MongoDbType, meta map[string]st
 	logger.Debugf("SaveMongoTransaction === db:%v, meta:%v, opts:%v", db, meta, opts)
 	// err = s.Daprc.ExecuteStateTransaction(ctx, string(db), meta, opts)
 	_, err = utils.RetryDoSyncInterval(
-		baseconf.GetBaseConf().AniwarDbSetRetryCount,
-		baseconf.GetBaseConf().AniwarDbRetryInterval,
+		conf.Base().AniwarDbSetRetryCount,
+		conf.Base().AniwarDbRetryInterval,
 		func() (any, error) {
 			return nil, s.Daprc.ExecuteStateTransaction(ctx, string(db), meta, opts)
 		})
@@ -249,7 +249,7 @@ func (s *Server) SaveSystemMail(value proto.Message) error {
 		return err
 	}
 
-	if baseconf.GetBaseConf().IsDebug {
+	if conf.Base().IsDebug {
 		kvTable.DataSrc = utils.PrettyJson(value)
 	}
 	// 保存

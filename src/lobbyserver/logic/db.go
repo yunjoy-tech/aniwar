@@ -2,8 +2,7 @@ package logic
 
 import (
 	"errors"
-	"gitee.com/aniwar2/musae/baseconf"
-
+	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/aniwar/src/common/db"
 	"gitee.com/aniwar2/musae/logger"
 	"gitee.com/aniwar2/musae/service"
@@ -18,7 +17,7 @@ func (s *LobbyServer) SaveDB(key string, value proto.Message) error {
 		return err
 	}
 
-	if baseconf.GetBaseConf().IsDebug {
+	if conf.Base().IsDebug {
 		kvTable.DataSrc = utils.PrettyJson(value)
 	}
 	// 保存

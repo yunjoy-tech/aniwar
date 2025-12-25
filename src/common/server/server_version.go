@@ -37,7 +37,6 @@ type Version struct {
 }
 
 func ParseVersion(version string) *VersionSupport {
-
 	forceStr := strings.Split(version, ".")
 	if len(forceStr) != 3 {
 		logger.Errorf("parse LoginConf err Version :%v", version)

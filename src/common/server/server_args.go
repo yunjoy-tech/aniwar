@@ -2,7 +2,7 @@ package server
 
 import (
 	"fmt"
-	"gitee.com/aniwar2/musae/baseconf"
+	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/musae/errorx"
 	"gitee.com/aniwar2/musae/global"
 	"os"
@@ -116,7 +116,7 @@ func (s *Server) InitSrvArgs() error {
 		global.HostName = global.AppID
 	}
 	fmt.Println("hostname:", global.HostName)
-	if baseconf.GetBaseConf().Cloud {
+	if conf.Base().Cloud {
 		ids := strings.Split(global.HostName, "-")
 		if len(ids) == 2 {
 			id, err := strconv.Atoi(ids[1])

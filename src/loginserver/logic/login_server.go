@@ -78,10 +78,10 @@ func (s *LoginServer) PostInit() error {
 	// 注册login接口
 	s.RegisterRpcHandler("/api", s.OnHttp)
 	//
-	if conf.Base().LoginReqRate > 0 && conf.Base().LoginReqQueue > 0 {
-		s.ch = make(chan *Msg, conf.Base().LoginReqQueue)
+	if conf.Login().LoginReqRate > 0 && conf.Login().LoginReqQueue > 0 {
+		s.ch = make(chan *Msg, conf.Login().LoginReqQueue)
 		utils.GoSafeRun(s.doHandleMsg, nil)
-		s.ticket = make(chan struct{}, conf.Base().LoginReqRate)
+		s.ticket = make(chan struct{}, conf.Login().LoginReqRate)
 		utils.GoSafeRun(func() {
 			t := time.NewTicker(time.Second)
 			defer t.Stop()

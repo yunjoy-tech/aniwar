@@ -3,7 +3,7 @@ package server
 import (
 	"context"
 	"encoding/json"
-	"gitee.com/aniwar2/musae/baseconf"
+	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/musae/errorx"
 	"gitee.com/aniwar2/musae/global"
 	"gitee.com/aniwar2/musae/logger"
@@ -91,8 +91,8 @@ func (s *Server) SaveRedisTransaction(db service.RedisDbType, meta map[string]st
 	now := time.Now()
 	// err := s.Daprc.ExecuteStateTransaction(ctx, string(db), meta, opts)
 	_, err = utils.RetryDoSyncInterval(
-		baseconf.GetBaseConf().AniwarDbSetRetryCount,
-		baseconf.GetBaseConf().AniwarDbRetryInterval,
+		conf.Base().AniwarDbSetRetryCount,
+		conf.Base().AniwarDbRetryInterval,
 		func() (any, error) {
 			return nil, s.Daprc.ExecuteStateTransaction(ctx, string(db), meta, opts)
 		})

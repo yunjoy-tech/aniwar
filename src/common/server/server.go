@@ -10,7 +10,6 @@ import (
 	"gitee.com/aniwar2/aniwar/src/common/sdkconstant"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/base"
-	"gitee.com/aniwar2/musae/baseconf"
 	"gitee.com/aniwar2/musae/gamelib/guid"
 	"gitee.com/aniwar2/musae/global"
 	"gitee.com/aniwar2/musae/logger"
@@ -175,7 +174,7 @@ func (s *Server) OnUpdateStatus() {
 		var count int32
 		var del []string
 		s.OnlinePlayers.Range(func(key, value any) bool {
-			if time.Now().Unix() > value.(int64)+int64(baseconf.GetBaseConf().ServerHeartbeatTimout) {
+			if time.Now().Unix() > value.(int64)+int64(conf.Base().ServerHeartbeatTimout) {
 				del = append(del, key.(string))
 			} else {
 				count += 1
@@ -266,7 +265,7 @@ func (s *Server) PlayerIsOnline(uid string) (bool, *pb.UserSession) {
 		return false, session
 	}
 	if time.Now().Unix() > session.LastHeartbeatTs+
-		int64(baseconf.GetBaseConf().HeartbeatTimout) {
+		int64(conf.Base().HeartbeatTimout) {
 		return false, session
 	}
 	return true, session

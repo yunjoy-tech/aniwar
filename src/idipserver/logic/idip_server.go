@@ -4,11 +4,11 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
 	comn "gitee.com/aniwar2/aniwar/src/common/server"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/base"
-	"gitee.com/aniwar2/musae/baseconf"
 	"gitee.com/aniwar2/musae/global"
 	"gitee.com/aniwar2/musae/logger"
 	"gitee.com/aniwar2/musae/metrics"
@@ -50,8 +50,8 @@ func (s *IDIPServer) PreInit() error {
 	s.RegisterRpcHandler("/api/insideGMT", s.InsideGMT)
 
 	// http reload api
-	if baseconf.GetBaseConf().IsDebug {
-		s.RegisterRpcHandler("/api/hotReload", s.HotReload)
+	if conf.Base().IsDebug {
+		s.RegisterRpcHandler("/api/hotReload", s.HotReload) // TODO 这里应该不需要支持reload
 	}
 	return nil
 }

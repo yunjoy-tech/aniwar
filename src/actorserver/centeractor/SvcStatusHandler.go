@@ -3,11 +3,11 @@ package centeractor
 import (
 	"context"
 	"encoding/json"
+	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/base"
 	"gitee.com/aniwar2/musae/baseactor"
-	"gitee.com/aniwar2/musae/baseconf"
 	"gitee.com/aniwar2/musae/global"
 	"gitee.com/aniwar2/musae/logger"
 	"gitee.com/aniwar2/musae/metrics"
@@ -109,7 +109,7 @@ func (h *SvcStatusHandler) SvcStatusReq(ctx context.Context, in *base.ProtoMsg) 
 	for _, svcMap := range h.actor.Data.SvcMaps {
 		svcMap.Range(func(key, value any) bool {
 			svc := value.(*pb.ServiceData)
-			if now < svc.ReportTS+int64(baseconf.GetBaseConf().ServerHeartbeatTimout) {
+			if now < svc.ReportTS+int64(conf.Base().ServerHeartbeatTimout) {
 				rsp.Services = append(rsp.Services, svc)
 			}
 			return true
@@ -126,7 +126,7 @@ func (h *SvcStatusHandler) UpdateActorStatus() {
 	h.actor.Data.ActorStatusMap.Range(func(key, value any) bool {
 		status := value.(*pb.ActorStatus)
 		if status != nil {
-			if now < status.LastTime+int64(baseconf.GetBaseConf().ServerHeartbeatTimout) {
+			if now < status.LastTime+int64(conf.Base().ServerHeartbeatTimout) {
 				for _, actor := range status.Counts {
 					switch actor.Type {
 					case global.PlayerCountType:

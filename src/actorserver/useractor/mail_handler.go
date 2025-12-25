@@ -5,12 +5,12 @@ import (
 	"fmt"
 	"gitee.com/aniwar2/aniwar/src/common"
 	"gitee.com/aniwar2/aniwar/src/common/clidto"
+	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
 	"gitee.com/aniwar2/aniwar/src/common/db"
 	"gitee.com/aniwar2/aniwar/src/meta"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/base"
-	"gitee.com/aniwar2/musae/baseconf"
 	"gitee.com/aniwar2/musae/gamelib/guid"
 	"gitee.com/aniwar2/musae/global"
 	"gitee.com/aniwar2/musae/service"
@@ -748,8 +748,8 @@ func (h *MailHandler) tryDelMail(mails map[int64]*pb.PMailInfo) []int64 {
 
 // 随机一个MailActor进行调用
 func randMailActorId() string {
-	minCount := baseconf.GetBaseConf().MailActorMin
-	percent := baseconf.GetBaseConf().MailActorPercent
+	minCount := conf.Actor().MailActorMin
+	percent := conf.Actor().MailActorPercent
 	need := int32(math.Ceil(float64(percent) / 10000 * float64(global.UserActorCount)))
 	if need < minCount {
 		need = minCount

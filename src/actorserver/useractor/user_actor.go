@@ -3,33 +3,26 @@ package useractor
 import (
 	"context"
 	"fmt"
+	"gitee.com/aniwar2/aniwar/src/actorserver/frame"
+	"gitee.com/aniwar2/aniwar/src/common"
+	"gitee.com/aniwar2/aniwar/src/common/clidto"
 	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
-	"gitee.com/aniwar2/musae/logger"
-	"gitee.com/aniwar2/musae/utils"
-	"strconv"
-
-	"gitee.com/aniwar2/aniwar/src/actorserver/frame"
-	"github.com/dapr/go-sdk/actor"
-
-	"gitee.com/aniwar2/aniwar/src/common/clidto"
-	"github.com/pkg/errors"
-
-	"gitee.com/aniwar2/musae/service"
-	"gitee.com/aniwar2/musae/state"
-
-	"gitee.com/aniwar2/musae/baseconf"
-	"gitee.com/aniwar2/musae/global"
-
-	"time"
-
-	"gitee.com/aniwar2/aniwar/src/common"
 	"gitee.com/aniwar2/aniwar/src/common/db"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/base"
 	"gitee.com/aniwar2/musae/baseactor"
+	"gitee.com/aniwar2/musae/global"
+	"gitee.com/aniwar2/musae/logger"
+	"gitee.com/aniwar2/musae/service"
 	svc "gitee.com/aniwar2/musae/service"
+	"gitee.com/aniwar2/musae/state"
+	"gitee.com/aniwar2/musae/utils"
+	"github.com/dapr/go-sdk/actor"
+	"github.com/pkg/errors"
 	"google.golang.org/protobuf/proto"
+	"strconv"
+	"time"
 )
 
 type ActorState int
@@ -301,7 +294,7 @@ func (u *UserActor) IsHeartbeatTimeout() bool {
 	if u.GetState() != State_Online {
 		return false
 	}
-	if time.Now().Unix() > u.LastMsgTs+int64(baseconf.GetBaseConf().HeartbeatTimout) {
+	if time.Now().Unix() > u.LastMsgTs+int64(conf.Base().HeartbeatTimout) {
 		return true
 	}
 	return false
