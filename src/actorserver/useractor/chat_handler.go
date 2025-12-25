@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"gitee.com/aniwar2/aniwar/src/common"
+	"gitee.com/aniwar2/aniwar/src/common/sensitive"
 	"gitee.com/aniwar2/musae/gamelib/guid"
 	"gitee.com/aniwar2/musae/utils"
 	"strconv"
@@ -177,7 +178,7 @@ func (h *UserChatHandler) SendChatMessageReq(ctx context.Context, in *base.Proto
 		return nil, errors.New("message too long"), int32(pb.ErrorCode_Chat_message_too_long)
 	}
 	// 敏感词过滤
-	result, err := h.actor.Srv.CheckSensitiveWord(common.CHECK_TYPE_PLAYERNAME, req.GetMessage())
+	result, err := sensitive.CheckSensitiveWord(common.CHECK_TYPE_PLAYERNAME, req.GetMessage())
 	if !result {
 		return nil, err, int32(pb.ErrorCode_Chat_illegal_message)
 	}

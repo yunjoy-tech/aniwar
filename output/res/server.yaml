@@ -190,18 +190,6 @@ DDosConf:
   # 用户消息流量上限,0表示无限制【支持热重载】
   limitByteNum: 1024000
 
-# 敏感词配置
-UGCConf:
-  # 机审url
-  baseUrl: 'https://gear-api.farlightgames.com'
-  # 接口path
-  apiPath: /api/v1/uniswf/scan/text
-  secretId: 449f6ba369ba4232a8342c06147c9667
-  secretKey: 52d4b89ed469416fb618d804e9f9d5df
-  accessKey: f7a2e8e0924544f89b575852eac6201
-  # 开关
-  switch: 0
-
 # 登录配置
 LoginConf:
   gateUrl: 'http://gate.aniwar.com:22001/gate'

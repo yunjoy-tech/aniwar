@@ -6,7 +6,6 @@ import (
 	"gitee.com/aniwar2/musae/global"
 	"gitee.com/aniwar2/musae/logger"
 	"github.com/dapr/go-sdk/client"
-	"strings"
 )
 
 /*func (s *ActorServer) SubConfCenter() error {
@@ -52,9 +51,9 @@ func (s *ActorServer) HandlerConfEvent(id string, items map[string]*client.Confi
 		//		logger.Errorf("reload --> LoadExcel got err:%+v", err)
 		//	}
 
-		case db.KeyCfgGlobalDirtyWord: // 动态屏蔽词热更
-			words := strings.Split(v.Value, "|")
-			dynamicWordMgr.AddWord(words...)
+		// case db.KeyCfgGlobalDirtyWord: // 动态屏蔽词热更
+		// 	words := strings.Split(v.Value, "|")
+		// 	dynamicWordMgr.AddWord(words...)
 
 		case db.KeyCfgReloadDirtyWord: // 静态屏蔽词更新
 			s.Server.LoadWordCfg()

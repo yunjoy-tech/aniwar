@@ -178,8 +178,8 @@ func (s *ActorServer) PostInit() error {
 
 	// center 跳过业务配置加载
 	if global.IsActor(s.AppId) {
-		s.LoadWordCfg()       // 加载静态屏蔽词库
-		s.InitDynamicWord()   // 加载动态屏蔽词
+		s.LoadWordCfg() // 加载静态屏蔽词库
+		// s.InitDynamicWord()   // 加载动态屏蔽词
 		s.RegisterCloseFunc() // 加载关闭的功能
 		s.InitCmd()
 		if err := s.GetSystemMail(s.SysMailMgr.Data); err != nil {

@@ -8,11 +8,11 @@ import (
 	"gitee.com/aniwar2/aniwar/src/common"
 	"gitee.com/aniwar2/aniwar/src/common/clidto"
 	"gitee.com/aniwar2/aniwar/src/common/conf"
+	"gitee.com/aniwar2/aniwar/src/common/sensitive"
 	"gitee.com/aniwar2/aniwar/src/idipserver/logic"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/base"
 	"gitee.com/aniwar2/musae/gamelib/guid"
-	"gitee.com/aniwar2/musae/gamelib/sensitive"
 	"gitee.com/aniwar2/musae/global"
 	"gitee.com/aniwar2/musae/logger"
 	"gitee.com/aniwar2/musae/service"
@@ -68,7 +68,6 @@ func NewGmHandler(actor *UserActor) *GmHandler {
 	h.RegisterCmdHandler(common.GM_ADD_PLAYER_EXP, h.GmAddPlayerExp)
 	h.RegisterCmdHandler(common.GM_TEST_PROTO, h.GmTestCmd)
 	h.RegisterCmdHandler(common.GM_TEST_UGC, h.GmTestUgc)
-	h.RegisterCmdHandler(common.GM_TEST_SENSITIVE, h.GmTestSensitive)
 	h.RegisterCmdHandler(common.GM_CHECKBATTLE_RELOAD_EXCEL, h.GmTestCheckBattleReloadExcel)
 	h.RegisterCmdHandler(common.GM_TEST_GUID, h.GmTestGUID)
 	h.RegisterCmdHandler(common.GM_TEST_DB, h.GmTestDB)
@@ -415,12 +414,6 @@ func (h *GmHandler) GmTestCmd(param []string, comdata *clidto.Comdata) error {
 	return nil
 }
 
-func (h *GmHandler) GmTestSensitive(param []string, commonData *clidto.Comdata) error {
-	ok, str := sensitive.GetSensitiveWordMgr().FindIn(param[0])
-	h.Debugf("屏蔽词校验 result: %v, find: %s", ok, str)
-	return nil
-}
-
 func (h *GmHandler) GmTestUgc(param []string, commonData *clidto.Comdata) error {
 	// 测试指定字符串
 	if len(param) > 0 {
@@ -571,7 +564,7 @@ func (h *GmHandler) GMAddItem(param []string, commonData *clidto.Comdata) error 
 func (h *GmHandler) test_UGCStringCheck(str string, cType int32, f bool) (bool, error) {
 	// 校验合法性
 	h.Debugf("数据校验: %s %d", str, cType)
-	result, err := h.actor.Srv.CheckSensitiveWord(cType, str)
+	result, err := sensitive.CheckSensitiveWord(cType, str)
 	if err != nil {
 		return false, err
 	}

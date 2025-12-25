@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"gitee.com/aniwar2/aniwar/src/common"
 	"gitee.com/aniwar2/aniwar/src/common/db"
+	"gitee.com/aniwar2/aniwar/src/common/sensitive"
 	"gitee.com/aniwar2/musae/gamelib/guid"
 	"gitee.com/aniwar2/musae/global"
 	timeutil "gitee.com/aniwar2/musae/utils/time"
@@ -540,10 +541,10 @@ func (h *UserAllianceHandler) commonInfoCheck(infos map[string]string) (error, p
 		if nameLen == 0 || nameLen > 8 {
 			return fmt.Errorf("name length is illegal"), pb.ErrorCode_Alliance_name_illegal
 		}
-		if h.actor.Srv.CheckSpecialLetters(name, false) {
+		if sensitive.CheckSpecialLetters(name, false) {
 			return fmt.Errorf("name is illegal"), pb.ErrorCode_Alliance_name_illegal
 		}
-		check, err := h.actor.Srv.CheckSensitiveWord(common.CHECK_TYPE_PLAYERNAME, name)
+		check, err := sensitive.CheckSensitiveWord(common.CHECK_TYPE_PLAYERNAME, name)
 		if err != nil || !check {
 			return err, pb.ErrorCode_Alliance_name_illegal
 		}
@@ -559,10 +560,10 @@ func (h *UserAllianceHandler) commonInfoCheck(infos map[string]string) (error, p
 			return fmt.Errorf("profile length is illegal"), pb.ErrorCode_Alliance_profile_illegal
 		}
 		if profile != "" {
-			if h.actor.Srv.CheckSpecialLetters(profile, true) {
+			if sensitive.CheckSpecialLetters(profile, true) {
 				return fmt.Errorf("profile is illegal"), pb.ErrorCode_Alliance_profile_illegal
 			}
-			check, err := h.actor.Srv.CheckSensitiveWord(common.CHECK_TYPE_PLAYERNAME, profile)
+			check, err := sensitive.CheckSensitiveWord(common.CHECK_TYPE_PLAYERNAME, profile)
 			if err != nil || !check {
 				return err, pb.ErrorCode_Alliance_profile_illegal
 			}
@@ -576,10 +577,10 @@ func (h *UserAllianceHandler) commonInfoCheck(infos map[string]string) (error, p
 			return fmt.Errorf("notice length is illegal"), pb.ErrorCode_Alliance_notice_illegal
 		}
 		if notice != "" {
-			if h.actor.Srv.CheckSpecialLetters(notice, true) {
+			if sensitive.CheckSpecialLetters(notice, true) {
 				return fmt.Errorf("notice is illegal"), pb.ErrorCode_Alliance_notice_illegal
 			}
-			check, err := h.actor.Srv.CheckSensitiveWord(common.CHECK_TYPE_PLAYERNAME, notice)
+			check, err := sensitive.CheckSensitiveWord(common.CHECK_TYPE_PLAYERNAME, notice)
 			if err != nil || !check {
 				return err, pb.ErrorCode_Alliance_notice_illegal
 			}

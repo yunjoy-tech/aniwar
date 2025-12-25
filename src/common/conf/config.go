@@ -2,7 +2,6 @@ package conf
 
 import (
 	"gitee.com/aniwar2/musae/baseconf"
-
 	"gopkg.in/yaml.v3"
 	"os"
 )
@@ -19,7 +18,6 @@ func (s *ServerConf) BaseConf() *baseconf.BaseConf {
 type ServerConf struct {
 	Base    *baseconf.BaseConf `yaml:"BaseConf"`    // 基础配置
 	DDos    *DDosConf          `yaml:"DDosConf"`    // 负载配置
-	UGC     *UGCConf           `yaml:"UGCConf"`     // ugc机器审核配置
 	Login   *LoginConf         `yaml:"LoginConf"`   // 版本校验
 	GMT     *GMTConf           `yaml:"GMTConf"`     // gmt配置
 	Bill    *BillConf          `yaml:"BillConf"`    // bill配置
@@ -66,20 +64,6 @@ type DDosConf struct {
 
 func DDos() *DDosConf {
 	return gConf.DDos
-}
-
-// UGCConf 机审接口相关配置
-type UGCConf struct {
-	BaseUrl   string `yaml:"baseUrl"`   // 机审url
-	ApiPath   string `yaml:"apiPath"`   // 接口path
-	SecretId  string `yaml:"secretId"`  // appid
-	SecretKey string `yaml:"secretKey"` // appkey
-	AccessKey string `yaml:"accessKey"` // accessKey
-	Switch    int    `yaml:"switch"`    // 开关
-}
-
-func UGC() *UGCConf {
-	return gConf.UGC
 }
 
 // LoginConf 登录服配置项

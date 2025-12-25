@@ -8,6 +8,7 @@ import (
 	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
 	"gitee.com/aniwar2/aniwar/src/common/db"
+	"gitee.com/aniwar2/aniwar/src/common/sensitive"
 	"gitee.com/aniwar2/aniwar/src/common/server"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/base"
@@ -140,10 +141,10 @@ func (h *LoginHandler) checkNickName(nickname string, isCreate bool) (error, int
 	}
 
 	// 校验合法性
-	if h.actor.Srv.CheckSpecialLetters(nickname, false) {
+	if sensitive.CheckSpecialLetters(nickname, false) {
 		return fmt.Errorf("nickname invalid"), int32(pb.ErrorCode_NicknameInvalid)
 	}
-	result, err := h.actor.Srv.CheckSensitiveWord(common.CHECK_TYPE_PLAYERNAME, nickname)
+	result, err := sensitive.CheckSensitiveWord(common.CHECK_TYPE_PLAYERNAME, nickname)
 	if err != nil {
 		return err, int32(pb.ErrorCode_InternalError)
 	}
