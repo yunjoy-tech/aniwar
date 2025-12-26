@@ -84,7 +84,7 @@ func (h *OrderHandler) CreateOrderReq(ctx context.Context, in *base.ProtoMsg) (p
 		now = time.Now()
 	)
 
-	if conf.Base().CanPay == 0 {
+	if conf.Bill().CanPay == 0 {
 		// 充值关闭
 		return nil, errors.New("充值功能关闭"), int32(pb.ErrorCode_Order_pay_closed)
 	}
@@ -491,8 +491,8 @@ func (h *OrderHandler) paySendReward(order *pb.Order, paymentType pb.PaymentType
 
 // VirtualPay 虚拟充值
 func (h *OrderHandler) VirtualPay(cpOrderId string) {
-	if conf.Base().CanVirtualPay != 1 {
-		h.Debugf("不支持模拟充值, CanVirtualPay:%d", conf.Base().CanVirtualPay)
+	if conf.Bill().CanVirtualPay != 1 {
+		h.Debugf("不支持模拟充值, CanVirtualPay:%d", conf.Bill().CanVirtualPay)
 		return
 	}
 

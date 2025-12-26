@@ -138,6 +138,7 @@ func Gate() *GateConf {
 
 // ActorConf Actor服配置项
 type ActorConf struct {
+	RoomTokenTTL     int    `yaml:"roomTokenTTL"`     // room的Token有效时长
 	MailActorMin     int32  `yaml:"mailActorMin"`     // 邮件actor最小启用数量
 	MailActorPercent int32  `yaml:"mailActorPercent"` // 邮件Actor启用数量万分比
 	DirtyWords       string `yaml:"dirtyWords"`       // 屏蔽字库
@@ -157,9 +158,11 @@ func Idip() *IdipConf {
 
 // BillConf 充值服相关配置
 type BillConf struct {
-	ApiSecret   string   `yaml:"apiSecret"`   // 验签密钥
-	IsIpWhite   bool     `yaml:"isIpWhite"`   // 是否开启IP白名单
-	IpWhiteList []string `yaml:"ipWhiteList"` // ip白名单
+	CanPay        int32    `yaml:"canPay"`        // 是否开启充值, 1:是, 0:否
+	CanVirtualPay int32    `yaml:"canVirtualPay"` // 是否支持模拟充值, 1:是, 0:否
+	ApiSecret     string   `yaml:"apiSecret"`     // 验签密钥
+	IsIpWhite     bool     `yaml:"isIpWhite"`     // 是否开启IP白名单
+	IpWhiteList   []string `yaml:"ipWhiteList"`   // ip白名单
 }
 
 func Bill() *BillConf {

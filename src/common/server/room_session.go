@@ -24,7 +24,7 @@ func (s *Server) SaveRoomBindingData(uid string, roomId string) error {
 		return err
 	}
 
-	ttlMap := map[string]string{"ttlInSeconds": strconv.Itoa(conf.Base().RoomTokenTTL)}
+	ttlMap := map[string]string{"ttlInSeconds": strconv.Itoa(conf.Actor().RoomTokenTTL)}
 	return s.SaveGlobalRedis(key, kvTable, ttlMap)
 }
 

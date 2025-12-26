@@ -32,8 +32,8 @@ import (
 
 type Server struct {
 	svc.Service
-	pack         *tcpx.Packx
-	version      *VersionSupport
+	pack         *tcpx.Packx       // TODO 理论上这个只有gateServer需要
+	version      *VersionSupport   // TODO 这个只有loginServer需要，当有不兼容更新的时候，需要 停服维护 / T人维护
 	Args         map[string]string // 运行参数列表
 	LiveTime     int64             // 生存时间戳
 	NeedExcel    map[string]int    // TODO musae提供支持，根据srv类型进行加载 需要加载的策划excel表

@@ -42,7 +42,7 @@ BaseConf:
   # 服务器包体大小限制,默认上限16Mb
   srvMsgMaxSize: 16777216
   # 服务器ID【支持热重载】
-  serverId: '1'
+  serverId: '1' # todo 需要支持分区分服
   # 服务器Name【支持热重载】
   serverName: test
   # 服务器之间心跳超时，单位秒【支持热重载】
@@ -51,8 +51,6 @@ BaseConf:
   serverHeartbeatInterval: 15
   # 账号Token有效时长【支持热重载】
   accTokenTTL: 604800
-  # room的Token有效时长【支持热重载】
-  roomTokenTTL: 604800
   # 是否开启指标输出【支持热重载】
   metric: true
   metricPort: ":9999" # todo
@@ -75,12 +73,6 @@ BaseConf:
     - 10110202
   # 1:开启防重放, 0:关闭【支持热重载】
   useReqIdx: 1
-  # 是否开启充值, 1:是, 0:否【支持热重载】
-  canPay: 0
-  # 是否支持模拟充值, 1:是, 0:否【支持热重载】
-  canVirtualPay: 1
-  # 配置表数据是否使用压缩 1:是, 0:否
-  excelDataZip: 0
   # 耗时收集日志阈值【支持热重载】
   delayLogLimit: 100
   # UserActor gc扫描间隔, m:分钟, s:秒
@@ -181,6 +173,8 @@ GateConf:
 
 # ActorServer配置
 ActorConf:
+  # room的Token有效时长【支持热重载】
+  roomTokenTTL: 604800
   # 邮件actor最小启用数量
   mailActorMin: 100
   # 邮件Actor启用数量万分比
@@ -193,6 +187,10 @@ IdipConf:
 
 # BillServer配置
 BillConf:
+  # 是否开启充值, 1:是, 0:否【支持热重载】
+  canPay: 0
+  # 是否支持模拟充值, 1:是, 0:否【支持热重载】
+  canVirtualPay: 1
   # api调用验签密钥【支持热重载】
   apiSecret: |-
     -----BEGIN RSA PUBLIC KEY-----
