@@ -50,14 +50,14 @@ func NewLoginServer() base.IServer {
 	srv.GRPCPort = "50001"
 	srv.OutAddr = ":12001"
 	srv.HasPriTopic = true // 开启私有频道订阅
-	srv.OnPreInit = srv.PreInit
-	srv.OnPostInit = srv.PostInit
-	srv.OnConnect = srv.OnNetConnect
-	srv.OnMessage = srv.OnNetMessage
-	srv.OnClose = srv.OnNetClose
-	srv.OnEventHandler = srv.EventHandler
-	srv.OnInvokeHandler = srv.InvokeHandler
-	srv.OnBindHandler = srv.BindingHandler
+	srv.OnPreInit = srv.OnPreInitHandler
+	srv.OnPostInit = srv.OnPostInitHandler
+	srv.OnNetConnect = srv.OnNetConnectHandler
+	srv.OnNetMessage = srv.OnNetMessageHandler
+	srv.OnNetClose = srv.OnNetCloseHandler
+	srv.OnDaprTopicEvent = srv.OnDaprTopicEventHandler
+	srv.OnDaprSvcInvoke = srv.OnDaprSvcInvokeHandler
+	srv.OnDaprBindInvoke = srv.OnDaprBindInvokeHandler
 	srv.OnRegisterMetric = srv.RegisterMetrics
 	srv.OnCfgCenterCB = srv.HandlerConfEvent
 	return srv
@@ -70,13 +70,13 @@ func (s *LoginServer) RegisterMetrics() {
 
 }
 
-func (s *LoginServer) PreInit() error {
+func (s *LoginServer) OnPreInitHandler() error {
 	return nil
 }
 
-func (s *LoginServer) PostInit() error {
+func (s *LoginServer) OnPostInitHandler() error {
 	// 注册login接口
-	s.RegisterRpcHandler("/api", s.OnHttp)
+	s.RegisterDaprSvcInvokeHandler("/api", s.OnHttp)
 	//
 	if conf.Login().LoginReqRate > 0 && conf.Login().LoginReqQueue > 0 {
 		s.ch = make(chan *Msg, conf.Login().LoginReqQueue)
@@ -102,17 +102,17 @@ func (s *LoginServer) PostInit() error {
 	return nil
 }
 
-func (s *LoginServer) OnNetConnect(c *tcpx.Context) {
+func (s *LoginServer) OnNetConnectHandler(c *tcpx.Context) {
 	defer func() {
 		if err := recover(); err != any(nil) {
 			logger.Error("OnNetConnect failed, err: ", err)
 		}
 	}()
 
-	logger.Debug("OnConnect from remote host:", c.ClientIP(), c.Network())
+	logger.Debug("OnNetConnect from remote host:", c.ClientIP(), c.Network())
 }
 
-func (s *LoginServer) OnNetMessage(c *tcpx.Context) {
+func (s *LoginServer) OnNetMessageHandler(c *tcpx.Context) {
 	defer func() {
 		if err := recover(); err != any(nil) {
 			logger.Error("OnNetMessage failed, err: ", err)
@@ -122,15 +122,15 @@ func (s *LoginServer) OnNetMessage(c *tcpx.Context) {
 	s.OnTcp(c)
 }
 
-func (s *LoginServer) OnNetClose(c *tcpx.Context) {
+func (s *LoginServer) OnNetCloseHandler(c *tcpx.Context) {
 
-	logger.Debug("OnClose from remote host: ", c.ClientIP(), c.Network())
+	logger.Debug("OnNetClose from remote host: ", c.ClientIP(), c.Network())
 }
 
-func (s *LoginServer) EventHandler(ctx context.Context, e *common.TopicEvent) (retry bool, err error) {
+func (s *LoginServer) OnDaprTopicEventHandler(ctx context.Context, e *common.TopicEvent) (retry bool, err error) {
 	defer func() {
 		if err := recover(); err != any(nil) {
-			logger.Error("EventHandler failed, err: ", err)
+			logger.Error("OnDaprTopicEvent failed, err: ", err)
 		}
 	}()
 
@@ -148,17 +148,17 @@ func (s *LoginServer) EventHandler(ctx context.Context, e *common.TopicEvent) (r
 	return false, nil
 }
 
-func (s *LoginServer) InvokeHandler(ctx context.Context, in *common.InvocationEvent) (out *common.Content, err error) {
+func (s *LoginServer) OnDaprSvcInvokeHandler(ctx context.Context, in *common.InvocationEvent) (out *common.Content, err error) {
 	defer func() {
 		if err := recover(); err != any(nil) {
-			logger.Error("InvokeHandler failed, err: ", err)
+			logger.Error("OnDaprSvcInvokeHandler failed, err: ", err)
 		}
 	}()
 
 	if in == nil {
 		err = errors.New("nil invocation parameter")
 	}
-	logger.Debugf("InvokeHandler - ContentType:%s, Verb:%s, QueryString:%s, len:%v", in.ContentType, in.Verb, in.QueryString, len(in.Data))
+	logger.Debugf("OnDaprSvcInvokeHandler - ContentType:%s, Verb:%s, QueryString:%s, len:%v", in.ContentType, in.Verb, in.QueryString, len(in.Data))
 	metrics.GaugeInc(metrics.InvokeSubCount)
 	out = &common.Content{
 		Data:        in.Data,
@@ -175,7 +175,7 @@ func (s *LoginServer) InvokeHandler(ctx context.Context, in *common.InvocationEv
 	return out, nil
 }
 
-func (s *LoginServer) BindingHandler(ctx context.Context, in *common.BindingEvent) (out []byte, err error) {
+func (s *LoginServer) OnDaprBindInvokeHandler(ctx context.Context, in *common.BindingEvent) (out []byte, err error) {
 	logger.Debug("binding - Data:%s, Meta:%v", in.Data, in.Metadata)
 	return nil, nil
 }

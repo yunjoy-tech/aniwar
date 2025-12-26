@@ -59,11 +59,11 @@ func NewActorServer() base.IServer {
 	srv.InAddr = ":24001"
 	srv.GRPCPort = "50001"
 	srv.HasPriTopic = true // 开启私有频道订阅
-	srv.OnPreInit = srv.PreInit
-	srv.OnPostInit = srv.PostInit
-	srv.OnEventHandler = srv.EventHandler
-	srv.OnInvokeHandler = srv.InvokeHandler
-	srv.OnBindHandler = srv.BindingHandler
+	srv.OnPreInit = srv.OnPreInitHandler
+	srv.OnPostInit = srv.OnPostInitHandler
+	srv.OnDaprTopicEvent = srv.OnDaprTopicEventHandler
+	srv.OnDaprSvcInvoke = srv.OnDaprSvcInvokeHandler
+	srv.OnDaprBindInvoke = srv.OnDaprBindInvokeHandler
 	srv.OnRegisterMetric = srv.RegisterMetrics
 	srv.OnCfgCenterCB = srv.HandlerConfEvent
 	// cron handler
@@ -164,14 +164,14 @@ func (s *ActorServer) InitCmd() {
 	s.RegisterCmdInfo(myCommon.GM_TEST_RECOMMEND, "测试好友推荐列表", "", CMD_TYPE_PERSON)
 }
 
-func (s *ActorServer) PreInit() error {
+func (s *ActorServer) OnPreInitHandler() error {
 	if conf.Base().IsDebug {
-		s.RegisterRpcHandler("/api/hotReload", s.HotReload)
+		s.RegisterDaprSvcInvokeHandler("/api/hotReload", s.HotReload)
 	}
 	return nil
 }
 
-func (s *ActorServer) PostInit() error {
+func (s *ActorServer) OnPostInitHandler() error {
 	logger.Debug("ActorServer Init")
 
 	s.LiveTime = time.Now().Unix() // 创建server时间戳
@@ -214,7 +214,7 @@ func (s *ActorServer) OnHeartBeat(c *tcpx.Context) {
 	logger.Debug("ActorServer:OnHeartBeat,implement me")
 }
 
-func (s *ActorServer) EventHandler(ctx context.Context, e *common.TopicEvent) (retry bool, err error) {
+func (s *ActorServer) OnDaprTopicEventHandler(ctx context.Context, e *common.TopicEvent) (retry bool, err error) {
 	defer func() {
 		if err := recover(); err != any(nil) {
 			logger.Errorf("recover failed err:%v", err)
@@ -239,7 +239,7 @@ func (s *ActorServer) EventHandler(ctx context.Context, e *common.TopicEvent) (r
 	return false, nil
 }
 
-func (s *ActorServer) InvokeHandler(ctx context.Context, in *common.InvocationEvent) (out *common.Content, err error) {
+func (s *ActorServer) OnDaprSvcInvokeHandler(ctx context.Context, in *common.InvocationEvent) (out *common.Content, err error) {
 	defer func() {
 		if err := recover(); err != any(nil) {
 			logger.Error("failed, err: ", err)
@@ -319,10 +319,10 @@ func (s *ActorServer) GetUserGMList(msg *base.ProtoMsg) (*common.Content, error)
 	return &common.Content{Data: data}, err
 }
 
-func (s *ActorServer) BindingHandler(ctx context.Context, in *common.BindingEvent) (out []byte, err error) {
+func (s *ActorServer) OnDaprBindInvokeHandler(ctx context.Context, in *common.BindingEvent) (out []byte, err error) {
 	defer func() {
 		if err := recover(); err != any(nil) {
-			logger.Error("BindingHandler failed, err: ", err)
+			logger.Error("OnDaprBindInvokeHandler failed, err: ", err)
 		}
 	}()
 

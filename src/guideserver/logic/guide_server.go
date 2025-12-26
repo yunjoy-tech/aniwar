@@ -10,7 +10,6 @@ import (
 	"gitee.com/aniwar2/musae/global"
 	"gitee.com/aniwar2/musae/logger"
 	"gitee.com/aniwar2/musae/metrics"
-	"gitee.com/aniwar2/musae/tcpx"
 	"github.com/dapr/go-sdk/service/common"
 	"os"
 	"time"
@@ -26,11 +25,11 @@ func NewGuideServer() base.IServer {
 	srv.InAddr = ":20001"
 	srv.GRPCPort = "50001"
 	srv.HasPriTopic = true // 开启私有频道订阅
-	srv.OnPreInit = srv.PreInit
-	srv.OnPostInit = srv.PostInit
-	srv.OnEventHandler = srv.EventHandler
-	srv.OnInvokeHandler = srv.InvokeHandler
-	srv.OnBindHandler = srv.BindingHandler
+	srv.OnPreInit = srv.OnPreInitHandler
+	srv.OnPostInit = srv.OnPostInitHandler
+	srv.OnDaprTopicEvent = srv.OnDaprTopicEventHandler
+	srv.OnDaprSvcInvoke = srv.OnDaprSvcInvokeHandler
+	srv.OnDaprBindInvoke = srv.OnDaprBindInvokeHandler
 	srv.OnRegisterMetric = srv.RegisterMetrics
 	srv.OnCfgCenterCB = srv.HandlerConfEvent
 	return srv
@@ -42,27 +41,26 @@ func (s *GuideServer) RegisterMetrics() {
 	metrics.RegisterHistogram(metrics.GuideDelayHist, nil, metrics.Delay)
 }
 
-func (s *GuideServer) PreInit() error {
-	// client version
-	s.RegisterRpcHandler("/api/version", s.Version)
-	s.RegisterRpcHandler("/api/notice", s.Notice)
+func (s *GuideServer) OnPreInitHandler() error {
+	s.RegisterDaprSvcInvokeHandler("/api/version", s.Version) // 游戏版本信息
+	s.RegisterDaprSvcInvokeHandler("/api/notice", s.Notice)   // 游戏公告列表
 
 	// test
 	// s.RegisterBindingInvocationHandler("/api/_test", s.test)
 	return nil
 }
 
-func (s *GuideServer) PostInit() error {
+func (s *GuideServer) OnPostInitHandler() error {
 	s.LiveTime = time.Now().Unix() // 创建server时间戳
 	// 服务启动埋点
 	taptap.ServiceStart(s.AppId, global.APP_VERSION, "", global.ROLLING_VERSION, "GuideServer")
 	return nil
 }
 
-func (s *GuideServer) EventHandler(ctx context.Context, e *common.TopicEvent) (retry bool, err error) {
+func (s *GuideServer) OnDaprTopicEventHandler(ctx context.Context, e *common.TopicEvent) (retry bool, err error) {
 	defer func() {
 		if err := recover(); err != any(nil) {
-			logger.Error("EventHandler failed, err: ", err)
+			logger.Error("OnDaprTopicEvent failed, err: ", err)
 		}
 	}()
 
@@ -80,10 +78,10 @@ func (s *GuideServer) EventHandler(ctx context.Context, e *common.TopicEvent) (r
 	return false, nil
 }
 
-func (s *GuideServer) InvokeHandler(ctx context.Context, in *common.InvocationEvent) (out *common.Content, err error) {
+func (s *GuideServer) OnDaprSvcInvokeHandler(ctx context.Context, in *common.InvocationEvent) (out *common.Content, err error) {
 	defer func() {
 		if err := recover(); err != any(nil) {
-			logger.Error("InvokeHandler failed, err: ", err)
+			logger.Error("OnDaprSvcInvokeHandler failed, err: ", err)
 		}
 	}()
 
@@ -94,36 +92,20 @@ func (s *GuideServer) InvokeHandler(ctx context.Context, in *common.InvocationEv
 
 	msg, err := base.UnPackProtoMsg(in.Data)
 	if err != nil {
-		logger.Warn("InvokeHandler UnPackProtoMsg, err: ", err)
+		logger.Warn("OnDaprSvcInvokeHandler UnPackProtoMsg, err: ", err)
 		return nil, err
 	}
 
 	messageID, uid := msg.MsgId, msg.UserId
 	logger.Debug("guide.server ===>>> ", uid, pb.Protocols(messageID), messageID)
-	logger.Debug("InvokeHandler: ", in.ContentType, in.Verb, in.QueryString, pb.Protocols(messageID), msg.String())
+	logger.Debug("OnDaprSvcInvokeHandler: ", in.ContentType, in.Verb, in.QueryString, pb.Protocols(messageID), msg.String())
 
 	return out, nil
 }
 
-func (s *GuideServer) BindingHandler(ctx context.Context, in *common.BindingEvent) (out []byte, err error) {
+func (s *GuideServer) OnDaprBindInvokeHandler(ctx context.Context, in *common.BindingEvent) (out []byte, err error) {
 	logger.Debug("binding - Data:%s, Meta:%v", in.Data, in.Metadata)
 	return nil, nil
-}
-
-func (s *GuideServer) OnHeartBeat(c *tcpx.Context) {
-	logger.Debug("OnHeartBeat", c.ClientIP())
-}
-
-func (s *GuideServer) OnNetConnect(c *tcpx.Context) {
-	logger.Debug("GuideServer:OnNetMessage, implement me")
-}
-
-func (s *GuideServer) OnNetMessage(c *tcpx.Context) {
-	logger.Debug("GuideServer:OnNetMessage, implement me")
-}
-
-func (s *GuideServer) OnNetClose(c *tcpx.Context) {
-	logger.Debug("GuideServer:OnNetMessage, implement me")
 }
 
 func (s *GuideServer) Exit() {

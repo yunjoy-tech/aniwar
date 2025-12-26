@@ -3,30 +3,25 @@ package logic
 import (
 	"context"
 	"fmt"
-	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
-	"gitee.com/aniwar2/musae/gamelib/guid"
-	"gitee.com/aniwar2/musae/utils"
-	"os"
-	"sync"
-	"time"
-
-	"google.golang.org/protobuf/proto"
-
-	"github.com/pkg/errors"
-
 	myCommon "gitee.com/aniwar2/aniwar/src/common"
-
-	comn "gitee.com/aniwar2/aniwar/src/common/server"
-	"gitee.com/aniwar2/musae/global"
-
 	"gitee.com/aniwar2/aniwar/src/common/conf"
+	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
+	comn "gitee.com/aniwar2/aniwar/src/common/server"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/base"
+	"gitee.com/aniwar2/musae/gamelib/guid"
+	"gitee.com/aniwar2/musae/global"
 	"gitee.com/aniwar2/musae/logger"
 	"gitee.com/aniwar2/musae/metrics"
 	svc "gitee.com/aniwar2/musae/service"
 	"gitee.com/aniwar2/musae/tcpx"
+	"gitee.com/aniwar2/musae/utils"
 	"github.com/dapr/go-sdk/service/common"
+	"github.com/pkg/errors"
+	"google.golang.org/protobuf/proto"
+	"os"
+	"sync"
+	"time"
 )
 
 type GateServer struct {
@@ -36,6 +31,7 @@ type GateServer struct {
 	ch chan *base.ProtoMsg
 }
 
+// todo 暂时可以废弃，先做功能开启控制，后面再看需求是否需要增加协议Id控制
 var DeprecatedMsgId sync.Map // 废弃消息id
 
 func NewGateServer() base.IServer {
@@ -45,14 +41,14 @@ func NewGateServer() base.IServer {
 	srv.GRPCPort = "50001"
 	srv.OutAddr = ":13001"
 	srv.HasPriTopic = true // 开启私有频道订阅
-	srv.OnPreInit = srv.PreInit
-	srv.OnPostInit = srv.PostInit
-	srv.OnConnect = srv.OnNetConnect
-	srv.OnMessage = srv.OnNetMessage
-	srv.OnClose = srv.OnNetClose
-	srv.OnEventHandler = srv.EventHandler
-	srv.OnInvokeHandler = srv.InvokeHandler
-	srv.OnBindHandler = srv.BindingHandler
+	srv.OnPreInit = srv.OnPreInitHandler
+	srv.OnPostInit = srv.OnPostInitHandler
+	srv.OnNetConnect = srv.OnNetConnectHandler
+	srv.OnNetMessage = srv.OnNetMessageHandler
+	srv.OnNetClose = srv.OnNetCloseHandler
+	srv.OnDaprTopicEvent = srv.OnDaprTopicEventHandler
+	srv.OnDaprSvcInvoke = srv.OnDaprSvcInvokeHandler
+	srv.OnDaprBindInvoke = srv.OnDaprBindInvokeHandler
 	srv.OnRegisterMetric = srv.RegisterMetrics
 	srv.OnCfgCenterCB = srv.HandlerConfEvent
 	srv.userMgr = NewUserMgr(srv)
@@ -85,14 +81,14 @@ func (s *GateServer) RegisterMetrics() {
 	metrics.RegisterHistogram(metrics.EnterDelayHist, nil, metrics.Delay)
 }
 
-func (s *GateServer) PreInit() error {
+func (s *GateServer) OnPreInitHandler() error {
 	return nil
 }
 
-func (s *GateServer) PostInit() error {
+func (s *GateServer) OnPostInitHandler() error {
 
 	// 注册login接口
-	s.RegisterRpcHandler("/api", s.OnHttp)
+	s.RegisterDaprSvcInvokeHandler("/api", s.OnHttp)
 
 	interval := time.Duration(conf.Base().HeartbeatInterval)
 	// 定时器模块
@@ -138,14 +134,14 @@ func (s *GateServer) PostInit() error {
 //	return user
 // }
 
-func (s *GateServer) OnNetConnect(c *tcpx.Context) {
+func (s *GateServer) OnNetConnectHandler(c *tcpx.Context) {
 	if conf.Base().IsDebug {
-		logger.Debug("OnConnect from remote host: ", c.ClientIP(), c.Network())
+		logger.Debug("OnNetConnect from remote host: ", c.ClientIP(), c.Network())
 	}
 	metrics.GaugeInc(metrics.GateConnCount)
 }
 
-func (s *GateServer) OnNetMessage(c *tcpx.Context) {
+func (s *GateServer) OnNetMessageHandler(c *tcpx.Context) {
 	defer func() {
 		if err := recover(); err != any(nil) {
 			logger.Error("OnNetMessage recover, err: ", err)
@@ -156,9 +152,9 @@ func (s *GateServer) OnNetMessage(c *tcpx.Context) {
 	s.OnTcp(c)
 }
 
-func (s *GateServer) OnNetClose(c *tcpx.Context) {
+func (s *GateServer) OnNetCloseHandler(c *tcpx.Context) {
 	if c.GetAccountId() != "" {
-		logger.Infof("[gate]OnClose : %s, %s, %s.", c.ClientIP(), c.Network(), c.GetAccountId())
+		logger.Infof("[gate]OnNetClose : %s, %s, %s.", c.ClientIP(), c.Network(), c.GetAccountId())
 	}
 	accountId, ok := c.AccountId()
 	if ok && accountId != "" {
@@ -192,7 +188,7 @@ func (s *GateServer) OnNetClose(c *tcpx.Context) {
 //	}
 // }
 
-func (s *GateServer) EventHandler(ctx context.Context, e *common.TopicEvent) (retry bool, err error) {
+func (s *GateServer) OnDaprTopicEventHandler(ctx context.Context, e *common.TopicEvent) (retry bool, err error) {
 	defer func() {
 		if err := recover(); err != any(nil) {
 			logger.Error("recover, err: ", err)
@@ -230,10 +226,10 @@ func (s *GateServer) EventHandler(ctx context.Context, e *common.TopicEvent) (re
 	return false, nil
 }
 
-func (s *GateServer) InvokeHandler(ctx context.Context, in *common.InvocationEvent) (out *common.Content, err error) {
+func (s *GateServer) OnDaprSvcInvokeHandler(ctx context.Context, in *common.InvocationEvent) (out *common.Content, err error) {
 	defer func() {
 		if err := recover(); err != any(nil) {
-			logger.Error("InvokeHandler recover, err: ", err)
+			logger.Error("OnDaprSvcInvokeHandler recover, err: ", err)
 		}
 	}()
 
@@ -251,21 +247,21 @@ func (s *GateServer) InvokeHandler(ctx context.Context, in *common.InvocationEve
 
 	msg, err := base.UnPackProtoMsg(in.Data)
 	if err != nil {
-		logger.Warn("InvokeHandler UnPackProtoMsg, err: ", err)
+		logger.Warn("OnDaprSvcInvokeHandler UnPackProtoMsg, err: ", err)
 		return nil, err
 	}
 	// messageID, uid, data := msg.MsgId, msg.UserId, msg.Data
-	logger.Debugf("Gate InvokeHandler: msgId:%v, %s", pb.Protocols(msg.MsgId), msg.String())
+	logger.Debugf("Gate OnDaprSvcInvokeHandler: msgId:%v, %s", pb.Protocols(msg.MsgId), msg.String())
 
 	msg.Topic = string(svc.EVENT_PRIVATE)
 	s.PushSrvMsg(msg)
 	return out, nil
 }
 
-func (s *GateServer) BindingHandler(ctx context.Context, in *common.BindingEvent) (out []byte, err error) {
+func (s *GateServer) OnDaprBindInvokeHandler(ctx context.Context, in *common.BindingEvent) (out []byte, err error) {
 	defer func() {
 		if err := recover(); err != any(nil) {
-			logger.Error("BindingHandler recover, err: ", err)
+			logger.Error("OnDaprBindInvokeHandler recover, err: ", err)
 		}
 	}()
 

@@ -29,11 +29,11 @@ func NewIDIPServer() base.IServer {
 	srv.InAddr = ":29001"
 	srv.GRPCPort = "50001"
 	srv.HasPriTopic = true // 开启私有频道订阅
-	srv.OnPreInit = srv.PreInit
-	srv.OnPostInit = srv.PostInit
-	srv.OnEventHandler = srv.EventHandler
-	srv.OnInvokeHandler = srv.InvokeHandler
-	srv.OnBindHandler = srv.BindingHandler
+	srv.OnPreInit = srv.OnPreInitHandler
+	srv.OnPostInit = srv.OnPostInitHandler
+	srv.OnDaprTopicEvent = srv.OnDaprTopicEventHandler
+	srv.OnDaprSvcInvoke = srv.OnDaprSvcInvokeHandler
+	srv.OnDaprBindInvoke = srv.OnDaprBindInvokeHandler
 	srv.OnRegisterMetric = srv.RegisterMetrics
 	srv.OnCfgCenterCB = srv.HandlerConfEvent
 	return srv
@@ -43,20 +43,20 @@ func (s *IDIPServer) RegisterMetrics() {
 
 }
 
-func (s *IDIPServer) PreInit() error {
+func (s *IDIPServer) OnPreInitHandler() error {
 	s.InitCmdHandler()
 	// 内部gmt调用
 	s.InitInsideGmtHandlerMap()
-	s.RegisterRpcHandler("/api/insideGMT", s.InsideGMT)
+	s.RegisterDaprSvcInvokeHandler("/api/insideGMT", s.InsideGMT)
 
 	// http reload api
 	if conf.Base().IsDebug {
-		s.RegisterRpcHandler("/api/hotReload", s.HotReload) // TODO 这里应该不需要支持reload
+		s.RegisterDaprSvcInvokeHandler("/api/hotReload", s.HotReload) // TODO 这里应该不需要支持reload
 	}
 	return nil
 }
 
-func (s *IDIPServer) PostInit() error {
+func (s *IDIPServer) OnPostInitHandler() error {
 	s.LiveTime = time.Now().Unix() // 创建server时间戳
 	s.NeedExcel = map[string]int{  // 需要加载的策划表 TODO 后台导入字典元数据
 		// excel.GetPackageMgr().GetDataFileName(): 0,
@@ -84,7 +84,7 @@ func (s *IDIPServer) PostInit() error {
 	c.String(http.StatusOK, "hello world")
 }*/
 
-func (s *IDIPServer) EventHandler(ctx context.Context, e *common.TopicEvent) (retry bool, err error) {
+func (s *IDIPServer) OnDaprTopicEventHandler(ctx context.Context, e *common.TopicEvent) (retry bool, err error) {
 	defer func() {
 		if err := recover(); err != any(nil) {
 			logger.Error("recover failed, err: ", err)
@@ -109,10 +109,10 @@ func (s *IDIPServer) EventHandler(ctx context.Context, e *common.TopicEvent) (re
 	return false, nil
 }
 
-func (s *IDIPServer) InvokeHandler(ctx context.Context, in *common.InvocationEvent) (out *common.Content, err error) {
+func (s *IDIPServer) OnDaprSvcInvokeHandler(ctx context.Context, in *common.InvocationEvent) (out *common.Content, err error) {
 	defer func() {
 		if err := recover(); err != any(nil) {
-			logger.Error("InvokeHandler failed, err: ", err)
+			logger.Error("OnDaprSvcInvokeHandler failed, err: ", err)
 		}
 	}()
 
@@ -123,14 +123,14 @@ func (s *IDIPServer) InvokeHandler(ctx context.Context, in *common.InvocationEve
 
 	msg, err := base.UnPackProtoMsg(in.Data)
 	if err != nil {
-		logger.Warn("InvokeHandler UnPackProtoMsg, err: ", err)
+		logger.Warn("OnDaprSvcInvokeHandler UnPackProtoMsg, err: ", err)
 		return nil, err
 	}
 
 	messageID, uid := msg.MsgId, msg.UserId
 	logger.Debug("idip.server ===>>> ", uid, pb.Protocols(messageID), messageID)
 
-	logger.Debug("InvokeHandler: ", in.ContentType, in.Verb, in.QueryString, pb.Protocols(messageID), msg.String())
+	logger.Debug("OnDaprSvcInvokeHandler: ", in.ContentType, in.Verb, in.QueryString, pb.Protocols(messageID), msg.String())
 
 	if messageID == int32(pb.Protocols_PC2LS_HeartBeatReq) { // 测试useractor 调用 svcinvoke 到 idipserver
 		logger.Debug("idip ===>>> test ugc gm command...")
@@ -147,7 +147,7 @@ func (s *IDIPServer) InvokeHandler(ctx context.Context, in *common.InvocationEve
 	return out, nil
 }
 
-func (s *IDIPServer) BindingHandler(ctx context.Context, in *common.BindingEvent) (out []byte, err error) {
+func (s *IDIPServer) OnDaprBindInvokeHandler(ctx context.Context, in *common.BindingEvent) (out []byte, err error) {
 	logger.Debug("binding - Data:%s, Meta:%v", in.Data, in.Metadata)
 	return nil, nil
 }

@@ -31,11 +31,11 @@ func NewBillServer() base.IServer {
 	srv.InAddr = ":28001"
 	srv.GRPCPort = "50001"
 	srv.HasPriTopic = true // 开启私有频道订阅
-	srv.OnPreInit = srv.PreInit
-	srv.OnPostInit = srv.PostInit
-	srv.OnEventHandler = srv.EventHandler
-	srv.OnInvokeHandler = srv.InvokeHandler
-	srv.OnBindHandler = srv.BindingHandler
+	srv.OnPreInit = srv.OnPreInitHandler
+	srv.OnPostInit = srv.OnPostInitHandler
+	srv.OnDaprTopicEvent = srv.OnDaprTopicEventHandler
+	srv.OnDaprSvcInvoke = srv.OnDaprSvcInvokeHandler
+	srv.OnDaprBindInvoke = srv.OnDaprBindInvokeHandler
 	srv.OnRegisterMetric = srv.RegisterMetrics
 	srv.OnCfgCenterCB = srv.HandlerConfEvent
 	return srv
@@ -45,12 +45,12 @@ func (s *BillServer) RegisterMetrics() {
 
 }
 
-func (s *BillServer) PreInit() error {
+func (s *BillServer) OnPreInitHandler() error {
 	// 充值三方回调
-	s.RegisterRpcHandler("/api/pay", s.PayHandler)
-	s.RegisterRpcHandler("/api/refund", s.RefundHandler)
+	s.RegisterDaprSvcInvokeHandler("/api/pay", s.PayHandler)
+	s.RegisterDaprSvcInvokeHandler("/api/refund", s.RefundHandler)
 
-	s.RegisterRpcHandler("healthz", func(ctx context.Context, in *common.InvocationEvent) (*common.Content, error) {
+	s.RegisterDaprSvcInvokeHandler("healthz", func(ctx context.Context, in *common.InvocationEvent) (*common.Content, error) {
 		out := &common.Content{
 			Data:        []byte(time.Now().String()),
 			ContentType: "text/plain",
@@ -60,7 +60,7 @@ func (s *BillServer) PreInit() error {
 	return nil
 }
 
-func (s *BillServer) PostInit() error {
+func (s *BillServer) OnPostInitHandler() error {
 
 	s.LiveTime = time.Now().Unix() // 创建server时间戳
 	// 服务启动埋点
@@ -78,10 +78,10 @@ func (s *BillServer) test(c *gin.Context) {
 	c.String(http.StatusOK, "hello world")
 }
 
-func (s *BillServer) EventHandler(ctx context.Context, e *common.TopicEvent) (retry bool, err error) {
+func (s *BillServer) OnDaprTopicEventHandler(ctx context.Context, e *common.TopicEvent) (retry bool, err error) {
 	defer func() {
 		if err := recover(); err != any(nil) {
-			logger.Error("EventHandler failed, err: ", err)
+			logger.Error("OnDaprTopicEvent failed, err: ", err)
 		}
 	}()
 
@@ -90,7 +90,7 @@ func (s *BillServer) EventHandler(ctx context.Context, e *common.TopicEvent) (re
 		logger.Debugf("UnPackProtoMsg, error: %+v", err)
 		return false, err
 	}
-	logger.Debug("[EventHandler] PubsubName:%s, Topic:%s, ID:%s, DataLen: %v", e.PubsubName, e.Topic, e.ID, len(e.RawData))
+	logger.Debug("[OnDaprTopicEvent] PubsubName:%s, Topic:%s, ID:%s, DataLen: %v", e.PubsubName, e.Topic, e.ID, len(e.RawData))
 
 	err = s.HandlerSubEvent(msg)
 	if err != nil {
@@ -99,17 +99,17 @@ func (s *BillServer) EventHandler(ctx context.Context, e *common.TopicEvent) (re
 	return false, nil
 }
 
-func (s *BillServer) InvokeHandler(ctx context.Context, in *common.InvocationEvent) (out *common.Content, err error) {
+func (s *BillServer) OnDaprSvcInvokeHandler(ctx context.Context, in *common.InvocationEvent) (out *common.Content, err error) {
 	defer func() {
 		if err := recover(); err != any(nil) {
-			logger.Error("[InvokeHandler] failed, err: ", err)
+			logger.Error("[OnDaprSvcInvokeHandler] failed, err: ", err)
 		}
 	}()
 
 	if in == nil {
 		err = errors.New("nil invocation parameter")
 	}
-	logger.Debug("[bill] InvokeHandler ContentType:%s, Verb:%s, QueryString:%s, %v", in.ContentType, in.Verb, in.QueryString, len(in.Data))
+	logger.Debug("[bill] OnDaprSvcInvokeHandler ContentType:%s, Verb:%s, QueryString:%s, %v", in.ContentType, in.Verb, in.QueryString, len(in.Data))
 	metrics.GaugeInc(metrics.InvokeSubCount)
 	out = &common.Content{
 		Data:        in.Data,
@@ -124,7 +124,7 @@ func (s *BillServer) InvokeHandler(ctx context.Context, in *common.InvocationEve
 	return out, nil
 }
 
-func (s *BillServer) BindingHandler(ctx context.Context, in *common.BindingEvent) (out []byte, err error) {
+func (s *BillServer) OnDaprBindInvokeHandler(ctx context.Context, in *common.BindingEvent) (out []byte, err error) {
 	logger.Debug("binding - Data:%s, Meta:%v", in.Data, in.Metadata)
 	return nil, nil
 }

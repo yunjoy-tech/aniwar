@@ -32,9 +32,9 @@ func NewLobbyServer() base.IServer {
 	srv.HasPriTopic = true // 开启私有频道订阅
 	srv.OnPreInit = srv.PreInit
 	srv.OnPostInit = srv.PostInit
-	srv.OnEventHandler = srv.EventHandler
-	srv.OnInvokeHandler = srv.InvokeHandler
-	srv.OnBindHandler = srv.BindingHandler
+	srv.OnDaprTopicEvent = srv.EventHandler
+	srv.OnDaprSvcInvoke = srv.InvokeHandler
+	srv.OnDaprBindInvoke = srv.BindingHandler
 	srv.OnRegisterMetric = srv.RegisterMetrics
 	srv.OnCfgCenterCB = srv.HandlerConfEvent
 	return srv
@@ -59,7 +59,7 @@ func (s *LobbyServer) PostInit() error {
 func (s *LobbyServer) EventHandler(ctx context.Context, e *common.TopicEvent) (retry bool, err error) {
 	defer func() {
 		if err := recover(); err != any(nil) {
-			logger.Error("EventHandler recover, err: ", err)
+			logger.Error("OnDaprTopicEvent recover, err: ", err)
 		}
 	}()
 
@@ -71,24 +71,24 @@ func (s *LobbyServer) InvokeHandler(ctx context.Context, in *common.InvocationEv
 
 	defer func() {
 		if err := recover(); err != any(nil) {
-			logger.Error("InvokeHandler exception, err: ", err)
+			logger.Error("OnDaprSvcInvokeHandler exception, err: ", err)
 		}
 	}()
 
 	if in == nil {
 		err = errors.New("nil invocation parameter")
-		logger.Warn("InvokeHandler failed, err: ", err)
+		logger.Warn("OnDaprSvcInvokeHandler failed, err: ", err)
 		return nil, err
 	}
 	metrics.GaugeInc(metrics.InvokeSubCount)
 	msg, err := base.UnPackProtoMsg(in.Data)
 	if err != nil {
-		logger.Warn("InvokeHandler UnPackProtoMsg, err: ", err)
+		logger.Warn("OnDaprSvcInvokeHandler UnPackProtoMsg, err: ", err)
 		return nil, err
 	}
 	messageID := msg.MsgId
 
-	logger.Info("lobby InvokeHandler begin: ", in.ContentType, in.Verb, in.QueryString, pb.Protocols(messageID), messageID, msg.String())
+	logger.Info("lobby OnDaprSvcInvokeHandler begin: ", in.ContentType, in.Verb, in.QueryString, pb.Protocols(messageID), messageID, msg.String())
 
 	out = &common.Content{}
 	if messageID == int32(pb.Protocols_PAS2LS_CheckSystemMailReq) {
@@ -98,14 +98,14 @@ func (s *LobbyServer) InvokeHandler(ctx context.Context, in *common.InvocationEv
 	} else {
 		out, err = nil, fmt.Errorf("unknown message")
 	}
-	logger.Info("lobby InvokeHandler begin: ", in.ContentType, in.Verb, in.QueryString, pb.Protocols(messageID), messageID, msg.String())
+	logger.Info("lobby OnDaprSvcInvokeHandler begin: ", in.ContentType, in.Verb, in.QueryString, pb.Protocols(messageID), messageID, msg.String())
 	return out, err
 }
 
 func (s *LobbyServer) BindingHandler(ctx context.Context, in *common.BindingEvent) (out []byte, err error) {
 	defer func() {
 		if err := recover(); err != any(nil) {
-			logger.Error("BindingHandler failed, err: ", err)
+			logger.Error("OnDaprBindInvokeHandler failed, err: ", err)
 		}
 	}()
 

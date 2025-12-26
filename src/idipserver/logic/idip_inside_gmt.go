@@ -49,7 +49,7 @@ func (s *IDIPServer) InsideGMT(ctx context.Context, in *common.InvocationEvent) 
 	if in == nil {
 		err = errors.New("nil invocation parameter")
 	}
-	logger.Infof("[idip] InvokeHandler - ContentType:%s, Verb:%s, QueryString:%s, len:%v", in.ContentType, in.Verb, in.QueryString, len(in.Data))
+	logger.Infof("[idip] OnDaprSvcInvokeHandler - ContentType:%s, Verb:%s, QueryString:%s, len:%v", in.ContentType, in.Verb, in.QueryString, len(in.Data))
 
 	out = &common.Content{
 		ContentType: in.ContentType,
