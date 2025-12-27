@@ -4,6 +4,9 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"strconv"
+	"time"
+
 	"gitee.com/aniwar2/aniwar/src/common/actor/stub"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/base"
@@ -16,8 +19,6 @@ import (
 	dapr "github.com/dapr/go-sdk/client"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/protobuf/proto"
-	"strconv"
-	"time"
 )
 
 // 全服广播
@@ -173,7 +174,7 @@ func (s *Server) SvcInvokeByData(appId, uid string, roleId uint64, uaid string, 
 	startTime := time.Now()
 	md := metadata.Pairs("msg-id", fmt.Sprintf("%v", pb.Protocols(msgId)))
 	ctx = metadata.NewOutgoingContext(ctx, md)
-	out, err = s.Daprc.InvokeMethodWithContent(ctx, appId, "RpcCall", "post",
+	out, err = s.Daprc.InvokeMethodWithContent(ctx, appId, svc.DEFAULT_SVC_INVOKE_NAME, "post",
 		&dapr.DataContent{Data: data, ContentType: "text/plain"}) // text/plain
 	metrics.HistogramPut(metrics.SrvInvokeDelayHist, time.Since(startTime).Milliseconds(), metrics.Invoke)
 	metrics.GaugeInc(metrics.InvokePubCount)

@@ -5,14 +5,15 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"gitee.com/aniwar2/aniwar/src/common/conf"
-	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
-	"gitee.com/aniwar2/aniwar/src/idipserver/logic"
 	"os"
 	"strconv"
 	"strings"
 	"sync"
 	"time"
+
+	"gitee.com/aniwar2/aniwar/src/common/conf"
+	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
+	"gitee.com/aniwar2/aniwar/src/idipserver/logic"
 
 	"gitee.com/aniwar2/aniwar/src/common/db"
 	"google.golang.org/protobuf/proto"
@@ -66,8 +67,7 @@ func NewActorServer() base.IServer {
 	srv.OnDaprBindInvoke = srv.OnDaprBindInvokeHandler
 	srv.OnRegisterMetric = srv.RegisterMetrics
 	srv.OnCfgCenterCB = srv.HandlerConfEvent
-	// cron handler
-	srv.OnCronEveryHour = srv.CronEveryHour
+	srv.OnCronEveryHour = srv.OnCronEveryHourHandler
 
 	srv.CmdLogicHandlerMap = make(map[string]*CmdInfo)
 	srv.CloseFuncMap = sync.Map{}
@@ -357,8 +357,8 @@ func (s *ActorServer) Reload() error {
 	return nil
 }
 
-func (s *ActorServer) CronEveryHour(ctx context.Context, in *common.BindingEvent) (out []byte, err error) {
-	logger.Debugf("ActorServer binding CronEveryHour Data:%s, Meta:%v", in.Data, in.Metadata)
+func (s *ActorServer) OnCronEveryHourHandler(ctx context.Context, in *common.BindingEvent) (out []byte, err error) {
+	logger.Debugf("ActorServer binding OnCronEveryHourHandler Data:%s, Meta:%v", in.Data, in.Metadata)
 
 	hour := time.Now().Hour()
 	switch hour {
@@ -373,7 +373,7 @@ func (s *ActorServer) CronEveryHour(ctx context.Context, in *common.BindingEvent
 	}
 
 	// 服务定时器埋点
-	taptap.ServerHourComm(s.AppId, global.APP_VERSION, "", global.ROLLING_VERSION, "CronEveryHour", time.Now().Unix()-s.LiveTime)
+	taptap.ServerHourComm(s.AppId, global.APP_VERSION, "", global.ROLLING_VERSION, "OnCronEveryHourHandler", time.Now().Unix()-s.LiveTime)
 
 	return nil, nil
 }
