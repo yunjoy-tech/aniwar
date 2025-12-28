@@ -4,10 +4,11 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
-	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
 	"net/http"
 	"os"
 	"time"
+
+	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
 
 	comn "gitee.com/aniwar2/aniwar/src/common/server"
 	"gitee.com/aniwar2/musae/global"
@@ -108,6 +109,7 @@ func (s *BillServer) OnDaprSvcInvokeHandler(ctx context.Context, in *common.Invo
 
 	if in == nil {
 		err = errors.New("nil invocation parameter")
+		return
 	}
 	logger.Debug("[bill] OnDaprSvcInvokeHandler ContentType:%s, Verb:%s, QueryString:%s, %v", in.ContentType, in.Verb, in.QueryString, len(in.Data))
 	metrics.GaugeInc(metrics.InvokeSubCount)

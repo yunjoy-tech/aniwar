@@ -4,6 +4,11 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"os"
+	"strconv"
+	"strings"
+	"time"
+
 	"gitee.com/aniwar2/aniwar/src/common"
 	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/aniwar/src/common/db"
@@ -24,12 +29,9 @@ import (
 	"github.com/xuri/excelize/v2"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/emptypb"
-	"os"
-	"strconv"
-	"strings"
-	"time"
 )
 
+// 一个通用的微服务实例结构，对创建微服务需要的能力进行封装
 type Server struct {
 	svc.Service
 	pack         *tcpx.Packx       // TODO 理论上这个只有gateServer需要

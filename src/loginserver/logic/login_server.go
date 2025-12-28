@@ -5,6 +5,10 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"os"
+	"strings"
+	"time"
+
 	"gitee.com/aniwar2/aniwar/src/common/actor/stub"
 	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
@@ -19,9 +23,6 @@ import (
 	"gitee.com/aniwar2/musae/utils"
 	"github.com/dapr/go-sdk/service/common"
 	"google.golang.org/protobuf/proto"
-	"os"
-	"strings"
-	"time"
 )
 
 type Msg struct {
@@ -157,6 +158,7 @@ func (s *LoginServer) OnDaprSvcInvokeHandler(ctx context.Context, in *common.Inv
 
 	if in == nil {
 		err = errors.New("nil invocation parameter")
+		return
 	}
 	logger.Debugf("OnDaprSvcInvokeHandler - ContentType:%s, Verb:%s, QueryString:%s, len:%v", in.ContentType, in.Verb, in.QueryString, len(in.Data))
 	metrics.GaugeInc(metrics.InvokeSubCount)
