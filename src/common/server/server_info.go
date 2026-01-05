@@ -2,6 +2,7 @@ package server
 
 import (
 	"fmt"
+	"gitee.com/aniwar2/aniwar/src/common/actor/stub"
 	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/base"
@@ -81,7 +82,7 @@ func (s *Server) Status() string {
 
 // 请求center协议
 func (s *Server) CenterSrvInvoke(msgId int32, data []byte) []byte {
-	msg, err := s.ActorInvoke(global.CenterActorType, global.CenterActorID, &base.ProtoMsg{
+	msg, err := s.ActorInvoke(stub.CenterActorType, global.CenterActorID, &base.ProtoMsg{
 		AppId:   global.ACTOR_SVC,
 		MsgId:   msgId,
 		UserId:  "",

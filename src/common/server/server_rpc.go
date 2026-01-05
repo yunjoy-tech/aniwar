@@ -242,19 +242,19 @@ func (s *Server) ActorInvoke(actorType, actorId string, msg *base.ProtoMsg) (*ba
 	var ret *base.ProtoMsg
 	var invokeErr error
 	switch actorType {
-	case global.RoomActorType:
+	case stub.RoomActorType:
 		stub := stub.NewRoomStub(actorId)
 		s.ImpActorStub(stub)
 		ret, invokeErr = stub.Invoke(ctx, msg)
-	case global.AllianceActorType:
+	case stub.AllianceActorType:
 		stub := stub.NewAllianceStub(actorId)
 		s.ImpActorStub(stub)
 		ret, invokeErr = stub.Invoke(ctx, msg)
-	case global.CenterActorType:
+	case stub.CenterActorType:
 		stub := stub.NewCenterStub(actorId)
 		s.ImpActorStub(stub)
 		ret, invokeErr = stub.Invoke(ctx, msg)
-	case global.MailActorType:
+	case stub.MailActorType:
 		stub := stub.NewMailStub(actorId)
 		s.ImpActorStub(stub)
 		ret, invokeErr = stub.Invoke(ctx, msg)

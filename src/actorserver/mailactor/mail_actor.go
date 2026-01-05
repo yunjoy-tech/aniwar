@@ -6,11 +6,11 @@ import (
 	"errors"
 	"fmt"
 	"gitee.com/aniwar2/aniwar/src/actorserver/frame"
+	"gitee.com/aniwar2/aniwar/src/common/actor/stub"
 	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/aniwar/src/common/db"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/baseactor"
-	"gitee.com/aniwar2/musae/global"
 	"gitee.com/aniwar2/musae/logger"
 	"gitee.com/aniwar2/musae/service"
 	svc "gitee.com/aniwar2/musae/service"
@@ -37,7 +37,7 @@ func New() actor.Server {
 	a := &MailActor{
 		CommonActor: frame.NewCommonActor(frame.GSrv),
 	}
-	a.ActorType = global.MailActorType
+	a.ActorType = stub.MailActorType
 	a.SetActor(a)
 	a.Srv = frame.GSrv
 	// a.MsgFunc = make(map[int32]base.FProtoMsgHandler)
@@ -60,7 +60,7 @@ func (s *MailActor) Activate(invokeName string) error {
 		}
 	}()
 
-	s.ReloadActorFromRedis(global.MailActorType)
+	s.ReloadActorFromRedis(stub.MailActorType)
 
 	// 内存中没有数据
 	if s.Data == nil {
@@ -79,7 +79,7 @@ func (s *MailActor) Deactivate() error {
 	s.Infof("=================>MailActor Deactivate [%s]<=================", s.ID())
 
 	utils.SafeRunNoError(func() {
-		s.SaveActor2Redis(global.MailActorType)
+		s.SaveActor2Redis(stub.MailActorType)
 	})
 
 	return nil

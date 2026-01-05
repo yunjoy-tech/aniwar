@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"gitee.com/aniwar2/musae/base"
-	"gitee.com/aniwar2/musae/global"
 )
 
 type MailStub struct {
@@ -19,7 +18,7 @@ func NewMailStub(id string) *MailStub {
 }
 
 func (a *MailStub) Type() string {
-	return global.MailActorType
+	return MailActorType
 }
 
 func (a *MailStub) ID() string {

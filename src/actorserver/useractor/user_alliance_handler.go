@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"gitee.com/aniwar2/aniwar/src/common"
+	"gitee.com/aniwar2/aniwar/src/common/actor/stub"
 	"gitee.com/aniwar2/aniwar/src/common/db"
 	"gitee.com/aniwar2/aniwar/src/common/sensitive"
 	"gitee.com/aniwar2/musae/gamelib/guid"
@@ -794,7 +795,7 @@ func (h *UserAllianceHandler) AllianceInvoke(allianceId int64, msgId int32, reqM
 		Topic:        topic,
 		ServerReqIdx: guid.GenIntUuid(),
 	}
-	rspMsg, err := h.actor.Srv.ActorInvoke(global.AllianceActorType, strconv.Itoa(int(allianceId)), protoMsg)
+	rspMsg, err := h.actor.Srv.ActorInvoke(stub.AllianceActorType, strconv.Itoa(int(allianceId)), protoMsg)
 	if err != nil {
 		h.Error(err)
 	}

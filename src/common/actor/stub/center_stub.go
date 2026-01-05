@@ -3,7 +3,6 @@ package stub
 import (
 	"context"
 	"gitee.com/aniwar2/musae/base"
-	"gitee.com/aniwar2/musae/global"
 )
 
 type CenterStub struct {
@@ -18,7 +17,7 @@ func NewCenterStub(id string) *CenterStub {
 }
 
 func (a *CenterStub) Type() string {
-	return global.CenterActorType
+	return CenterActorType
 }
 
 func (a *CenterStub) ID() string {

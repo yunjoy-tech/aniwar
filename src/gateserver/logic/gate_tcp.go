@@ -2,13 +2,12 @@ package logic
 
 import (
 	"context"
+	"gitee.com/aniwar2/aniwar/src/common/actor/stub"
 	"time"
 
 	"github.com/pkg/errors"
 
 	"gitee.com/aniwar2/aniwar/src/common"
-
-	"gitee.com/aniwar2/musae/global"
 
 	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/aniwar/src/common/db"
@@ -249,7 +248,7 @@ func (s *GateServer) TcpLoginGame(pendingUser *PendingUser) ([]byte, *base.RpcEr
 			}
 			metrics.GaugeInc(metrics.EnterFailedCount)
 		} else if msg.ErrCode == int32(pb.ErrorCode_RepeatMsg) {
-			logger.Debugf("OnNetMessage, 防重放中获取到数据返回, :", global.RoomActorType, pb.Protocols(respMessageID), respMessageID, len(respData))
+			logger.Debugf("OnNetMessage, 防重放中获取到数据返回, :", stub.RoomActorType, pb.Protocols(respMessageID), respMessageID, len(respData))
 
 			lastRspData, _ := s.reqRepeated(nil, pendingUser.msgId, pendingUser.reqIdx, pendingUser.session)
 			err = pendingUser.ctx.ReplyWithBody(respMessageID, int32(pb.ErrorCode_Success), lastRspData)

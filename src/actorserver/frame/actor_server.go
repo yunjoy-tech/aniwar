@@ -5,30 +5,27 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"os"
-	"strconv"
-	"strings"
-	"sync"
-	"time"
-
+	myCommon "gitee.com/aniwar2/aniwar/src/common"
+	"gitee.com/aniwar2/aniwar/src/common/actor/stub"
 	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
-	"gitee.com/aniwar2/aniwar/src/idipserver/logic"
-
 	"gitee.com/aniwar2/aniwar/src/common/db"
-	"google.golang.org/protobuf/proto"
-
-	myCommon "gitee.com/aniwar2/aniwar/src/common"
 	comn "gitee.com/aniwar2/aniwar/src/common/server"
-	"gitee.com/aniwar2/musae/global"
-
+	"gitee.com/aniwar2/aniwar/src/idipserver/logic"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/base"
+	"gitee.com/aniwar2/musae/global"
 	"gitee.com/aniwar2/musae/logger"
 	"gitee.com/aniwar2/musae/metrics"
 	"gitee.com/aniwar2/musae/tcpx"
 	"github.com/dapr/go-sdk/actor/runtime"
 	"github.com/dapr/go-sdk/service/common"
+	"google.golang.org/protobuf/proto"
+	"os"
+	"strconv"
+	"strings"
+	"sync"
+	"time"
 )
 
 var GSrv *ActorServer
@@ -278,7 +275,7 @@ func (s *ActorServer) OnDaprSvcInvokeHandler(ctx context.Context, in *common.Inv
 			DataTypeURL: "",
 		}
 	} else if messageID == int32(pb.Protocols_PS2S_SvcStatusReq) || messageID == int32(pb.Protocols_PS2S_HotReloadNotifyReq) {
-		ret, err := s.ActorInvoke(global.CenterActorType, global.CenterActorID, msg)
+		ret, err := s.ActorInvoke(stub.CenterActorType, global.CenterActorID, msg)
 		if err != nil {
 			logger.Warn("ActorInvoke err:", err)
 		}
@@ -364,11 +361,11 @@ func (s *ActorServer) OnCronEveryHourHandler(ctx context.Context, in *common.Bin
 	switch hour {
 	case 0:
 		params, _ := json.Marshal(make([]byte, 0))
-		runtime.GetActorRuntimeInstance().InvokeActors(global.UserActorType, "Hour0Handler", params)
+		runtime.GetActorRuntimeInstance().InvokeActors(stub.UserActorType, "Hour0Handler", params)
 	case 5:
 		// 隔天间隔，刷新在线玩家数据
 		params, _ := json.Marshal(make([]byte, 0))
-		runtime.GetActorRuntimeInstance().InvokeActors(global.UserActorType, "Hour5Handler", params)
+		runtime.GetActorRuntimeInstance().InvokeActors(stub.UserActorType, "Hour5Handler", params)
 	case 23:
 	}
 

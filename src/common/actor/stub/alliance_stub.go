@@ -3,7 +3,6 @@ package stub
 import (
 	"context"
 	"gitee.com/aniwar2/musae/base"
-	"gitee.com/aniwar2/musae/global"
 )
 
 type AllianceStub struct {
@@ -18,7 +17,7 @@ func NewAllianceStub(id string) *AllianceStub {
 }
 
 func (a *AllianceStub) Type() string {
-	return global.AllianceActorType
+	return AllianceActorType
 }
 
 func (a *AllianceStub) ID() string {

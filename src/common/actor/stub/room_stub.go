@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"gitee.com/aniwar2/musae/base"
-	"gitee.com/aniwar2/musae/global"
 )
 
 type RoomStub struct {
@@ -19,7 +18,7 @@ func NewRoomStub(id string) *RoomStub {
 }
 
 func (a *RoomStub) Type() string {
-	return global.RoomActorType
+	return RoomActorType
 }
 
 func (a *RoomStub) ID() string {

@@ -1,9 +1,8 @@
 package logic
 
 import (
+	"gitee.com/aniwar2/aniwar/src/common/actor/stub"
 	"time"
-
-	"gitee.com/aniwar2/musae/global"
 
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/base"
@@ -29,7 +28,7 @@ func (u *User) HandleUserActor(reqMessageID int32, reqData []byte, reqIdx uint32
 	if respMessageID > 0 {
 		if respMessageID == int32(pb.Protocols_PS2C_ErrorCodeNtf) {
 			if msg.ErrCode == int32(pb.ErrorCode_RepeatMsg) {
-				logger.Debugf("OnNetMessage, 防重放中获取到数据返回, actor:%s, %s, %v, %d, %d", global.RoomActorType, u.String(), pb.Protocols(respMessageID), respMessageID, len(respData))
+				logger.Debugf("OnNetMessage, 防重放中获取到数据返回, actor:%s, %s, %v, %d, %d", stub.RoomActorType, u.String(), pb.Protocols(respMessageID), respMessageID, len(respData))
 
 				lastRespData, lastDownId := u.s.reqRepeated(nil, reqMessageID, reqIdx, u.session)
 				return lastRespData, pb.Protocols(lastDownId), pb.ErrorCode_Success
@@ -71,7 +70,7 @@ func (u *User) HandleRoomActor(reqMessageID int32, reqData []byte, reqIdx uint32
 		return nil, pb.Protocols_PS2C_ErrorCodeNtf, errCode
 	}
 
-	msg, err := u.s.ActorInvoke(global.RoomActorType, binding.RoomId, &base.ProtoMsg{
+	msg, err := u.s.ActorInvoke(stub.RoomActorType, binding.RoomId, &base.ProtoMsg{
 		AppId:   u.s.AppId,
 		MsgId:   reqMessageID,
 		UserId:  u.uid,
@@ -83,7 +82,7 @@ func (u *User) HandleRoomActor(reqMessageID int32, reqData []byte, reqIdx uint32
 		ReqIdx:  reqIdx,
 	})
 	if pb.ErrorCode(msg.ErrCode) == pb.ErrorCode_RepeatMsg {
-		logger.Debugf("OnNetMessage, 防重放中获取到数据返回, actor:%s, %s, %v, %d, %d", global.RoomActorType, u.String(), pb.Protocols(reqMessageID), reqMessageID, len(msg.Data))
+		logger.Debugf("OnNetMessage, 防重放中获取到数据返回, actor:%s, %s, %v, %d, %d", stub.RoomActorType, u.String(), pb.Protocols(reqMessageID), reqMessageID, len(msg.Data))
 		lastRespData, lastDownId := u.s.reqRepeated(nil, reqMessageID, reqIdx, u.session)
 		// return lastRespData, pb.Protocols(lastDownId), pb.ErrorCode_Success
 		msg.ErrCode = int32(pb.ErrorCode_Success)
@@ -91,11 +90,11 @@ func (u *User) HandleRoomActor(reqMessageID int32, reqData []byte, reqIdx uint32
 		msg.MsgId = lastDownId
 
 	} else if err != nil {
-		logger.Debugf("HandleRoomActor ActorInvoke got error, actor:%s, msg: %+v, err:%+v", global.RoomActorType, msg.Str(), err)
+		logger.Debugf("HandleRoomActor ActorInvoke got error, actor:%s, msg: %+v, err:%+v", stub.RoomActorType, msg.Str(), err)
 		return nil, pb.Protocols_PS2C_ErrorCodeNtf, pb.ErrorCode(msg.ErrCode)
 
 	}
-	logger.Debugf("OnNetMessage, ActorInvoke end, actor:%s, msg: %+v, err:%+v", global.RoomActorType, msg.Str(), err)
+	logger.Debugf("OnNetMessage, ActorInvoke end, actor:%s, msg: %+v, err:%+v", stub.RoomActorType, msg.Str(), err)
 
 	respMessageID, respData := msg.MsgId, msg.Data
 	if respMessageID > 0 {
@@ -113,12 +112,12 @@ func (u *User) HandleRoomActor(reqMessageID int32, reqData []byte, reqIdx uint32
 			b, err := proto.Marshal(rsp)
 			if err != nil {
 				logger.Debug("OnNetMessage, ActorInvoke end, actor:%s, proto.Marshal got error:",
-					global.RoomActorType, u.String(), pb.Protocols(respMessageID), respMessageID, len(respData), err.Error())
+					stub.RoomActorType, u.String(), pb.Protocols(respMessageID), respMessageID, len(respData), err.Error())
 				return nil, pb.Protocols_Protocols_None, pb.ErrorCode(msg.ErrCode)
 			}
 
 			logger.Debug("OnNetMessage, ActorInvoke end actor:%s, got errorCode:",
-				global.RoomActorType, u.String(), pb.Protocols(respMessageID), respMessageID, pb.ErrorCode(msg.ErrCode), string(respData))
+				stub.RoomActorType, u.String(), pb.Protocols(respMessageID), respMessageID, pb.ErrorCode(msg.ErrCode), string(respData))
 			return b, pb.Protocols_PS2C_ErrorCodeNtf, pb.ErrorCode(msg.ErrCode)
 			// err = u.ReplyWithBody(int32(pb.Protocols_PS2C_ErrorCodeNtf), b)
 			// if err != nil {
@@ -130,7 +129,7 @@ func (u *User) HandleRoomActor(reqMessageID int32, reqData []byte, reqIdx uint32
 			// if err != nil {
 			//	logger.Warn("OnNetMessage, UserInvoke ReplyWithBody err: ", errorx.Wrap(err).Error())
 			// }
-			logger.Debug("OnNetMessage, ActorInvoke end actor:%s, :", global.RoomActorType, u.String(), pb.Protocols(respMessageID), respMessageID, len(respData))
+			logger.Debug("OnNetMessage, ActorInvoke end actor:%s, :", stub.RoomActorType, u.String(), pb.Protocols(respMessageID), respMessageID, len(respData))
 			return respData, pb.Protocols(respMessageID), pb.ErrorCode(msg.ErrCode)
 		}
 	}

@@ -6,6 +6,7 @@ import (
 	"errors"
 	"fmt"
 	"gitee.com/aniwar2/aniwar/src/common"
+	"gitee.com/aniwar2/aniwar/src/common/actor/stub"
 	"gitee.com/aniwar2/aniwar/src/common/clidto"
 	"gitee.com/aniwar2/aniwar/src/common/sensitive"
 	"gitee.com/aniwar2/aniwar/src/idipserver/logic"
@@ -807,7 +808,7 @@ func (h *GmHandler) GMTestRoom(param []string, commonData *clidto.Comdata) error
 			ServerReqIdx: guid.GenIntUuid(),
 		}
 
-		resp, err := h.actor.Srv.ActorInvoke(global.RoomActorType, roomId, &msg)
+		resp, err := h.actor.Srv.ActorInvoke(stub.RoomActorType, roomId, &msg)
 		if err != nil {
 			return err
 		}
@@ -840,7 +841,7 @@ func (h *GmHandler) GMTestRoom(param []string, commonData *clidto.Comdata) error
 			ServerReqIdx: guid.GenIntUuid(),
 		}
 
-		resp, err := h.actor.Srv.ActorInvoke(global.RoomActorType, roomId, &msg)
+		resp, err := h.actor.Srv.ActorInvoke(stub.RoomActorType, roomId, &msg)
 		if err != nil {
 			return err
 		}

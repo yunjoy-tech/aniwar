@@ -1,6 +1,7 @@
 package roomactor
 
 import (
+	"gitee.com/aniwar2/aniwar/src/common/actor/stub"
 	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/musae/utils"
 	"strconv"
@@ -9,7 +10,6 @@ import (
 	"gitee.com/aniwar2/aniwar/src/actorserver/frame"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/baseactor"
-	"gitee.com/aniwar2/musae/global"
 	"gitee.com/aniwar2/musae/service"
 	svc "gitee.com/aniwar2/musae/service"
 	"github.com/dapr/go-sdk/actor"
@@ -36,7 +36,7 @@ func New() actor.Server {
 		CommonActor: frame.NewCommonActor(frame.GSrv),
 		RoomData:    RoomData{},
 	}
-	a.ActorType = global.RoomActorType
+	a.ActorType = stub.RoomActorType
 	a.SetActor(a)
 
 	a.Srv = frame.GSrv
@@ -63,7 +63,7 @@ func (s *RoomActor) Activate(invokeName string) error {
 		}
 	}()
 
-	s.ReloadActorFromRedis(global.RoomActorType)
+	s.ReloadActorFromRedis(stub.RoomActorType)
 
 	// 内存中没有数据
 	if s.Data == nil {
@@ -91,7 +91,7 @@ func (s *RoomActor) Activate(invokeName string) error {
 
 func (s *RoomActor) Deactivate() error {
 	utils.SafeRunNoError(func() {
-		s.SaveActor2Redis(global.RoomActorType)
+		s.SaveActor2Redis(stub.RoomActorType)
 		// 判定是否超时deactivate
 		now := time.Now()
 		update := time.Unix(s.Data.UpdateTs, 0)

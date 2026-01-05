@@ -3,7 +3,6 @@ package stub
 import (
 	"context"
 	"gitee.com/aniwar2/musae/base"
-	"gitee.com/aniwar2/musae/global"
 )
 
 type UserStub struct {
@@ -19,7 +18,7 @@ func NewUserStub(id string) *UserStub {
 }
 
 func (a *UserStub) Type() string {
-	return global.UserActorType
+	return UserActorType
 }
 
 func (a *UserStub) ID() string {

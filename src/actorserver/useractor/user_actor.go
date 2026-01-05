@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"gitee.com/aniwar2/aniwar/src/actorserver/frame"
 	"gitee.com/aniwar2/aniwar/src/common"
+	"gitee.com/aniwar2/aniwar/src/common/actor/stub"
 	"gitee.com/aniwar2/aniwar/src/common/clidto"
 	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
@@ -12,7 +13,6 @@ import (
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/base"
 	"gitee.com/aniwar2/musae/baseactor"
-	"gitee.com/aniwar2/musae/global"
 	"gitee.com/aniwar2/musae/logger"
 	"gitee.com/aniwar2/musae/service"
 	svc "gitee.com/aniwar2/musae/service"
@@ -81,7 +81,7 @@ func New() actor.Server {
 		CommonActor: frame.NewCommonActor(frame.GSrv),
 	}
 
-	a.ActorType = global.UserActorType
+	a.ActorType = stub.UserActorType
 	a.SetActor(a)
 	a.HandlersMap = make(map[svc.MongoDbType][]baseactor.IBaseHandler, 0)
 	// actor.Daprc = server.GSrv.Daprc
@@ -127,7 +127,7 @@ func New() actor.Server {
 }
 
 func (u *UserActor) Type() string {
-	return global.UserActorType
+	return stub.UserActorType
 }
 
 func (u *UserActor) SetState(state ActorState) {
@@ -154,7 +154,7 @@ func (u *UserActor) Activate(invokeName string) error {
 		return errors.New("this is Delete, DO NOT Activate")
 	}
 
-	u.ReloadActorFromRedis(global.UserActorType)
+	u.ReloadActorFromRedis(stub.UserActorType)
 
 	bMini := invokeName == "EventInvoke"
 	startTime := time.Now()
@@ -249,7 +249,7 @@ func (u *UserActor) deactivate() error {
 	if u.GetUserData() != nil && u.GetUserData().Common.OfflineTime <= 0 {
 		u.LoginHandler.UpdateOfflineTS(time.Now().Unix())
 	}
-	u.SaveActor2Redis(global.UserActorType)
+	u.SaveActor2Redis(stub.UserActorType)
 
 	u.Timer.Stop()
 

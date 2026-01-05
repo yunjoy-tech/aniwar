@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"gitee.com/aniwar2/aniwar/src/common/actor/stub"
 	"os"
 	"strconv"
 	"strings"
@@ -208,7 +209,7 @@ func (s *Server) OnUpdateStatus() {
 		logger.Warn("OnUpdateActorCount proto.Marshal  err:", err)
 		return
 	}
-	msg, err := s.ActorInvoke(global.CenterActorType, global.CenterActorID, &base.ProtoMsg{
+	msg, err := s.ActorInvoke(stub.CenterActorType, global.CenterActorID, &base.ProtoMsg{
 		AppId:   global.ACTOR_SVC,
 		MsgId:   int32(pb.Protocols_PS2S_SvcStatusReq),
 		UserId:  "",
@@ -231,11 +232,11 @@ func (s *Server) OnUpdateStatus() {
 		switch actor.Type {
 		case global.PlayerCountType:
 			global.TotalPlayerCount = actor.Count
-		case global.UserActorType:
+		case stub.UserActorType:
 			global.UserActorCount = actor.Count
-		case global.RoomActorType:
+		case stub.RoomActorType:
 			global.RoomActorCount = actor.Count
-		case global.AllianceActorType:
+		case stub.AllianceActorType:
 			global.AllianceActorCount = actor.Count
 		}
 	}

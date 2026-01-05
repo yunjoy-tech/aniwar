@@ -2,6 +2,7 @@ package centeractor
 
 import (
 	"gitee.com/aniwar2/aniwar/src/actorserver/frame"
+	"gitee.com/aniwar2/aniwar/src/common/actor/stub"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/global"
 	"gitee.com/aniwar2/musae/service"
@@ -39,7 +40,7 @@ func New() actor.Server {
 	s := &CenterActor{
 		CommonActor: frame.NewCommonActor(frame.GSrv),
 	}
-	s.ActorType = global.CenterActorType
+	s.ActorType = stub.CenterActorType
 	s.SetActor(s)
 	s.Srv = frame.GSrv
 	// s.MsgFunc = make(map[int32]base.FProtoMsgHandler)
@@ -70,7 +71,7 @@ func (c *CenterActor) SetID(id string) {
 func (c *CenterActor) Activate(invokeName string) error {
 	// implement me
 	// panic("implement me")
-	c.ReloadActorFromRedis(global.CenterActorType)
+	c.ReloadActorFromRedis(stub.CenterActorType)
 
 	return nil
 }
@@ -78,7 +79,7 @@ func (c *CenterActor) Activate(invokeName string) error {
 func (c *CenterActor) Deactivate() error {
 
 	utils.SafeRunNoError(func() {
-		c.SaveActor2Redis(global.CenterActorType)
+		c.SaveActor2Redis(stub.CenterActorType)
 	})
 
 	return nil

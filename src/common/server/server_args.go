@@ -2,6 +2,7 @@ package server
 
 import (
 	"fmt"
+	"gitee.com/aniwar2/aniwar/src/common/actor/stub"
 	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/musae/errorx"
 	"gitee.com/aniwar2/musae/global"
@@ -99,11 +100,11 @@ func (s *Server) InitSrvArgs() error {
 		actors := strings.Split(s.Args["actor"], "|")
 		for _, v := range actors {
 			switch v {
-			case global.UserActorType,
-				global.RoomActorType,
-				global.AllianceActorType,
-				global.CenterActorType,
-				global.MailActorType:
+			case stub.UserActorType,
+				stub.RoomActorType,
+				stub.AllianceActorType,
+				stub.CenterActorType,
+				stub.MailActorType:
 				s.Actors = append(s.Actors, v)
 			default:
 				return errorx.Newf("unknown actor type: %s, actors:%+v", v, actors)

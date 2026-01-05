@@ -3,6 +3,7 @@ package centeractor
 import (
 	"context"
 	"encoding/json"
+	"gitee.com/aniwar2/aniwar/src/common/actor/stub"
 	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
@@ -97,11 +98,11 @@ func (h *SvcStatusHandler) SvcStatusReq(ctx context.Context, in *base.ProtoMsg) 
 			Count: h.actor.Data.TotalPlayerCount,
 		},
 		{
-			Type:  global.UserActorType,
+			Type:  stub.UserActorType,
 			Count: h.actor.Data.UserActorCount,
 		},
 		{
-			Type:  global.RoomActorType,
+			Type:  stub.RoomActorType,
 			Count: h.actor.Data.RoomActorCount,
 		},
 	}}
@@ -131,9 +132,9 @@ func (h *SvcStatusHandler) UpdateActorStatus() {
 					switch actor.Type {
 					case global.PlayerCountType:
 						h.actor.Data.TotalPlayerCount += actor.Count
-					case global.UserActorType:
+					case stub.UserActorType:
 						h.actor.Data.UserActorCount += actor.Count
-					case global.RoomActorType:
+					case stub.RoomActorType:
 						h.actor.Data.RoomActorCount += actor.Count
 					}
 				}

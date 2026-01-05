@@ -2,9 +2,9 @@ package allianceactor
 
 import (
 	"gitee.com/aniwar2/aniwar/src/actorserver/frame"
+	"gitee.com/aniwar2/aniwar/src/common/actor/stub"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/baseactor"
-	"gitee.com/aniwar2/musae/global"
 	"gitee.com/aniwar2/musae/service"
 	"gitee.com/aniwar2/musae/utils"
 	"github.com/dapr/go-sdk/actor"
@@ -30,7 +30,7 @@ func New() actor.Server {
 		AllianceData: &AllianceData{},
 	}
 	// a.Cache = NewCacheMgr(a)
-	a.ActorType = global.AllianceActorType
+	a.ActorType = stub.AllianceActorType
 	a.SetActor(a)
 
 	a.Srv = frame.GSrv
@@ -51,7 +51,7 @@ func (a *AllianceActor) Activate(invokeName string) error {
 		}
 	}()
 
-	a.ReloadActorFromRedis(global.AllianceActorType)
+	a.ReloadActorFromRedis(stub.AllianceActorType)
 
 	// 内存中没有数据
 	if a.Data == nil {
@@ -74,7 +74,7 @@ func (a *AllianceActor) Deactivate() error {
 	a.Infof("=================>AllianceActor Deactivate [%s]<=================", a.ID())
 
 	utils.SafeRunNoError(func() {
-		a.SaveActor2Redis(global.AllianceActorType)
+		a.SaveActor2Redis(stub.AllianceActorType)
 	})
 
 	return nil

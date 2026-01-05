@@ -5,6 +5,7 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"gitee.com/aniwar2/aniwar/src/common/actor/stub"
 	"gitee.com/aniwar2/musae/gamelib/guid"
 	"strconv"
 	"time"
@@ -135,7 +136,7 @@ func (h *UserRoomHandler) CreateRoomReq(ctx context.Context, in *base.ProtoMsg) 
 		// GUID:    utils.GenIntUUID(),
 		ServerReqIdx: guid.GenIntUuid(),
 	}
-	createRoomRspMsg, err := h.actor.Srv.ActorInvoke(global.RoomActorType, roomId, createRoomReqMsg)
+	createRoomRspMsg, err := h.actor.Srv.ActorInvoke(stub.RoomActorType, roomId, createRoomReqMsg)
 	if err != nil {
 		return nil, err, createRoomRspMsg.ErrCode
 	}
@@ -209,7 +210,7 @@ func (h *UserRoomHandler) JoinRoomReq(ctx context.Context, in *base.ProtoMsg) (p
 		// GUID:    utils.GenIntUUID(),
 		ServerReqIdx: guid.GenIntUuid(),
 	}
-	joinRoomRspMsg, err := h.actor.Srv.ActorInvoke(global.RoomActorType, req.RoomId, joinRoomReqMsg)
+	joinRoomRspMsg, err := h.actor.Srv.ActorInvoke(stub.RoomActorType, req.RoomId, joinRoomReqMsg)
 	if err != nil {
 		h.Debugf("返回errCode, err:%+v", err.Error())
 		return nil, err, joinRoomRspMsg.ErrCode
@@ -318,7 +319,7 @@ func (h *UserRoomHandler) RoomInvoke(roomId string, msgId int32, reqMsg proto.Me
 		// GUID:    utils.GenIntUUID(),
 		ServerReqIdx: guid.GenIntUuid(),
 	}
-	rspMsg, err := h.actor.Srv.ActorInvoke(global.RoomActorType, roomId, protoMsg)
+	rspMsg, err := h.actor.Srv.ActorInvoke(stub.RoomActorType, roomId, protoMsg)
 	if err != nil {
 		h.Error(err)
 	}
