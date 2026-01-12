@@ -3,9 +3,9 @@ package logic
 import (
 	"encoding/json"
 	myCommon "gitee.com/aniwar2/aniwar/src/common"
+	"gitee.com/aniwar2/aniwar/src/common/server"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/gamelib/guid"
-	"gitee.com/aniwar2/musae/global"
 	"gitee.com/aniwar2/musae/logger"
 	"github.com/dapr/go-sdk/service/common"
 	"net/http"
@@ -129,7 +129,7 @@ func (s *IDIPServer) SendSysMail2(out *common.Content, reqJson []byte) {
 	}
 
 	reqMsg := &pb.S2S_SendGMAddMailReq{AddMail: mail}
-	_, err := s.SvcInvoke(global.ACTOR_SVC, "", 0, "", reqMsg)
+	_, err := s.SvcInvoke(server.ACTOR_SVC, "", 0, "", reqMsg)
 	if err != nil {
 		logger.Error("add sys mail error", err)
 		RetCommonMsg(out, http.StatusInternalServerError, int32(pb.ErrorCode_ParamError), Param_Error)

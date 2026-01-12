@@ -10,7 +10,7 @@ import (
 	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
 	"gitee.com/aniwar2/aniwar/src/common/db"
-	comn "gitee.com/aniwar2/aniwar/src/common/server"
+	"gitee.com/aniwar2/aniwar/src/common/server"
 	"gitee.com/aniwar2/aniwar/src/idipserver/logic"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/base"
@@ -45,7 +45,7 @@ type CmdInfo struct {
 }
 
 type ActorServer struct {
-	comn.Server
+	server.Server
 	CmdLogicHandlerMap map[string]*CmdInfo
 	CloseFuncMap       sync.Map
 	SysMailMgr         *SysMailMgr
@@ -75,13 +75,13 @@ func NewActorServer() base.IServer {
 }
 
 func (s *ActorServer) RegisterMetrics() {
-	if global.AppID == global.ACTOR_SVC {
+	if global.AppID == server.ACTOR_SVC {
 		metrics.RegisterGauge(metrics.UserActorCount, false)
 		metrics.RegisterGauge(metrics.RoomActorCount, false)
 		metrics.RegisterGauge(metrics.AllianceActorCount, false)
 		metrics.RegisterGauge(metrics.UserCount, false)
 
-	} else if global.AppID == global.CENTER_SVC {
+	} else if global.AppID == server.CENTER_SVC {
 		metrics.RegisterGauge(metrics.AllUserCount, false)
 	}
 }
@@ -174,7 +174,7 @@ func (s *ActorServer) OnPostInitHandler() error {
 	s.LiveTime = time.Now().Unix() // 创建server时间戳
 
 	// center 跳过业务配置加载
-	if global.IsActor(s.AppId) {
+	if server.IsActor(s.AppId) {
 		s.LoadWordCfg() // 加载静态屏蔽词库
 		// s.InitDynamicWord()   // 加载动态屏蔽词
 		s.RegisterCloseFunc() // 加载关闭的功能
@@ -268,7 +268,7 @@ func (s *ActorServer) OnDaprSvcInvokeHandler(ctx context.Context, in *common.Inv
 		if err = msg.UnmarshalData(req); err != nil {
 			return nil, err
 		}
-		excelData := comn.GetExcelData(req.SheetName)
+		excelData := server.GetExcelData(req.SheetName)
 		out = &common.Content{
 			Data:        excelData,
 			ContentType: "text/plain",

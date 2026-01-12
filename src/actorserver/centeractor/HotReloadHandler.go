@@ -4,10 +4,10 @@ import (
 	"context"
 	"fmt"
 	"gitee.com/aniwar2/aniwar/src/common/conf"
+	"gitee.com/aniwar2/aniwar/src/common/server"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/base"
 	"gitee.com/aniwar2/musae/baseactor"
-	"gitee.com/aniwar2/musae/global"
 	"gitee.com/aniwar2/musae/logger"
 	"gitee.com/aniwar2/musae/service"
 	svc "gitee.com/aniwar2/musae/service"
@@ -69,18 +69,17 @@ func (h *HotReloadHandler) HotReloadReq(ctx context.Context, in *base.ProtoMsg) 
 	if req.Type == 1 {
 		// 通知到所有的actor和idip
 		h.actor.Data.HotReloadMap = &sync.Map{}
-		h.Send2PubTopic(req, h.actor.Data.SvcMaps[global.ACTOR_SVC], now)
-		h.Send2PubTopic(req, h.actor.Data.SvcMaps[global.IDIP_SVC], now)
-		h.Send2PubTopic(req, h.actor.Data.SvcMaps[global.BATTLE_SVC], now)
-		h.Send2PubTopic(req, h.actor.Data.SvcMaps[global.GUIDE_SVC], now)
-		h.Send2PubTopic(req, h.actor.Data.SvcMaps[global.LOGIN_SVC], now)
-		h.Send2PubTopic(req, h.actor.Data.SvcMaps[global.GATE_SVC], now)
-		h.Send2PubTopic(req, h.actor.Data.SvcMaps[global.BILL_SVC], now)
-		h.Send2PubTopic(req, h.actor.Data.SvcMaps[global.CENTER_SVC], now)
+		h.Send2PubTopic(req, h.actor.Data.SvcMaps[server.ACTOR_SVC], now)
+		h.Send2PubTopic(req, h.actor.Data.SvcMaps[server.IDIP_SVC], now)
+		h.Send2PubTopic(req, h.actor.Data.SvcMaps[server.GUIDE_SVC], now)
+		h.Send2PubTopic(req, h.actor.Data.SvcMaps[server.LOGIN_SVC], now)
+		h.Send2PubTopic(req, h.actor.Data.SvcMaps[server.GATE_SVC], now)
+		h.Send2PubTopic(req, h.actor.Data.SvcMaps[server.BILL_SVC], now)
+		h.Send2PubTopic(req, h.actor.Data.SvcMaps[server.CENTER_SVC], now)
 
 	} else if req.Type == 99 { // 系统邮件刷新
 		h.actor.Data.HotReloadMap = &sync.Map{}
-		h.Send2PubTopic(req, h.actor.Data.SvcMaps[global.ACTOR_SVC], now)
+		h.Send2PubTopic(req, h.actor.Data.SvcMaps[server.ACTOR_SVC], now)
 	} else { // 返回
 		h.actor.Data.HotReloadMap.Range(func(key, value any) bool {
 			rsp.Progress[key.(string)] = value.(string)

@@ -83,7 +83,7 @@ func (s *Server) Status() string {
 // 请求center协议
 func (s *Server) CenterSrvInvoke(msgId int32, data []byte) []byte {
 	msg, err := s.ActorInvoke(stub.CenterActorType, global.CenterActorID, &base.ProtoMsg{
-		AppId:   global.ACTOR_SVC,
+		AppId:   ACTOR_SVC,
 		MsgId:   msgId,
 		UserId:  "",
 		RoleId:  0,

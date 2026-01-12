@@ -464,7 +464,7 @@ func (s *IDIPServer) GetServerList() []byte {
 
 func (s *IDIPServer) GetExcelConfig(sheetName string) []byte {
 	reqMsg := &pb.S2S_GetExcelConfigReq{SheetName: sheetName}
-	rsp, err := s.SvcInvoke(global.ACTOR_SVC, "", 0, "", reqMsg)
+	rsp, err := s.SvcInvoke(server.ACTOR_SVC, "", 0, "", reqMsg)
 	if err != nil {
 		return []byte(err.Error())
 	}

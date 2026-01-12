@@ -3,10 +3,10 @@ package centeractor
 import (
 	"context"
 	"gitee.com/aniwar2/aniwar/src/common/conf"
+	"gitee.com/aniwar2/aniwar/src/common/server"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/base"
 	"gitee.com/aniwar2/musae/baseactor"
-	"gitee.com/aniwar2/musae/global"
 	"gitee.com/aniwar2/musae/logger"
 	"gitee.com/aniwar2/musae/service"
 	svc "gitee.com/aniwar2/musae/service"
@@ -66,9 +66,9 @@ func (h *SvcRestartHandler) SvcRestartReq(ctx context.Context, in *base.ProtoMsg
 	if req.Type == 1 {
 		h.actor.Data.RestartEventTime = now
 		h.actor.Data.SvcRestartMap = &sync.Map{}
-		h.Send2PubTopic(req, h.actor.Data.SvcMaps[global.GATE_SVC], now)
-		h.Send2PubTopic(req, h.actor.Data.SvcMaps[global.ACTOR_SVC], now)
-		h.Send2PubTopic(req, h.actor.Data.SvcMaps[global.IDIP_SVC], now)
+		h.Send2PubTopic(req, h.actor.Data.SvcMaps[server.GATE_SVC], now)
+		h.Send2PubTopic(req, h.actor.Data.SvcMaps[server.ACTOR_SVC], now)
+		h.Send2PubTopic(req, h.actor.Data.SvcMaps[server.IDIP_SVC], now)
 	} else { // 返回
 		h.actor.Data.SvcRestartMap.Range(func(key, value any) bool {
 			rsp.Progress[key.(string)] = value.(int64)

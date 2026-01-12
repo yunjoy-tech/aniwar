@@ -6,17 +6,16 @@ import (
 	"encoding/json"
 	"fmt"
 	"gitee.com/aniwar2/aniwar/src/common/actor/stub"
+	"gitee.com/aniwar2/aniwar/src/common/server"
 	"gitee.com/aniwar2/musae/gamelib/guid"
 	"strconv"
 	"time"
 
 	"github.com/forgoer/openssl"
 
-	"gitee.com/aniwar2/musae/base"
-	"gitee.com/aniwar2/musae/global"
-
 	"gitee.com/aniwar2/aniwar/src/common"
 	"gitee.com/aniwar2/aniwar/src/common/com_order"
+	"gitee.com/aniwar2/musae/base"
 
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/logger"
@@ -128,7 +127,7 @@ func (h *UserRoomHandler) CreateRoomReq(ctx context.Context, in *base.ProtoMsg) 
 
 	createRoomReqMsg := &base.ProtoMsg{
 		MsgId:  int32(pb.Protocols_PS2S_CreateRoomReq),
-		AppId:  global.ACTOR_SVC,
+		AppId:  server.ACTOR_SVC,
 		UserId: h.actor.uid,
 		RoleId: 0,
 		UAID:   h.actor.Srv.UAID(h.actor.ID(), h.actor.roleId),
@@ -202,7 +201,7 @@ func (h *UserRoomHandler) JoinRoomReq(ctx context.Context, in *base.ProtoMsg) (p
 
 	joinRoomReqMsg := &base.ProtoMsg{
 		MsgId:  int32(pb.Protocols_PS2S_JoinRoomReq),
-		AppId:  global.ACTOR_SVC,
+		AppId:  server.ACTOR_SVC,
 		UserId: h.actor.uid,
 		RoleId: 0,
 		UAID:   h.actor.Srv.UAID(h.actor.ID(), h.actor.roleId),
@@ -311,7 +310,7 @@ func (h *UserRoomHandler) RoomInvoke(roomId string, msgId int32, reqMsg proto.Me
 	}
 	protoMsg := &base.ProtoMsg{
 		MsgId:  msgId,
-		AppId:  global.ACTOR_SVC,
+		AppId:  server.ACTOR_SVC,
 		UserId: h.actor.uid,
 		RoleId: h.actor.roleId,
 		UAID:   h.actor.ID(),

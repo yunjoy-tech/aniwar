@@ -116,7 +116,7 @@ func (s *Server) HandlerHotEvent(in *base.ProtoMsg) (err error) {
 	reqData, err := proto.Marshal(notify)
 	if err == nil {
 		_, _ = s.ActorInvoke(stub.CenterActorType, global.CenterActorID, &base.ProtoMsg{
-			AppId:   global.ACTOR_SVC,
+			AppId:   ACTOR_SVC,
 			MsgId:   int32(pb.Protocols_PS2S_HotReloadNotifyReq),
 			UserId:  "",
 			RoleId:  0,

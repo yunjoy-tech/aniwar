@@ -7,8 +7,8 @@ import (
 	"gitee.com/aniwar2/aniwar/src/common/actor/stub"
 	"gitee.com/aniwar2/aniwar/src/common/db"
 	"gitee.com/aniwar2/aniwar/src/common/sensitive"
+	"gitee.com/aniwar2/aniwar/src/common/server"
 	"gitee.com/aniwar2/musae/gamelib/guid"
-	"gitee.com/aniwar2/musae/global"
 	timeutil "gitee.com/aniwar2/musae/utils/time"
 	"strconv"
 	"time"
@@ -786,7 +786,7 @@ func (h *UserAllianceHandler) AllianceInvoke(allianceId int64, msgId int32, reqM
 	}
 	protoMsg := &base.ProtoMsg{
 		MsgId:  msgId,
-		AppId:  global.ACTOR_SVC,
+		AppId:  server.ACTOR_SVC,
 		UserId: h.actor.uid,
 		RoleId: h.actor.roleId,
 		UAID:   h.actor.ID(),

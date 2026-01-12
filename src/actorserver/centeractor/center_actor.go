@@ -3,8 +3,8 @@ package centeractor
 import (
 	"gitee.com/aniwar2/aniwar/src/actorserver/frame"
 	"gitee.com/aniwar2/aniwar/src/common/actor/stub"
+	"gitee.com/aniwar2/aniwar/src/common/server"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	"gitee.com/aniwar2/musae/global"
 	"gitee.com/aniwar2/musae/service"
 	"gitee.com/aniwar2/musae/state"
 	"gitee.com/aniwar2/musae/utils"
@@ -51,14 +51,13 @@ func New() actor.Server {
 	s.Data.ActorStatusMap = &sync.Map{}
 	s.Data.SvcRestartMap = &sync.Map{}
 	s.Data.SvcMaps = make(map[string]*sync.Map)
-	s.Data.SvcMaps[global.GUIDE_SVC] = &sync.Map{}
-	s.Data.SvcMaps[global.LOGIN_SVC] = &sync.Map{}
-	s.Data.SvcMaps[global.GATE_SVC] = &sync.Map{}
-	s.Data.SvcMaps[global.ACTOR_SVC] = &sync.Map{}
-	s.Data.SvcMaps[global.BILL_SVC] = &sync.Map{}
-	s.Data.SvcMaps[global.IDIP_SVC] = &sync.Map{}
-	s.Data.SvcMaps[global.BATTLE_SVC] = &sync.Map{}
-	s.Data.SvcMaps[global.CENTER_SVC] = &sync.Map{}
+	s.Data.SvcMaps[server.GUIDE_SVC] = &sync.Map{}
+	s.Data.SvcMaps[server.LOGIN_SVC] = &sync.Map{}
+	s.Data.SvcMaps[server.GATE_SVC] = &sync.Map{}
+	s.Data.SvcMaps[server.ACTOR_SVC] = &sync.Map{}
+	s.Data.SvcMaps[server.BILL_SVC] = &sync.Map{}
+	s.Data.SvcMaps[server.IDIP_SVC] = &sync.Map{}
+	s.Data.SvcMaps[server.CENTER_SVC] = &sync.Map{}
 	s.Data.UploadTapTs = 0
 
 	return s

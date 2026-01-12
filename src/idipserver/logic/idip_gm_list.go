@@ -2,8 +2,8 @@ package logic
 
 import (
 	"encoding/json"
+	"gitee.com/aniwar2/aniwar/src/common/server"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	"gitee.com/aniwar2/musae/global"
 	"gitee.com/aniwar2/musae/logger"
 	"github.com/dapr/go-sdk/service/common"
 	"net/http"
@@ -22,7 +22,7 @@ type GmHelpRsp struct {
 // 获取玩家个人cmd
 func (s *IDIPServer) GetUserGMList(out *common.Content, reqJson []byte) {
 	rpcCall := &pb.S2AS_GetGmListReq{GetGlobalGM: false}
-	rspData, err := s.SvcInvoke(global.ACTOR_SVC, "", 0, "", rpcCall)
+	rspData, err := s.SvcInvoke(server.ACTOR_SVC, "", 0, "", rpcCall)
 	if err != nil {
 		logger.Error("GetUserGMList error", err)
 		RetCommonMsg(out, http.StatusInternalServerError, int32(pb.ErrorCode_ParamError), err)

@@ -43,8 +43,8 @@ type Server struct {
 // IsValidAppId check appid
 func IsValidAppId(appid string) bool {
 	switch appid {
-	case global.GUIDE_SVC, global.LOGIN_SVC, global.GATE_SVC, global.IDIP_SVC, global.BILL_SVC,
-		global.ACTOR_SVC, global.CENTER_SVC, global.LOBBY_SVC, global.BATTLE_SVC:
+	case GUIDE_SVC, LOGIN_SVC, GATE_SVC, IDIP_SVC, BILL_SVC,
+		ACTOR_SVC, CENTER_SVC, LOBBY_SVC:
 		return true
 	default:
 		return false
@@ -88,7 +88,7 @@ func (s *Server) ConvUAID(uaid string) (string, uint64) {
 
 func (s *Server) OnUpdateStatus() {
 	req := &pb.S2S_SvcStatusReq{}
-	if global.AppID == global.ACTOR_SVC {
+	if global.AppID == ACTOR_SVC {
 		req.Actor = map[string]*pb.ActorStatus{}
 		res, err := s.Daprc.GrpcClient().GetMetadata(context.Background(), &emptypb.Empty{})
 		if err != nil {
@@ -149,7 +149,7 @@ func (s *Server) OnUpdateStatus() {
 		return
 	}
 	msg, err := s.ActorInvoke(stub.CenterActorType, global.CenterActorID, &base.ProtoMsg{
-		AppId:   global.ACTOR_SVC,
+		AppId:   ACTOR_SVC,
 		MsgId:   int32(pb.Protocols_PS2S_SvcStatusReq),
 		UserId:  "",
 		RoleId:  0,
@@ -182,7 +182,7 @@ func (s *Server) OnUpdateStatus() {
 
 	global.GateServices = []string{}
 	for _, srv := range res.Services {
-		if global.IsGate(srv.Name) {
+		if IsGate(srv.Name) {
 			global.GateServices = append(global.GateServices, srv.Name)
 		}
 	}

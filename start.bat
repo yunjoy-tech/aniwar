@@ -113,10 +113,11 @@ if %Debug% EQU  "l" (
     start %LOBBY_APPID% /min %BIN_PATH%\dapr.exe run -c %DAPR_CONFIG% -a %LOBBY_APPID% ^
     -P %PROTOCOL% -p %LOBBY_APP_PORT% --dapr-http-port %LOBBY_HTTP_PORT% --dapr-grpc-port %LOBBY_GRPC_PORT% ^
     --dapr-http-read-buffer-size 4096 --log-level debug -d %COMPONENT_PATH% ^
-    %BIN_PATH%\lobbyserver.exe config=%SERVER_CONFIG% appId=%LOBBY_APPID% inAddr=%LOBBY_APP_PORT% grpcPort=%LOBBY_GRPC_PORT% pprofAddr=%LOBBY_PPROF_PORT% dev=1
+    -- ^
+    %BIN_PATH%\lobbyserver.exe --config %SERVER_CONFIG% --app-id %LOBBY_APPID% --in-addr %LOBBY_APP_PORT% --grpc-port %LOBBY_GRPC_PORT% ^
+    --pprof-addr %LOBBY_PPROF_PORT% --dev 1
    )
-:: rdscfghost=%RDSCFGHOST% rdscfgpass=%RDSCFGPASS% rdscfgns=%RDSCFGNS% rdscfggroup=%RDSCFGGROUP%
-
+:: TODO 简化传参，只需要传config和app-id
 :: ****************** actor ******************
 ping 127.0.0.1 -n 1
 if %Debug% EQU  "a" (
@@ -132,9 +133,10 @@ ENDLOCAL
    start %ACTOR_APPID% %BIN_PATH%\dapr.exe run -c %DAPR_CONFIG% -a %ACTOR_APPID% ^
     -P http -p %ACTOR_APP_PORT% --dapr-http-port %ACTOR_HTTP_PORT% --dapr-grpc-port %ACTOR_GRPC_PORT% ^
     --dapr-http-read-buffer-size 4096 --log-level debug -d %COMPONENT_PATH% ^
-    %BIN_PATH%\actorserver.exe config=%SERVER_CONFIG% appId=%ACTOR_APPID% actor=%ACTORS% inAddr=%ACTOR_APP_PORT% grpcPort=%ACTOR_GRPC_PORT% pprofAddr=%ACTOR_PPROF_PORT% dev=1
+    -- ^
+    %BIN_PATH%\actorserver.exe --config=%SERVER_CONFIG% --app-id=%ACTOR_APPID% --actor=%ACTORS% --in-addr=%ACTOR_APP_PORT% ^
+    --grpc-port=%ACTOR_GRPC_PORT% --pprof-addr=%ACTOR_PPROF_PORT% --dev=1
    )
-:: rdscfghost=%RDSCFGHOST% rdscfgpass=%RDSCFGPASS% rdscfgns=%RDSCFGNS% rdscfggroup=%RDSCFGGROUP%
 
 :: ****************** login ******************
 ping 127.0.0.1 -n 1
@@ -149,9 +151,10 @@ if %Debug% EQU  "lo" (
     start %LOGIN_APPID% /min %BIN_PATH%\dapr.exe run -c %DAPR_CONFIG% -a %LOGIN_APPID% ^
     -P %PROTOCOL% -p %LOGIN_APP_PORT% --dapr-http-port %LOGIN_HTTP_PORT% --dapr-grpc-port %LOGIN_GRPC_PORT% ^
     --dapr-http-read-buffer-size 4096 --log-level debug -d %COMPONENT_PATH% ^
-    %BIN_PATH%\loginserver.exe config=%SERVER_CONFIG% appId=%LOGIN_APPID% inAddr=%LOGIN_APP_PORT% outAddr=%LOGIN_OUT_PORT% grpcPort=%LOGIN_GRPC_PORT% pprofAddr=%LOGIN_PPROF_PORT% dev=1
+    -- ^
+    %BIN_PATH%\loginserver.exe --config %SERVER_CONFIG% --app-id %LOGIN_APPID% --in-addr %LOGIN_APP_PORT% --out-addr %LOGIN_OUT_PORT% ^
+    --grpc-port %LOGIN_GRPC_PORT% --pprof-addr %LOGIN_PPROF_PORT% --dev 1
    )
-:: rdscfghost=%RDSCFGHOST% rdscfgpass=%RDSCFGPASS% rdscfgns=%RDSCFGNS% rdscfggroup=%RDSCFGGROUP%
 
 :: ****************** gate ******************
 ping 127.0.0.1 -n 1
@@ -167,9 +170,10 @@ if %Debug% EQU  "g" (
    start %GATE_APPID% %BIN_PATH%\dapr.exe run -c %DAPR_CONFIG% -a %GATE_APPID% ^
    -P %PROTOCOL% -p %GATE_APP_PORT% --dapr-http-port %GATE_HTTP_PORT% --dapr-grpc-port %GATE_GRPC_PORT% ^
    --dapr-http-read-buffer-size 4096 --log-level debug -d %COMPONENT_PATH% ^
-   %BIN_PATH%\gateserver.exe config=%SERVER_CONFIG% appId=%GATE_APPID% inAddr=%GATE_APP_PORT% outAddr=%GATE_OUT_PORT% grpcPort=%GATE_GRPC_PORT% pprofAddr=%GATE_PPROF_PORT% dev=1
+   -- ^
+   %BIN_PATH%\gateserver.exe --config %SERVER_CONFIG% --app-id %GATE_APPID% --in-addr %GATE_APP_PORT% --out-addr %GATE_OUT_PORT% ^
+   --grpc-port %GATE_GRPC_PORT% --pprof-addr %GATE_PPROF_PORT% --dev 1
    )
-::rdscfghost=%RDSCFGHOST% rdscfgpass=%RDSCFGPASS% rdscfgns=%RDSCFGNS% rdscfggroup=%RDSCFGGROUP%
 
 :: ****************** bill ******************
 ping 127.0.0.1 -n 1
@@ -185,9 +189,11 @@ if %Debug% EQU  "b" (
    start %BILL_APPID% /min %BIN_PATH%\dapr.exe run -c %DAPR_CONFIG% -a %BILL_APPID% ^
    -P %PROTOCOL% -p %BILL_APP_PORT% --dapr-http-port %BILL_HTTP_PORT% --dapr-grpc-port %BILL_GRPC_PORT% ^
    --dapr-http-read-buffer-size 4096 --log-level debug -d %COMPONENT_PATH% ^
-   %BIN_PATH%\billserver.exe config=%SERVER_CONFIG% appId=%BILL_APPID% inAddr=%BILL_APP_PORT% grpcPort=%BILL_GRPC_PORT% webAddr=18001 pprofAddr=%BILL_PPROF_PORT% dev=1
+   -- ^
+   %BIN_PATH%\billserver.exe --config %SERVER_CONFIG% --app-id %BILL_APPID% --in-addr %BILL_APP_PORT% --grpc-port %BILL_GRPC_PORT% ^
+   --web-addr 18001 --pprof-addr %BILL_PPROF_PORT% --dev 1
    )
-::rdscfghost=%RDSCFGHOST% rdscfgpass=%RDSCFGPASS% rdscfgns=%RDSCFGNS% rdscfggroup=%RDSCFGGROUP%
+
 :: ****************** idip ******************
 ping 127.0.0.1 -n 1
 if %Debug% EQU  "i" (
@@ -201,7 +207,9 @@ if %Debug% EQU  "i" (
    echo ">>>>>>>>>>>>>>idip"
    start %IDIP_APPID% /min %BIN_PATH%\dapr.exe run -c %DAPR_CONFIG% -a %IDIP_APPID% ^
    -P %PROTOCOL% -p %IDIP_APP_PORT% --dapr-http-port %IDIP_HTTP_PORT% --dapr-grpc-port %IDIP_GRPC_PORT% --log-level debug -d %COMPONENT_PATH% ^
-   %BIN_PATH%\idipserver.exe config=%SERVER_CONFIG% appId=%IDIP_APPID% inAddr=%IDIP_APP_PORT% grpcPort=%IDIP_GRPC_PORT% webAddr=19001 pprofAddr=%IDIP_PPROF_PORT% dev=1
+   -- ^
+   %BIN_PATH%\idipserver.exe --config %SERVER_CONFIG% --app-id %IDIP_APPID% --in-addr %IDIP_APP_PORT% --grpc-port %IDIP_GRPC_PORT% --web-addr 19001 ^
+   --pprof-addr %IDIP_PPROF_PORT% --dev 1
    )
 
 :: ****************** guide ******************
@@ -217,18 +225,11 @@ if %Debug% EQU  "gu" (
    echo ">>>>>>>>>>>>>>guide"
    start %GUIDE_APPID% /min %BIN_PATH%\dapr.exe run -c %DAPR_CONFIG% -a %GUIDE_APPID% ^
    -P %PROTOCOL% -p %GUIDE_APP_PORT% --dapr-http-port %GUIDE_HTTP_PORT% --dapr-grpc-port %GUIDE_GRPC_PORT% --log-level debug -d %COMPONENT_PATH% ^
-   %BIN_PATH%\guideserver.exe config=%SERVER_CONFIG% appId=%GUIDE_APPID% inAddr=%GUIDE_APP_PORT% grpcPort=%GUIDE_GRPC_PORT% pprofAddr=%GUIDE_PPROF_PORT% dev=1
+   -- ^
+   %BIN_PATH%\guideserver.exe --config %SERVER_CONFIG% --app-id %GUIDE_APPID% --in-addr %GUIDE_APP_PORT% --grpc-port %GUIDE_GRPC_PORT% ^
+   --pprof-addr %GUIDE_PPROF_PORT% --dev 1
    )
 
-:: ****************** battle ******************
-echo ">>>>>>>>>>>>>>BATTLE"
-    start %BATTLE_APPID% /min %BIN_PATH%\dapr.exe run -c %DAPR_CONFIG% -a %BATTLE_APPID% ^
-    -P http -p %BATTLE_APP_PORT% --dapr-http-port %BATTLE_HTTP_PORT% --dapr-grpc-port %BATTLE_GRPC_PORT% ^
-    --dapr-http-read-buffer-size 4096 --log-level debug -d %COMPONENT_PATH% ^
-    %BIN_PATH%\battleserver.exe dev=1 ^
-    rdscfghost=%RDSCFGHOST% rdscfgpass=%RDSCFGPASS% rdscfgns=%RDSCFGNS% rdscfggroup=%RDSCFGGROUP%
-
-ping 127.0.0.1 -n 1
 rem start %MUSAE_APPID% %BIN_PATH%\dapr.exe run -a %MUSAE_APPID%  -P %PROTOCOL% -p 50009 --dapr-http-port 3509 -d %COMPONENT_PATH%  --log-level debug  %BIN_PATH%\musaectl.exe appid=%MUSAE_APPID%
 
 :: ****************** musae ******************

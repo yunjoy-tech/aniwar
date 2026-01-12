@@ -6,12 +6,11 @@ import (
 	"encoding/json"
 	"fmt"
 	"gitee.com/aniwar2/aniwar/src/common/gmeta"
+	"gitee.com/aniwar2/aniwar/src/common/server"
 	"gitee.com/aniwar2/musae/gamelib/guid"
 	"gitee.com/aniwar2/musae/utils"
 	"strconv"
 	"time"
-
-	"gitee.com/aniwar2/musae/global"
 
 	"gitee.com/aniwar2/musae/logger"
 
@@ -622,7 +621,7 @@ func (h *RoomHandler) InviteIntoRoomReq(ctx context.Context, in *base.ProtoMsg) 
 	// }
 	// toUid, _ := h.actor.Srv.ConvUAID(toUaid)
 	inviteRespData, err := h.actor.Srv.UserInvoke(fromUaid, &base.ProtoMsg{
-		AppId:        global.ACTOR_SVC,
+		AppId:        server.ACTOR_SVC,
 		MsgId:        int32(pb.Protocols_PS2S_InviteIntoRoomReq),
 		ServerReqIdx: guid.GenIntUuid(),
 		UserId:       fromPlayerUid,

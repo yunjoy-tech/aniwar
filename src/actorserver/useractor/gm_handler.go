@@ -9,11 +9,11 @@ import (
 	"gitee.com/aniwar2/aniwar/src/common/actor/stub"
 	"gitee.com/aniwar2/aniwar/src/common/clidto"
 	"gitee.com/aniwar2/aniwar/src/common/sensitive"
+	"gitee.com/aniwar2/aniwar/src/common/server"
 	"gitee.com/aniwar2/aniwar/src/idipserver/logic"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/base"
 	"gitee.com/aniwar2/musae/gamelib/guid"
-	"gitee.com/aniwar2/musae/global"
 	"gitee.com/aniwar2/musae/logger"
 	"gitee.com/aniwar2/musae/service"
 	svc "gitee.com/aniwar2/musae/service"
@@ -743,37 +743,6 @@ func (h *GmHandler) GMTestAchieve(param []string, commonData *clidto.Comdata) er
 	return nil
 }
 
-func (h *GmHandler) testExcelBattleEventReq(dataId string) error {
-	reqMsg := &pb.CheckUp{
-		TestExcelBattleEventReq: &pb.TestExcelBattleEventReq{
-			Id: dataId,
-		},
-	}
-
-	out, err := h.actor.Srv.SvcInvoke(global.BATTLE_SVC, h.actor.GetUID(), h.actor.roleId, h.actor.ID(), reqMsg)
-	if err != nil {
-		h.Errorf(err.Error())
-		return err
-	}
-
-	protoMsg, err := base.UnPackProtoMsg(out)
-	if err != nil {
-		h.Errorf(err.Error())
-		return err
-	}
-	logger.Debugf("protoMsg：%v", protoMsg.Str())
-
-	checkResp := &pb.CheckDown{}
-	err = protoMsg.UnmarshalData(checkResp)
-	if err != nil {
-		h.Errorf(err.Error())
-		return err
-	}
-	logger.Debugf("校验结果：%v", checkResp)
-
-	return nil
-}
-
 func (h *GmHandler) GMTestRoom(param []string, commonData *clidto.Comdata) error {
 	if len(param) < 2 {
 		return fmt.Errorf("param error")
@@ -799,7 +768,7 @@ func (h *GmHandler) GMTestRoom(param []string, commonData *clidto.Comdata) error
 
 		msg := base.ProtoMsg{
 			MsgId:  int32(pb.Protocols_PC2LS_CreateRoomReq),
-			AppId:  global.ACTOR_SVC,
+			AppId:  server.ACTOR_SVC,
 			UserId: h.actor.uid,
 			RoleId: 0,
 			UAID:   h.actor.Srv.UAID(h.actor.ID(), h.actor.roleId),
@@ -832,7 +801,7 @@ func (h *GmHandler) GMTestRoom(param []string, commonData *clidto.Comdata) error
 
 		msg := base.ProtoMsg{
 			MsgId:  int32(pb.Protocols_PC2LS_JoinRoomReq),
-			AppId:  global.ACTOR_SVC,
+			AppId:  server.ACTOR_SVC,
 			UserId: h.actor.uid,
 			RoleId: 0,
 			UAID:   h.actor.Srv.UAID(h.actor.ID(), h.actor.roleId),

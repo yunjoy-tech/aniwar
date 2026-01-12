@@ -21,7 +21,6 @@ func (s *Server) Init() error {
 			logger.Fatal("Server InitCfg recover, err: ", err)
 		}
 	}()
-	HelpInfo()
 	s.AnalysisArgs()
 
 	s.initRedisCenter() // todo 迁移到musae的组件进行支持，不在业务层进行处理
@@ -30,7 +29,7 @@ func (s *Server) Init() error {
 		return err
 	}
 	// 运行参数配置会覆盖server.conf配置
-	if err := s.InitSrvArgs(); err != nil {
+	if err := s.InitRunArgs(); err != nil {
 		return err
 	}
 	if err := s.InitLog(); err != nil {
