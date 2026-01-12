@@ -12,52 +12,54 @@ import (
 	"gitee.com/aniwar2/musae/utils"
 	"google.golang.org/protobuf/proto"
 	"runtime"
+	"strings"
 	"time"
 )
 
-func (s *Server) Info() string {
-	// output version info
+// 服务运行配置信息输出
+
+// 服务基础运行信息
+func (s *Server) BasicInfo() string {
 	maxProcs := runtime.NumCPU()
 	defMaxProcs := runtime.GOMAXPROCS(maxProcs)
-	var szInfo string
-	szInfo += (fmt.Sprintf("\n%s\n", "========== info =========="))
-	szInfo += (fmt.Sprintf("%-13s: %s\n", "Now", time.Now().String()))
-	szInfo += (fmt.Sprintf("%-13s: %s\n", "Version", global.VERSION))
-	szInfo += (fmt.Sprintf("%-13s: %s\n", "AppVersion", global.APP_VERSION))
-	szInfo += (fmt.Sprintf("%-13s: %s\n", "RollingVersion", global.ROLLING_VERSION))
-	szInfo += (fmt.Sprintf("%-13s: %v\n", "IsCloud", conf.Base().Cloud))
-	szInfo += (fmt.Sprintf("%-13s: %v\n", "IsDev", conf.Base().IsDebug))
-	szInfo += (fmt.Sprintf("%-13s: %v\n", "Metric", conf.Base().Metric))
-	szInfo += (fmt.Sprintf("%-13s: %v\n", "DefProcNum", defMaxProcs))
-	szInfo += (fmt.Sprintf("%-13s: %v\n", "NewProcNum", maxProcs))
-	szInfo += (fmt.Sprintf("%-13s: %v\n", "CPU", runtime.NumCPU()))
-	szInfo += (fmt.Sprintf("%-13s: %v\n", "GOROOT", runtime.GOROOT()))
-	szInfo += (fmt.Sprintf("%-13s: %v\n", "GOOS", runtime.GOOS))
-	szInfo += (fmt.Sprintf("%-13s: %v\n", "DefMAXPROCS", defMaxProcs))
-	szInfo += (fmt.Sprintf("%-13s: %v\n", "MAXPROCS", maxProcs))
-	szInfo += (fmt.Sprintf("%-13s: %s\n", "AppId", s.AppId))
-	szInfo += (fmt.Sprintf("%-13s: %s\n", "InAddr", s.InAddr))
-	szInfo += (fmt.Sprintf("%-13s: %s\n", "OutAddr", s.OutAddr))
-	szInfo += (fmt.Sprintf("%-13s: %s\n", "WebAddr", s.WebAddr))
-	szInfo += (fmt.Sprintf("%-13s: %s\n", "GRPCPort", s.GRPCPort))
-	szInfo += (fmt.Sprintf("%-13s: %s\n", "Gateway", global.Gateway))
-	szInfo += (fmt.Sprintf("%-13s: %s\n", "TcpAddr", global.TcpAddr))
-	szInfo += (fmt.Sprintf("%-13s: %s\n", "Actors", s.Actors))
-	szInfo += (fmt.Sprintf("%-13s: %d\n", "UserActor", global.UserActorCount))
-	szInfo += (fmt.Sprintf("%-13s: %d\n", "SceneActor", global.RoomActorCount))
-	szInfo += (fmt.Sprintf("%-13s: %d\n", "AllianceActor", global.AllianceActorCount))
-	szInfo += (fmt.Sprintf("%-13s: %s\n", "ConfFile", s.Args["config"]))
-	szInfo += (fmt.Sprintf("%-13s: %s\n", "PrivateTopic", s.PrivateTopicID()))
-	szInfo += (fmt.Sprintf("%-13s: %s\n", "LogDir", conf.Base().LogConf.Dir))
-	szInfo += (fmt.Sprintf("%-13s: %s\n", "PProfAddr", s.PProfAddr))
-	szInfo += (fmt.Sprintf("%-13s: %s\n", "StartTime", time.Unix(global.StartTime, 0).Format("2006-01-02 15:04:05.000 -0700 MST")))
-	szInfo += (fmt.Sprintf("%-13s: %s\n", "updateAddrARD", conf.SrvAddr().UpdateAddrARD))
-	szInfo += (fmt.Sprintf("%-13s: %s\n", "updateAddrIOS", conf.SrvAddr().UpdateAddrIOS))
-	// TODO szInfo += (fmt.Sprintf("%-13v: %s\n", "Args", s.Args))
-	// szInfo += (fmt.Sprintf("\n%s\n", "========== server.conf =========="))
-	// szInfo += (fmt.Sprintf("%s\n", utils.PrettyJson(conf.GConf())))
-	return szInfo
+	var sb strings.Builder
+	sb.WriteString(fmt.Sprintf("\n%s\n", "========== info =========="))
+	sb.WriteString(fmt.Sprintf("%-13s: %s\n", "Now", time.Now().String()))
+	sb.WriteString(fmt.Sprintf("%-13s: %s\n", "Version", global.VERSION))
+	sb.WriteString(fmt.Sprintf("%-13s: %s\n", "AppVersion", global.APP_VERSION))
+	sb.WriteString(fmt.Sprintf("%-13s: %s\n", "RollingVersion", global.ROLLING_VERSION))
+	sb.WriteString(fmt.Sprintf("%-13s: %v\n", "IsCloud", conf.Base().Cloud))
+	sb.WriteString(fmt.Sprintf("%-13s: %v\n", "IsDev", conf.Base().IsDebug))
+	sb.WriteString(fmt.Sprintf("%-13s: %v\n", "Metric", conf.Base().Metric))
+	sb.WriteString(fmt.Sprintf("%-13s: %v\n", "DefProcNum", defMaxProcs))
+	sb.WriteString(fmt.Sprintf("%-13s: %v\n", "NewProcNum", maxProcs))
+	sb.WriteString(fmt.Sprintf("%-13s: %v\n", "CPU", runtime.NumCPU()))
+	sb.WriteString(fmt.Sprintf("%-13s: %v\n", "GOROOT", runtime.GOROOT()))
+	sb.WriteString(fmt.Sprintf("%-13s: %v\n", "GOOS", runtime.GOOS))
+	sb.WriteString(fmt.Sprintf("%-13s: %v\n", "DefMAXPROCS", defMaxProcs))
+	sb.WriteString(fmt.Sprintf("%-13s: %v\n", "MAXPROCS", maxProcs))
+	sb.WriteString(fmt.Sprintf("%-13s: %s\n", "AppId", s.AppId))
+	sb.WriteString(fmt.Sprintf("%-13s: %s\n", "InAddr", s.InAddr))
+	sb.WriteString(fmt.Sprintf("%-13s: %s\n", "OutAddr", s.OutAddr))
+	sb.WriteString(fmt.Sprintf("%-13s: %s\n", "WebAddr", s.WebAddr))
+	sb.WriteString(fmt.Sprintf("%-13s: %s\n", "GRPCPort", s.GRPCPort))
+	sb.WriteString(fmt.Sprintf("%-13s: %s\n", "Gateway", global.Gateway))
+	sb.WriteString(fmt.Sprintf("%-13s: %s\n", "TcpAddr", global.TcpAddr))
+	sb.WriteString(fmt.Sprintf("%-13s: %s\n", "Actors", s.Actors))
+	sb.WriteString(fmt.Sprintf("%-13s: %d\n", "UserActor", global.UserActorCount))
+	sb.WriteString(fmt.Sprintf("%-13s: %d\n", "SceneActor", global.RoomActorCount))
+	sb.WriteString(fmt.Sprintf("%-13s: %d\n", "AllianceActor", global.AllianceActorCount))
+	sb.WriteString(fmt.Sprintf("%-13s: %s\n", "ConfFile", s.Args["config"]))
+	sb.WriteString(fmt.Sprintf("%-13s: %s\n", "PrivateTopic", s.PrivateTopicID()))
+	sb.WriteString(fmt.Sprintf("%-13s: %s\n", "LogDir", conf.Base().LogConf.Dir))
+	sb.WriteString(fmt.Sprintf("%-13s: %s\n", "PProfAddr", s.PProfAddr))
+	sb.WriteString(fmt.Sprintf("%-13s: %s\n", "StartTime", time.Unix(global.StartTime, 0).Format("2006-01-02 15:04:05.000 -0700 MST")))
+	sb.WriteString(fmt.Sprintf("%-13s: %s\n", "updateAddrARD", conf.SrvAddr().UpdateAddrARD))
+	sb.WriteString(fmt.Sprintf("%-13s: %s\n", "updateAddrIOS", conf.SrvAddr().UpdateAddrIOS))
+	return sb.String()
 }
+
+// TODO 配置文件信息输出
 
 func (s *Server) Status() string {
 	data, err := proto.Marshal(&pb.S2S_SvcStatusReq{})
@@ -72,9 +74,9 @@ func (s *Server) Status() string {
 		return ""
 	}
 
-	status := (fmt.Sprintf("\n%s\n", "========== status =========="))
-	status += (fmt.Sprintf("%s\n", utils.PrettyJson(res)))
-	szInfo := s.Info()
+	status := fmt.Sprintf("\n%s\n", "========== status ==========")
+	status += fmt.Sprintf("%s\n", utils.PrettyJson(res))
+	szInfo := s.BasicInfo()
 	szInfo = status + szInfo
 	logger.Infof("server info:%s", szInfo)
 	return szInfo

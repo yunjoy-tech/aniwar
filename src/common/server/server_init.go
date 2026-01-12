@@ -2,7 +2,6 @@ package server
 
 import (
 	"context"
-	"encoding/base64"
 	"fmt"
 	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/aniwar/src/common/gmeta"
@@ -10,7 +9,6 @@ import (
 	"gitee.com/aniwar2/musae/global"
 	"gitee.com/aniwar2/musae/logger"
 	"gitee.com/aniwar2/musae/tcpx"
-	"github.com/go-redis/redis/v8"
 )
 
 // 启动流程2: Server
@@ -21,9 +19,10 @@ func (s *Server) Init() error {
 			logger.Fatal("Server InitCfg recover, err: ", err)
 		}
 	}()
+	// 解析运行参数
 	s.AnalysisArgs()
-
-	s.initRedisCenter() // todo 迁移到musae的组件进行支持，不在业务层进行处理
+	// 初始化配置中心
+	s.InitRedisCenter()
 	// 加载程序配置文件
 	if err := s.LoadConf(); err != nil {
 		return err
@@ -54,33 +53,9 @@ func (s *Server) Init() error {
 		}
 	}
 
-	logger.Info(s.Info())
+	logger.Info(s.BasicInfo())
 	s.pack = tcpx.NewPackx(tcpx.ProtobufMarshaller{})
 	return nil
-}
-
-func (s *Server) initRedisCenter() {
-	fmt.Printf("配置中心redis配置: %s:%s", global.RdsCfgCenterHost, global.RdsCfgCenterPass)
-	if global.RdsCfgCenterHost != "" && global.RdsCfgCenterPass != "" {
-		pass, err := base64.StdEncoding.DecodeString(global.RdsCfgCenterPass)
-		if err != nil {
-			fmt.Printf("decode password %s err: %v", global.RdsCfgCenterPass, err)
-			return
-		}
-		opts := &redis.Options{
-			Addr:     global.RdsCfgCenterHost,
-			Password: string(pass),
-		}
-		s.RedisCenter = redis.NewClient(opts)
-		if s.RedisCenter == nil {
-			fmt.Printf("配置中心连接失败 host: %+v", opts)
-		}
-		pong := s.RedisCenter.Ping(context.Background())
-		if pong.Err() != nil {
-			fmt.Printf("配置中心初始化失败 %v", pong.Err())
-		}
-		fmt.Printf("配置中心redis链接ping: %s", pong.Val())
-	}
 }
 
 func (s *Server) LoadConf() error {
