@@ -1,7 +1,6 @@
 package server
 
 import (
-	"context"
 	"fmt"
 	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/aniwar/src/common/gmeta"
@@ -21,16 +20,17 @@ func (s *Server) Init() error {
 	}()
 	// 解析运行参数
 	s.AnalysisArgs()
-	// 初始化配置中心
-	s.InitRedisCenter()
+	// 初始化运行参数
+	if err := s.InitRunArgs(); err != nil {
+		return err
+	}
+	// 初始化远程配置中心
+	s.InitApolloConfigCenter(s.Args["config-center"])
 	// 加载程序配置文件
 	if err := s.LoadConf(); err != nil {
 		return err
 	}
-	// 运行参数配置会覆盖server.conf配置
-	if err := s.InitRunArgs(); err != nil {
-		return err
-	}
+	// 初始化日志输出
 	if err := s.InitLog(); err != nil {
 		return err
 	}
@@ -60,15 +60,15 @@ func (s *Server) Init() error {
 
 func (s *Server) LoadConf() error {
 	// TODO 从配置中心读取
-	if /*!global.IsDev &&*/ s.RedisCenter != nil {
-		key := fmt.Sprintf("%s:%s:%s:%s:%s", global.RdsCfgNameSpace, global.RdsCfgGroup, "aniwar", global.ROLLING_VERSION, "server.conf")
-		fmt.Println("配置中心server.conf key: ", key)
-		stringCmd := s.RedisCenter.Get(context.Background(), key)
-		if stringCmd.Val() != "" {
-			// params = append(params, stringCmd.Val())
-			// fmt.Println("拉取到配置中心server.conf val: ", params)
-		}
-	}
+	// if /*!global.IsDev &&*/ s.RedisCenter != nil {
+	// 	key := fmt.Sprintf("%s:%s:%s:%s:%s", global.RdsCfgNameSpace, global.RdsCfgGroup, "aniwar", global.ROLLING_VERSION, "server.conf")
+	// 	fmt.Println("配置中心server.conf key: ", key)
+	// 	stringCmd := s.RedisCenter.Get(context.Background(), key)
+	// 	if stringCmd.Val() != "" {
+	// 		// params = append(params, stringCmd.Val())
+	// 		// fmt.Println("拉取到配置中心server.conf val: ", params)
+	// 	}
+	// }
 
 	// 运行参数配置会覆盖默认配置
 	err := conf.LoadConf(s.Args["config"])
@@ -97,7 +97,7 @@ func (s *Server) ReloadConf() error {
 
 // 加载excel配置表数据
 func (s *Server) LoadExcelData() (err error) {
-	if conf.Base().IsDebug || s.RedisCenter == nil {
+	if conf.Base().IsDebug /*|| s.RedisCenter == nil */ {
 		// 加载本地配置表
 		err = s.LoadExcel()
 	} else {
@@ -109,7 +109,7 @@ func (s *Server) LoadExcelData() (err error) {
 
 // 按需加载excel配置表数据
 func (s *Server) LoadExcelDataByFiles(files []string) (err error) {
-	if conf.Base().IsDebug || s.RedisCenter == nil {
+	if conf.Base().IsDebug /*|| s.RedisCenter == nil*/ {
 		// TODO
 		// err = data.LoadByFileNames(conf.Base().MetaDir, files, s.AppId, "actorserver")
 	} else {

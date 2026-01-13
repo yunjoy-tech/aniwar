@@ -1,0 +1,7 @@
+BaseConf:
+  appID: aniwar, # 应用ID
+  cluster: default, # 集群名称
+  namespace: server, # 命名空间
+  ip: http://localhost:18080, # 配置中心地址
+  isBackup: true, # 是否开启备份
+  secret: 6ce3ff7e96a24335a9634fe9abca6d51, # 访问密钥

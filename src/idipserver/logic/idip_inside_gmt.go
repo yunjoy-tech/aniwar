@@ -6,32 +6,28 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	myCommon "gitee.com/aniwar2/aniwar/src/common"
+	"gitee.com/aniwar2/aniwar/src/common/actor/stub"
+	"gitee.com/aniwar2/aniwar/src/common/conf"
+	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
+	"gitee.com/aniwar2/aniwar/src/common/db"
+	"gitee.com/aniwar2/aniwar/src/common/sdkconstant"
+	"gitee.com/aniwar2/aniwar/src/common/server"
 	"gitee.com/aniwar2/aniwar/src/meta"
+	"gitee.com/aniwar2/aniwar/src/proto/pb"
+	"gitee.com/aniwar2/musae/base"
+	"gitee.com/aniwar2/musae/gamelib/guid"
+	"gitee.com/aniwar2/musae/global"
+	"gitee.com/aniwar2/musae/logger"
+	"gitee.com/aniwar2/musae/service"
+	"gitee.com/aniwar2/musae/state"
+	"gitee.com/aniwar2/musae/utils"
+	"github.com/dapr/go-sdk/service/common"
+	"google.golang.org/protobuf/proto"
 	"io"
 	"io/ioutil"
 	"os"
 	"strings"
-
-	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
-	"gitee.com/aniwar2/musae/global"
-	"gitee.com/aniwar2/musae/utils"
-	"github.com/go-redis/redis/v8"
-
-	"gitee.com/aniwar2/aniwar/src/common/server"
-	"gitee.com/aniwar2/musae/service"
-
-	myCommon "gitee.com/aniwar2/aniwar/src/common"
-	"gitee.com/aniwar2/aniwar/src/common/actor/stub"
-	"gitee.com/aniwar2/aniwar/src/common/conf"
-	"gitee.com/aniwar2/aniwar/src/common/db"
-	"gitee.com/aniwar2/aniwar/src/common/sdkconstant"
-	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	"gitee.com/aniwar2/musae/base"
-	"gitee.com/aniwar2/musae/gamelib/guid"
-	"gitee.com/aniwar2/musae/logger"
-	"gitee.com/aniwar2/musae/state"
-	"github.com/dapr/go-sdk/service/common"
-	"google.golang.org/protobuf/proto"
 )
 
 type UserJsonExport struct {
@@ -1577,55 +1573,54 @@ func (s *IDIPServer) SrvPushExcel(files []*pb.ExcelFile) []byte {
 	ret := &pb.GMTPushExcelRet{
 		Code: 2,
 	}
-	cont := context.Background()
+	// cont := context.Background()
 	//cn:pob:aniwar:0.0.1259:build_main.data
-	pipline := s.Server.RedisCenter.Pipeline()
-	srcMD5 := make(map[string]string, len(files))
-	for _, v := range files {
-		temp := strings.Split(v.Name, ":")
-		temp[3] = global.ROLLING_VERSION
-		key := strings.Join(temp, ":")
-		hashKey := strings.Join(temp[:3], ":") + ":" + global.ROLLING_VERSION + ":" + "versionList"
-		md5 := utils.MD5(v.Data)
-		pipline.HSet(cont, hashKey, temp[4], strings.Join([]string{v.Name, md5}, "|"))
-		srcMD5[key] = md5
-		pipline.Set(cont, key, string(v.Data), -1)
-	}
-	res, err := pipline.Exec(cont)
-	if err != nil {
-		logger.Warn("SrvPushExcel  pipline excel err:", err, res)
-		ret.Code = 1 // 失败
-		return s.GenJsonRet(ret)
-	}
-	// 做校验
-	// newMd5 := make(map[string]string, len(files))
-	for k, _ := range srcMD5 {
-		pipline.Get(cont, k)
-	}
-	res, err = pipline.Exec(cont)
-	if err != nil {
-		ret.Code = 1 // 失败
-		for _, v := range res {
-			if v.Err() != nil {
-				logger.Infof("SrvPushExcel  update redis file:%s", v.Args()[1].(string))
-			}
-		}
-		return s.GenJsonRet(ret)
-	}
-	for _, item := range res {
-		cmdRes, _ := item.(*redis.StringCmd)
-		key := item.Args()[1].(string)
-		if m, ok := srcMD5[key]; ok {
-			tempByte, _ := cmdRes.Bytes()
-			if utils.MD5(tempByte) != m {
-				ret.Code = 1 // 失败
-				logger.Infof("SrvPushExcel  update redis file:%s", key)
-			}
-		} else {
-			ret.Code = 1 // 失败
-		}
-
-	}
+	// pipline := s.Server.RedisCenter.Pipeline()
+	// srcMD5 := make(map[string]string, len(files))
+	// for _, v := range files {
+	// 	temp := strings.Split(v.Name, ":")
+	// 	temp[3] = global.ROLLING_VERSION
+	// 	key := strings.Join(temp, ":")
+	// 	hashKey := strings.Join(temp[:3], ":") + ":" + global.ROLLING_VERSION + ":" + "versionList"
+	// 	md5 := utils.MD5(v.Data)
+	// 	pipline.HSet(cont, hashKey, temp[4], strings.Join([]string{v.Name, md5}, "|"))
+	// 	srcMD5[key] = md5
+	// 	pipline.Set(cont, key, string(v.Data), -1)
+	// }
+	// res, err := pipline.Exec(cont)
+	// if err != nil {
+	// 	logger.Warn("SrvPushExcel  pipline excel err:", err, res)
+	// 	ret.Code = 1 // 失败
+	// 	return s.GenJsonRet(ret)
+	// }
+	// // 做校验
+	// // newMd5 := make(map[string]string, len(files))
+	// for k, _ := range srcMD5 {
+	// 	pipline.Get(cont, k)
+	// }
+	// res, err = pipline.Exec(cont)
+	// if err != nil {
+	// 	ret.Code = 1 // 失败
+	// 	for _, v := range res {
+	// 		if v.Err() != nil {
+	// 			logger.Infof("SrvPushExcel  update redis file:%s", v.Args()[1].(string))
+	// 		}
+	// 	}
+	// 	return s.GenJsonRet(ret)
+	// }
+	// for _, item := range res {
+	// 	cmdRes, _ := item.(*redis.StringCmd)
+	// 	key := item.Args()[1].(string)
+	// 	if m, ok := srcMD5[key]; ok {
+	// 		tempByte, _ := cmdRes.Bytes()
+	// 		if utils.MD5(tempByte) != m {
+	// 			ret.Code = 1 // 失败
+	// 			logger.Infof("SrvPushExcel  update redis file:%s", key)
+	// 		}
+	// 	} else {
+	// 		ret.Code = 1 // 失败
+	// 	}
+	// }
 	return s.GenJsonRet(ret)
 }
 

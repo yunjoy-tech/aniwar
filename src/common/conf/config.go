@@ -38,7 +38,7 @@ func LoadConf(path string) error {
 		return err
 	}
 
-	err = yaml.Unmarshal(data, &gConf)
+	err = yaml.Unmarshal(data, gConf)
 	if err != nil {
 		return err
 	}

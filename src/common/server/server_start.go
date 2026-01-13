@@ -47,7 +47,7 @@ func (s *Server) Start() error {
 		return err
 	}
 
-	s.InitConfigCenter()
+	// s.InitConfigCenter()
 
 	if err := s.OnPostInit(); err != nil {
 		return err

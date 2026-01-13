@@ -4,30 +4,30 @@ import (
 	"flag"
 	"fmt"
 	"gitee.com/aniwar2/aniwar/src/common/actor/stub"
-	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/musae/errorx"
 	"gitee.com/aniwar2/musae/global"
 	"os"
-	"strconv"
 	"strings"
 	"time"
 )
 
 // 运行参数定义
 var (
-	ArgConfig    string // 配置文件
-	ArgAppId     string // app id
-	ArgActor     string // 注册的actor类型
-	ArgInAddr    string // 服务监听端口
-	ArgOutAddr   string // 服务对外监听端口, 服务面向用户监听, login, gate, idip
-	ArgWebAddr   string // web服务对外监听端口, idip, bill
-	ArgGrpcPort  string // dapr监听的 gRPC 端口
-	ArgPprofAddr string // pprof监听的端口
-	ArgDev       int    // 是否开发环境
+	ArgConfig       string // 配置文件
+	ArgConfigCenter string // 远程配置中心
+	ArgAppId        string // app id
+	ArgActor        string // 注册的actor类型
+	ArgInAddr       string // 服务监听端口
+	ArgOutAddr      string // 服务对外监听端口, 服务面向用户监听, login, gate, idip
+	ArgWebAddr      string // web服务对外监听端口, idip, bill
+	ArgGrpcPort     string // dapr监听的 gRPC 端口
+	ArgPprofAddr    string // pprof监听的端口
+	ArgDev          int    // 是否开发环境
 )
 
 func init() {
 	flag.StringVar(&ArgConfig, "config", "", "server config file path")
+	flag.StringVar(&ArgConfigCenter, "config-center", "", "server config center file path")
 	flag.StringVar(&ArgAppId, "app-id", "", "server app id")
 	flag.StringVar(&ArgActor, "actor", "", "actor server register actor type")
 	flag.StringVar(&ArgInAddr, "in-addr", "", "server in port")
@@ -48,12 +48,6 @@ func (s *Server) AnalysisArgs() {
 		fmt.Printf("运行参数: %s = %s\n", f.Name, f.Value.String())
 		s.Args[f.Name] = f.Value.String()
 	})
-
-	// TODO 待删除
-	// global.RdsCfgCenterHost = s.Args["rdscfghost"]
-	// global.RdsCfgCenterPass = s.Args["rdscfgpass"]
-	// global.RdsCfgNameSpace = s.Args["rdscfgns"]
-	// global.RdsCfgGroup = s.Args["rdscfggroup"]
 }
 
 // 初始化运行参数，包括server层的参数和框架层的参数
@@ -70,18 +64,19 @@ func (s *Server) InitRunArgs() error {
 		global.HostName = global.AppID
 	}
 	fmt.Println("hostname:", global.HostName)
-	if conf.Base().Cloud {
-		ids := strings.Split(global.HostName, "-")
-		if len(ids) == 2 {
-			id, err := strconv.Atoi(ids[1])
-			if err != nil {
-				fmt.Printf("hostname error: %+v\n", err)
-			}
-			global.SID = int64(id)
-		}
-	} else {
-		global.SID = 0
-	}
+	// TODO 初始化报错
+	// if conf.Base().Cloud {
+	// 	ids := strings.Split(global.HostName, "-")
+	// 	if len(ids) == 2 {
+	// 		id, err := strconv.Atoi(ids[1])
+	// 		if err != nil {
+	// 			fmt.Printf("hostname error: %+v\n", err)
+	// 		}
+	// 		global.SID = int64(id)
+	// 	}
+	// } else {
+	// 	global.SID = 0
+	// }
 
 	// 注册server层的参数
 	s.AppId = global.AppID

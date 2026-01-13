@@ -714,7 +714,7 @@ func (s *IDIPServer) SetServerCurVersion(apiData []byte) []byte {
 		logger.Errorf("Unmarshal fail apiData:%s error:%+v", string(apiData), err)
 	}
 	logger.Debugf("InsideGMT SetClientMinVersion, Req: %s", utils.PrettyJson(req))
-	s.Server.RedisCenter.Set(context.Background(), "cfg:version:server", req.Version, -1)
+	// s.Server.RedisCenter.Set(context.Background(), "cfg:version:server", req.Version, -1)
 	return s.GenRet("success")
 }
 

@@ -73,6 +73,7 @@ set BIN_PATH=.\output\bin\win
 set COMPONENT_PATH=.\output\cfg\component
 set DAPR_CONFIG=.\output\cfg\dapr-config.yaml
 set SERVER_CONFIG=.\output\res\server.yaml
+set CONFIG_CENTER=.\output\res\config-center.yaml
 
 set ACTORS="UserActor|RoomActor|AllianceActor|CenterActor|MailActor"
 
@@ -134,8 +135,8 @@ ENDLOCAL
     -P http -p %ACTOR_APP_PORT% --dapr-http-port %ACTOR_HTTP_PORT% --dapr-grpc-port %ACTOR_GRPC_PORT% ^
     --dapr-http-read-buffer-size 4096 --log-level debug -d %COMPONENT_PATH% ^
     -- ^
-    %BIN_PATH%\actorserver.exe --config=%SERVER_CONFIG% --app-id=%ACTOR_APPID% --actor=%ACTORS% --in-addr=%ACTOR_APP_PORT% ^
-    --grpc-port=%ACTOR_GRPC_PORT% --pprof-addr=%ACTOR_PPROF_PORT% --dev=1
+    %BIN_PATH%\actorserver.exe --config %SERVER_CONFIG% --config-center %CONFIG_CENTER% --app-id %ACTOR_APPID% --actor %ACTORS% ^
+    --in-addr %ACTOR_APP_PORT% --grpc-port %ACTOR_GRPC_PORT% --pprof-addr %ACTOR_PPROF_PORT% --dev 1
    )
 
 :: ****************** login ******************

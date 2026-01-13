@@ -61,20 +61,21 @@ func (s *IDIPServer) GetExcelExpired(apiData []byte) []byte {
 }
 
 func (s *IDIPServer) GetAniwarExcel(req *GetExcelList) []string {
-	key := fmt.Sprintf("%s:%s:aniwar:%s:fileList", req.NameSpace, req.Group, req.Version)
-	listString, err := s.Server.RedisCenter.Get(context.Background(), key).Result()
-	ping := s.Server.RedisCenter.Ping(context.Background())
-	fmt.Println("ping:", ping.String())
-	if err != nil {
+	// key := fmt.Sprintf("%s:%s:aniwar:%s:fileList", req.NameSpace, req.Group, req.Version)
+	// listString, err := s.Server.RedisCenter.Get(context.Background(), key).Result()
+	// ping := s.Server.RedisCenter.Ping(context.Background())
+	// fmt.Println("ping:", ping.String())
+	// if err != nil {
+	//
+	// }
+	// lists := strings.Split(listString, "|")
+	// fileNames := make([]string, 0)
+	// for _, fileName := range lists {
+	// 	fileNames = append(fileNames, fileName)
+	// }
 
-	}
-	lists := strings.Split(listString, "|")
-	fileNames := make([]string, 0)
-	for _, fileName := range lists {
-		fileNames = append(fileNames, fileName)
-	}
-
-	return fileNames
+	// return fileNames
+	return []string{}
 }
 
 func (s *IDIPServer) GetBattleServerExcel(version string) []string {
