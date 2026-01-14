@@ -2,6 +2,7 @@ package taptap
 
 import (
 	"encoding/json"
+	"gitee.com/aniwar2/musae/baseconf"
 	"gitee.com/aniwar2/musae/statistics"
 	"gitee.com/aniwar2/musae/utils"
 	"strconv"
@@ -238,7 +239,7 @@ func DbFailComm(key, db, typeC, serverName string) {
 
 // login网络延迟
 func LoginDelayComm(uid string, tapUser *pb.TaptapUserInfo, device *pb.CliDeviceInfo, msgId int32, delay int64) {
-	if delay < conf.Base().DelayLogLimit {
+	if delay < baseconf.GetLogConf().DelayLogLimit {
 		return
 	}
 	utils.SafeRunNoError(func() {
@@ -253,7 +254,7 @@ func LoginDelayComm(uid string, tapUser *pb.TaptapUserInfo, device *pb.CliDevice
 
 // gate网络延迟
 func GateDelayComm(uid string, tapUser *pb.TaptapUserInfo, device *pb.CliDeviceInfo, msgId int32, delay int64) {
-	if delay < conf.Base().DelayLogLimit {
+	if delay < baseconf.GetLogConf().DelayLogLimit {
 		return
 	}
 	utils.SafeRunNoError(func() {

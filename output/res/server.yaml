@@ -73,8 +73,6 @@ BaseConf:
     - 10110202
   # 1:开启防重放, 0:关闭【支持热重载】
   useReqIdx: 1
-  # 耗时收集日志阈值【支持热重载】
-  delayLogLimit: 100
   # UserActor gc扫描间隔, m:分钟, s:秒
   userActorGCScan: 10s
   # UserActor 空闲超时gc, 单位:秒【支持热重载】
@@ -97,25 +95,6 @@ BaseConf:
     maxRetryBackoff: 100
     poolSize: 15
     minIdleConns: 1
-  LogConf:
-    # 日志输出等级[debug/info/warn/error/panic/fatal]
-    level: debug
-    # 日志输出目录
-    dir: log
-    # 日志切割类型(0=按大小，1=按时间)
-    cutType: 1
-    # 时间切割间隔（单位：分钟）
-    rotationTime: 1440
-    # 在进行切割之前，日志文件的最大大小（以 MB 为单位）
-    maxSize: 1024
-    # 保留旧文件的最大个数
-    maxBackups: 100
-    # 保留旧文件的最大天数
-    maxAges: 30
-    # 是否压缩/归档旧文件
-    compress: false
-    # 是否开启批量缓冲写
-    bufferWrite: false
   # redis配置中心key
   cfgKeys:
     - 'cfg:server:opentime'

@@ -6,6 +6,7 @@ import (
 	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"gitee.com/aniwar2/musae/base"
+	"gitee.com/aniwar2/musae/baseconf"
 	"gitee.com/aniwar2/musae/gamelib/guid"
 	"gitee.com/aniwar2/musae/global"
 	"gitee.com/aniwar2/musae/logger"
@@ -51,7 +52,7 @@ func (s *Server) BasicInfo() string {
 	sb.WriteString(fmt.Sprintf("%-13s: %d\n", "AllianceActor", global.AllianceActorCount))
 	sb.WriteString(fmt.Sprintf("%-13s: %s\n", "ConfFile", s.Args["config"]))
 	sb.WriteString(fmt.Sprintf("%-13s: %s\n", "PrivateTopic", s.PrivateTopicID()))
-	sb.WriteString(fmt.Sprintf("%-13s: %s\n", "LogDir", conf.Base().LogConf.Dir))
+	sb.WriteString(fmt.Sprintf("%-13s: %s\n", "LogDir", baseconf.GetLogConf().Dir))
 	sb.WriteString(fmt.Sprintf("%-13s: %s\n", "PProfAddr", s.PProfAddr))
 	sb.WriteString(fmt.Sprintf("%-13s: %s\n", "StartTime", time.Unix(global.StartTime, 0).Format("2006-01-02 15:04:05.000 -0700 MST")))
 	sb.WriteString(fmt.Sprintf("%-13s: %s\n", "updateAddrARD", conf.SrvAddr().UpdateAddrARD))

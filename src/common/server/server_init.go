@@ -20,18 +20,18 @@ func (s *Server) Init() error {
 	}()
 	// 解析运行参数
 	s.AnalysisArgs()
-	// 初始化运行参数
-	if err := s.InitRunArgs(); err != nil {
+	// 初始化日志输出 TODO 优化错误处理
+	if err := s.InitLog(s.Args["log"]); err != nil {
+		return err
+	}
+	// 初始化服务相关参数
+	if err := s.InitServerArgs(); err != nil {
 		return err
 	}
 	// 初始化远程配置中心
 	s.InitApolloConfigCenter(s.Args["config-center"])
 	// 加载程序配置文件
 	if err := s.LoadConf(); err != nil {
-		return err
-	}
-	// 初始化日志输出
-	if err := s.InitLog(); err != nil {
 		return err
 	}
 

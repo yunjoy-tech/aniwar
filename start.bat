@@ -74,6 +74,7 @@ set COMPONENT_PATH=.\output\cfg\component
 set DAPR_CONFIG=.\output\cfg\dapr-config.yaml
 set SERVER_CONFIG=.\output\res\server.yaml
 set CONFIG_CENTER=.\output\res\config-center.yaml
+set LOG_CONFIG=.\output\res\log.yaml
 
 set ACTORS="UserActor|RoomActor|AllianceActor|CenterActor|MailActor"
 
@@ -116,7 +117,7 @@ if %Debug% EQU  "l" (
     --dapr-http-read-buffer-size 4096 --log-level debug -d %COMPONENT_PATH% ^
     -- ^
     %BIN_PATH%\lobbyserver.exe --config %SERVER_CONFIG% --app-id %LOBBY_APPID% --in-addr %LOBBY_APP_PORT% --grpc-port %LOBBY_GRPC_PORT% ^
-    --pprof-addr %LOBBY_PPROF_PORT% --dev 1
+    --pprof-addr %LOBBY_PPROF_PORT% --dev 1 --log %LOG_CONFIG%
    )
 :: TODO 简化传参，只需要传config和app-id
 :: ****************** actor ******************
@@ -136,7 +137,7 @@ ENDLOCAL
     --dapr-http-read-buffer-size 4096 --log-level debug -d %COMPONENT_PATH% ^
     -- ^
     %BIN_PATH%\actorserver.exe --config %SERVER_CONFIG% --config-center %CONFIG_CENTER% --app-id %ACTOR_APPID% --actor %ACTORS% ^
-    --in-addr %ACTOR_APP_PORT% --grpc-port %ACTOR_GRPC_PORT% --pprof-addr %ACTOR_PPROF_PORT% --dev 1
+    --in-addr %ACTOR_APP_PORT% --grpc-port %ACTOR_GRPC_PORT% --pprof-addr %ACTOR_PPROF_PORT% --dev 1 --log %LOG_CONFIG%
    )
 
 :: ****************** login ******************
@@ -154,7 +155,7 @@ if %Debug% EQU  "lo" (
     --dapr-http-read-buffer-size 4096 --log-level debug -d %COMPONENT_PATH% ^
     -- ^
     %BIN_PATH%\loginserver.exe --config %SERVER_CONFIG% --app-id %LOGIN_APPID% --in-addr %LOGIN_APP_PORT% --out-addr %LOGIN_OUT_PORT% ^
-    --grpc-port %LOGIN_GRPC_PORT% --pprof-addr %LOGIN_PPROF_PORT% --dev 1
+    --grpc-port %LOGIN_GRPC_PORT% --pprof-addr %LOGIN_PPROF_PORT% --dev 1 --log %LOG_CONFIG%
    )
 
 :: ****************** gate ******************
@@ -173,7 +174,7 @@ if %Debug% EQU  "g" (
    --dapr-http-read-buffer-size 4096 --log-level debug -d %COMPONENT_PATH% ^
    -- ^
    %BIN_PATH%\gateserver.exe --config %SERVER_CONFIG% --app-id %GATE_APPID% --in-addr %GATE_APP_PORT% --out-addr %GATE_OUT_PORT% ^
-   --grpc-port %GATE_GRPC_PORT% --pprof-addr %GATE_PPROF_PORT% --dev 1
+   --grpc-port %GATE_GRPC_PORT% --pprof-addr %GATE_PPROF_PORT% --dev 1 --log %LOG_CONFIG%
    )
 
 :: ****************** bill ******************
@@ -192,7 +193,7 @@ if %Debug% EQU  "b" (
    --dapr-http-read-buffer-size 4096 --log-level debug -d %COMPONENT_PATH% ^
    -- ^
    %BIN_PATH%\billserver.exe --config %SERVER_CONFIG% --app-id %BILL_APPID% --in-addr %BILL_APP_PORT% --grpc-port %BILL_GRPC_PORT% ^
-   --web-addr 18001 --pprof-addr %BILL_PPROF_PORT% --dev 1
+   --web-addr 18001 --pprof-addr %BILL_PPROF_PORT% --dev 1 --log %LOG_CONFIG%
    )
 
 :: ****************** idip ******************
@@ -210,7 +211,7 @@ if %Debug% EQU  "i" (
    -P %PROTOCOL% -p %IDIP_APP_PORT% --dapr-http-port %IDIP_HTTP_PORT% --dapr-grpc-port %IDIP_GRPC_PORT% --log-level debug -d %COMPONENT_PATH% ^
    -- ^
    %BIN_PATH%\idipserver.exe --config %SERVER_CONFIG% --app-id %IDIP_APPID% --in-addr %IDIP_APP_PORT% --grpc-port %IDIP_GRPC_PORT% --web-addr 19001 ^
-   --pprof-addr %IDIP_PPROF_PORT% --dev 1
+   --pprof-addr %IDIP_PPROF_PORT% --dev 1 --log %LOG_CONFIG%
    )
 
 :: ****************** guide ******************
@@ -228,7 +229,7 @@ if %Debug% EQU  "gu" (
    -P %PROTOCOL% -p %GUIDE_APP_PORT% --dapr-http-port %GUIDE_HTTP_PORT% --dapr-grpc-port %GUIDE_GRPC_PORT% --log-level debug -d %COMPONENT_PATH% ^
    -- ^
    %BIN_PATH%\guideserver.exe --config %SERVER_CONFIG% --app-id %GUIDE_APPID% --in-addr %GUIDE_APP_PORT% --grpc-port %GUIDE_GRPC_PORT% ^
-   --pprof-addr %GUIDE_PPROF_PORT% --dev 1
+   --pprof-addr %GUIDE_PPROF_PORT% --dev 1 --log %LOG_CONFIG%
    )
 
 rem start %MUSAE_APPID% %BIN_PATH%\dapr.exe run -a %MUSAE_APPID%  -P %PROTOCOL% -p 50009 --dapr-http-port 3509 -d %COMPONENT_PATH%  --log-level debug  %BIN_PATH%\musaectl.exe appid=%MUSAE_APPID%

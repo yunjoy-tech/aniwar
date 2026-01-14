@@ -6,6 +6,7 @@ import (
 	"gitee.com/aniwar2/aniwar/src/common/actor/stub"
 	"gitee.com/aniwar2/musae/errorx"
 	"gitee.com/aniwar2/musae/global"
+	"gitee.com/aniwar2/musae/logger"
 	"os"
 	"strings"
 	"time"
@@ -15,6 +16,7 @@ import (
 var (
 	ArgConfig       string // 配置文件
 	ArgConfigCenter string // 远程配置中心
+	ArgLogConfig    string // 日志配置文件
 	ArgAppId        string // app id
 	ArgActor        string // 注册的actor类型
 	ArgInAddr       string // 服务监听端口
@@ -28,6 +30,7 @@ var (
 func init() {
 	flag.StringVar(&ArgConfig, "config", "", "server config file path")
 	flag.StringVar(&ArgConfigCenter, "config-center", "", "server config center file path")
+	flag.StringVar(&ArgLogConfig, "log", "", "server log config file path")
 	flag.StringVar(&ArgAppId, "app-id", "", "server app id")
 	flag.StringVar(&ArgActor, "actor", "", "actor server register actor type")
 	flag.StringVar(&ArgInAddr, "in-addr", "", "server in port")
@@ -50,8 +53,8 @@ func (s *Server) AnalysisArgs() {
 	})
 }
 
-// 初始化运行参数，包括server层的参数和框架层的参数
-func (s *Server) InitRunArgs() error {
+// 初始化服务相关参数，包括server层的参数和框架层的参数
+func (s *Server) InitServerArgs() error {
 	// 注册框架层的参数（全局参数，server和musae都会使用到的参数）
 	global.AppID = s.Args["app-id"]
 	global.ROLLING_VERSION = s.Args["rollingVersion"] // TODO
@@ -63,7 +66,7 @@ func (s *Server) InitRunArgs() error {
 	if global.HostName == "" {
 		global.HostName = global.AppID
 	}
-	fmt.Println("hostname:", global.HostName)
+	logger.Debugf("hostname: %s", global.HostName)
 	// TODO 初始化报错
 	// if conf.Base().Cloud {
 	// 	ids := strings.Split(global.HostName, "-")
