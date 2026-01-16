@@ -25,9 +25,6 @@ type IDIPServer struct {
 
 func NewIDIPServer() base.IServer {
 	srv := &IDIPServer{}
-	srv.AppId = "idip"
-	srv.InAddr = ":29001"
-	srv.GRPCPort = "50001"
 	srv.HasPriTopic = true // 开启私有频道订阅
 	srv.OnPreInit = srv.OnPreInitHandler
 	srv.OnPostInit = srv.OnPostInitHandler

@@ -5,10 +5,6 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"os"
-	"strings"
-	"time"
-
 	"gitee.com/aniwar2/aniwar/src/common/actor/stub"
 	"gitee.com/aniwar2/aniwar/src/common/conf"
 	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
@@ -23,6 +19,9 @@ import (
 	"gitee.com/aniwar2/musae/utils"
 	"github.com/dapr/go-sdk/service/common"
 	"google.golang.org/protobuf/proto"
+	"os"
+	"strings"
+	"time"
 )
 
 type Msg struct {
@@ -46,10 +45,6 @@ type LoginServer struct {
 
 func NewLoginServer() base.IServer {
 	srv := &LoginServer{}
-	srv.AppId = "login"
-	srv.InAddr = ":21001"
-	srv.GRPCPort = "50001"
-	srv.OutAddr = ":12001"
 	srv.HasPriTopic = true // 开启私有频道订阅
 	srv.OnPreInit = srv.OnPreInitHandler
 	srv.OnPostInit = srv.OnPostInitHandler

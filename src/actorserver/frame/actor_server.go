@@ -53,9 +53,6 @@ type ActorServer struct {
 
 func NewActorServer() base.IServer {
 	srv := &ActorServer{}
-	srv.AppId = "actor"
-	srv.InAddr = ":24001"
-	srv.GRPCPort = "50001"
 	srv.HasPriTopic = true // 开启私有频道订阅
 	srv.OnPreInit = srv.OnPreInitHandler
 	srv.OnPostInit = srv.OnPostInitHandler

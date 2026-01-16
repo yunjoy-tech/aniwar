@@ -26,9 +26,6 @@ type LobbyServer struct {
 
 func NewLobbyServer() base.IServer {
 	srv := &LobbyServer{}
-	srv.AppId = "lobby"
-	srv.InAddr = ":23001"
-	srv.GRPCPort = "50001"
 	srv.HasPriTopic = true // 开启私有频道订阅
 	srv.OnPreInit = srv.PreInit
 	srv.OnPostInit = srv.PostInit

@@ -28,9 +28,6 @@ type BillServer struct {
 
 func NewBillServer() base.IServer {
 	srv := &BillServer{}
-	srv.AppId = "bill"
-	srv.InAddr = ":28001"
-	srv.GRPCPort = "50001"
 	srv.HasPriTopic = true // 开启私有频道订阅
 	srv.OnPreInit = srv.OnPreInitHandler
 	srv.OnPostInit = srv.OnPostInitHandler

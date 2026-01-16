@@ -29,7 +29,7 @@ func (s *Server) Init() error {
 		return err
 	}
 	// 初始化远程配置中心
-	s.InitApolloConfigCenter(s.Args["config-center"])
+	s.InitApolloConfigCenter(s.Args["config-center"]) // TODO 增加监听，日志等自定义功能
 	// 加载程序配置文件
 	if err := s.LoadConf(); err != nil {
 		return err

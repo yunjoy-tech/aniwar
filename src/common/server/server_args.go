@@ -24,7 +24,6 @@ var (
 	ArgWebAddr      string // web服务对外监听端口, idip, bill
 	ArgGrpcPort     string // dapr监听的 gRPC 端口
 	ArgPprofAddr    string // pprof监听的端口
-	ArgDev          int    // 是否开发环境
 )
 
 func init() {
@@ -38,7 +37,6 @@ func init() {
 	flag.StringVar(&ArgWebAddr, "web-addr", "", "server web port")
 	flag.StringVar(&ArgGrpcPort, "grpc-port", "", "dapr server register grpc port")
 	flag.StringVar(&ArgPprofAddr, "pprof-addr", "", "server pprof register port")
-	flag.IntVar(&ArgDev, "dev", 0, "server run mode")
 }
 
 // 运行参数解析
@@ -89,9 +87,10 @@ func (s *Server) InitServerArgs() error {
 	s.GRPCPort = s.Args["grpc-port"]
 	s.PProfAddr = fmt.Sprintf("0.0.0.0:%s", s.Args["pprof-addr"])
 
-	if !IsValidAppId(s.AppId) {
-		return errorx.Newf("app-id error: %s", s.AppId)
-	}
+	// TODO 可以不检测
+	// if !IsValidAppId(s.AppId) {
+	// 	return errorx.Newf("app-id error: %s", s.AppId)
+	// }
 
 	if s.AppId == ACTOR_SVC || s.AppId == CENTER_SVC {
 		actors := strings.Split(s.Args["actor"], "|")

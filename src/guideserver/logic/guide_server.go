@@ -21,9 +21,6 @@ type GuideServer struct {
 
 func NewGuideServer() base.IServer {
 	srv := &GuideServer{}
-	srv.AppId = "guide"
-	srv.InAddr = ":20001"
-	srv.GRPCPort = "50001"
 	srv.HasPriTopic = true // 开启私有频道订阅
 	srv.OnPreInit = srv.OnPreInitHandler
 	srv.OnPostInit = srv.OnPostInitHandler

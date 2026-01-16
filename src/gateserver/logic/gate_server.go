@@ -36,10 +36,6 @@ var DeprecatedMsgId sync.Map // 废弃消息id
 
 func NewGateServer() base.IServer {
 	srv := &GateServer{}
-	srv.AppId = "gate"
-	srv.InAddr = ":22001"
-	srv.GRPCPort = "50001"
-	srv.OutAddr = ":13001"
 	srv.HasPriTopic = true // 开启私有频道订阅
 	srv.OnPreInit = srv.OnPreInitHandler
 	srv.OnPostInit = srv.OnPostInitHandler
