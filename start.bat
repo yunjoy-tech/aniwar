@@ -83,19 +83,22 @@ set RDSCFGPASS=123456
 set RDSCFGNS=cn
 set RDSCFGGROUP=pob
 
-wmic process where (name="consul.exe") get ProcessId | find /i "ProcessId" >nul 2>&1
-if %ERRORLEVEL% neq 0 (
-    echo "result:"%ERRORLEVEL%
-    start "consul" /min %BIN_PATH%\consul.exe agent -dev -ui -client 0.0.0.0
-    ping 127.0.0.1 -n 10
-)
-
-wmic process where (name="placement.exe") get ProcessId | find /i "ProcessId" >nul 2>&1
-if %ERRORLEVEL% neq 0 (
-    echo "result:"%ERRORLEVEL%
-   start "placement" /min %BIN_PATH%\placement.exe -port 6050 -metrics-port 9091
-    ping 127.0.0.1 -n 5
-)
+:: ============================================================
+:: Consul 和 Placement 已改为 Docker 方式启动，请先运行 start-consul-placement.bat
+:: ============================================================
+:: wmic process where (name="consul.exe") get ProcessId | find /i "ProcessId" >nul 2>&1
+:: if %ERRORLEVEL% neq 0 (
+::     echo "result:"%ERRORLEVEL%
+::     start "consul" /min %BIN_PATH%\consul.exe agent -dev -ui -client 0.0.0.0
+::     ping 127.0.0.1 -n 10
+:: )
+::
+:: wmic process where (name="placement.exe") get ProcessId | find /i "ProcessId" >nul 2>&1
+:: if %ERRORLEVEL% neq 0 (
+::     echo "result:"%ERRORLEVEL%
+::    start "placement" /min %BIN_PATH%\placement.exe -port 6050 -metrics-port 9091
+::     ping 127.0.0.1 -n 5
+:: )
 
 :: start "filebeat" /min ./output/bin/win/filebeat.exe -e -c ./output/cfg/filebeat.yml --path.data  ./filebeat --path.home ./ --path.logs ./log
 :: start "filebeat-prom" /min ./output/bin/win/filebeat-prom.exe -e -c ./output/cfg/filebeat-prom.yml --path.data  ./filebeat-prom --path.home ./ --path.logs ./log/mlog/*
