@@ -23,7 +23,10 @@ make stop             # Stop services
 
 ### Linting
 ```bash
-make lint             # Run golangci-lint (requires ./golangci-lint binary)
+# Download golangci-lint binary to project root (version must match .golangci.yml's go version)
+curl -sSfL https://raw.githubusercontent.com/golangci-lint/golangci-lint/master/install.sh | sh -s -- -b . v1.57.2
+
+make lint             # Run golangci-lint
 ```
 
 ### Other Commands
@@ -87,6 +90,11 @@ Services are started via `dapr.exe run` wrapper with:
 - Requires `./golangci-lint` binary in project root
 
 ### Testing/Profiling
+```bash
+go test ./src/... -run TestFuncName    # Run single test
+go test ./src/... -v                   # Verbose output
+go test ./src/... -count=1             # Disable cache
+```
 - Pprof available on ports 20004-29004
 - Debug mode: `start.bat d` starts daprd with gRPC port 50001 for IDE attachment
 - Statsviz available for real-time metrics
@@ -105,7 +113,13 @@ Services are started via `dapr.exe run` wrapper with:
 
 ### Proto Definitions
 - Located at `src/proto/protocol/`
-- Use `go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.28.0` for protoc tools
+```bash
+# Install protoc tools
+go install google.golang.org/protobuf/cmd/protoc-gen-go@v1.28.0
+go install google.golang.org/grpc/cmd/protoc-gen-go-grpc@latest
+
+make proto            # Pull latest proto definitions
+```
 
 ---
 
@@ -124,15 +138,21 @@ make mod  # Pulls latest musae, runs go mod tidy/vendor
 ```
 
 ### Debugging
-- Use `start.bat a` for actor server debug (daprd runs independently)
-- Use `start.bat l` for lobby server debug
-- Use `start.bat lo` for login server debug
-- Use `start.bat g` for gate server debug
-- Use `start.bat b` for bill server debug
-- Use `start.bat i` for idip server debug
-- Use `start.bat gu` for guide server debug
+Debug mode starts daprd separately with gRPC port 50001 for IDE attachment.
 
-Debug mode sets gRPC port to 50001 for IDE attach.
+| Command | Service | IDE Launch Config Example |
+|---------|---------|--------------------------|
+| `start.bat a` | actor | `appid=actor actor=user inaddr=24001 gport=50001` |
+| `start.bat l` | lobby | `appid=lobby inaddr=23001 gport=50001` |
+| `start.bat lo` | login | `appid=login inaddr=21001 gport=50001` |
+| `start.bat g` | gate | `appid=gate9999 outaddr=13001 inaddr=22001 gport=50001` |
+| `start.bat b` | bill | `appid=bill inaddr=28001 gport=50001` |
+| `start.bat i` | idip | `appid=idip inaddr=29001 gport=50001` |
+| `start.bat gu` | guide | `appid=guide inaddr=20001 gport=50001` |
+
+### Infrastructure Ports
+- Consul UI: `http://localhost:8500`
+- Dapr Placement: `port 6050`
 
 ---
 
