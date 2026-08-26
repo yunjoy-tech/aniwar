@@ -1,9 +1,9 @@
 package common
 
 import (
+	"errors"
 	"fmt"
 
-	"github.com/pkg/errors"
 	"github.com/yunjoy-tech/aniwar/src/common/utils"
 
 	"github.com/yunjoy-tech/aniwar/src/proto/pb"

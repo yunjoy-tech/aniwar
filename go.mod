@@ -10,7 +10,6 @@ require (
 	github.com/forgoer/openssl v1.4.0
 	github.com/gin-gonic/gin v1.8.1
 	github.com/go-redis/redis/v8 v8.11.5
-	github.com/pkg/errors v0.9.1
 	github.com/samber/lo v1.38.1
 	github.com/xuri/excelize/v2 v2.7.0
 	github.com/yunjoy-tech/musae v1.0.0
@@ -48,6 +47,7 @@ require (
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/mohae/deepcopy v0.0.0-20170929034955-c48cc78d4826 // indirect
 	github.com/pelletier/go-toml/v2 v2.2.4 // indirect
+	github.com/pkg/errors v0.9.1 // indirect
 	github.com/prometheus/client_golang v1.12.2 // indirect
 	github.com/prometheus/client_model v0.2.0 // indirect
 	github.com/prometheus/common v0.35.0 // indirect

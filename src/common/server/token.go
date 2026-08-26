@@ -1,12 +1,12 @@
 package server
 
 import (
-	"github.com/yunjoy-tech/musae/errorx"
+	"errors"
 )
 
 func (s *Server) GetToken(uid string) (string, error) {
 	if uid == "" {
-		return "", errorx.New("uid is empty")
+		return "", errors.New("uid is empty")
 	}
 
 	userSession, err, _ := s.GetUserSession(uid)

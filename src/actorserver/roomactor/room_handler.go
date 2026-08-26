@@ -16,7 +16,7 @@ import (
 
 	"github.com/forgoer/openssl"
 
-	"github.com/pkg/errors"
+	"errors"
 
 	"github.com/yunjoy-tech/aniwar/src/common"
 	"github.com/yunjoy-tech/aniwar/src/common/db"
@@ -740,7 +740,7 @@ func (h *RoomHandler) doExitRoom(playerUid string, reason pb.ExitRoomReason) {
 	// 推送被踢消息
 	err = h.pushExitRoomNtf(playerUid, reason)
 	if err != nil {
-		_ = errors.Wrapf(err, "被提玩家已经不在房间里了, playerUid=%s", playerUid)
+		_ = fmt.Errorf("被提玩家已经不在房间里了, playerUid=%s: %w", playerUid, err)
 		h.Debug(err.Error())
 	}
 	h.Infof("玩家 %s 由于 %v 退出房间了", playerUid, reason)
@@ -892,7 +892,7 @@ func (h *RoomHandler) doRecruit(opt pb.RoomRecruitStateOpt) (error, pb.ErrorCode
 	case pb.RoomRecruitStateOpt_rrs_opt_cancel:
 		h.actor.Data.IsRecruit = 0
 	default:
-		err := errors.Errorf("无效的操作类型, opt:%v", opt)
+		err := fmt.Errorf("无效的操作类型, opt:%v", opt)
 		h.Errorf(err.Error())
 		return err, pb.ErrorCode_InvalidParam
 	}

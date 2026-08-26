@@ -12,7 +12,7 @@ import (
 	"time"
 	"unicode/utf8"
 
-	"github.com/pkg/errors"
+	"errors"
 	"github.com/yunjoy-tech/aniwar/src/common/db"
 	"github.com/yunjoy-tech/aniwar/src/proto/pb"
 	"github.com/yunjoy-tech/musae/base"

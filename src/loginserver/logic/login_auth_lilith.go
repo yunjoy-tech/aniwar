@@ -2,12 +2,11 @@ package logic
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
 	"strings"
-
-	"github.com/pkg/errors"
 
 	"github.com/yunjoy-tech/aniwar/src/idipserver/logic"
 
@@ -67,7 +66,7 @@ func (s *LoginServer) handleAuthLilith(appUid int, appToken string) (*LilithLogi
 	resp := &LilithLoginResp{}
 	err = json.Unmarshal(body, resp)
 	if err != nil {
-		err = errors.Wrap(err, "验证结果失败")
+		err = fmt.Errorf("验证结果失败: %w", err)
 		logger.Errorf(err.Error())
 		return nil, pb.ErrorCode_Account_auth_fail
 	}

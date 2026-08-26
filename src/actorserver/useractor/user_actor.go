@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/dapr/go-sdk/actor"
-	"github.com/pkg/errors"
+	"errors"
 	"github.com/yunjoy-tech/aniwar/src/actorserver/frame"
 	"github.com/yunjoy-tech/aniwar/src/common"
 	"github.com/yunjoy-tech/aniwar/src/common/actor/stub"
@@ -188,7 +188,7 @@ func (u *UserActor) Activate(invokeName string) error {
 		bTrue, err = u.GetStateManager().Contains(db.KeyAccountInfo(u.uid))
 		if err != nil && !errors.Is(err, service.DB_ERROR_NOT_EXIST) {
 			u.Errorf("u.GetStateManager().Contains,key:%s, err:%+v", db.KeyAccountInfo(u.uid), err)
-			return errors.Wrapf(err, "account %s nil", u.uid)
+			return fmt.Errorf("account %s nil: %w", u.uid, err)
 		}
 		// 1.判断角色是否已创建
 		bTrue, err = u.GetStateManager().Contains(db.KeyUserBaseInfo(u.ID()))

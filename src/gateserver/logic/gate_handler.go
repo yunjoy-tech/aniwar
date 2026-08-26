@@ -8,14 +8,13 @@ import (
 	"sync"
 	"time"
 
-	"github.com/pkg/errors"
+	"errors"
 
 	"github.com/yunjoy-tech/aniwar/src/common/db"
 	"github.com/yunjoy-tech/aniwar/src/common/rsa"
 
 	"github.com/yunjoy-tech/aniwar/src/proto/pb"
 	"github.com/yunjoy-tech/musae/base"
-	"github.com/yunjoy-tech/musae/errorx"
 	"github.com/yunjoy-tech/musae/logger"
 	"github.com/yunjoy-tech/musae/metrics"
 	"github.com/yunjoy-tech/musae/tcpx"
@@ -250,7 +249,7 @@ func (s *GateServer) HandleRsa(c *tcpx.Context, messageID int32, data []byte) ([
 	)
 	err = base.UnmarshalData(data, &req)
 	if err != nil {
-		logger.Warn(errorx.Wrap(err, "").Error())
+		logger.Warn(fmt.Errorf(": %w", err).Error())
 		return nil, "", err
 	}
 	logger.Debugf("HandleRsa req: %v", &req)
@@ -272,7 +271,7 @@ func (s *GateServer) HandleRsa(c *tcpx.Context, messageID int32, data []byte) ([
 	b, err := proto.Marshal(res)
 	if err != nil {
 		logger.Debugf(err.Error())
-		return nil, "", fmt.Errorf("OnNetMessage Reply proto.Marshal, error:%v", errorx.Wrap(err, "").Error())
+		return nil, "", fmt.Errorf("OnNetMessage Reply proto.Marshal, error:%v", fmt.Errorf(": %w", err).Error())
 	}
 	logger.Debugf("OnNetMessage HandleRsa %v %v %v", pb.Protocols(messageID), &req, res)
 	if c != nil {
@@ -280,7 +279,7 @@ func (s *GateServer) HandleRsa(c *tcpx.Context, messageID int32, data []byte) ([
 		err = c.ReplyWithBody(int32(pb.Protocols_PLS2C_RsaServerRandomRes), int32(pb.ErrorCode_Success), b)
 		if err != nil {
 			logger.Debugf(err.Error())
-			return nil, "", fmt.Errorf("OnNetMessage Reply ReplyWithBody, error:%v", errorx.Wrap(err, "").Error())
+			return nil, "", fmt.Errorf("OnNetMessage Reply ReplyWithBody, error:%v", fmt.Errorf(": %w", err).Error())
 		}
 
 		defer func() {
@@ -302,7 +301,7 @@ func (s *GateServer) HandleLoginGate(c *tcpx.Context, messageID int32, data []by
 	)
 	err = base.UnmarshalData(data, &req)
 	if err != nil {
-		logger.Warn(errorx.Wrap(err, "").Error())
+		logger.Warn(fmt.Errorf(": %w", err).Error())
 		return nil, err
 	}
 	logger.Debugf("LoginGateReq: %v", &req)
@@ -320,7 +319,7 @@ func (s *GateServer) HandleLoginGate(c *tcpx.Context, messageID int32, data []by
 	//	return nil, fmt.Errorf("HandleLoginGate GetSession, errCode:%v", pb.ErrorCode_TokenInvalid)
 	// }
 	if err, errCode = s.CheckToken(session, req.Token); err != nil {
-		err = errors.Wrap(err, fmt.Sprintf("HandleLoginGate CheckToken, errCode:%v", errCode))
+		err = fmt.Errorf("HandleLoginGate CheckToken, errCode:%v: %w", errCode, err)
 		return nil, err
 	}
 
@@ -330,7 +329,7 @@ func (s *GateServer) HandleLoginGate(c *tcpx.Context, messageID int32, data []by
 	b, err := proto.Marshal(res)
 	if err != nil {
 		logger.Debugf(err.Error())
-		return nil, fmt.Errorf("reply proto.Marshal, error:%v", errorx.Wrap(err, "").Error())
+		return nil, fmt.Errorf("reply proto.Marshal, error:%v", fmt.Errorf(": %w", err).Error())
 	}
 	logger.Debugf("HandleLoginGate %v %v %v", pb.Protocols(messageID), &req, res)
 
@@ -350,7 +349,7 @@ func (s *GateServer) HandleLoginGate(c *tcpx.Context, messageID int32, data []by
 		err = user.ReplyWithBody(int32(pb.Protocols_PG2C_LoginGateRes), 0, pb.ErrorCode_Success, b)
 		if err != nil {
 			logger.Debugf(err.Error())
-			return nil, fmt.Errorf("reply ReplyWithBody, error:%v", errorx.Wrap(err, "").Error())
+			return nil, fmt.Errorf("reply ReplyWithBody, error:%v", fmt.Errorf(": %w", err).Error())
 		}
 		if account, err := s.GetAccount(db.KeyAccountInfo(req.AccountId)); err == nil {
 			taptap.TcpEnterComm(req.AccountId, account.TapUserInfo, account.CliDeviceInfo)

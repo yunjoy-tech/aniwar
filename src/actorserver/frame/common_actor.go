@@ -3,15 +3,14 @@ package frame
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
-	"github.com/pkg/errors"
 	"github.com/yunjoy-tech/aniwar/src/common/conf"
 	"github.com/yunjoy-tech/aniwar/src/common/db"
 	"github.com/yunjoy-tech/aniwar/src/common/server"
 	"github.com/yunjoy-tech/aniwar/src/proto/pb"
 	"github.com/yunjoy-tech/musae/base"
 	"github.com/yunjoy-tech/musae/baseactor"
-	"github.com/yunjoy-tech/musae/errorx"
 	"github.com/yunjoy-tech/musae/logger"
 	"github.com/yunjoy-tech/musae/mtime"
 	"github.com/yunjoy-tech/musae/service"
@@ -145,7 +144,7 @@ func (s *CommonActor) Invoke(ctx context.Context, in *base.ProtoMsg) (msg *base.
 		if err := recover(); err != nil {
 			eStr := fmt.Sprintf("UserInvoke recover Msg:%+v %s %s err:%v", pb.Protocols(msgId), s.Str(), in.Str(), err)
 			msg.Data = []byte(eStr)
-			s.Error(errorx.Newf("UserInvoke recover error: %v", err))
+			s.Error(fmt.Errorf("UserInvoke recover error: %v", err))
 		}
 		delay := time.Since(now).Milliseconds()
 		logStr := fmt.Sprintf("===>>>UserInvoke Msg:%v Delay:%d UAID:%s MSG-RET:%s", pb.Protocols(msg.MsgId), delay, s.ID(), msg.Str())
@@ -267,7 +266,7 @@ func (s *CommonActor) GetCache(mongoDbName service.MongoDbType, key string, msg 
 // 写到redis缓存
 func (s *CommonActor) Cache2Redis(mongoDbType service.MongoDbType, uaid string, key string, value proto.Message) error {
 	if key == "" {
-		errors.Errorf("UserActor.CacheDelay got key is nil")
+		logger.Errorf("UserActor.CacheDelay got key is nil")
 		return nil
 	}
 

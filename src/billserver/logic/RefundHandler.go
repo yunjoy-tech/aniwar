@@ -2,26 +2,22 @@ package logic
 
 import (
 	"context"
+	"errors"
 	"fmt"
-	"github.com/yunjoy-tech/aniwar/src/common/sdkconstant/sdksign"
-	"github.com/yunjoy-tech/musae/gamelib/guid"
-	netutil "github.com/yunjoy-tech/musae/utils/net"
-
-	"github.com/dapr/go-sdk/service/common"
-	gameCommon "github.com/yunjoy-tech/aniwar/src/common"
-
-	"github.com/yunjoy-tech/musae/base"
-	"google.golang.org/protobuf/proto"
-
-	"github.com/yunjoy-tech/aniwar/src/proto/pb"
 
 	"github.com/yunjoy-tech/aniwar/src/common/com_order"
 	"github.com/yunjoy-tech/aniwar/src/common/conf"
-
-	"github.com/pkg/errors"
-	"github.com/yunjoy-tech/musae/logger"
-
+	"github.com/yunjoy-tech/aniwar/src/common/sdkconstant/sdksign"
 	"github.com/yunjoy-tech/aniwar/src/idipserver/logic"
+	"github.com/yunjoy-tech/aniwar/src/proto/pb"
+	"github.com/yunjoy-tech/musae/base"
+	"github.com/yunjoy-tech/musae/gamelib/guid"
+	"github.com/yunjoy-tech/musae/logger"
+	netutil "github.com/yunjoy-tech/musae/utils/net"
+	"google.golang.org/protobuf/proto"
+
+	"github.com/dapr/go-sdk/service/common"
+	gameCommon "github.com/yunjoy-tech/aniwar/src/common"
 )
 
 func (s *BillServer) RefundHandler(ctx context.Context, in *common.InvocationEvent) (out *common.Content, err error) {
@@ -64,7 +60,7 @@ func (s *BillServer) RefundHandler(ctx context.Context, in *common.InvocationEve
 
 	apiReq := com_order.ParseLilithRefundReq(argsMap)
 	if err != nil {
-		err = errors.Wrap(err, "解析参数失败")
+		err = fmt.Errorf("解析参数失败: %w", err)
 		logger.Errorf(err.Error())
 		return reply2Lilith(in, logic.FAIL), err
 	}
@@ -79,7 +75,7 @@ func (s *BillServer) RefundHandler(ctx context.Context, in *common.InvocationEve
 	// 透传参数
 	// cbiObj, err := com_order.ParsePayCbi(apiReq.Ext)
 	if err != nil {
-		err = errors.Wrap(err, fmt.Sprintf("解析透传参数失败, ext:%s", apiReq.Ext))
+		err = fmt.Errorf("解析透传参数失败, ext:%s: %w", apiReq.Ext, err)
 		logger.Errorf(err.Error())
 		return reply2Lilith(in, logic.FAIL), err
 	}
@@ -119,7 +115,7 @@ func (s *BillServer) RefundHandler(ctx context.Context, in *common.InvocationEve
 			OptVal:  fmt.Sprintf("%v %s", 365*24*3600*10, "异常退款"), // 封禁时长(秒)+封禁原因
 		})
 		if err != nil {
-			err = errors.Wrap(err, fmt.Sprintf("proto.Marshal got error"))
+			err = fmt.Errorf("proto.Marshal got error: %w", err)
 			logger.Errorf(err.Error())
 			return reply2Lilith(in, logic.FAIL), err
 		}
@@ -137,7 +133,7 @@ func (s *BillServer) RefundHandler(ctx context.Context, in *common.InvocationEve
 			Topic:        "",
 		})
 		if err != nil {
-			err = errors.Wrap(err, fmt.Sprintf("对:%s, 进行封号遇到错误", myUid))
+			err = fmt.Errorf("对:%s, 进行封号遇到错误: %w", myUid, err)
 			logger.Errorf(err.Error())
 			return reply2Lilith(in, logic.FAIL), err
 		}

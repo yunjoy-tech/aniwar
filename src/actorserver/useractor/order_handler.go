@@ -3,8 +3,10 @@ package useractor
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
-	"github.com/pkg/errors"
+	"time"
+
 	"github.com/yunjoy-tech/aniwar/src/common"
 	"github.com/yunjoy-tech/aniwar/src/common/com_order"
 	"github.com/yunjoy-tech/aniwar/src/common/conf"
@@ -20,7 +22,6 @@ import (
 	timeutil "github.com/yunjoy-tech/musae/utils/time"
 	"google.golang.org/protobuf/proto"
 	"strconv"
-	"time"
 )
 
 type OrderHandler struct {
@@ -176,7 +177,7 @@ func (h *OrderHandler) BillCallbackReq(ctx context.Context, in *base.ProtoMsg) (
 	sdkReq := &com_order.LilithPayCallbackReq{}
 	err = json.Unmarshal([]byte(req.SdkParamStr), sdkReq)
 	if err != nil {
-		err = errors.Wrap(err, fmt.Sprintf("解析sdk参数失败, ext:%s", req.SdkParamStr))
+		err = fmt.Errorf("解析sdk参数失败, ext:%s: %w", req.SdkParamStr, err)
 		logger.Errorf(err.Error())
 		return nil, err, int32(pb.ErrorCode_InternalError)
 	}
@@ -184,7 +185,7 @@ func (h *OrderHandler) BillCallbackReq(ctx context.Context, in *base.ProtoMsg) (
 	// 透传参数
 	cbiObj, err := com_order.ParsePayCbi(sdkReq.Ext)
 	if err != nil {
-		err = errors.Wrap(err, fmt.Sprintf("解析透传参数失败, ext:%s", sdkReq.Ext))
+		err = fmt.Errorf("解析透传参数失败, ext:%s: %w", sdkReq.Ext, err)
 		logger.Errorf(err.Error())
 		return nil, errors.New(fmt.Sprintf("解析透传参数失败:%s, %s", req.CpOrderId, sdkReq.Ext)), int32(pb.ErrorCode_Order_cbi_invalid)
 	}
@@ -214,7 +215,7 @@ func (h *OrderHandler) BillCallbackReq(ctx context.Context, in *base.ProtoMsg) (
 	// orders := &pb.OrderData{}
 	// _, err = s.LoadMongoDB(dbMongoType, dbKey, orders)
 	// if err != nil {
-	//	err = errors.Wrap(err, fmt.Sprintf("没有查找到订单信息, dbMongoType:%s, dbKey:%s", dbMongoType, dbKey))
+	//	err = fmt.Errorf(": %w", err)fmt.Sprintf("没有查找到订单信息, dbMongoType:%s, dbKey:%s", dbMongoType, dbKey))
 	//	logger.Errorf(err.Error())
 	//	return nil, err, int32(pb.ErrorCode_Invalid_order)
 	// }
@@ -511,7 +512,7 @@ func (h *OrderHandler) VirtualPay(cpOrderId string) {
 
 	err, errCode := h.paySendReward(order, pb.PaymentType_PaymentType_virtual_pay, "")
 	if err != nil {
-		err = errors.Wrap(err, fmt.Sprintf("errCode:%v", errCode))
+		err = fmt.Errorf("errCode:%v: %w", errCode, err)
 		h.Debugf(err.Error())
 		return
 	}

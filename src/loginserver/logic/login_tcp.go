@@ -3,9 +3,9 @@ package logic
 import (
 	"strconv"
 
+	"fmt"
 	"github.com/yunjoy-tech/aniwar/src/common/conf"
 	"github.com/yunjoy-tech/aniwar/src/proto/pb"
-	"github.com/yunjoy-tech/musae/errorx"
 	"github.com/yunjoy-tech/musae/logger"
 	"github.com/yunjoy-tech/musae/tcpx"
 )
@@ -14,21 +14,21 @@ func (s *LoginServer) OnTcp(c *tcpx.Context) {
 
 	messageID, e := tcpx.MessageIDOf(c.Stream)
 	if e != nil {
-		logger.Warn(errorx.Wrap(e, "").Error())
+		logger.Warn(fmt.Errorf(": %w", e).Error())
 		return
 	}
 	logger.Debug("OnTcp: ", c.ClientIP(), c.Network(), pb.Protocols(messageID), len(c.Stream), c.Stream)
 
 	data, err := tcpx.BodyBytesOf(c.Stream)
 	if err != nil {
-		logger.Warn("OnTcp BodyBytesOf", errorx.Wrap(err, "").Error())
+		logger.Warn("OnTcp BodyBytesOf", fmt.Errorf(": %w", err).Error())
 		return
 	}
 
 	dataLen := len(data)
 	// 包体大小限制
 	if dataLen > conf.Base().GateMsgMaxSize {
-		logger.Warn("OnTcp BodyBytesOf", errorx.Wrap(err, "").Error())
+		logger.Warn("OnTcp BodyBytesOf", fmt.Errorf(": %w", err).Error())
 		return
 	}
 

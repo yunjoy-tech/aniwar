@@ -3,20 +3,17 @@ package logic
 import (
 	"context"
 	"fmt"
-	"github.com/yunjoy-tech/aniwar/src/common/datalog/taptap"
-	"strings"
-	"time"
-
-	"github.com/yunjoy-tech/aniwar/src/common/conf"
-
 	"github.com/dapr/go-sdk/service/common"
 	"github.com/yunjoy-tech/aniwar/src/common/auth"
+	"github.com/yunjoy-tech/aniwar/src/common/conf"
+	"github.com/yunjoy-tech/aniwar/src/common/datalog/taptap"
 	"github.com/yunjoy-tech/aniwar/src/proto/pb"
 	"github.com/yunjoy-tech/musae/base"
-	"github.com/yunjoy-tech/musae/errorx"
 	"github.com/yunjoy-tech/musae/logger"
 	"github.com/yunjoy-tech/musae/metrics"
 	"github.com/yunjoy-tech/musae/tcpx"
+	"strings"
+	"time"
 )
 
 func (s *GateServer) OnHttp(ctx context.Context, in *common.InvocationEvent) (out *common.Content, err error) {
@@ -122,14 +119,14 @@ func (s *GateServer) HandlerGate(in *common.InvocationEvent, session *pb.UserSes
 	}
 	msgId, e := tcpx.MessageIDOf(data)
 	if e != nil {
-		logger.Warn(errorx.Wrap(e, "").Error())
+		logger.Warn(fmt.Errorf(": %w", e).Error())
 		return nil, pb.Protocols_Protocols_None, pb.ErrorCode_UnKnownMsg
 	}
 	logger.Debug("OnNetMessage: ", in.Request.RemoteAddr, msgId, len(data))
 
 	reqIdx, err := tcpx.ReqIndexOf(data)
 	if err != nil {
-		logger.Warn("OnNetMessage ReqIndexOf", errorx.Wrap(err, "").Error())
+		logger.Warn("OnNetMessage ReqIndexOf", fmt.Errorf(": %w", err).Error())
 		return nil, pb.Protocols_Protocols_None, pb.ErrorCode_UnKnownMsg
 	}
 	// logger.Infof(" c.GetReqIndex() : %d", reqIdx)

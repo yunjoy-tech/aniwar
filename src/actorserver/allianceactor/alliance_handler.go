@@ -4,7 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"github.com/pkg/errors"
+	"errors"
 	"github.com/yunjoy-tech/aniwar/src/common/db"
 	"github.com/yunjoy-tech/aniwar/src/common/gmeta"
 	"github.com/yunjoy-tech/aniwar/src/meta"

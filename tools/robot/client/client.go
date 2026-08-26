@@ -5,7 +5,8 @@ import (
 	"context"
 	"fmt"
 	"github.com/yunjoy-tech/aniwar/src/proto/pb"
-	"github.com/yunjoy-tech/musae/errorx"
+	"errors"
+	"fmt"
 	"github.com/yunjoy-tech/musae/tcpx"
 	"github.com/yunjoy-tech/musae/utils"
 	"google.golang.org/protobuf/proto"
@@ -343,11 +344,11 @@ func (c *Client) Pack(cmd pb.Protocols, src interface{}) ([]byte, error) {
 func (c *Client) Unpack(allData []byte, dest proto.Message) error {
 	body, err := tcpx.BodyBytesOf(allData)
 	if err != nil {
-		c.Warn("Unpack BodyBytesOf", errorx.Wrap(err, "").Error())
+		c.Warn("Unpack BodyBytesOf", fmt.Errorf(": %w", err).Error())
 	}
 	err = proto.Unmarshal(body, dest)
 	if err != nil {
-		c.Warn("Unpack Unmarshal", errorx.Wrap(err, "").Error())
+		c.Warn("Unpack Unmarshal", fmt.Errorf(": %w", err).Error())
 	}
 
 	return nil
@@ -442,7 +443,7 @@ func (c *Client) MsgHandler(bytes []byte) {
 	c.Debug("MsgHandler处理数据 :", len(bytes))
 	allData, err := tcpx.Decrypt(bytes, c.rsaVal)
 	if err != nil {
-		c.Warn("Unpack Decrypt", errorx.Wrap(err, "").Error())
+		c.Warn("Unpack Decrypt", fmt.Errorf(": %w", err).Error())
 		return
 	}
 

@@ -4,7 +4,6 @@ import (
 	"flag"
 	"fmt"
 	"github.com/yunjoy-tech/aniwar/src/common/actor/stub"
-	"github.com/yunjoy-tech/musae/errorx"
 	"github.com/yunjoy-tech/musae/global"
 	"github.com/yunjoy-tech/musae/logger"
 	"os"
@@ -89,7 +88,7 @@ func (s *Server) InitServerArgs() error {
 
 	// TODO 可以不检测
 	// if !IsValidAppId(s.AppId) {
-	// 	return errorx.Newf("app-id error: %s", s.AppId)
+	// 	return fmt.Errorf("app-id error: %s", s.AppId)
 	// }
 
 	if s.AppId == ACTOR_SVC || s.AppId == CENTER_SVC {
@@ -103,7 +102,7 @@ func (s *Server) InitServerArgs() error {
 				stub.MailActorType:
 				s.Actors = append(s.Actors, v)
 			default:
-				return errorx.Newf("unknown actor type: %s, actors:%+v", v, actors)
+				return fmt.Errorf("unknown actor type: %s, actors:%+v", v, actors)
 			}
 		}
 	}

@@ -3,11 +3,12 @@ package server
 import (
 	"context"
 	"encoding/json"
+	"errors"
+	"fmt"
 	dapr "github.com/dapr/go-sdk/client"
 	"github.com/yunjoy-tech/aniwar/src/common/conf"
 	"github.com/yunjoy-tech/aniwar/src/common/db"
 	"github.com/yunjoy-tech/aniwar/src/proto/pb"
-	"github.com/yunjoy-tech/musae/errorx"
 	"github.com/yunjoy-tech/musae/global"
 	"github.com/yunjoy-tech/musae/logger"
 	"github.com/yunjoy-tech/musae/metrics"
@@ -28,7 +29,7 @@ func (s *Server) SaveMongoGame(key string, table *state.KvTable, meta map[string
 	err = s.Service.SaveMongo(service.MongoDbType_MongoGame, key, table, meta, so...)
 	logger.WarnDelayf(time.Since(startT).Milliseconds(), "")
 
-	return errorx.WithStack(err)
+	return fmt.Errorf(": %w", err)
 }
 
 // GetMongoGame load from mongo game
@@ -41,7 +42,7 @@ func (s *Server) GetMongoGame(key string, meta map[string]string) (*state.KvTabl
 
 	kvTable, err = s.Service.GetMongo(service.MongoDbType_MongoGame, key, meta)
 	logger.WarnDelayf(time.Since(startT).Milliseconds(), "")
-	return kvTable, errorx.WithStack(err)
+	return kvTable, fmt.Errorf(": %w", err)
 }
 
 // SaveMongoMail save to mongo mail
@@ -81,7 +82,7 @@ func (s *Server) SaveMongoAccount(key string, table *state.KvTable, meta map[str
 	err = s.Service.SaveMongo(service.MongoDbType_MongoAccount, key, table, meta, so...)
 	logger.WarnDelayf(time.Since(startT).Milliseconds(), "")
 
-	return errorx.WithStack(err)
+	return fmt.Errorf(": %w", err)
 }
 
 // GetMongoAccount load from mongo account
@@ -95,7 +96,7 @@ func (s *Server) GetMongoAccount(key string, meta map[string]string) (*state.KvT
 	kvTable, err = s.Service.GetMongo(service.MongoDbType_MongoAccount, key, meta)
 	logger.WarnDelayf(time.Since(startT).Milliseconds(), "")
 
-	return kvTable, errorx.WithStack(err)
+	return kvTable, fmt.Errorf(": %w", err)
 }
 
 // SaveMongoGmt save to mongo gmt
@@ -267,7 +268,7 @@ func (s *Server) GetSystemMail(systemMail *pb.PSystemMailInfo) error {
 		systemMail.SystemMail = make(map[int64]*pb.PSysMailInfo)
 	}
 	if kvTable, err := s.GetMongoGame(db.KeySystemMail(), nil); err != nil {
-		if errorx.Is(err, service.DB_ERROR_NOT_EXIST) {
+		if errors.Is(err, service.DB_ERROR_NOT_EXIST) {
 			return nil // db中没有数据
 		} else {
 			return err

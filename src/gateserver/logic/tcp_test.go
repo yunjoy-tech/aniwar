@@ -3,7 +3,7 @@ package logic
 import (
 	"encoding/binary"
 	"fmt"
-	"github.com/yunjoy-tech/musae/errorx"
+	"errors"
 	"github.com/yunjoy-tech/musae/logger"
 	"github.com/yunjoy-tech/musae/tcpx"
 	"net"
@@ -70,7 +70,7 @@ func TestHeartbeat(t *testing.T) {
 		conn, e := net.Dial("tcp", "localhost:7008")
 
 		if e != nil {
-			testResult <- errorx.Wrap(e)
+			testResult <- fmt.Errorf(": %w", e)
 			panic(any(e))
 		}
 		var heartBeat []byte
@@ -80,7 +80,7 @@ func TestHeartbeat(t *testing.T) {
 			Body: nil,
 		}, nil)
 		if e != nil {
-			testResult <- errorx.Wrap(e)
+			testResult <- fmt.Errorf(": %w", e)
 			panic(e)
 		}
 
@@ -89,7 +89,7 @@ func TestHeartbeat(t *testing.T) {
 			_, e = conn.Write(heartBeat)
 			if e != nil {
 				fmt.Println(e.Error())
-				testResult <- errorx.Wrap(e)
+				testResult <- fmt.Errorf(": %w", e)
 				break
 			}
 			time.Sleep(5 * time.Second)
@@ -145,7 +145,7 @@ func RunClient(srvAddr string, testResult chan error) {
 		conn, e := net.Dial("tcp", srvAddr)
 
 		if e != nil {
-			testResult <- errorx.Wrap(e)
+			testResult <- fmt.Errorf(": %w", e)
 			panic(any(e))
 		}
 		var heartBeat []byte
@@ -155,7 +155,7 @@ func RunClient(srvAddr string, testResult chan error) {
 			Body: nil,
 		}, nil)
 		if e != nil {
-			testResult <- errorx.Wrap(e)
+			testResult <- fmt.Errorf(": %w", e)
 			panic(e)
 		}
 
@@ -163,7 +163,7 @@ func RunClient(srvAddr string, testResult chan error) {
 			_, e = conn.Write(heartBeat)
 			if e != nil {
 				fmt.Println(e.Error())
-				testResult <- errorx.Wrap(e)
+				testResult <- fmt.Errorf(": %w", e)
 				break
 			}
 			time.Sleep(5 * time.Second)

@@ -3,9 +3,9 @@ package server
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	dapr "github.com/dapr/go-sdk/client"
 	"github.com/yunjoy-tech/aniwar/src/common/conf"
-	"github.com/yunjoy-tech/musae/errorx"
 	"github.com/yunjoy-tech/musae/global"
 	"github.com/yunjoy-tech/musae/logger"
 	"github.com/yunjoy-tech/musae/metrics"
@@ -16,7 +16,7 @@ import (
 )
 
 func (s *Server) SaveGlobalRedis(key string, table *state.KvTable, meta map[string]string, so ...dapr.StateOption) error {
-	return errorx.WithStack(s.Service.SaveRedis(service.RedisGlobal, key, table, meta, so...))
+	return fmt.Errorf(": %w", s.Service.SaveRedis(service.RedisGlobal, key, table, meta, so...))
 }
 
 func (s *Server) GetGlobalRedis(key string, meta map[string]string) (*state.KvTable, error) {
@@ -24,7 +24,7 @@ func (s *Server) GetGlobalRedis(key string, meta map[string]string) (*state.KvTa
 }
 
 func (s *Server) SaveCacheRedis(key string, table *state.KvTable, meta map[string]string, so ...dapr.StateOption) error {
-	return errorx.WithStack(s.Service.SaveRedis(service.RedisCache, key, table, meta, so...))
+	return fmt.Errorf(": %w", s.Service.SaveRedis(service.RedisCache, key, table, meta, so...))
 }
 
 func (s *Server) GetCacheRedis(key string, meta map[string]string) (*state.KvTable, error) {

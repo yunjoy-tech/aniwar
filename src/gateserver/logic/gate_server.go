@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/dapr/go-sdk/service/common"
-	"github.com/pkg/errors"
+	"errors"
 	myCommon "github.com/yunjoy-tech/aniwar/src/common"
 	"github.com/yunjoy-tech/aniwar/src/common/conf"
 	"github.com/yunjoy-tech/aniwar/src/common/datalog/taptap"
@@ -156,7 +156,7 @@ func (s *GateServer) OnNetCloseHandler(c *tcpx.Context) {
 	if ok && accountId != "" {
 		err := s.CleanHeartBeat(accountId)
 		if err != nil {
-			err = errors.Wrap(err, "长链接断开, 删除心跳报错")
+			err = fmt.Errorf("长链接断开, 删除心跳报错: %w", err)
 			logger.Error(err.Error())
 		}
 

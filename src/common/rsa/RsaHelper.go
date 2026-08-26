@@ -2,13 +2,13 @@ package rsa
 
 import (
 	"encoding/base64"
+	"fmt"
 	"github.com/yunjoy-tech/aniwar/src/common/tls"
 	randutil "github.com/yunjoy-tech/musae/utils/rand"
 
 	"github.com/yunjoy-tech/musae/tcpx"
 
 	"github.com/forgoer/openssl"
-	"github.com/yunjoy-tech/musae/errorx"
 	"github.com/yunjoy-tech/musae/logger"
 )
 
@@ -20,12 +20,12 @@ func CreateSrvRsaKey(c *tcpx.Context, base64CliRsaKey string) (string, string, s
 	// base64解码
 	bytes, err := base64.StdEncoding.DecodeString(base64CliRsaKey)
 	if err != nil {
-		logger.Warn(errorx.Wrap(err, "").Error())
+		logger.Warn(fmt.Errorf(": %w", err).Error())
 		return "", "", ""
 	}
 	// rsa解密
 	if cliKeyBytes, err := tls.RsaDecrypt(bytes); err != nil {
-		logger.Warn(errorx.Wrap(err, "").Error())
+		logger.Warn(fmt.Errorf(": %w", err).Error())
 		return "", "", ""
 	} else {
 		cliKey = string(cliKeyBytes)

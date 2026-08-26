@@ -1,7 +1,8 @@
 package useractor
 
 import (
-	"github.com/pkg/errors"
+	"errors"
+	"fmt"
 	"github.com/yunjoy-tech/aniwar/src/common/datalog/taptap"
 	"github.com/yunjoy-tech/aniwar/src/meta"
 	"github.com/yunjoy-tech/musae/utils"
@@ -49,7 +50,7 @@ func (x *UserData) AddItems(uid string, reason common.ChangeReason, itemInfos ..
 			// todo
 			// addedNum, err := utils.AddUint(beforeNum, item.ItemNum)
 			if err != nil {
-				return changeItems, finalItems, limitItems, errors.WithStack(err)
+				return changeItems, finalItems, limitItems, fmt.Errorf(": %w", err)
 			}
 			target.ItemNum = utils.Min(addedNum, uint32(itemCfg.NumLimit))
 

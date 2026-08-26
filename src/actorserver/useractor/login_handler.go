@@ -3,7 +3,7 @@ package useractor
 import (
 	"context"
 	"fmt"
-	"github.com/pkg/errors"
+	"errors"
 	"github.com/yunjoy-tech/aniwar/src/common"
 	"github.com/yunjoy-tech/aniwar/src/common/clidto"
 	"github.com/yunjoy-tech/aniwar/src/common/conf"

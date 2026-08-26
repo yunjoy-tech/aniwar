@@ -2,7 +2,7 @@ package db
 
 import (
 	"encoding/json"
-	"github.com/pkg/errors"
+	"fmt"
 	"github.com/yunjoy-tech/aniwar/src/common/conf"
 	"github.com/yunjoy-tech/musae/logger"
 	"github.com/yunjoy-tech/musae/utils"
@@ -23,7 +23,7 @@ func BuildKvTable(value proto.Message, key string) (*state.KvTable, error) {
 
 	temp, err := proto.Marshal(value)
 	if err != nil {
-		return nil, errors.Wrap(err, "SaveDB Marshal err")
+		return nil, fmt.Errorf("SaveDB Marshal err: %w", err)
 	}
 
 	var dataSrc []byte
@@ -55,7 +55,7 @@ func ParseKvTable(kvTable *state.KvTable, value proto.Message) error {
 
 	err := proto.Unmarshal(kvTable.Data, value)
 	if err != nil {
-		return errors.WithStack(err)
+		return fmt.Errorf(": %w", err)
 	}
 	if conf.Base().IsDebug {
 		kvTable.DataSrc = utils.PrettyJson(value)

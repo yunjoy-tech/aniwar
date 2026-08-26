@@ -1,11 +1,11 @@
 package server
 
 import (
+	"errors"
 	"fmt"
 	"github.com/yunjoy-tech/aniwar/src/common/conf"
 	"github.com/yunjoy-tech/aniwar/src/common/db"
 	"github.com/yunjoy-tech/aniwar/src/proto/pb"
-	"github.com/yunjoy-tech/musae/errorx"
 	"github.com/yunjoy-tech/musae/service"
 	"strconv"
 )
@@ -36,7 +36,7 @@ func (s *Server) GetRoomBindingData(uid string) (*pb.RoomBindingData, error, pb.
 
 	kvTable, err := s.GetGlobalRedis(db.KeyPlayerUidAndRoomId(uid), nil)
 	if err != nil {
-		if errorx.Is(err, service.DB_ERROR_NOT_EXIST) { // session数据不存在,重新登录
+		if errors.Is(err, service.DB_ERROR_NOT_EXIST) { // session数据不存在,重新登录
 			return nil, fmt.Errorf("db value not exist"), pb.ErrorCode_Room_player_not_exist
 		} else {
 			return nil, fmt.Errorf("internal error"), pb.ErrorCode_InternalError

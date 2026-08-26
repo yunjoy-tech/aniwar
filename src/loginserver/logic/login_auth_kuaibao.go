@@ -3,12 +3,11 @@ package logic
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
 	"strconv"
-
-	"github.com/pkg/errors"
 
 	"github.com/yunjoy-tech/aniwar/src/common/sdkconstant"
 
@@ -38,7 +37,7 @@ func (s *LoginServer) handleAuthKuaiBao(unionId, accessToken string) pb.ErrorCod
 
 	kuaiBaoUid, err := strconv.Atoi(unionId)
 	if err != nil {
-		err = errors.Wrap(err, fmt.Sprintf("好游快爆的账号不合法, unionId=%s", unionId))
+		err = fmt.Errorf("好游快爆的账号不合法, unionId=%s: %w", unionId, err)
 		logger.Errorf(err.Error())
 		return pb.ErrorCode_InvalidParam
 	}
@@ -82,7 +81,7 @@ func (s *LoginServer) handleAuthKuaiBao(unionId, accessToken string) pb.ErrorCod
 	resp := &KuaiBaoLoginResp{}
 	err = json.Unmarshal(body, resp)
 	if err != nil {
-		err = errors.Wrap(err, "验证结果失败")
+		err = fmt.Errorf("验证结果失败: %w", err)
 		logger.Errorf(err.Error())
 		return pb.ErrorCode_InternalError
 	}

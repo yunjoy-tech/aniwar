@@ -3,11 +3,11 @@ package server
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"github.com/go-redis/redis/v8"
 	"github.com/yunjoy-tech/aniwar/src/common/conf"
 	"github.com/yunjoy-tech/aniwar/src/common/db"
 	"github.com/yunjoy-tech/aniwar/src/proto/pb"
-	"github.com/yunjoy-tech/musae/errorx"
 	"github.com/yunjoy-tech/musae/logger"
 	"github.com/yunjoy-tech/musae/service"
 	"github.com/yunjoy-tech/musae/state"
@@ -83,10 +83,10 @@ func (s *Server) SAdd(ctx context.Context, key string, ttl int, vals ...interfac
 		return err
 	}
 	if addRet.Err() != nil {
-		return errorx.Newf("redis SAdd error:%v,key:%s, vals:%+v", addRet.Err(), key, vals)
+		return fmt.Errorf("redis SAdd error:%v,key:%s, vals:%+v", addRet.Err(), key, vals)
 	}
 	if expireRet.Val() == false || expireRet.Err() != nil {
-		return errorx.Newf("redis expire error:%v,key:%s, vals:%+v", expireRet.Err(), key, vals)
+		return fmt.Errorf("redis expire error:%v,key:%s, vals:%+v", expireRet.Err(), key, vals)
 	}
 
 	// ret := s.Redis.SAdd(ctx, key, vals...)

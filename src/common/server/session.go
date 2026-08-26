@@ -3,12 +3,12 @@ package server
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	dapr "github.com/dapr/go-sdk/client"
 	"github.com/yunjoy-tech/aniwar/src/common/conf"
 	"github.com/yunjoy-tech/aniwar/src/common/db"
 	"github.com/yunjoy-tech/aniwar/src/proto/pb"
-	"github.com/yunjoy-tech/musae/errorx"
 	"github.com/yunjoy-tech/musae/global"
 	"github.com/yunjoy-tech/musae/logger"
 	"github.com/yunjoy-tech/musae/service"
@@ -24,7 +24,7 @@ func (s *Server) GetUserSession(uid string) (*pb.UserSession, error, pb.ErrorCod
 
 	kvTable, err := s.GetGlobalRedis(db.KeyUserSession(uid), nil)
 	if err != nil {
-		if errorx.Is(err, service.DB_ERROR_NOT_EXIST) { // session数据不存在,重新登录
+		if errors.Is(err, service.DB_ERROR_NOT_EXIST) { // session数据不存在,重新登录
 			return nil, fmt.Errorf("db value not exist"), pb.ErrorCode_ReLogin
 		} else {
 			return nil, fmt.Errorf("internal error"), pb.ErrorCode_InternalError

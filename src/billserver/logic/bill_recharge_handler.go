@@ -4,26 +4,24 @@ import (
 	"context"
 	"encoding/base64"
 	"encoding/json"
+	"errors"
 	"fmt"
-	"github.com/yunjoy-tech/musae/gamelib/guid"
-	netutil "github.com/yunjoy-tech/musae/utils/net"
 	"net/url"
 	"strconv"
 
+	"github.com/yunjoy-tech/musae/gamelib/guid"
+	netutil "github.com/yunjoy-tech/musae/utils/net"
+
 	"github.com/yunjoy-tech/aniwar/src/common/com_order"
-	"github.com/yunjoy-tech/aniwar/src/proto/pb"
-	"github.com/yunjoy-tech/musae/base"
-	"google.golang.org/protobuf/proto"
-
 	"github.com/yunjoy-tech/aniwar/src/common/sdkconstant/sdksign"
-
 	"github.com/yunjoy-tech/aniwar/src/common/conf"
 	"github.com/yunjoy-tech/aniwar/src/idipserver/logic"
+	"github.com/yunjoy-tech/aniwar/src/proto/pb"
+	"github.com/yunjoy-tech/musae/base"
+	"github.com/yunjoy-tech/musae/logger"
 
 	"github.com/dapr/go-sdk/service/common"
-	"github.com/pkg/errors"
-
-	"github.com/yunjoy-tech/musae/logger"
+	"google.golang.org/protobuf/proto"
 )
 
 func (s *BillServer) PayHandler(ctx context.Context, in *common.InvocationEvent) (out *common.Content, err error) {
@@ -77,7 +75,7 @@ func (s *BillServer) PayHandler(ctx context.Context, in *common.InvocationEvent)
 
 	apiReq := com_order.ParseLilithPayCallbackReq(argsMap)
 	if err != nil {
-		err = errors.Wrap(err, "解析参数失败")
+		err = fmt.Errorf("解析参数失败: %w", err)
 		logger.Errorf(err.Error())
 		return reply2Lilith(in, logic.FAIL), err
 	}
@@ -93,7 +91,7 @@ func (s *BillServer) PayHandler(ctx context.Context, in *common.InvocationEvent)
 	// 透传参数
 	cbiObj, err := com_order.ParsePayCbi(apiReq.Ext)
 	if err != nil {
-		err = errors.Wrap(err, fmt.Sprintf("解析透传参数失败, ext:%s", apiReq.Ext))
+		err = fmt.Errorf("解析透传参数失败, ext:%s: %w", apiReq.Ext, err)
 		logger.Errorf(err.Error())
 		return reply2Lilith(in, logic.FAIL), err
 	}
@@ -111,7 +109,7 @@ func (s *BillServer) PayHandler(ctx context.Context, in *common.InvocationEvent)
 
 	SdkParamBytes, err := json.Marshal(apiReq)
 	if err != nil {
-		err = errors.Wrap(err, fmt.Sprintf("json.Marshal got error"))
+		err = fmt.Errorf("json.Marshal got error: %w", err)
 		logger.Errorf(err.Error())
 		return reply2Lilith(in, logic.FAIL), err
 	}
@@ -122,7 +120,7 @@ func (s *BillServer) PayHandler(ctx context.Context, in *common.InvocationEvent)
 		SdkParamStr: string(SdkParamBytes),
 	})
 	if err != nil {
-		err = errors.Wrap(err, fmt.Sprintf("proto.Marshal got error"))
+		err = fmt.Errorf("proto.Marshal got error: %w", err)
 		logger.Errorf(err.Error())
 		return reply2Lilith(in, logic.FAIL), err
 	}
@@ -141,7 +139,7 @@ func (s *BillServer) PayHandler(ctx context.Context, in *common.InvocationEvent)
 		Topic:        "",
 	})
 	if err != nil {
-		err = errors.Wrap(err, "通知下发奖励报错")
+		err = fmt.Errorf("通知下发奖励报错: %w", err)
 		logger.Errorf(err.Error())
 		return reply2Lilith(in, logic.FAIL), err
 	}

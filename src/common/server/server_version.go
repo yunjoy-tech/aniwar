@@ -3,7 +3,6 @@ package server
 import (
 	"fmt"
 	"github.com/yunjoy-tech/aniwar/src/common/db"
-	"github.com/yunjoy-tech/musae/errorx"
 	"github.com/yunjoy-tech/musae/global"
 	"github.com/yunjoy-tech/musae/logger"
 	"strconv"
@@ -131,11 +130,11 @@ func (s *Server) VersionCheckExt(platform, clientVersion string) error {
 
 	mini := ParseVersion(miniVersion)
 	if mini == nil {
-		return errorx.Newf("ParseVersion miniVersion err version:%v", miniVersion)
+		return fmt.Errorf("ParseVersion miniVersion err version:%v", miniVersion)
 	}
 	client := ParseVersion(clientVersion)
 	if client == nil {
-		return errorx.Newf("ParseVersion clientVersion err version:%v", clientVersion)
+		return fmt.Errorf("ParseVersion clientVersion err version:%v", clientVersion)
 	}
 	logger.Debugf("VersionCheckExt,clientVersion:%+v, miniVersion:%+v", client, mini)
 	if mini.Verify(client) {

@@ -2,11 +2,10 @@ package sdkutil
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 
 	"github.com/yunjoy-tech/aniwar/src/proto/pb"
-
-	"github.com/pkg/errors"
 
 	"github.com/yunjoy-tech/musae/logger"
 )
@@ -149,7 +148,7 @@ func TapCheckPayLimit(tapUserInfo *pb.TaptapUserInfo, tapToken, userIdentifier s
 
 	// bytes, err := json.Marshal(resp)
 	// if err != nil {
-	//	err = errors.Wrap(err, "json.Marshal got error")
+	//	err = fmt.Errorf(": %w", err)"json.Marshal got error")
 	//	logger.Errorf(err.Error())
 	//	return false, -1
 	// }
