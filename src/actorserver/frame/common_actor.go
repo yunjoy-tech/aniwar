@@ -11,8 +11,8 @@ import (
 	"github.com/yunjoy-tech/aniwar/src/proto/pb"
 	"github.com/yunjoy-tech/musae/base"
 	"github.com/yunjoy-tech/musae/baseactor"
+	"github.com/yunjoy-tech/musae/gamelib/gtimer"
 	"github.com/yunjoy-tech/musae/logger"
-	"github.com/yunjoy-tech/musae/mtime"
 	"github.com/yunjoy-tech/musae/service"
 	"github.com/yunjoy-tech/musae/state"
 	"github.com/yunjoy-tech/musae/utils"
@@ -25,13 +25,13 @@ type CommonActor struct {
 	baseactor.BaseActor
 	Srv *ActorServer
 	pb.ActorInfo
-	Timer *mtime.TimeWheel
+	Timer gtimer.Timer
 }
 
 func NewCommonActor(actorServer *ActorServer) *CommonActor {
 	commonActor := &CommonActor{
 		Srv:   actorServer,
-		Timer: mtime.NewTimeWheel(),
+		Timer: gtimer.NewTimer(),
 	}
 	commonActor.UserMap = make(map[string]*pb.ActorUserInfo)
 

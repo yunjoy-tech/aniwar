@@ -2,9 +2,9 @@ package useractor
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"github.com/dapr/go-sdk/actor"
-	"errors"
 	"github.com/yunjoy-tech/aniwar/src/actorserver/frame"
 	"github.com/yunjoy-tech/aniwar/src/common"
 	"github.com/yunjoy-tech/aniwar/src/common/actor/stub"
@@ -118,6 +118,7 @@ func New() actor.Server {
 	}, a, nil)
 
 	// 启动timer定时器
+	// TODO 注册定时任务
 	utils.GoSafeRunWithParam(func(ua interface{}) {
 		ua.(*UserActor).Timer.Run()
 	}, a, nil)
