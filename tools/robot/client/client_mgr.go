@@ -2,8 +2,8 @@ package client
 
 import (
 	"fmt"
-	"gitee.com/aniwar2/musae/logger"
 	"gitee.com/aniwar2/robot/conf"
+	"github.com/yunjoy-tech/musae/logger"
 	"time"
 )
 

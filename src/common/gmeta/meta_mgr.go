@@ -1,7 +1,7 @@
 package gmeta
 
 import (
-	"gitee.com/aniwar2/aniwar/src/meta"
+	"github.com/yunjoy-tech/aniwar/src/meta"
 )
 
 var (

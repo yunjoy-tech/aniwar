@@ -3,10 +3,10 @@ package common
 import (
 	"fmt"
 
-	"gitee.com/aniwar2/aniwar/src/common/utils"
 	"github.com/pkg/errors"
+	"github.com/yunjoy-tech/aniwar/src/common/utils"
 
-	"gitee.com/aniwar2/aniwar/src/proto/pb"
+	"github.com/yunjoy-tech/aniwar/src/proto/pb"
 )
 
 var (

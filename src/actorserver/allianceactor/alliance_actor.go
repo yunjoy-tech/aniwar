@@ -1,13 +1,13 @@
 package allianceactor
 
 import (
-	"gitee.com/aniwar2/aniwar/src/actorserver/frame"
-	"gitee.com/aniwar2/aniwar/src/common/actor/stub"
-	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	"gitee.com/aniwar2/musae/baseactor"
-	"gitee.com/aniwar2/musae/service"
-	"gitee.com/aniwar2/musae/utils"
 	"github.com/dapr/go-sdk/actor"
+	"github.com/yunjoy-tech/aniwar/src/actorserver/frame"
+	"github.com/yunjoy-tech/aniwar/src/common/actor/stub"
+	"github.com/yunjoy-tech/aniwar/src/proto/pb"
+	"github.com/yunjoy-tech/musae/baseactor"
+	"github.com/yunjoy-tech/musae/service"
+	"github.com/yunjoy-tech/musae/utils"
 	"time"
 )
 

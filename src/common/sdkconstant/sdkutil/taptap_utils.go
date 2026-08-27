@@ -4,11 +4,11 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"gitee.com/aniwar2/aniwar/src/proto/pb"
+	"github.com/yunjoy-tech/aniwar/src/proto/pb"
 
 	"github.com/pkg/errors"
 
-	"gitee.com/aniwar2/musae/logger"
+	"github.com/yunjoy-tech/musae/logger"
 )
 
 type TapUrlResp struct {

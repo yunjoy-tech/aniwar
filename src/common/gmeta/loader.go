@@ -2,7 +2,7 @@ package gmeta
 
 import (
 	"encoding/json"
-	"gitee.com/aniwar2/aniwar/src/common/conf"
+	"github.com/yunjoy-tech/aniwar/src/common/conf"
 	"os"
 )
 

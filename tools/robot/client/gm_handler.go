@@ -1,6 +1,6 @@
 package client
 
-import "gitee.com/aniwar2/aniwar/src/proto/pb"
+import "github.com/yunjoy-tech/aniwar/src/proto/pb"
 
 type GmHandler struct {
 	client *Client

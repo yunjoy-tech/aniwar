@@ -1,11 +1,11 @@
 package frame
 
 import (
-	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
-	"gitee.com/aniwar2/aniwar/src/common/db"
-	"gitee.com/aniwar2/musae/global"
-	"gitee.com/aniwar2/musae/logger"
 	"github.com/dapr/go-sdk/client"
+	"github.com/yunjoy-tech/aniwar/src/common/datalog/taptap"
+	"github.com/yunjoy-tech/aniwar/src/common/db"
+	"github.com/yunjoy-tech/musae/global"
+	"github.com/yunjoy-tech/musae/logger"
 )
 
 /*func (s *ActorServer) SubConfCenter() error {

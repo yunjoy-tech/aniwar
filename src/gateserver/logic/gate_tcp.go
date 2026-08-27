@@ -2,21 +2,21 @@ package logic
 
 import (
 	"context"
-	"gitee.com/aniwar2/aniwar/src/common/actor/stub"
+	"github.com/yunjoy-tech/aniwar/src/common/actor/stub"
 	"time"
 
 	"github.com/pkg/errors"
 
-	"gitee.com/aniwar2/aniwar/src/common"
+	"github.com/yunjoy-tech/aniwar/src/common"
 
-	"gitee.com/aniwar2/aniwar/src/common/conf"
-	"gitee.com/aniwar2/aniwar/src/common/db"
-	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	"gitee.com/aniwar2/musae/base"
-	"gitee.com/aniwar2/musae/errorx"
-	"gitee.com/aniwar2/musae/logger"
-	"gitee.com/aniwar2/musae/metrics"
-	"gitee.com/aniwar2/musae/tcpx"
+	"github.com/yunjoy-tech/aniwar/src/common/conf"
+	"github.com/yunjoy-tech/aniwar/src/common/db"
+	"github.com/yunjoy-tech/aniwar/src/proto/pb"
+	"github.com/yunjoy-tech/musae/base"
+	"github.com/yunjoy-tech/musae/errorx"
+	"github.com/yunjoy-tech/musae/logger"
+	"github.com/yunjoy-tech/musae/metrics"
+	"github.com/yunjoy-tech/musae/tcpx"
 	"google.golang.org/protobuf/proto"
 )
 

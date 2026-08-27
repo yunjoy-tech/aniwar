@@ -1,15 +1,15 @@
 package useractor
 
 import (
-	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
-	"gitee.com/aniwar2/aniwar/src/meta"
-	"gitee.com/aniwar2/musae/utils"
 	"github.com/pkg/errors"
+	"github.com/yunjoy-tech/aniwar/src/common/datalog/taptap"
+	"github.com/yunjoy-tech/aniwar/src/meta"
+	"github.com/yunjoy-tech/musae/utils"
 	"strconv"
 
-	"gitee.com/aniwar2/aniwar/src/common"
-	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	"gitee.com/aniwar2/musae/logger"
+	"github.com/yunjoy-tech/aniwar/src/common"
+	"github.com/yunjoy-tech/aniwar/src/proto/pb"
+	"github.com/yunjoy-tech/musae/logger"
 )
 
 func (x *UserData) GetUserItems() *pb.PCommonItemInfos {

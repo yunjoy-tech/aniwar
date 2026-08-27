@@ -2,10 +2,10 @@ package server
 
 import (
 	"fmt"
-	"gitee.com/aniwar2/aniwar/src/common/db"
-	"gitee.com/aniwar2/musae/errorx"
-	"gitee.com/aniwar2/musae/global"
-	"gitee.com/aniwar2/musae/logger"
+	"github.com/yunjoy-tech/aniwar/src/common/db"
+	"github.com/yunjoy-tech/musae/errorx"
+	"github.com/yunjoy-tech/musae/global"
+	"github.com/yunjoy-tech/musae/logger"
 	"strconv"
 	"strings"
 )

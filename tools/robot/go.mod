@@ -5,7 +5,7 @@ go 1.24.0
 toolchain go1.24.7
 
 require (
-	gitee.com/aniwar2/musae v1.0.0
+	github.com/yunjoy-tech/musae v1.0.0
 	github.com/forgoer/openssl v1.4.0
 	google.golang.org/protobuf v1.28.0
 )

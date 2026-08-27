@@ -9,11 +9,11 @@ import (
 	"encoding/asn1"
 	"encoding/pem"
 	"errors"
-	"gitee.com/aniwar2/aniwar/src/common/conf"
+	"github.com/yunjoy-tech/aniwar/src/common/conf"
 	"strings"
 	"sync"
 
-	"gitee.com/aniwar2/musae/logger"
+	"github.com/yunjoy-tech/musae/logger"
 )
 
 type BillRsa struct {

@@ -1,7 +1,7 @@
 package conf
 
 import (
-	"gitee.com/aniwar2/musae/baseconf"
+	"github.com/yunjoy-tech/musae/baseconf"
 	"gopkg.in/yaml.v3"
 	"os"
 )

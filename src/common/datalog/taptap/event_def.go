@@ -1,7 +1,7 @@
 package taptap
 
 import (
-	"gitee.com/aniwar2/aniwar/src/proto/pb"
+	"github.com/yunjoy-tech/aniwar/src/proto/pb"
 )
 
 // 系统字段定义

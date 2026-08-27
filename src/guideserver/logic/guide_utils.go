@@ -2,7 +2,7 @@ package logic
 
 import (
 	"fmt"
-	"gitee.com/aniwar2/aniwar/src/common/db"
+	"github.com/yunjoy-tech/aniwar/src/common/db"
 	"strings"
 )
 

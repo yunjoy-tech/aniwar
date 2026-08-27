@@ -1,12 +1,12 @@
 package main
 
 import (
-	gameConf "gitee.com/aniwar2/aniwar/src/common/conf"
-	"gitee.com/aniwar2/aniwar/src/common/gmeta"
-	"gitee.com/aniwar2/musae/logger"
-	"gitee.com/aniwar2/musae/web"
 	"gitee.com/aniwar2/robot/client"
 	"gitee.com/aniwar2/robot/conf"
+	gameConf "github.com/yunjoy-tech/aniwar/src/common/conf"
+	"github.com/yunjoy-tech/aniwar/src/common/gmeta"
+	"github.com/yunjoy-tech/musae/logger"
+	"github.com/yunjoy-tech/musae/web"
 )
 
 func main() {

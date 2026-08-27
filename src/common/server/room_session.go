@@ -2,11 +2,11 @@ package server
 
 import (
 	"fmt"
-	"gitee.com/aniwar2/aniwar/src/common/conf"
-	"gitee.com/aniwar2/aniwar/src/common/db"
-	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	"gitee.com/aniwar2/musae/errorx"
-	"gitee.com/aniwar2/musae/service"
+	"github.com/yunjoy-tech/aniwar/src/common/conf"
+	"github.com/yunjoy-tech/aniwar/src/common/db"
+	"github.com/yunjoy-tech/aniwar/src/proto/pb"
+	"github.com/yunjoy-tech/musae/errorx"
+	"github.com/yunjoy-tech/musae/service"
 	"strconv"
 )
 

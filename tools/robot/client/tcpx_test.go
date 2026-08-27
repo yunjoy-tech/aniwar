@@ -3,9 +3,9 @@ package client
 import (
 	"encoding/binary"
 	"fmt"
-	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	"gitee.com/aniwar2/musae/logger"
-	"gitee.com/aniwar2/musae/tcpx"
+	"github.com/yunjoy-tech/aniwar/src/proto/pb"
+	"github.com/yunjoy-tech/musae/logger"
+	"github.com/yunjoy-tech/musae/tcpx"
 	"net"
 	"testing"
 )

@@ -3,22 +3,22 @@ package useractor
 import (
 	"context"
 	"fmt"
-	"gitee.com/aniwar2/aniwar/src/common"
-	"gitee.com/aniwar2/aniwar/src/common/actor/stub"
-	"gitee.com/aniwar2/aniwar/src/common/db"
-	"gitee.com/aniwar2/aniwar/src/common/sensitive"
-	"gitee.com/aniwar2/aniwar/src/common/server"
-	"gitee.com/aniwar2/musae/gamelib/guid"
-	timeutil "gitee.com/aniwar2/musae/utils/time"
+	"github.com/yunjoy-tech/aniwar/src/common"
+	"github.com/yunjoy-tech/aniwar/src/common/actor/stub"
+	"github.com/yunjoy-tech/aniwar/src/common/db"
+	"github.com/yunjoy-tech/aniwar/src/common/sensitive"
+	"github.com/yunjoy-tech/aniwar/src/common/server"
+	"github.com/yunjoy-tech/musae/gamelib/guid"
+	timeutil "github.com/yunjoy-tech/musae/utils/time"
 	"strconv"
 	"time"
 	"unicode/utf8"
 
-	"gitee.com/aniwar2/musae/base"
+	"github.com/yunjoy-tech/musae/base"
 
-	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	"gitee.com/aniwar2/musae/logger"
-	"gitee.com/aniwar2/musae/service"
+	"github.com/yunjoy-tech/aniwar/src/proto/pb"
+	"github.com/yunjoy-tech/musae/logger"
+	"github.com/yunjoy-tech/musae/service"
 	"google.golang.org/protobuf/proto"
 )
 

@@ -7,7 +7,7 @@
 package pb
 
 import (
-	base "gitee.com/aniwar2/musae/base"
+	base "github.com/yunjoy-tech/musae/base"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"

@@ -2,15 +2,15 @@ package frame
 
 import (
 	"fmt"
-	"gitee.com/aniwar2/musae/global"
+	"github.com/yunjoy-tech/musae/global"
 	"strings"
 	"time"
 
-	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
-	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	"gitee.com/aniwar2/musae/base"
-	"gitee.com/aniwar2/musae/logger"
 	"github.com/dapr/go-sdk/service/common"
+	"github.com/yunjoy-tech/aniwar/src/common/datalog/taptap"
+	"github.com/yunjoy-tech/aniwar/src/proto/pb"
+	"github.com/yunjoy-tech/musae/base"
+	"github.com/yunjoy-tech/musae/logger"
 )
 
 type SysMailMgr struct {

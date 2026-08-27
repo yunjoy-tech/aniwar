@@ -1,8 +1,8 @@
 package main
 
 import (
-	"gitee.com/aniwar2/aniwar/src/lobbyserver/logic"
-	"gitee.com/aniwar2/musae/process"
+	"github.com/yunjoy-tech/aniwar/src/lobbyserver/logic"
+	"github.com/yunjoy-tech/musae/process"
 )
 
 func main() {

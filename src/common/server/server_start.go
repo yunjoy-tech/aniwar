@@ -3,11 +3,11 @@ package server
 import (
 	"context"
 	"fmt"
-	"gitee.com/aniwar2/aniwar/src/common/conf"
-	"gitee.com/aniwar2/musae/global"
-	"gitee.com/aniwar2/musae/logger"
-	"gitee.com/aniwar2/musae/utils"
 	daprCommon "github.com/dapr/go-sdk/service/common"
+	"github.com/yunjoy-tech/aniwar/src/common/conf"
+	"github.com/yunjoy-tech/musae/global"
+	"github.com/yunjoy-tech/musae/logger"
+	"github.com/yunjoy-tech/musae/utils"
 	"time"
 )
 

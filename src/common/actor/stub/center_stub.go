@@ -2,7 +2,7 @@ package stub
 
 import (
 	"context"
-	"gitee.com/aniwar2/musae/base"
+	"github.com/yunjoy-tech/musae/base"
 )
 
 type CenterStub struct {

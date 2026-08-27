@@ -1,11 +1,10 @@
-module gitee.com/aniwar2/aniwar
+module github.com/yunjoy-tech/aniwar
 
 go 1.24.0
 
 toolchain go1.24.7
 
 require (
-	gitee.com/aniwar2/musae v1.0.0
 	github.com/aliyun/aliyun-oss-go-sdk v2.2.7+incompatible
 	github.com/dapr/go-sdk v1.6.0
 	github.com/forgoer/openssl v1.4.0
@@ -14,6 +13,7 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/samber/lo v1.38.1
 	github.com/xuri/excelize/v2 v2.7.0
+	github.com/yunjoy-tech/musae v1.0.0
 	google.golang.org/grpc v1.48.0
 	google.golang.org/protobuf v1.28.0
 	gopkg.in/yaml.v3 v3.0.1
@@ -78,7 +78,7 @@ require (
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
 
-replace gitee.com/aniwar2/musae => ../musae/
+replace github.com/yunjoy-tech/musae => ../musae/
 
 replace github.com/dapr/go-sdk v1.6.0 => github.com/bychannel/go-sdk v1.6.9 // indirect
 

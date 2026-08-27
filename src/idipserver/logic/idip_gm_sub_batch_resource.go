@@ -2,10 +2,10 @@ package logic
 
 import (
 	"encoding/json"
-	gameCommon "gitee.com/aniwar2/aniwar/src/common"
-	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	"gitee.com/aniwar2/musae/logger"
 	"github.com/dapr/go-sdk/service/common"
+	gameCommon "github.com/yunjoy-tech/aniwar/src/common"
+	"github.com/yunjoy-tech/aniwar/src/proto/pb"
+	"github.com/yunjoy-tech/musae/logger"
 	"net/http"
 	"strconv"
 )

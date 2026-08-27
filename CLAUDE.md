@@ -71,7 +71,7 @@ Services are started via `dapr.exe run` wrapper with:
 - `--actor`: Comma-separated actor types (actor server only)
 
 ### Key Dependencies
-- **Musae Framework**: `gitee.com/aniwar2/musae` (located at `../musae/`)
+- **Musae Framework**: `github.com/yunjoy-tech/musae` (located at `../musae/`)
 - **Dapr**: Distributed application runtime
 - **Consul**: Service discovery (auto-started on port 8500)
 - **Apollo**: Configuration center (planning migration to Nacos)

@@ -2,15 +2,15 @@ package taptap
 
 import (
 	"encoding/json"
-	"gitee.com/aniwar2/musae/baseconf"
-	"gitee.com/aniwar2/musae/statistics"
-	"gitee.com/aniwar2/musae/utils"
+	"github.com/yunjoy-tech/musae/baseconf"
+	"github.com/yunjoy-tech/musae/statistics"
+	"github.com/yunjoy-tech/musae/utils"
 	"strconv"
 	"time"
 
-	"gitee.com/aniwar2/aniwar/src/common/conf"
-	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	"gitee.com/aniwar2/musae/logger"
+	"github.com/yunjoy-tech/aniwar/src/common/conf"
+	"github.com/yunjoy-tech/aniwar/src/proto/pb"
+	"github.com/yunjoy-tech/musae/logger"
 )
 
 const (

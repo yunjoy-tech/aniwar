@@ -1,8 +1,8 @@
 package clidto
 
 import (
-	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	timeutil "gitee.com/aniwar2/musae/utils/time"
+	"github.com/yunjoy-tech/aniwar/src/proto/pb"
+	timeutil "github.com/yunjoy-tech/musae/utils/time"
 	"time"
 )
 

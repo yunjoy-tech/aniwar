@@ -9,11 +9,11 @@ import (
 
 	"github.com/pkg/errors"
 
-	"gitee.com/aniwar2/aniwar/src/idipserver/logic"
+	"github.com/yunjoy-tech/aniwar/src/idipserver/logic"
 
-	"gitee.com/aniwar2/musae/logger"
+	"github.com/yunjoy-tech/musae/logger"
 
-	"gitee.com/aniwar2/aniwar/src/proto/pb"
+	"github.com/yunjoy-tech/aniwar/src/proto/pb"
 )
 
 // LilithLoginResp 莉莉丝登陆验证结果

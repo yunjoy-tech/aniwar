@@ -1,8 +1,8 @@
 package logic
 
 import (
-	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	"gitee.com/aniwar2/musae/base"
+	"github.com/yunjoy-tech/aniwar/src/proto/pb"
+	"github.com/yunjoy-tech/musae/base"
 )
 
 func (s *GuideServer) HandlerSubEvent(msg *base.ProtoMsg) (err error) {

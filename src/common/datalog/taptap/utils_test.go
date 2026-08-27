@@ -2,7 +2,7 @@ package taptap
 
 import (
 	"fmt"
-	"gitee.com/aniwar2/aniwar/src/proto/pb"
+	"github.com/yunjoy-tech/aniwar/src/proto/pb"
 	"testing"
 )
 

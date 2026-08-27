@@ -3,13 +3,13 @@ package logic
 import (
 	"context"
 	"encoding/json"
-	"gitee.com/aniwar2/musae/gamelib/guid"
+	"github.com/yunjoy-tech/musae/gamelib/guid"
 	"net/http"
 
-	"gitee.com/aniwar2/aniwar/src/common/actor/stub"
-	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	"gitee.com/aniwar2/musae/base"
 	"github.com/dapr/go-sdk/service/common"
+	"github.com/yunjoy-tech/aniwar/src/common/actor/stub"
+	"github.com/yunjoy-tech/aniwar/src/proto/pb"
+	"github.com/yunjoy-tech/musae/base"
 )
 
 // 请求参数结构

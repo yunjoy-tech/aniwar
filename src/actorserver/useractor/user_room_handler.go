@@ -5,21 +5,21 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"gitee.com/aniwar2/aniwar/src/common/actor/stub"
-	"gitee.com/aniwar2/aniwar/src/common/server"
-	"gitee.com/aniwar2/musae/gamelib/guid"
+	"github.com/yunjoy-tech/aniwar/src/common/actor/stub"
+	"github.com/yunjoy-tech/aniwar/src/common/server"
+	"github.com/yunjoy-tech/musae/gamelib/guid"
 	"strconv"
 	"time"
 
 	"github.com/forgoer/openssl"
 
-	"gitee.com/aniwar2/aniwar/src/common"
-	"gitee.com/aniwar2/aniwar/src/common/com_order"
-	"gitee.com/aniwar2/musae/base"
+	"github.com/yunjoy-tech/aniwar/src/common"
+	"github.com/yunjoy-tech/aniwar/src/common/com_order"
+	"github.com/yunjoy-tech/musae/base"
 
-	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	"gitee.com/aniwar2/musae/logger"
-	"gitee.com/aniwar2/musae/service"
+	"github.com/yunjoy-tech/aniwar/src/proto/pb"
+	"github.com/yunjoy-tech/musae/logger"
+	"github.com/yunjoy-tech/musae/service"
 	"google.golang.org/protobuf/proto"
 )
 

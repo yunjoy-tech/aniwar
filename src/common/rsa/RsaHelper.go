@@ -2,14 +2,14 @@ package rsa
 
 import (
 	"encoding/base64"
-	"gitee.com/aniwar2/aniwar/src/common/tls"
-	randutil "gitee.com/aniwar2/musae/utils/rand"
+	"github.com/yunjoy-tech/aniwar/src/common/tls"
+	randutil "github.com/yunjoy-tech/musae/utils/rand"
 
-	"gitee.com/aniwar2/musae/tcpx"
+	"github.com/yunjoy-tech/musae/tcpx"
 
-	"gitee.com/aniwar2/musae/errorx"
-	"gitee.com/aniwar2/musae/logger"
 	"github.com/forgoer/openssl"
+	"github.com/yunjoy-tech/musae/errorx"
+	"github.com/yunjoy-tech/musae/logger"
 )
 
 func CreateSrvRsaKey(c *tcpx.Context, base64CliRsaKey string) (string, string, string) {

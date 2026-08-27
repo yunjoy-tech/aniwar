@@ -8,18 +8,18 @@ import (
 	"os"
 	"time"
 
-	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
+	"github.com/yunjoy-tech/aniwar/src/common/datalog/taptap"
 
-	comn "gitee.com/aniwar2/aniwar/src/common/server"
-	"gitee.com/aniwar2/musae/global"
+	comn "github.com/yunjoy-tech/aniwar/src/common/server"
+	"github.com/yunjoy-tech/musae/global"
 
-	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	"gitee.com/aniwar2/musae/base"
-	"gitee.com/aniwar2/musae/logger"
-	"gitee.com/aniwar2/musae/metrics"
-	"gitee.com/aniwar2/musae/tcpx"
 	"github.com/dapr/go-sdk/service/common"
 	"github.com/gin-gonic/gin"
+	"github.com/yunjoy-tech/aniwar/src/proto/pb"
+	"github.com/yunjoy-tech/musae/base"
+	"github.com/yunjoy-tech/musae/logger"
+	"github.com/yunjoy-tech/musae/metrics"
+	"github.com/yunjoy-tech/musae/tcpx"
 )
 
 type BillServer struct {

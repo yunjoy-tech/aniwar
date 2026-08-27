@@ -1,7 +1,7 @@
 package gmeta
 
 import (
-	"gitee.com/aniwar2/aniwar/src/proto/pb"
+	"github.com/yunjoy-tech/aniwar/src/proto/pb"
 )
 
 // MiniGameWinType 小游戏胜利类型

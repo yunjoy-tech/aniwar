@@ -2,9 +2,9 @@ package useractor
 
 import (
 	"context"
-	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	"gitee.com/aniwar2/musae/base"
-	"gitee.com/aniwar2/musae/service"
+	"github.com/yunjoy-tech/aniwar/src/proto/pb"
+	"github.com/yunjoy-tech/musae/base"
+	"github.com/yunjoy-tech/musae/service"
 	"google.golang.org/protobuf/proto"
 	"time"
 )

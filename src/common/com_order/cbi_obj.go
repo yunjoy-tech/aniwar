@@ -4,11 +4,11 @@ import (
 	"encoding/base64"
 	"encoding/json"
 
-	"gitee.com/aniwar2/aniwar/src/common/aes"
+	"github.com/yunjoy-tech/aniwar/src/common/aes"
 
-	"gitee.com/aniwar2/aniwar/src/common/db"
+	"github.com/yunjoy-tech/aniwar/src/common/db"
 
-	"gitee.com/aniwar2/musae/service"
+	"github.com/yunjoy-tech/musae/service"
 )
 
 // CBI_AES_KEY AES加解密的key

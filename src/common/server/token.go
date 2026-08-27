@@ -1,7 +1,7 @@
 package server
 
 import (
-	"gitee.com/aniwar2/musae/errorx"
+	"github.com/yunjoy-tech/musae/errorx"
 )
 
 func (s *Server) GetToken(uid string) (string, error) {

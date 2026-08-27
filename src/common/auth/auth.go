@@ -3,11 +3,11 @@ package auth
 import (
 	"encoding/base64"
 	"encoding/json"
-	"gitee.com/aniwar2/musae/gamelib/guid"
+	"github.com/yunjoy-tech/musae/gamelib/guid"
 	"time"
 
-	"gitee.com/aniwar2/musae/global"
 	"github.com/forgoer/openssl"
+	"github.com/yunjoy-tech/musae/global"
 )
 
 type Token struct {

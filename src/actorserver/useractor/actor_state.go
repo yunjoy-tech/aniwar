@@ -1,7 +1,7 @@
 package useractor
 
 import (
-	"gitee.com/aniwar2/musae/state"
+	"github.com/yunjoy-tech/musae/state"
 )
 
 func (u *UserActor) GetStateManager() *UserActor {

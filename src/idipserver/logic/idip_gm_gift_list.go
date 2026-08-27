@@ -2,8 +2,8 @@ package logic
 
 import (
 	"encoding/json"
-	"gitee.com/aniwar2/aniwar/src/proto/pb"
 	"github.com/dapr/go-sdk/service/common"
+	"github.com/yunjoy-tech/aniwar/src/proto/pb"
 	"net/http"
 )
 

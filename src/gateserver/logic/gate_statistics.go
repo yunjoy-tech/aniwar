@@ -5,9 +5,9 @@ import (
 	"sync/atomic"
 	"time"
 
-	"gitee.com/aniwar2/aniwar/src/common/conf"
-	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	"gitee.com/aniwar2/musae/logger"
+	"github.com/yunjoy-tech/aniwar/src/common/conf"
+	"github.com/yunjoy-tech/aniwar/src/proto/pb"
+	"github.com/yunjoy-tech/musae/logger"
 )
 
 var DS = &DebugStatistics{

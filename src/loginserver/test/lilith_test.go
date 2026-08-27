@@ -2,16 +2,16 @@ package test
 
 import (
 	"fmt"
-	"gitee.com/aniwar2/aniwar/src/common/conf"
+	"github.com/yunjoy-tech/aniwar/src/common/conf"
 	"io/ioutil"
 	"net/http"
 	"net/url"
 	"strings"
 	"testing"
 
-	"gitee.com/aniwar2/aniwar/src/common/sdkconstant"
+	"github.com/yunjoy-tech/aniwar/src/common/sdkconstant"
 
-	"gitee.com/aniwar2/musae/logger"
+	"github.com/yunjoy-tech/musae/logger"
 )
 
 func Test_checkLogin(t *testing.T) {

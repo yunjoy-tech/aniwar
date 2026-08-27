@@ -2,13 +2,13 @@ package allianceactor
 
 import (
 	"fmt"
-	"gitee.com/aniwar2/aniwar/src/common/db"
-	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	"gitee.com/aniwar2/musae/base"
-	"gitee.com/aniwar2/musae/logger"
-	"gitee.com/aniwar2/musae/service"
-	randutil "gitee.com/aniwar2/musae/utils/rand"
-	timeutil "gitee.com/aniwar2/musae/utils/time"
+	"github.com/yunjoy-tech/aniwar/src/common/db"
+	"github.com/yunjoy-tech/aniwar/src/proto/pb"
+	"github.com/yunjoy-tech/musae/base"
+	"github.com/yunjoy-tech/musae/logger"
+	"github.com/yunjoy-tech/musae/service"
+	randutil "github.com/yunjoy-tech/musae/utils/rand"
+	timeutil "github.com/yunjoy-tech/musae/utils/time"
 	"time"
 )
 

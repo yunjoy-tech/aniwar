@@ -2,8 +2,8 @@ package sensitive
 
 import (
 	"errors"
-	"gitee.com/aniwar2/musae/gamelib/sensitive"
-	"gitee.com/aniwar2/musae/logger"
+	"github.com/yunjoy-tech/musae/gamelib/sensitive"
+	"github.com/yunjoy-tech/musae/logger"
 	"strings"
 	"unicode"
 )

@@ -3,13 +3,13 @@ package useractor
 import (
 	"errors"
 	"fmt"
-	"gitee.com/aniwar2/aniwar/src/meta"
+	"github.com/yunjoy-tech/aniwar/src/meta"
 	"time"
 
-	"gitee.com/aniwar2/aniwar/src/common/clidto"
+	"github.com/yunjoy-tech/aniwar/src/common/clidto"
 
-	"gitee.com/aniwar2/aniwar/src/common"
-	"gitee.com/aniwar2/aniwar/src/proto/pb"
+	"github.com/yunjoy-tech/aniwar/src/common"
+	"github.com/yunjoy-tech/aniwar/src/proto/pb"
 )
 
 type ConsumeMgr struct {

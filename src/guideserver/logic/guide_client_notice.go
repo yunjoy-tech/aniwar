@@ -3,10 +3,10 @@ package logic
 import (
 	"context"
 	"fmt"
-	"gitee.com/aniwar2/aniwar/src/common/conf"
-	"gitee.com/aniwar2/aniwar/src/common/db"
-	"gitee.com/aniwar2/musae/logger"
 	"github.com/dapr/go-sdk/service/common"
+	"github.com/yunjoy-tech/aniwar/src/common/conf"
+	"github.com/yunjoy-tech/aniwar/src/common/db"
+	"github.com/yunjoy-tech/musae/logger"
 	"time"
 )
 

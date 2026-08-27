@@ -2,16 +2,16 @@ package main
 
 import (
 	"errors"
-	"gitee.com/aniwar2/aniwar/src/actorserver/allianceactor"
-	"gitee.com/aniwar2/aniwar/src/actorserver/centeractor"
-	"gitee.com/aniwar2/aniwar/src/actorserver/frame"
-	"gitee.com/aniwar2/aniwar/src/actorserver/mailactor"
-	"gitee.com/aniwar2/aniwar/src/actorserver/roomactor"
-	"gitee.com/aniwar2/aniwar/src/actorserver/useractor"
-	"gitee.com/aniwar2/aniwar/src/common/actor/stub"
-	"gitee.com/aniwar2/musae/base"
-	"gitee.com/aniwar2/musae/logger"
-	"gitee.com/aniwar2/musae/process"
+	"github.com/yunjoy-tech/aniwar/src/actorserver/allianceactor"
+	"github.com/yunjoy-tech/aniwar/src/actorserver/centeractor"
+	"github.com/yunjoy-tech/aniwar/src/actorserver/frame"
+	"github.com/yunjoy-tech/aniwar/src/actorserver/mailactor"
+	"github.com/yunjoy-tech/aniwar/src/actorserver/roomactor"
+	"github.com/yunjoy-tech/aniwar/src/actorserver/useractor"
+	"github.com/yunjoy-tech/aniwar/src/common/actor/stub"
+	"github.com/yunjoy-tech/musae/base"
+	"github.com/yunjoy-tech/musae/logger"
+	"github.com/yunjoy-tech/musae/process"
 )
 
 func InitActorFactory(srv base.IServer) error {

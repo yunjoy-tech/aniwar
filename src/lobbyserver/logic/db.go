@@ -2,11 +2,11 @@ package logic
 
 import (
 	"errors"
-	"gitee.com/aniwar2/aniwar/src/common/conf"
-	"gitee.com/aniwar2/aniwar/src/common/db"
-	"gitee.com/aniwar2/musae/logger"
-	"gitee.com/aniwar2/musae/service"
-	"gitee.com/aniwar2/musae/utils"
+	"github.com/yunjoy-tech/aniwar/src/common/conf"
+	"github.com/yunjoy-tech/aniwar/src/common/db"
+	"github.com/yunjoy-tech/musae/logger"
+	"github.com/yunjoy-tech/musae/service"
+	"github.com/yunjoy-tech/musae/utils"
 	"google.golang.org/protobuf/proto"
 )
 

@@ -2,14 +2,14 @@ package useractor
 
 import (
 	"fmt"
-	"gitee.com/aniwar2/aniwar/src/meta"
-	"gitee.com/aniwar2/musae/gamelib/guid"
+	"github.com/yunjoy-tech/aniwar/src/meta"
+	"github.com/yunjoy-tech/musae/gamelib/guid"
 	"time"
 
-	"gitee.com/aniwar2/aniwar/src/common/clidto"
+	"github.com/yunjoy-tech/aniwar/src/common/clidto"
 
-	"gitee.com/aniwar2/aniwar/src/common"
-	"gitee.com/aniwar2/aniwar/src/proto/pb"
+	"github.com/yunjoy-tech/aniwar/src/common"
+	"github.com/yunjoy-tech/aniwar/src/proto/pb"
 )
 
 type DropMgr struct {

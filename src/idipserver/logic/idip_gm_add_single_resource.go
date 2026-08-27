@@ -3,15 +3,15 @@ package logic
 import (
 	"context"
 	"encoding/json"
-	"gitee.com/aniwar2/musae/gamelib/guid"
+	"github.com/yunjoy-tech/musae/gamelib/guid"
 	"net/http"
 	"strconv"
 
-	"gitee.com/aniwar2/aniwar/src/common/actor/stub"
-	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	"gitee.com/aniwar2/musae/base"
-	"gitee.com/aniwar2/musae/logger"
 	"github.com/dapr/go-sdk/service/common"
+	"github.com/yunjoy-tech/aniwar/src/common/actor/stub"
+	"github.com/yunjoy-tech/aniwar/src/proto/pb"
+	"github.com/yunjoy-tech/musae/base"
+	"github.com/yunjoy-tech/musae/logger"
 	"google.golang.org/protobuf/proto"
 )
 

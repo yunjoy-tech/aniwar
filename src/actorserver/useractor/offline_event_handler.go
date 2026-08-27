@@ -3,12 +3,12 @@ package useractor
 import (
 	"context"
 	"fmt"
-	"gitee.com/aniwar2/aniwar/src/common"
-	"gitee.com/aniwar2/aniwar/src/common/db"
-	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	"gitee.com/aniwar2/musae/base"
-	"gitee.com/aniwar2/musae/service"
-	"gitee.com/aniwar2/musae/utils"
+	"github.com/yunjoy-tech/aniwar/src/common"
+	"github.com/yunjoy-tech/aniwar/src/common/db"
+	"github.com/yunjoy-tech/aniwar/src/proto/pb"
+	"github.com/yunjoy-tech/musae/base"
+	"github.com/yunjoy-tech/musae/service"
+	"github.com/yunjoy-tech/musae/utils"
 	"google.golang.org/protobuf/proto"
 	"time"
 )

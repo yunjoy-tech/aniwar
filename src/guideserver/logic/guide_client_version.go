@@ -4,17 +4,17 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"gitee.com/aniwar2/aniwar/src/common/datalog/taptap"
+	"github.com/yunjoy-tech/aniwar/src/common/datalog/taptap"
 	"time"
 
-	"gitee.com/aniwar2/musae/global"
+	"github.com/yunjoy-tech/musae/global"
 
-	"gitee.com/aniwar2/aniwar/src/common/conf"
-	"gitee.com/aniwar2/aniwar/src/common/db"
-	"gitee.com/aniwar2/aniwar/src/common/server"
-	"gitee.com/aniwar2/musae/logger"
-	"gitee.com/aniwar2/musae/metrics"
 	"github.com/dapr/go-sdk/service/common"
+	"github.com/yunjoy-tech/aniwar/src/common/conf"
+	"github.com/yunjoy-tech/aniwar/src/common/db"
+	"github.com/yunjoy-tech/aniwar/src/common/server"
+	"github.com/yunjoy-tech/musae/logger"
+	"github.com/yunjoy-tech/musae/metrics"
 )
 
 func (s *GuideServer) Version(ctx context.Context, in *common.InvocationEvent) (out *common.Content, err error) {

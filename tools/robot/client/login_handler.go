@@ -4,12 +4,12 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"gitee.com/aniwar2/aniwar/src/common/server"
-	"gitee.com/aniwar2/aniwar/src/common/tls"
-	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	randutil "gitee.com/aniwar2/musae/utils/rand"
 	"gitee.com/aniwar2/robot/conf"
 	"github.com/forgoer/openssl"
+	"github.com/yunjoy-tech/aniwar/src/common/server"
+	"github.com/yunjoy-tech/aniwar/src/common/tls"
+	"github.com/yunjoy-tech/aniwar/src/proto/pb"
+	randutil "github.com/yunjoy-tech/musae/utils/rand"
 	"time"
 )
 

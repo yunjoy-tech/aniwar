@@ -4,11 +4,11 @@ import (
 	"fmt"
 	"time"
 
-	"gitee.com/aniwar2/musae/base"
+	"github.com/yunjoy-tech/musae/base"
 
-	"gitee.com/aniwar2/aniwar/src/proto/pb"
-	"gitee.com/aniwar2/musae/logger"
-	"gitee.com/aniwar2/musae/tcpx"
+	"github.com/yunjoy-tech/aniwar/src/proto/pb"
+	"github.com/yunjoy-tech/musae/logger"
+	"github.com/yunjoy-tech/musae/tcpx"
 )
 
 func (s *GateServer) HandleLoginGame(c *tcpx.Context, session *pb.UserSession, messageID int32, data []byte, reqIdx uint32) ([]byte, *base.RpcError) {
