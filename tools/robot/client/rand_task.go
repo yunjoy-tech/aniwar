@@ -1,8 +1,8 @@
 package client
 
 import (
-	"gitee.com/aniwar2/robot/conf"
 	randutil "github.com/yunjoy-tech/musae/utils/rand"
+	"robot/conf"
 	"strconv"
 )
 
