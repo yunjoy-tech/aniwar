@@ -1,0 +1,260 @@
+BaseConf:
+  # 正式环境必须false【支持热重载】
+  debug: true
+  # server run env: pc, k3s, k8s【支持热重载】
+  env: pc
+  # 是否云环境部署
+  cloud: false
+  # 策划表路径
+  metaDir: output/res/meta/
+  # 存储db key添加ns:group:前缀,正式环境必须false【支持热重载】
+  dbPrefix: false
+  # app-protocol: http or grpc
+  protocol: http
+  # dapr client 重连次数【支持热重载】
+  daprClientRetry: 6
+  # db读超时重试次数【支持热重载】
+  musaeDbGetRetryCount: 1
+  # db写超时重试次数【支持热重载】
+  musaeDbSetRetryCount: 1
+  # db读写间隔时间(毫秒)【支持热重载】
+  musaeDbRetryInterval: 100
+  # db读超时重试次数【支持热重载】
+  aniwarDbGetRetryCount: 1
+  # db写超时重试次数【支持热重载】
+  aniwarDbSetRetryCount: 1
+  # db读写间隔时间(毫秒)【支持热重载】
+  aniwarDbRetryInterval: 100
+  # 版本检查开关【支持热重载】
+  versionCheck: false
+  # 必须匹配版本 [渠道].[大版本号].[小版本号].[热更版本号]【支持热重载】
+  version: 1.0.1
+  # 安卓版本 [渠道].[大版本号].[小版本号]【支持热重载】
+  versionAndroid: 1.0.1
+  # IOS版本 [渠道].[大版本号].[小版本号]【支持热重载】
+  versionIOS: 1.0.1
+  # 服务器网关IP
+  gateIP: 192.168.2.8
+  # 服务器网关端口
+  gatePort: 13001
+  # 网关包体大小限制,默认上限512kb【支持热重载】
+  gateMsgMaxSize: 524288
+  # 服务器包体大小限制,默认上限16Mb
+  srvMsgMaxSize: 16777216
+  # 服务器ID【支持热重载】
+  serverId: '1' # todo 需要支持分区分服
+  # 服务器Name【支持热重载】
+  serverName: test
+  # 服务器之间心跳超时，单位秒【支持热重载】
+  serverHeartbeatTimout: 60
+  # 服务器之间心跳间隔，单位秒
+  serverHeartbeatInterval: 15
+  # 账号Token有效时长【支持热重载】
+  accTokenTTL: 604800
+  # 是否开启指标输出【支持热重载】
+  metric: true
+  metricPort: ":9999" # todo
+  # 创建角色时检测重复ID【支持热重载】
+  roleIdCheck: true
+  # 心跳间隔，单位秒
+  heartbeatInterval: 15
+  # 心跳超时，单位秒【支持热重载】
+  heartbeatTimeout: 120
+  # gate上user实体缓存时长
+  userCacheTTL: 900
+  # 推送actor消息到gate的模式, 1: rpc; 2: gate private topics
+  actor2GateType: 1
+  # 1:开启加密, 0:关闭【支持热重载】
+  useEncrypt: 0
+  # 不做数据加密的协议号【支持热重载】
+  ignoreEncryptCmdIds:
+    - 1010
+    - 10110201
+    - 10110202
+  # 1:开启防重放, 0:关闭【支持热重载】
+  useReqIdx: 1
+  # 耗时收集日志阈值【支持热重载】
+  delayLogLimit: 100
+  # UserActor gc扫描间隔, m:分钟, s:秒
+  userActorGCScan: 10s
+  # UserActor 空闲超时gc, 单位:秒【支持热重载】
+  userActorGCTime: '600'
+  # redis配置
+  RedisConf:
+    addr: 'r-uf66fe7d84f75854pi.redis.rds.aliyuncs.com:6379'
+    addrDev: '127.0.0.1:6379'
+    userName: ''
+    password: ''
+    db: 0
+    # 超时设置(毫秒)
+    dialTimeout: 5000
+    readTimeout: 3000
+    writeTimeout: 3000
+    # 最大重试次数
+    maxRetries: 3
+    # 重试最小/大backoff(毫秒)
+    minRetryBackoff: 50
+    maxRetryBackoff: 100
+    poolSize: 15
+    minIdleConns: 1
+  LogConf:
+    # 日志输出等级[debug/info/warn/error/panic/fatal]
+    level: debug
+    # 日志输出目录
+    dir: log
+    # 日志切割类型(0=按大小，1=按时间)
+    cutType: 1
+    # 时间切割间隔（单位：分钟）
+    rotationTime: 1440
+    # 在进行切割之前，日志文件的最大大小（以 MB 为单位）
+    maxSize: 1024
+    # 保留旧文件的最大个数
+    maxBackups: 100
+    # 保留旧文件的最大天数
+    maxAges: 30
+    # 是否压缩/归档旧文件
+    compress: false
+    # 是否开启批量缓冲写
+    bufferWrite: false
+  # redis配置中心key
+  cfgKeys:
+    - 'cfg:server:opentime'
+    - 'cfg:server:notice'
+    - 'cfg:server:rollingnotice'
+    - 'cfg:server:registerlimit'
+    - 'cfg:global:server'
+    - 'cfg:version:client:android'
+    - 'cfg:version:client:android:mini'
+    - 'cfg:version:client:ios'
+    - 'cfg:version:client:ios:mini'
+    - 'cfg:version:client:android:max'
+    - 'cfg:version:client:ios:max'
+    - 'cfg:version:server'
+    - 'cfg:version:image'
+    - 'cfg:server:conf'
+    - 'cfg:reload:excel'
+    - 'cfg:login:createuser'
+    - 'cfg:login:entergame'
+    - 'cfg:login:openwhitelist'
+    - 'cfg:login:whitelist'
+    - 'cfg:login:openblacklist'
+    - 'cfg:login:blacklist'
+    - 'cfg:login:registerswitch'
+    - 'cfg:login:loginswitch'
+    - 'cfg:login:registerblackip'
+    - 'cfg:login:loginblackip'
+    - 'cfg:global:dirtyword'
+    - 'cfg:global:deprecatedmsg'
+    - 'cfg:global:sysmail'
+
+# GuideServer配置
+GuideConf:
+
+# LoginServer配置
+LoginConf:
+  # loginReq这条协议的请求频率限制【支持热重载】
+  loginReqRate: 100
+  # loginReq这条协议的请求频率限制【支持热重载】
+  loginReqQueue: 3000
+  gateUrl: 'http://gate.aniwar.com:22001/gate'
+  gateUrlDev: 'http://%s:22001/gate'
+  userActorAhead: true
+
+# GateServer配置
+GateConf:
+  # gate上排队人数限制
+  gatePendingNumLimit: 1000
+  # gate登录频率限制
+  gateLoginRateLimit: 200
+  # gate登录线程数量
+  gateLoginThreadNum: 100
+  # 每个gate上的登录用户上限
+  gateUserNumLimit: 3000
+
+# ActorServer配置
+ActorConf:
+  # room的Token有效时长【支持热重载】
+  roomTokenTTL: 604800
+  # 邮件actor最小启用数量
+  mailActorMin: 100
+  # 邮件Actor启用数量万分比
+  mailActorPercent: 10
+  # 屏蔽字库
+  dirtyWords: ./output/res/dirtyWord.txt
+
+# IdipServer配置
+IdipConf:
+
+# BillServer配置
+BillConf:
+  # 是否开启充值, 1:是, 0:否【支持热重载】
+  canPay: 0
+  # 是否支持模拟充值, 1:是, 0:否【支持热重载】
+  canVirtualPay: 1
+  # api调用验签密钥【支持热重载】
+  apiSecret: |-
+    -----BEGIN RSA PUBLIC KEY-----
+    MIGHAoGBANAjokXH83tyut4zkRGdn6bFvTBymg0cNRBe7DrXrqeyC190Df15jYG3
+    +t47q/+3CENg8cXx7Df+s9Wq7KtcOJW33+/J8Rs+whdHQQ97W9YEzxRlA0EEH76Q
+    EFx6+rs9X7o/NJVABlt0LsVyGAfSM7tSV4t3NqIJTcsgYdCtzkwbAgED
+    -----END RSA PUBLIC KEY-----
+  # 是否开启IP白名单【支持热重载】
+  isIpWhite: false
+  # IP白名单【支持热重载】
+  ipWhiteList:
+    - 106.14.169.58
+    - 106.14.195.109
+    - 54.151.206.237
+    - 127.0.0.1
+
+# DDos配置
+DDosConf:
+  # 检测时间间隔, 单位秒  0表示不检测【支持热重载】
+  timeInterval: 0
+  # 节点每秒登陆频率限制，0表示无限制【支持热重载】
+  loginLimitNum: 200
+  # 节点用户数上限, 0表示无限制【支持热重载】
+  totalUserNum: 400
+  # 用户消息包次数上限,0表示无限制【支持热重载】
+  limitPktNum: 1024
+  # 用户消息流量上限,0表示无限制【支持热重载】
+  limitByteNum: 1024000
+
+# gm后台配置
+GMTConf:
+  # api调用验签密钥
+  apiSecret: aniwar1024
+  # 是否开启IP白名单
+  isIpWhite: false
+  # IP白名单列表
+  ipWhiteList:
+    - 106.14.169.58
+    - 106.14.195.109
+    - 54.151.206.237
+    - 127.0.0.1
+
+# oss配置信息
+OSSConf:
+  # oss地址
+  endpoint: 'https://oss-cn-shanghai.aliyuncs.com'
+  # 访问密钥
+  accessKey: 'LTAI5tMqJTbbjHo6J92TEXKB'
+  accessSecret: '7B4T71Pq9iF5hVY8B6nWsENiB0uJPI'
+  # 发版用bucket
+  versionBucket: 'tsh-aniwar-cdn-origin'
+  downPath: '/mnt/nas/k3s/dev/app/server/'
+
+# 服务器地址配置信息
+SrvAddrConf:
+  # Android客户端版本更新地址【支持热重载】
+  updateAddrARD:
+    - 'http://192.168.2.8:18082/client/version/android/'
+  # IOS客户端版本更新地址【支持热重载】
+  updateAddrIOS:
+    - 'http://192.168.2.8:18082/client/version/ios/'
+  # TCP服务器地址【支持热重载】
+  tcpAddr:
+    - 10.5.10.106
+  # HTTP服务器地址【支持热重载】
+  httpAddr:
+    - 'https://aniwar-ce.lilithgame.com'
